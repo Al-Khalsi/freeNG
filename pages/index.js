@@ -3,10 +3,10 @@ import Link from 'next/link';
 function index() {
   return (
     <div>
-      <h1>صفحه اصلی</h1>
-      <Link href="/product/1">به صفحه محصول 1 بروید</Link>
+      <h1>home page</h1>
+      <Link href="/product/1">Go to product page 1</Link>
       <br />
-      <Link href="/product/2">به صفحه محصول 2 بروید</Link>
+      <Link href="/product/2">Go to product page 2</Link>
     </div>
   )
 }

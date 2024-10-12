@@ -2,12 +2,12 @@ import { useRouter } from 'next/router';
 
 const Product = () => {
     const router = useRouter();
-    const { id } = router.query; // دریافت id از پارامترهای URL
+    const { id } = router.query;
 
     return (
         <div>
-            <h1>صفحه محصول</h1>
-            <p>این صفحه مربوط به محصول شماره {id} است.</p>
+            <h1>page product</h1>
+            <p>This page is about product number {id}.</p>
         </div>
     );
 };
