@@ -1,7 +1,7 @@
-
 import ParticlesComponent from '@/components/templates/background/particles';
 import Link from 'next/link';
 import { FaSun, FaMoon } from "react-icons/fa";
+
 
 function index() {
   return (
@@ -23,7 +23,7 @@ function index() {
               <FaMoon />
             </button>
             <Link href="/profile">
-              profile
+              <img src="/img/user.png" className='userPng' alt='profile' title='profile' />
             </Link>
           </div>
         </header>

@@ -1,25 +1,13 @@
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { useEffect, useMemo, useState } from "react";
-// import { loadAll } from "@/tsparticles/all"; // if you are going to use `loadAll`, install the "@tsparticles/all" package too.
-// import { loadFull } from "tsparticles"; // if you are going to use `loadFull`, install the "tsparticles" package too.
-import { loadSlim } from "@tsparticles/slim"; // if you are going to use `loadSlim`, install the "@tsparticles/slim" package too.
-// import { loadBasic } from "@tsparticles/basic"; // if you are going to use `loadBasic`, install the "@tsparticles/basic" package too.
-
-
+import { loadSlim } from "@tsparticles/slim";
 
 const ParticlesComponent = (props) => {
-
     const [init, setInit] = useState(false);
-    // this should be run only once per application lifetime
+
     useEffect(() => {
         initParticlesEngine(async (engine) => {
-            // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-            // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-            // starting from v2 you can add only the features you need reducing the bundle size
-            //await loadAll(engine);
-            //await loadFull(engine);
             await loadSlim(engine);
-            //await loadBasic(engine);
         }).then(() => {
             setInit(true);
         });
@@ -29,78 +17,104 @@ const ParticlesComponent = (props) => {
         console.log(container);
     };
 
-
     const options = useMemo(
         () => ({
             background: {
                 color: {
-                    value: "#1E2F97",
+                    value: "#fff", // رنگ پس‌زمینه
                 },
             },
-            fpsLimit: 120,
+            fpsLimit: 60,
             interactivity: {
                 events: {
                     onClick: {
-                        enable: true,
-                        mode: "repulse",
+                        enable: false,
+                        mode: "push", // افزودن ذرات جدید به هنگام کلیک
                     },
                     onHover: {
                         enable: true,
-                        mode: 'grab',
+                        mode: "none", // دفع ذرات به هنگام حرکت ماوس
                     },
                 },
                 modes: {
                     push: {
-                        distance: 200,
-                        duration: 15,
+                        quantity: 4, // تعداد ذرات جدید در حالت push
+                    },
+                    repulse: {
+                        distance: 100, // فاصله دفع ذرات
+                        duration: 0.4, // مدت زمان
                     },
                     grab: {
-                        distance: 150,
+                        distance: 150, // فاصله جذب ذرات
                     },
                 },
             },
             particles: {
                 color: {
-                    value: "#FFFFFF",
+                    value: "#FFFFFF" // آرایه رنگ برای انتخاب تصادفی
                 },
                 links: {
-                    color: "#FFFFFF",
-                    distance: 150,
+                    color: "#000", // رنگ خطوط
+                    distance: 200,
                     enable: true,
-                    opacity: 0.3,
-                    width: 1,
+                    opacity: 0.5, // شفافیت خطوط
+                    width: 0.3,
                 },
                 move: {
                     direction: "none",
                     enable: true,
                     outModes: {
-                        default: "bounce",
+                        default: "bounce", // بازگشت ذرات به داخل
                     },
                     random: true,
-                    speed: 1,
+                    speed: 3, // افزایش سرعت
                     straight: false,
+                    attract: {
+                        enable: false,
+                        rotate: {
+                            x: 600,
+                            y: 1200,
+                        },
+                    },
                 },
                 number: {
                     density: {
                         enable: true,
+                        area: 800,
                     },
-                    value: 150,
+                    value: 300, // تعداد کل ذرات
                 },
                 opacity: {
-                    value: 1.0,
+                    value: 0.8,
+                    animation: {
+                        enable: true,
+                        speed: 1,
+                        minimumValue: 0.1,
+                        sync: false,
+                    },
                 },
                 shape: {
-                    type: "circle",
+                    type: "circle", // اشکال متنوع
+                    options: {
+                        polygon: {
+                            sides: 5, // تعداد اضلاع برای اشکال چندضلعی
+                        },
+                    },
                 },
                 size: {
-                    value: { min: 1, max: 3 },
+                    value: { min: 0, max: 0 },
+                    animation: {
+                        enable: true,
+                        speed: 3,
+                        minimumValue: 1,
+                        sync: false,
+                    },
                 },
             },
             detectRetina: true,
         }),
         [],
     );
-
 
     return <Particles id={props.id} init={particlesLoaded} options={options} />;
 };
