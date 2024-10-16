@@ -2,7 +2,7 @@ import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { useEffect, useMemo, useState } from "react";
 import { loadSlim } from "@tsparticles/slim";
 
-const ParticlesComponent = (props) => {
+const ParticlesComponent = ({ id, isDarkMode }) => {
     const [init, setInit] = useState(false);
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const ParticlesComponent = (props) => {
         () => ({
             background: {
                 color: {
-                    value: "#fff",
+                    value:  isDarkMode ? "#121212" : "#ffffff",
                 },
             },
             fpsLimit: 60,
@@ -54,7 +54,7 @@ const ParticlesComponent = (props) => {
                     value: "#FFFFFF" 
                 },
                 links: {
-                    color: '#000', 
+                    color: isDarkMode ? '#ffffff' : '#000000',
                     distance: 200,
                     enable: true,
                     opacity: 0.5, 
@@ -125,7 +125,7 @@ const ParticlesComponent = (props) => {
         [],
     );
 
-    return <Particles id={props.id} init={particlesLoaded} options={options} />;
+    return <Particles id={id} init={particlesLoaded} options={options} />;
 };
 
 export default ParticlesComponent;
