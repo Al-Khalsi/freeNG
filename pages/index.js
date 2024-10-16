@@ -7,18 +7,21 @@ function index() {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
-    document.body.classList.toggle('dark', isDarkMode);
-    document.body.classList.toggle('light', !isDarkMode);
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark'); // اضافه کردن کلاس dark
+    } else {
+      document.documentElement.classList.remove('dark'); // حذف کلاس dark
+    }
   }, [isDarkMode]);
 
   const toggleTheme = () => {
-    setIsDarkMode(prevMode => !prevMode);
+    setIsDarkMode(prevMode => !prevMode); // تغییر حالت تاریک و روشن
   };
 
   return (
     <>
       <div className="app">
-        <header className='header'>
+        <header className='header w-full h-24 px-12 flex justify-between items-center'>
 
           <div className='bg-logo'>
             <div className='logo'>LOGO</div>
@@ -31,7 +34,7 @@ function index() {
             </button>
           </div>
 
-          <div className='right-header'>
+          <div className='right-header flex py-1 px-3'>
             <button className='change-background' onClick={toggleTheme}>
               {isDarkMode ? <FaSun /> : <FaMoon />}
             </button>
