@@ -1,9 +1,10 @@
 import ParticlesComponent from '@/components/templates/background/particles';
 import Link from 'next/link';
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon, FaSearch } from "react-icons/fa";
 
 
 function index() {
+
   return (
     <>
       <ParticlesComponent id='particles' />
@@ -16,6 +17,9 @@ function index() {
 
           <div className='search-box'>
             <input type="search" className='search' placeholder='search...' />
+            <button className='btn-search'>
+              <FaSearch />
+            </button>
           </div>
 
           <div className='right-header'>
@@ -31,6 +35,7 @@ function index() {
         <Link href="/product/1">Go to product page 1</Link>
         <br />
         <Link href="/product/2">Go to product page 2</Link>
+        <br />
       </div>
     </>
   )

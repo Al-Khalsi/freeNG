@@ -21,7 +21,7 @@ const ParticlesComponent = (props) => {
         () => ({
             background: {
                 color: {
-                    value: "#fff", // رنگ پس‌زمینه
+                    value: "#fff",
                 },
             },
             fpsLimit: 60,
@@ -29,45 +29,54 @@ const ParticlesComponent = (props) => {
                 events: {
                     onClick: {
                         enable: false,
-                        mode: "push", // افزودن ذرات جدید به هنگام کلیک
+                        mode: "push", 
                     },
                     onHover: {
                         enable: true,
-                        mode: "none", // دفع ذرات به هنگام حرکت ماوس
+                        mode: "none", 
                     },
                 },
                 modes: {
                     push: {
-                        quantity: 4, // تعداد ذرات جدید در حالت push
+                        quantity: 4, 
                     },
                     repulse: {
-                        distance: 100, // فاصله دفع ذرات
-                        duration: 0.4, // مدت زمان
+                        distance: 100, 
+                        duration: 0.4, 
                     },
                     grab: {
-                        distance: 150, // فاصله جذب ذرات
+                        distance: 150, 
                     },
                 },
             },
             particles: {
                 color: {
-                    value: "#FFFFFF" // آرایه رنگ برای انتخاب تصادفی
+                    value: "#FFFFFF" 
                 },
                 links: {
-                    color: "#000", // رنگ خطوط
+                    color: '#000', 
                     distance: 200,
                     enable: true,
-                    opacity: 0.5, // شفافیت خطوط
+                    opacity: 0.5, 
                     width: 0.3,
+                    // shadow: { 
+                    //     enable: true,
+                    //     color: "#000", 
+                    //     blur: 5, 
+                    //     offset: {
+                    //         x: 0, 
+                    //         y: 0, 
+                    //     },
+                    // },
                 },
                 move: {
                     direction: "none",
                     enable: true,
                     outModes: {
-                        default: "bounce", // بازگشت ذرات به داخل
+                        default: "bounce", 
                     },
                     random: true,
-                    speed: 3, // افزایش سرعت
+                    speed: 3, 
                     straight: false,
                     attract: {
                         enable: false,
@@ -82,7 +91,7 @@ const ParticlesComponent = (props) => {
                         enable: true,
                         area: 800,
                     },
-                    value: 300, // تعداد کل ذرات
+                    value: 300, 
                 },
                 opacity: {
                     value: 0.8,
@@ -94,10 +103,10 @@ const ParticlesComponent = (props) => {
                     },
                 },
                 shape: {
-                    type: "circle", // اشکال متنوع
+                    type: "circle", 
                     options: {
                         polygon: {
-                            sides: 5, // تعداد اضلاع برای اشکال چندضلعی
+                            sides: 5, 
                         },
                     },
                 },
