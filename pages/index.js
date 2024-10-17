@@ -27,25 +27,25 @@ function index() {
             <div className='logo'>LOGO</div>
           </div>
 
-          <div className='search-box'>
-            <input type="search" className='search' placeholder='search...' />
-            <button className='btn-search'>
+          <div className='search-box relative'>
+            <input type="search" className='search border-none outline-none' placeholder='search...' />
+            <button className='btn-search absolute top-0 right-0 flex justify-center items-center'>
               <FaSearch />
             </button>
           </div>
 
           <div className='right-header flex py-1 px-3'>
-            <button className='change-background' onClick={toggleTheme}>
+            <button className='change-background flex justify-center items-center w-10 h-10 mr-4 rounded-full' onClick={toggleTheme}>
               {isDarkMode ? <FaSun /> : <FaMoon />}
             </button>
-            <Link href="/profile">
-              <img src="/img/user.png" className='userPng' alt='profile' title='profile' />
+            <Link href="/profile" className='w-10 h-10 rounded-full overflow-hidden'>
+              <img src="/img/user.png" className='userPng w-full ' alt='profile' title='profile' />
             </Link>
           </div>
         </header>
 
-        <div className='main'>
-          <aside class="filter-sidebar">
+        <main className='main container flex justify-between w-full p-12'>
+          <aside class="filter-sidebar p-4 rounded-xl">
             <h2>Filters</h2>
             <ul>
               <li><input type="checkbox" /> فیلتر 1</li>
@@ -54,20 +54,14 @@ function index() {
             </ul>
           </aside>
           <section>
-            <h1>home page</h1>
-            <Link href="/product/1">Go to product page 1</Link>
-            <br />
-            <div className='card'>
-              <div className='bg-img'>
-                <img src="/img/fire.png" alt="" />
-              </div>
-              <div className='info-img'>
-                <h3>fire</h3>
-                <b>category / style </b>
+            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
+              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                <img src="/img/fire.png" alt="" className='w-full h-full' />
+                <div className='info-img w-ful'></div>
               </div>
             </div>
           </section>
-        </div>
+        </main>
       </div>
     </>
   )
