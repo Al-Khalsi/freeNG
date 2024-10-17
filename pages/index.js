@@ -44,8 +44,8 @@ function index() {
           </div>
         </header>
 
-        <main className='main container flex justify-between w-full p-12'>
-          <aside class="filter-sidebar p-4 rounded-xl">
+        <main className='main container flex justify-between w-full py-12'>
+          <aside class="filter-sidebar p-4 rounded-xl w-1/6">
             <h2>Filters</h2>
             <ul>
               <li><input type="checkbox" /> فیلتر 1</li>
@@ -53,13 +53,42 @@ function index() {
               <li><input type="checkbox" /> فیلتر 3</li>
             </ul>
           </aside>
-          <section>
+          <section className='grid grid-cols-4 gap-4 w-5/6'>
             <div className='card w-64 h-64 rounded-xl overflow-hidden'>
               <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
                 <img src="/img/fire.png" alt="" className='w-full h-full' />
                 <div className='info-img w-ful'></div>
               </div>
             </div>
+
+            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
+              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                <img src="/img/h.png" alt="" className='w-full h-full' />
+                <div className='info-img w-ful'></div>
+              </div>
+            </div>
+
+            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
+              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                <img src="/img/hh.png" alt="" className='w-full h-full' />
+                <div className='info-img w-ful'></div>
+              </div>
+            </div>
+
+            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
+              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                <img src="/img/e.png" alt="" className='w-full h-full' />
+                <div className='info-img w-ful'></div>
+              </div>
+            </div>
+
+            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
+              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                <img src="/img/e.png" alt="" className='w-full h-full' />
+                <div className='info-img w-ful'></div>
+              </div>
+            </div>
+            
           </section>
         </main>
       </div>

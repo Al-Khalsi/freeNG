@@ -28,11 +28,6 @@ body {
   height: 100%;
 }
 
-.main section {
-  flex-grow: 0.85;
-  height: 5rem;
-}
-
 main aside {
   flex-shrink: 0.25;
 }
