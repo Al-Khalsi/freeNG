@@ -18,6 +18,17 @@ function index() {
     setIsDarkMode(prevMode => !prevMode); // تغییر حالت تاریک و روشن
   };
 
+  const images = [
+    "/img/fire.png",
+    "/img/h.png",
+    "/img/hh.png",
+    "/img/e.png",
+    "/img/fire.png",
+    "/img/h.png",
+    "/img/hh.png",
+    "/img/e.png"
+  ];
+
   return (
     <>
       <div className="app">
@@ -53,42 +64,15 @@ function index() {
               <li><input type="checkbox" /> فیلتر 3</li>
             </ul>
           </aside>
-          <section className='grid grid-cols-4 gap-4 w-5/6'>
-            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
-              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
-                <img src="/img/fire.png" alt="" className='w-full h-full' />
-                <div className='info-img w-ful'></div>
+          <section className='grid grid-cols-4 gap-8 w-5/6'>
+            {images.map((src, index) => (
+              <div key={index} className='card w-full h-64 rounded-xl overflow-hidden'>
+                <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                  <img src={src} alt={`Image ${index + 1}`} className='w-full h-full object-cover' />
+                  <div className='info-img w-ful'></div>
+                </div>
               </div>
-            </div>
-
-            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
-              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
-                <img src="/img/h.png" alt="" className='w-full h-full' />
-                <div className='info-img w-ful'></div>
-              </div>
-            </div>
-
-            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
-              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
-                <img src="/img/hh.png" alt="" className='w-full h-full' />
-                <div className='info-img w-ful'></div>
-              </div>
-            </div>
-
-            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
-              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
-                <img src="/img/e.png" alt="" className='w-full h-full' />
-                <div className='info-img w-ful'></div>
-              </div>
-            </div>
-
-            <div className='card w-64 h-64 rounded-xl overflow-hidden'>
-              <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
-                <img src="/img/e.png" alt="" className='w-full h-full' />
-                <div className='info-img w-ful'></div>
-              </div>
-            </div>
-            
+            ))}
           </section>
         </main>
       </div>
