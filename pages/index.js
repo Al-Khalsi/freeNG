@@ -55,8 +55,8 @@ function index() {
           </div>
         </header>
 
-        <main className='main flex justify-between w-full py-12'>
-          <aside class="filter-sidebar p-4 rounded-xl w-1/6">
+        <main className='main flex justify-center w-full py-12 sm:justify-between '>
+          <aside class="filter-sidebar p-4 rounded-xl w-1/6 hidden sm:block">
             <h2>Filters</h2>
             <ul>
               <li><input type="checkbox" /> فیلتر 1</li>
@@ -64,7 +64,7 @@ function index() {
               <li><input type="checkbox" /> فیلتر 3</li>
             </ul>
           </aside>
-          <section className='grid grid-cols-4 gap-8 w-5/6'>
+          <section className='grid gap-8 w-5/6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
             {images.map((src, index) => (
               <div key={index} className='card w-full h-64 rounded-xl overflow-hidden'>
                 <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
