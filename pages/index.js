@@ -61,7 +61,7 @@ function index() {
           </div>
         </header>
 
-        <main className='main flex justify-center w-full py-8 px-2 md:justify-between '>
+        <main className='main flex justify-center w-full py-8 px-2 md:justify-between lg:px-12'>
           <aside class="filter-sidebar p-4 mr-8 rounded-xl w-1/6 hidden md:block">
             <div className="flex justify-center h-screen bg-gray-200">
             <SelectWithSearch />
@@ -69,7 +69,7 @@ function index() {
           </aside>
           <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {images.map((src, index) => (
-              <div key={index} className='card w-full h-64 rounded-xl overflow-hidden'>
+              <div key={index} className='card w-full rounded-xl overflow-hidden'>
                 <div className='bg-img w-full h-full flex justify-center items-center p-2 bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
                   <img src={src} alt={`Image ${index + 1}`} className='w-full  object-cover' />
                   <div className='info-img w-ful'></div>
