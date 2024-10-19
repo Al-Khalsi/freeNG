@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { FaSun, FaMoon, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Head from 'next/head';
-import Dropdown from "../components/modules/Dropdown"
+import SelectWithSearch from "../components/modules/SelectWithSearch"
 
 
 function index() {
@@ -34,13 +34,13 @@ function index() {
   return (
     <>
       <div className="app">
-        <header className='header w-full h-24 px-12 flex justify-between items-center'>
+        <header className='header w-full h-24 px-2 md:px-12 flex justify-between items-center'>
 
           <div className='bg-logo'>
             <div className='logo'>LOGO</div>
           </div>
 
-          <div className='search-box relative'>
+          <div className='search-box relative hidden sm:block'>
             <input type="search" className='search border-none outline-none' placeholder='search...' />
             <button className='btn-search absolute top-0 right-0 flex justify-center items-center'>
               <FaSearch />
@@ -48,6 +48,10 @@ function index() {
           </div>
 
           <div className='right-header flex py-1 px-3'>
+            <button className='sm:hidden flex justify-center items-center w-10 h-10 mr-4 rounded-full
+            text-xl bg-black text-white'>
+            <FaSearch />
+            </button>
             <button className='change-background flex justify-center items-center w-10 h-10 mr-4 rounded-full' onClick={toggleTheme}>
               {isDarkMode ? <FaSun /> : <FaMoon />}
             </button>
@@ -59,13 +63,8 @@ function index() {
 
         <main className='main flex justify-center w-full py-8 px-2 md:justify-between '>
           <aside class="filter-sidebar p-4 mr-8 rounded-xl w-1/6 hidden md:block">
-            <div className="flex justify-center items-center h-screen bg-gray-200">
-              <Head>
-                <title>سلکتور با جستجو</title>
-                <meta name="description" content="Dropdown with search functionality using Next.js and Tailwind CSS" />
-                <link rel="icon" href="/favicon.ico" />
-              </Head>
-              <Dropdown />
+            <div className="flex justify-center h-screen bg-gray-200">
+            <SelectWithSearch />
             </div>
           </aside>
           <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>

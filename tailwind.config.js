@@ -34,5 +34,7 @@ module.exports = {
       "margin": "3rem"
     }
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar'),
+  ],
 };
