@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { FaSun, FaMoon, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
+import Head from 'next/head';
+import Dropdown from "../components/modules/Dropdown"
 
 
 function index() {
@@ -55,20 +57,22 @@ function index() {
           </div>
         </header>
 
-        <main className='main flex justify-center w-full py-12 sm:justify-between '>
-          <aside class="filter-sidebar p-4 rounded-xl w-1/6 hidden sm:block">
-            <h2>Filters</h2>
-            <ul>
-              <li><input type="checkbox" /> فیلتر 1</li>
-              <li><input type="checkbox" /> فیلتر 2</li>
-              <li><input type="checkbox" /> فیلتر 3</li>
-            </ul>
+        <main className='main flex justify-center w-full py-8 px-2 md:justify-between '>
+          <aside class="filter-sidebar p-4 mr-8 rounded-xl w-1/6 hidden md:block">
+            <div className="flex justify-center items-center h-screen bg-gray-200">
+              <Head>
+                <title>سلکتور با جستجو</title>
+                <meta name="description" content="Dropdown with search functionality using Next.js and Tailwind CSS" />
+                <link rel="icon" href="/favicon.ico" />
+              </Head>
+              <Dropdown />
+            </div>
           </aside>
-          <section className='grid gap-8 w-5/6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+          <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {images.map((src, index) => (
               <div key={index} className='card w-full h-64 rounded-xl overflow-hidden'>
-                <div className='bg-img w-full h-full bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
-                  <img src={src} alt={`Image ${index + 1}`} className='w-full h-full object-cover' />
+                <div className='bg-img w-full h-full flex justify-center items-center p-2 bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                  <img src={src} alt={`Image ${index + 1}`} className='w-full  object-cover' />
                   <div className='info-img w-ful'></div>
                 </div>
               </div>

@@ -16,14 +16,17 @@ module.exports = {
       'sm': '425px',
       // => @media (min-width: 640px) { ... }
 
-      'md': '426px',
+      'md': '769px',
       // => @media (min-width: 768px) { ... }
 
-      'lg': '769px',
+      'lg': '1024px',
       // => @media (min-width: 1024px) { ... }
 
-      'xl': '1025px',
+      'xl': '1280px',
       // => @media (min-width: 1280px) { ... }
+
+      '2xl': '1536px',
+      // => @media (min-width: 1536px) { ... }
     },
     container: {
       "center": true,
