@@ -1,17 +1,9 @@
 // components/SelectWithSearch.js
 import { useState } from 'react';
 
-const SelectWithSearch = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState('Category');
+const SelectWithSearch = ({ options, defaultText, isOpen, onToggle }) => { // دریافت isOpen و onToggle به عنوان props
+    const [selected, setSelected] = useState(defaultText || 'Category');
     const [search, setSearch] = useState('');
-
-    const options = ['html', 'css', 'js', 'react', 'next'];
-
-    const toggleOptions = () => {
-        setIsOpen(!isOpen);
-        setSearch(''); // Reset search input when opening
-    };
 
     const filterOptions = (option) => {
         return option.toLowerCase().includes(search.toLowerCase());
@@ -19,18 +11,18 @@ const SelectWithSearch = () => {
 
     const handleOptionClick = (option) => {
         setSelected(option);
-        setIsOpen(false);
+        onToggle(); // بستن منوی کشویی بعد از انتخاب گزینه
     };
 
     return (
         <div className="relative w-52 mr-6">
             <div 
                 className="cursor-pointer border border-gray-300 bg-gray-800 text-white p-2 rounded" 
-                onClick={toggleOptions}
+                onClick={onToggle} // استفاده از onToggle برای باز و بسته کردن
             >
                 {selected}
             </div>
-            {isOpen && (
+            {isOpen && ( // نمایش منوی کشویی بر اساس isOpen
                 <div className="absolute border border-gray-300 bg-gray-700 w-full max-h-40 overflow-y-auto rounded mt-1 z-10">
                     <input 
                         type="text" 
@@ -52,8 +44,8 @@ const SelectWithSearch = () => {
                     </div>
                 </div>
             )}
-            {/* Close dropdown on outside click */}
-            {isOpen && <div className="fixed inset-0 z-0" onClick={() => setIsOpen(false)} />}
+            {/* بستن منوی کشویی هنگام کلیک خارج از آن */}
+            {isOpen && <div className="fixed inset-0 z-0" onClick={onToggle} />}
             <style jsx>{`
                 .scrollbar-thin::-webkit-scrollbar {
                     width: 8px; /* عرض نوار اسکرول */
