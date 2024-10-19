@@ -23,7 +23,7 @@ const SelectWithSearch = () => {
     };
 
     return (
-        <div className="relative w-52">
+        <div className="relative w-52 mr-6">
             <div 
                 className="cursor-pointer border border-gray-300 bg-gray-800 text-white p-2 rounded" 
                 onClick={toggleOptions}

@@ -47,10 +47,10 @@ function index() {
             </button>
           </div>
 
-          <div className='right-header flex py-1 px-3'>
+          <div className='right-header flex py-1'>
             <button className='sm:hidden flex justify-center items-center w-10 h-10 mr-4 rounded-full
             text-xl bg-black text-white'>
-            <FaSearch />
+              <FaSearch />
             </button>
             <button className='change-background flex justify-center items-center w-10 h-10 mr-4 rounded-full' onClick={toggleTheme}>
               {isDarkMode ? <FaSun /> : <FaMoon />}
@@ -61,12 +61,17 @@ function index() {
           </div>
         </header>
 
-        <main className='main flex justify-center w-full py-8 px-2 md:justify-between lg:px-12'>
-          <aside class="filter-sidebar p-4 mr-8 rounded-xl w-1/6 hidden md:block">
-            <div className="flex justify-center h-screen bg-gray-200">
+        <aside class="filter-sidebar w-full">
+          <div className="flex px-12 py-2 bg-gray-500">
             <SelectWithSearch />
-            </div>
-          </aside>
+            <SelectWithSearch />
+            <SelectWithSearch />
+            <SelectWithSearch />
+ 
+
+          </div>
+        </aside>
+        <main className='main flex justify-center w-full py-8 px-2 md:justify-between lg:px-12'>
           <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {images.map((src, index) => (
               <div key={index} className='card w-full rounded-xl overflow-hidden'>
