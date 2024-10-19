@@ -55,7 +55,7 @@ function index() {
           </div>
         </header>
 
-        <main className='main container flex justify-between w-full py-12'>
+        <main className='main flex justify-between w-full py-12'>
           <aside class="filter-sidebar p-4 rounded-xl w-1/6">
             <h2>Filters</h2>
             <ul>
