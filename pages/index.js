@@ -61,7 +61,7 @@ function Index() {
               <div className="cosmic-dust"></div>
               <div className="cosmic-dust"></div>
 
-              <div className="stardust w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
+              <div className="stardust w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm max-h-16"></div>
 
               <div className="cosmic-ring w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
 
@@ -76,7 +76,7 @@ function Index() {
                 <div id="cosmic-glow"></div>
                 <div className="wormhole-border"></div>
                 <div id="wormhole-icon">
-                  <FaMicrophone className='text-blue-300'/>
+                  <FaMicrophone className='text-blue-300' />
                 </div>
                 <div id="search-icon">
                   <svg
@@ -136,10 +136,26 @@ function Index() {
         <main className='main flex justify-center w-full py-8 px-2 lg:px-12'>
           <section className='grid gap-16 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {images.map((src, index) => (
-              <div key={index} className='card w-full rounded-xl overflow-hidden'>
-                <div className='bg-img w-full h-full flex justify-center items-center p-2 bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
-                  <img src={src} alt={`Image ${index + 1}`} className='w-full object-cover' />
-                  <div className='info-img w-ful'></div>
+              <div key={index} className='card w-full rounded-2xl overflow-hidden p-3 bg-darkBlue'>
+                <div className='bg-img w-full h-2/3 flex justify-center items-center p-2 rounded-xl bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                  <img src={src} alt={`Image ${index + 1}`} className='w-full h-full object-continer' />
+                </div>
+                <div className='info-img mt-4 px-2 py-3'>
+                  <h3 className='block text-xl text-white'>title</h3>
+                  <div className='flex justify-between mt-3'>
+                    <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
+                      <span className='block text-sm'>800KB</span>
+                      <span className='text-xs'>Size</span>
+                    </div>
+                    <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue border-x-2 border-gray'>
+                      <span className='block text-sm'>1080*720</span>
+                      <span className='text-xs'>Resolution</span>
+                    </div>
+                    <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
+                      <span className='block text-sm'>1200</span>
+                      <span className='text-xs'>Download</span>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}

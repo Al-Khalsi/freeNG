@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-darkBlue: #05071b;
+  --cl-lightBlue: rgba(170, 222, 243, 0.721);
+  --cl-gray: rgba(255, 255, 255, 0.130);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -60,17 +66,13 @@ header {
   position: absolute;
 }
 
-.card {
-  background-color: black;
-}
-
 .filter-sidebar {
   background-color: #fff;
 }
 
 .input {
   background-color: #05071b;
-  width: 301px;
+  width: 391px;
   height: 56px;
   color: #a9c7ff;
   padding-inline: 59px;
@@ -116,8 +118,7 @@ header {
 }
 
 .stardust {
-  max-height: 63px;
-  max-width: 307px;
+  max-width: 400px;
   border-radius: 10px;
   filter: blur(2px);
 }
@@ -146,7 +147,7 @@ header {
 
 .cosmic-ring {
   max-height: 59px;
-  max-width: 303px;
+  max-width: 395px;
   border-radius: 11px;
   filter: blur(0.5px);
 }
@@ -175,7 +176,7 @@ header {
 
 .starfield {
   max-height: 65px;
-  max-width: 312px;
+  max-width: 405px;
 }
 
 .starfield::before {
@@ -240,7 +241,7 @@ header {
   filter: blur(30px);
   opacity: 0.4;
   max-height: 130px;
-  max-width: 354px;
+  max-width: 500px;
 }
 
 .nebula:before {
@@ -329,3 +330,8 @@ header {
     transform: translate(-50%, -50%) rotate(450deg);
   }
 }
+
+
+
+
+
