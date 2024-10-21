@@ -53,28 +53,28 @@ function Index() {
             <div className='logo'>LOGO</div>
           </div>
 
-          <div id='search' className='search-box hidden sm:block'>
-            <div id="search-container">
-              <div class="nebula"></div>
-              <div class="starfield"></div>
-              <div class="cosmic-dust"></div>
-              <div class="cosmic-dust"></div>
-              <div class="cosmic-dust"></div>
+          <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
+            <div id="search-container" className="flex justify-center items-center">
+              <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
+              <div className="starfield w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
+              <div className="cosmic-dust"></div>
+              <div className="cosmic-dust"></div>
+              <div className="cosmic-dust"></div>
 
-              <div class="stardust"></div>
+              <div className="stardust w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
 
-              <div class="cosmic-ring"></div>
+              <div className="cosmic-ring w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
 
               <div id="main">
                 <input
-                  class="input"
+                  className="input border-none rounded-xl text-lg"
                   name="text"
                   type="text"
                   placeholder="Search..."
                 />
                 <div id="input-mask"></div>
                 <div id="cosmic-glow"></div>
-                <div class="wormhole-border"></div>
+                <div className="wormhole-border"></div>
                 <div id="wormhole-icon">
                   <FaMicrophone className='text-blue-300'/>
                 </div>
