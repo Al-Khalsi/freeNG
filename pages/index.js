@@ -1,6 +1,6 @@
 // pages/index.js
 import Link from 'next/link';
-import { FaSun, FaMoon, FaSearch } from "react-icons/fa";
+import { FaSun, FaMoon, FaSearch, FaMicrophone } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import Head from 'next/head';
 import SelectWithSearch from "../components/modules/SelectWithSearch";
@@ -35,7 +35,6 @@ function Index() {
   // تعریف گزینه‌های مختلف برای هر SelectWithSearch
   const options1 = ['html', 'css', 'js', 'react', 'next'];
   const options2 = ['node', 'express', 'mongodb', 'graphql'];
-  const options3 = ['python', 'django', 'flask', 'fastapi'];
 
   const handleSelectToggle = (selectId) => {
     // اگر سلکتور فعلی باز است، آن را ببندید
@@ -49,16 +48,60 @@ function Index() {
   return (
     <>
       <div className="app">
-        <header className='header w-full h-24 px-2 md:px-12 flex justify-between items-center'>
+        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center'>
           <div className='bg-logo'>
             <div className='logo'>LOGO</div>
           </div>
 
-          <div className='search-box relative hidden sm:block'>
-            <input type="search" className='search border-none outline-none' placeholder='search...' />
-            <button className='btn-search absolute top-0 right-0 flex justify-center items-center'>
-              <FaSearch />
-            </button>
+          <div id='search' className='search-box hidden sm:block'>
+            <div id="search-container">
+              <div class="nebula"></div>
+              <div class="starfield"></div>
+              <div class="cosmic-dust"></div>
+              <div class="cosmic-dust"></div>
+              <div class="cosmic-dust"></div>
+
+              <div class="stardust"></div>
+
+              <div class="cosmic-ring"></div>
+
+              <div id="main">
+                <input
+                  class="input"
+                  name="text"
+                  type="text"
+                  placeholder="Search..."
+                />
+                <div id="input-mask"></div>
+                <div id="cosmic-glow"></div>
+                <div class="wormhole-border"></div>
+                <div id="wormhole-icon">
+                  <FaMicrophone className='text-blue-300'/>
+                </div>
+                <div id="search-icon">
+                  <svg
+                    stroke-linejoin="round"
+                    stroke-linecap="round"
+                    stroke-width="2"
+                    stroke="url(#cosmic-search)"
+                    fill="none"
+                    height="24"
+                    width="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle r="8" cy="11" cx="11"></circle>
+                    <line y2="16.65" x2="16.65" y1="21" x1="21"></line>
+                    <defs>
+                      <linearGradient gradientTransform="rotate(45)" id="cosmic-search">
+                        <stop stop-color="#a9c7ff" offset="0%"></stop>
+                        <stop stop-color="#6e8cff" offset="100%"></stop>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
           </div>
 
           <div className='right-header flex py-1'>
@@ -76,17 +119,17 @@ function Index() {
 
         <aside className="filter-sidebar w-full">
           <div className="flex px-12 py-2 bg-gray-500">
-            <SelectWithSearch 
-              options={options1} 
-              defaultText="Category" 
-              isOpen={openSelect === 1} 
-              onToggle={() => handleSelectToggle(1)} 
+            <SelectWithSearch
+              options={options1}
+              defaultText="Category"
+              isOpen={openSelect === 1}
+              onToggle={() => handleSelectToggle(1)}
             />
-            <SelectWithSearch 
-              options={options2} 
-              defaultText="Style" 
-              isOpen={openSelect === 2} 
-              onToggle={() => handleSelectToggle(2)} 
+            <SelectWithSearch
+              options={options2}
+              defaultText="Style"
+              isOpen={openSelect === 2}
+              onToggle={() => handleSelectToggle(2)}
             />
           </div>
         </aside>
