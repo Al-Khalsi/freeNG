@@ -4,8 +4,8 @@
 
 :root {
   --bg-darkBlue: #05071b;
-  --cl-lightBlue: rgba(170, 222, 243, 0.721);
-  --cl-gray: rgba(255, 255, 255, 0.130);
+  --cl-lightBlue: #a9c7ff;
+  --cl-gray: rgba(255, 255, 255, 0.13);
 }
 
 * {

@@ -10,7 +10,7 @@ module.exports = {
       colors: {
         darkBlue: "var(--bg-darkBlue)",
         lightBlue: "var(--cl-lightBlue)",
-        gray: "var(--cl-gray)",
+        lightGray: "var(--cl-gray)",
       },
     },
     screens: {
