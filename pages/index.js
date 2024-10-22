@@ -80,9 +80,9 @@ function Index() {
                 </div>
                 <div id="search-icon">
                   <svg
-                    stroke-linejoin="round"
-                    stroke-linecap="round"
-                    stroke-width="2"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    strokeWidth="2"
                     stroke="url(#cosmic-search)"
                     fill="none"
                     height="24"
@@ -93,8 +93,8 @@ function Index() {
                     <line y2="16.65" x2="16.65" y1="21" x1="21"></line>
                     <defs>
                       <linearGradient gradientTransform="rotate(45)" id="cosmic-search">
-                        <stop stop-color="#a9c7ff" offset="0%"></stop>
-                        <stop stop-color="#6e8cff" offset="100%"></stop>
+                        <stop stopColor="#a9c7ff" offset="0%"></stop>
+                        <stop stopColor="#6e8cff" offset="100%"></stop>
                       </linearGradient>
                     </defs>
                   </svg>
