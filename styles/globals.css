@@ -70,6 +70,18 @@ header {
   background-color: #fff;
 }
 
+.bg-img {
+  background:
+  radial-gradient(circle farthest-side at 0% 50%,#3d5275 23.5%,#0000 0)21px 30px,
+  radial-gradient(circle farthest-side at 0% 50%,#00bbff 24%,#0000 0)19px 30px,
+  linear-gradient(#3d5275 14%,#0000 0, #0000 85%,#3d5275 0)0 0,
+  linear-gradient(150deg,#3d5275 24%,#00bbff 0,#00bbff 26%,#0000 0,#0000 74%,#00bbff 0,#00bbff 76%,#3d5275 0)0 0,
+  linear-gradient(30deg,#3d5275 24%,#00bbff 0,#00bbff 26%,#0000 0,#0000 74%,#00bbff 0,#00bbff 76%,#3d5275 0)0 0,
+  linear-gradient(90deg,#00bbff 2%,#3d5275 0,#3d5275 98%,#00bbff 0%)0 0 #3d5275;
+background-size: 40px 60px;
+background-color: #3d5275;
+}
+
 .input {
   background-color: #05071b;
   width: 391px;
@@ -330,8 +342,3 @@ header {
     transform: translate(-50%, -50%) rotate(450deg);
   }
 }
-
-
-
-
-

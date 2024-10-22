@@ -138,7 +138,7 @@ function Index() {
             {images.map((src, index) => (
               <div key={index} className='card w-full h-96 rounded-2xl overflow-hidden bg-darkBlue'>
                 <div className='inside-card h-full w-full p-3'>
-                <div className='bg-img w-full h-2/3 flex justify-center items-center p-2 rounded-xl bg-gradient-to-r from-gray-600 via-40% to-gray-900 to-68%'>
+                <div className='bg-img w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
                   <img src={src} alt={`Image ${index + 1}`} className='w-full h-full object-continer' />
                 </div>
                 <div className='info-img w-full h-1/3 px-2 py-3'>
