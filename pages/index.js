@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { MdFullscreen } from "react-icons/md";
 import Head from 'next/head';
 import SelectWithSearch from "../components/modules/SelectWithSearch";
+import Images from "../data/db.json"
 
 function Index() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -23,17 +24,6 @@ function Index() {
     setIsDarkMode(prevMode => !prevMode);
   };
 
-  const images = [
-    "/img/fire.png",
-    "/img/h.png",
-    "/img/hh.png",
-    "/img/e.png",
-    "/img/fire.png",
-    "/img/h.png",
-    "/img/hh.png",
-    "/img/e.png"
-  ];
-
   // تعریف گزینه‌های مختلف برای هر SelectWithSearch
   const options1 = ['html', 'css', 'js', 'react', 'next'];
   const options2 = ['node', 'express', 'mongodb', 'graphql'];
@@ -50,7 +40,7 @@ function Index() {
   return (
     <>
       <div className="app">
-        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center bg-darkBlue'>
+        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center bg-darkBlue dark:bg-white'>
           <div className='bg-logo'>
             <div className='logo'>LOGO</div>
           </div>
@@ -120,7 +110,7 @@ function Index() {
         </header>
 
         <aside className="filter-sidebar w-full">
-          <div className="flex px-12 py-2 bg-gray-500">
+          <div className="flex px-12 py-2 bg-gray-0">
             <SelectWithSearch
               options={options1}
               defaultText="Category"
@@ -135,36 +125,39 @@ function Index() {
             />
           </div>
         </aside>
+
         <main className='main flex justify-center w-full py-8 px-2 lg:px-12'>
-          <section className='grid gap-16 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-            {images.map((src, index) => (
-              <div key={index} className='card w-full h-96 rounded-2xl overflow-hidden bg-darkBlue'>
-                <div className='inside-card h-full w-full p-3'>
-                  <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
-                    <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
-                      <MdFullscreen className='text-xl' />
+          <section className='grid gap-12 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+            {Images.Image.map((image) => (
+              <Link key={image.id}>
+                <div className='card w-full h-96 rounded-2xl overflow-hidden bg-darkBlue'>
+                  <div className='inside-card h-full w-full p-3'>
+                    <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
+                      <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
+                        <MdFullscreen className='text-xl' />
+                      </div>
+                      <img src={image.Src} alt={image.Title} className='w-full h-full object-continer' />
                     </div>
-                    <img src={src} alt={`Image ${index + 1}`} className='w-full h-full object-continer' />
-                  </div>
-                  <div className='info-img w-full h-1/3 px-2 py-3'>
-                    <h3 className='block text-xl text-white'>title</h3>
-                    <div className='flex justify-between mt-3'>
-                      <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
-                        <span className='block text-sm'>800KB</span>
-                        <span className='text-xs'>Size</span>
-                      </div>
-                      <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue border-x-2 border-lightGray'>
-                        <span className='block text-sm'>1080*720</span>
-                        <span className='text-xs'>Resolution</span>
-                      </div>
-                      <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
-                        <span className='block text-sm'>1200</span>
-                        <span className='text-xs'>Download</span>
+                    <div className='info-img w-full h-1/3 px-2 py-3'>
+                      <h3 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.Title}</h3>
+                      <div className='flex justify-between mt-3'>
+                        <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
+                          <span className='block text-sm'>{image.Size}</span>
+                          <span className='text-xs'>Size</span>
+                        </div>
+                        <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue border-x-2 border-lightGray'>
+                          <span className='block text-sm'>{image.Dimensions}</span>
+                          <span className='text-xs'>Resolution</span>
+                        </div>
+                        <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
+                          <span className='block text-sm'>{image.Download}</span>
+                          <span className='text-xs'>Download</span>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </section>
         </main>

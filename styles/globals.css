@@ -55,7 +55,7 @@ header {
 
 .change-background {
   font-size: 1.25rem;
-  background-color: black;
+  background-color: rgb(44, 0, 80);
   color: yellow;
 }
 
@@ -67,7 +67,7 @@ header {
 }
 
 .filter-sidebar {
-  background-color: #fff;
+  background-color: #ffffff00;
 }
 
 .bg-img {
