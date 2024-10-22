@@ -1,7 +1,9 @@
 // pages/index.js
 import Link from 'next/link';
 import { FaSun, FaMoon, FaSearch, FaMicrophone } from "react-icons/fa";
+import { AiOutlineFullscreen } from "react-icons/ai";
 import { useEffect, useState } from "react";
+import { MdFullscreen } from "react-icons/md";
 import Head from 'next/head';
 import SelectWithSearch from "../components/modules/SelectWithSearch";
 
@@ -138,26 +140,29 @@ function Index() {
             {images.map((src, index) => (
               <div key={index} className='card w-full h-96 rounded-2xl overflow-hidden bg-darkBlue'>
                 <div className='inside-card h-full w-full p-3'>
-                <div className='bg-img w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
-                  <img src={src} alt={`Image ${index + 1}`} className='w-full h-full object-continer' />
-                </div>
-                <div className='info-img w-full h-1/3 px-2 py-3'>
-                  <h3 className='block text-xl text-white'>title</h3>
-                  <div className='flex justify-between mt-3'>
-                    <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
-                      <span className='block text-sm'>800KB</span>
-                      <span className='text-xs'>Size</span>
+                  <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
+                    <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
+                      <MdFullscreen className='text-xl' />
                     </div>
-                    <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue border-x-2 border-lightGray'>
-                      <span className='block text-sm'>1080*720</span>
-                      <span className='text-xs'>Resolution</span>
-                    </div>
-                    <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
-                      <span className='block text-sm'>1200</span>
-                      <span className='text-xs'>Download</span>
+                    <img src={src} alt={`Image ${index + 1}`} className='w-full h-full object-continer' />
+                  </div>
+                  <div className='info-img w-full h-1/3 px-2 py-3'>
+                    <h3 className='block text-xl text-white'>title</h3>
+                    <div className='flex justify-between mt-3'>
+                      <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
+                        <span className='block text-sm'>800KB</span>
+                        <span className='text-xs'>Size</span>
+                      </div>
+                      <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue border-x-2 border-lightGray'>
+                        <span className='block text-sm'>1080*720</span>
+                        <span className='text-xs'>Resolution</span>
+                      </div>
+                      <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
+                        <span className='block text-sm'>1200</span>
+                        <span className='text-xs'>Download</span>
+                      </div>
                     </div>
                   </div>
-                </div>
                 </div>
               </div>
             ))}
