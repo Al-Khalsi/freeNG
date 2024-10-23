@@ -51,10 +51,10 @@ function Index() {
   // تابع برای ایجاد دکمه‌های پیجینیشن
   const renderPagination = () => {
     const pagination = [];
-    const maxVisiblePages = 10;
+    const maxVisiblePages = 5; // تعداد صفحاتی که قبل و بعد از صفحه فعلی نشان داده می‌شود
 
-    if (totalPages <= maxVisiblePages) {
-      // اگر تعداد صفحات کمتر یا برابر با 10 باشد، همه صفحات را نمایش دهید
+    if (totalPages <= maxVisiblePages + 2) {
+      // اگر تعداد کل صفحات کمتر یا برابر با 7 باشد، همه صفحات را نشان بده
       for (let i = 1; i <= totalPages; i++) {
         pagination.push(
           <button
@@ -67,47 +67,58 @@ function Index() {
         );
       }
     } else {
-      // اگر تعداد صفحات بیشتر از 10 باشد
-      if (currentPage <= 6) {
-        // اگر در 5 صفحه اول هستیم
-        for (let i = 1; i <= 5; i++) {
-          pagination.push(
-            <button
-              key={i}
-              onClick={() => handlePageChange(i)}
-              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
-              {i}
-            </button>
-          );
-        }
+      // اگر در صفحات میانی هستیم
+      if (currentPage > 2 && currentPage < totalPages - 2) {
+        pagination.push(
+          <button
+            key={1}
+            onClick={() => handlePageChange(1)}
+            className={`mx-2 px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          >
+            {1}
+          </button>
+        );
         pagination.push(<span key="dots1" className="mx-2">...</span>);
-        for (let i = totalPages - 4; i <= totalPages; i++) {
-          pagination.push(
-            <button
-              key={i}
-              onClick={() => handlePageChange(i)}
-              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
-              {i}
-            </button>
-          );
-        }
-      } else if (currentPage >= totalPages - 5) {
-        // اگر در 5 صفحه آخر هستیم
-        for (let i = 1; i <= 5; i++) {
-          pagination.push(
-            <button
-              key={i}
-              onClick={() => handlePageChange(i)}
-              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
-              {i}
-            </button>
-          );
-        }
+        pagination.push(
+          <button
+            key={currentPage - 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+            className={`mx-2 px-4 py-2 rounded-lg ${currentPage === currentPage - 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          >
+            {currentPage - 1}
+          </button>
+        );
+        pagination.push(
+          <button
+            key={currentPage}
+            onClick={() => handlePageChange(currentPage)}
+            className={`mx-2 px-4 py-2 rounded-lg ${currentPage === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          >
+            {currentPage}
+          </button>
+        );
+        pagination.push(
+          <button
+            key={currentPage + 1}
+            onClick={() => handlePageChange(currentPage + 1)}
+            className={`mx-2 px-4 py-2 rounded-lg ${currentPage === currentPage + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          >
+            {currentPage + 1}
+          </button>
+        );
         pagination.push(<span key="dots2" className="mx-2">...</span>);
-        for (let i = totalPages - 4; i <= totalPages; i++) {
+        pagination.push(
+          <button
+            key={totalPages}
+            onClick={() => handlePageChange(totalPages)}
+            className={`mx-2 px-4 py-2 rounded-lg ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          >
+            {totalPages}
+          </button>
+        );
+      } else if (currentPage <= 3) {
+        // اگر در سه صفحه اول هستیم
+        for (let i = 1; i <= 3; i++) {
           pagination.push(
             <button
               key={i}
@@ -118,32 +129,28 @@ function Index() {
             </button>
           );
         }
+        pagination.push(<span key="dots" className="mx-2">...</span>);
+        pagination.push(
+          <button
+            key={totalPages}
+            onClick={() => handlePageChange(totalPages)}
+            className={`mx-2 px-4 py-2 rounded-lg ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          >
+            {totalPages}
+          </button>
+        );
       } else {
-        // اگر در وسط صفحات هستیم
-        for (let i = 1; i <= 5; i++) {
-          pagination.push(
-            <button
-              key={i}
-              onClick={() => handlePageChange(i)}
-              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
-              {i}
-            </button>
-          );
-        }
-        pagination.push(<span key="dots3" className="mx-2">...</span>);
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-          pagination.push(
-            <button
-              key={i}
-              onClick={() => handlePageChange(i)}
-              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
-              {i}
-            </button>
-          );
-        }
-        pagination.push(<span key="dots4" className="mx-2">...</span>);
+        // اگر در سه صفحه آخر هستیم
+        pagination.push(
+          <button
+            key={1}
+            onClick={() => handlePageChange(1)}
+            className={`mx-2 px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          >
+            {1}
+          </button>
+        );
+        pagination.push(<span key="dots" className="mx-2">...</span>);
         for (let i = totalPages - 4; i <= totalPages; i++) {
           pagination.push(
             <button
