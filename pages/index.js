@@ -6,11 +6,15 @@ import { useEffect, useState } from "react";
 import { MdFullscreen } from "react-icons/md";
 import Head from 'next/head';
 import SelectWithSearch from "../components/modules/SelectWithSearch";
-import Images from "../data/db.json"
+import Images from "../data/db.json";
+import { useRouter } from 'next/router';
 
 function Index() {
+  const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [openSelect, setOpenSelect] = useState(null); // وضعیت برای شناسایی سلکتور باز
+  const [openSelect, setOpenSelect] = useState(null);
+  const itemsPerPage = 4;
+  const currentPage = parseInt(router.query.page) || 1;
 
   useEffect(() => {
     if (isDarkMode) {
@@ -24,17 +28,137 @@ function Index() {
     setIsDarkMode(prevMode => !prevMode);
   };
 
-  // تعریف گزینه‌های مختلف برای هر SelectWithSearch
   const options1 = ['html', 'css', 'js', 'react', 'next'];
   const options2 = ['node', 'express', 'mongodb', 'graphql'];
 
   const handleSelectToggle = (selectId) => {
-    // اگر سلکتور فعلی باز است، آن را ببندید
     if (openSelect === selectId) {
       setOpenSelect(null);
     } else {
-      setOpenSelect(selectId); // باز کردن سلکتور جدید
+      setOpenSelect(selectId);
     }
+  };
+
+  const indexOfLastImage = currentPage * itemsPerPage;
+  const indexOfFirstImage = indexOfLastImage - itemsPerPage;
+  const currentImages = Images.Image.slice(indexOfFirstImage, indexOfLastImage);
+  const totalPages = Math.ceil(Images.Image.length / itemsPerPage);
+
+  const handlePageChange = (page) => {
+    router.push(`/?page=${page}`);
+  };
+
+  // تابع برای ایجاد دکمه‌های پیجینیشن
+  const renderPagination = () => {
+    const pagination = [];
+    const maxVisiblePages = 10;
+
+    if (totalPages <= maxVisiblePages) {
+      // اگر تعداد صفحات کمتر یا برابر با 10 باشد، همه صفحات را نمایش دهید
+      for (let i = 1; i <= totalPages; i++) {
+        pagination.push(
+          <button
+            key={i}
+            onClick={() => handlePageChange(i)}
+            className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+          >
+            {i}
+          </button>
+        );
+      }
+    } else {
+      // اگر تعداد صفحات بیشتر از 10 باشد
+      if (currentPage <= 6) {
+        // اگر در 5 صفحه اول هستیم
+        for (let i = 1; i <= 5; i++) {
+          pagination.push(
+            <button
+              key={i}
+              onClick={() => handlePageChange(i)}
+              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            >
+              {i}
+            </button>
+          );
+        }
+        pagination.push(<span key="dots1" className="mx-2">...</span>);
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          pagination.push(
+            <button
+              key={i}
+              onClick={() => handlePageChange(i)}
+              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            >
+              {i}
+            </button>
+          );
+        }
+      } else if (currentPage >= totalPages - 5) {
+        // اگر در 5 صفحه آخر هستیم
+        for (let i = 1; i <= 5; i++) {
+          pagination.push(
+            <button
+              key={i}
+              onClick={() => handlePageChange(i)}
+              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            >
+              {i}
+            </button>
+          );
+        }
+        pagination.push(<span key="dots2" className="mx-2">...</span>);
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          pagination.push(
+            <button
+              key={i}
+              onClick={() => handlePageChange(i)}
+              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            >
+              {i}
+            </button>
+          );
+        }
+      } else {
+        // اگر در وسط صفحات هستیم
+        for (let i = 1; i <= 5; i++) {
+          pagination.push(
+            <button
+              key={i}
+              onClick={() => handlePageChange(i)}
+              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            >
+              {i}
+            </button>
+          );
+        }
+        pagination.push(<span key="dots3" className="mx-2">...</span>);
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pagination.push(
+            <button
+              key={i}
+              onClick={() => handlePageChange(i)}
+              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            >
+              {i}
+            </button>
+          );
+        }
+        pagination.push(<span key="dots4" className="mx-2">...</span>);
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          pagination.push(
+            <button
+              key={i}
+              onClick={() => handlePageChange(i)}
+              className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
+            >
+              {i}
+            </button>
+          );
+        }
+      }
+    }
+
+    return pagination;
   };
 
   return (
@@ -128,8 +252,8 @@ function Index() {
 
         <main className='main flex justify-center w-full py-8 px-2 lg:px-12'>
           <section className='grid gap-12 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
-            {Images.Image.map((image) => (
-              <Link key={image.id}>
+            {currentImages.map((image) => (
+              <Link href={`/product/${image.id}`} key={image.id}>
                 <div className='card w-full h-96 rounded-2xl overflow-hidden bg-darkBlue'>
                   <div className='inside-card h-full w-full p-3'>
                     <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
@@ -161,6 +285,12 @@ function Index() {
             ))}
           </section>
         </main>
+
+        {/* دکمه‌های پیجینیشن */}
+        <div className="pagination flex justify-center py-4">
+          {renderPagination()}
+        </div>
+
       </div>
     </>
   );
