@@ -233,7 +233,7 @@ function Index() {
             <button className='change-background flex justify-center items-center w-10 h-10 mr-4 rounded-full' onClick={toggleTheme}>
               {isDarkMode ? <FaSun /> : <FaMoon />}
             </button>
-            <Link href="/profile" className='w-10 h-10 rounded-full overflow-hidden'>
+            <Link href="/validation" className='w-10 h-10 rounded-full overflow-hidden'>
               <img src="/img/user.png" className='userPng w-full ' alt='profile' title='profile' />
             </Link>
           </div>
