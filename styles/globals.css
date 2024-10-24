@@ -6,6 +6,11 @@
   --bg-darkBlue: #05071b;
   --cl-lightBlue: #a9c7ff;
   --cl-gray: rgba(255, 255, 255, 0.13);
+  --bg-lightGray:  #e2e2e2;
+  --bg-lightBlue2: #c9d6ff;
+  --bg-white: #fff;
+  --cl-darkGray: #333;
+  --bg-input: #eee;
 }
 
 * {

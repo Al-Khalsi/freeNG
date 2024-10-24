@@ -8,10 +8,21 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      width: {
+        "custom-212": "53rem", // اضافه کردن عرض کاستوم با نام w-212
+      },
+      height: {
+        "custom-136": "34rem",
+      },
       colors: {
         darkBlue: "var(--bg-darkBlue)",
         lightBlue: "var(--cl-lightBlue)",
-        lightGray: "var(--cl-gray)",
+        clGray: "var(--cl-gray)",
+        lightGray: "var(--bg-lightGray)",
+        lightBlue2: "var(--bg-lightBlue2)",
+        white: "var(--bg-white)",
+        darkGray: "var(--cl-darkGray)",
+        inputwhite: "var(--bg-input)"
       },
     },
     screens: {
