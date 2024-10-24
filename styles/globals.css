@@ -72,14 +72,14 @@ header {
 
 .bg-img {
   background:
-  radial-gradient(circle farthest-side at 0% 50%,#3d5275 23.5%,#0000 0)21px 30px,
-  radial-gradient(circle farthest-side at 0% 50%,#00bbff 24%,#0000 0)19px 30px,
-  linear-gradient(#3d5275 14%,#0000 0, #0000 85%,#3d5275 0)0 0,
-  linear-gradient(150deg,#3d5275 24%,#00bbff 0,#00bbff 26%,#0000 0,#0000 74%,#00bbff 0,#00bbff 76%,#3d5275 0)0 0,
-  linear-gradient(30deg,#3d5275 24%,#00bbff 0,#00bbff 26%,#0000 0,#0000 74%,#00bbff 0,#00bbff 76%,#3d5275 0)0 0,
-  linear-gradient(90deg,#00bbff 2%,#3d5275 0,#3d5275 98%,#00bbff 0%)0 0 #3d5275;
-background-size: 40px 60px;
-background-color: #3d5275;
+    radial-gradient(circle farthest-side at 0% 50%, #3d5275 23.5%, #0000 0)21px 30px,
+    radial-gradient(circle farthest-side at 0% 50%, #00bbff 24%, #0000 0)19px 30px,
+    linear-gradient(#3d5275 14%, #0000 0, #0000 85%, #3d5275 0)0 0,
+    linear-gradient(150deg, #3d5275 24%, #00bbff 0, #00bbff 26%, #0000 0, #0000 74%, #00bbff 0, #00bbff 76%, #3d5275 0)0 0,
+    linear-gradient(30deg, #3d5275 24%, #00bbff 0, #00bbff 26%, #0000 0, #0000 74%, #00bbff 0, #00bbff 76%, #3d5275 0)0 0,
+    linear-gradient(90deg, #00bbff 2%, #3d5275 0, #3d5275 98%, #00bbff 0%)0 0 #3d5275;
+  background-size: 40px 60px;
+  background-color: #3d5275;
 }
 
 .input {
@@ -96,20 +96,6 @@ background-color: #3d5275;
 
 .input:focus {
   outline: none;
-}
-
-#main:focus-within>#input-mask {
-  display: none;
-}
-
-#input-mask {
-  pointer-events: none;
-  width: 100px;
-  height: 20px;
-  position: absolute;
-  background: linear-gradient(90deg, transparent, #05071b);
-  top: 18px;
-  left: 70px;
 }
 
 #cosmic-glow {
@@ -148,11 +134,11 @@ background-color: #3d5275;
   background-repeat: no-repeat;
   background-position: 0 0;
   filter: brightness(1.4);
-  background-image: conic-gradient(rgba(0, 0, 0, 0) 0%,
-      #4d6dff,
+  background-image: conic-gradient(rgba(0, 0, 0, 0) 0%, 
+      #4d6dff 
       rgba(0, 0, 0, 0) 8%,
       rgba(0, 0, 0, 0) 50%,
-      #6e8cff,
+      #6e8cff
       rgba(0, 0, 0, 0) 58%);
   transition: all 2s;
 }

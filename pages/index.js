@@ -13,7 +13,7 @@ function Index() {
   const router = useRouter();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [openSelect, setOpenSelect] = useState(null);
-  const itemsPerPage = 4;
+  const itemsPerPage = 16;
   const currentPage = parseInt(router.query.page) || 1;
 
   useEffect(() => {
@@ -171,7 +171,7 @@ function Index() {
   return (
     <>
       <div className="app">
-        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center bg-darkBlue dark:bg-white'>
+        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center bg-white text-black dark:bg-darkBlue dark:text-white'>
           <div className='bg-logo'>
             <div className='logo'>LOGO</div>
           </div>
@@ -195,7 +195,6 @@ function Index() {
                   type="text"
                   placeholder="Search..."
                 />
-                <div id="input-mask"></div>
                 <div id="cosmic-glow"></div>
                 <div className="wormhole-border"></div>
                 <div id="wormhole-icon">
@@ -258,7 +257,7 @@ function Index() {
         </aside>
 
         <main className='main flex justify-center w-full py-8 px-2 lg:px-12'>
-          <section className='grid gap-12 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+          <section className='grid gap-10 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
             {currentImages.map((image) => (
               <Link href={`/product/${image.id}`} key={image.id}>
                 <div className='card w-full h-96 rounded-2xl overflow-hidden bg-darkBlue'>
