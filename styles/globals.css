@@ -343,8 +343,64 @@ header {
 
 
 
-/* Validation css */
+/*-------------------- Validation css --------------------*/
+/*-------------------- Validation css --------------------*/
+/*-------------------- Validation css --------------------*/
 
+.form-box {
+  transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
+}
 
+.container.active .form-box {
+  right: 50%;
+}
+
+.form-box.register {
+  visibility: hidden;
+}
+
+.container.active .form-box.register {
+  visibility: visible;
+}
+
+.toggle-form::before {
+  content: '';
+  position: absolute;
+  left: -250%;
+  width: 300%;
+  height: 100%;
+  background: var(--bg-darkBlue);
+  border-radius: 150px;
+  z-index: 20;
+  transition: 1.8s ease-in-out;
+}
+
+.toggle-panel {
+  transition: 0.6s ease-in-out;
+}
+
+.container.active .toggle-form::before {
+  left: 50%;
+}
+
+.toggle-panel.toggle-left {
+  right: 0;
+  transition: 1.2s;
+}
+
+.toggle-panel.toggle-right {
+  right: -50%;
+  transition: 0.6s;
+}
+
+.container.active .toggle-panel.toggle-left {
+  left: -50%;
+  transition-delay: 0.6s;
+}
+
+.container.active .toggle-panel.toggle-right {
+  right: 0;
+  transition-delay: 1.2s;
+}
 
 
