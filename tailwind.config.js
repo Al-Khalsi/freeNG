@@ -41,11 +41,7 @@ module.exports = {
       '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
     },
-    container: {
-      "center": true,
-      "padding": "3rem",
-      "margin": "3rem"
-    }
+    
   },
   plugins: [
     require('tailwind-scrollbar'),

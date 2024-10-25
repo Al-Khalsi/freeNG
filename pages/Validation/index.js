@@ -17,8 +17,8 @@ function index() {
     };
 
     return (
-        <div className='Validaion flex justify-center items-center min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
-            <div className={`container relative w-custom-212 h-custom-136 m-5 bg-white rounded-3xl shadow-xl overflow-hidden ${isActive ? 'active' : ''}`}>
+        <div className='Validaion w-full h-full flex justify-center items-center min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
+            <div className={`wrapper relative w-custom-212 h-custom-136 m-5 bg-white rounded-3xl shadow-xl overflow-hidden ${isActive ? 'active' : ''}`}>
                 <div className='login form-box absolute right-0 w-1/2 h-full flex items-center p-10 bg-white text-center z-10'>
                     <form action="#" className='w-full'>
                         <h2 className='text-4xl my-2.5'>Login</h2>
@@ -72,7 +72,7 @@ function index() {
                         </button>
                         <p className='text-base my-4'>or</p>
                         <div className='social-icon'>
-                            <p className='w-full h-12 rounded-lg flex justify-center items-center bg-lightGray shadow-lg text-lg'><FcGoogle className='mr-2 text-2xl'/> Register With Google</p>
+                            <p className='w-full h-12 rounded-lg flex justify-center items-center bg-lightGray shadow-lg text-lg'><FcGoogle className='mr-2 text-2xl' /> Register With Google</p>
                         </div>
                     </form>
                 </div>
