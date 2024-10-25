@@ -11,8 +11,19 @@ services:
   server:
     build:
       context: .
+      dockerfile: /Dockerfile
     ports:
       - 8080:8080
+    environment:
+#      - SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/imalchemy
+#      - SPRING_DATASOURCE_USERNAME: postgres
+#      - SPRING_DATASOURCE_PASSWORD_FILE: /run/secrets/db-password
+      DATABASE_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+#    secrets:
+#      - db-password
 
   # The commented out section below is an example of how to define a PostgreSQL
   # database that your application can use. `depends_on` tells Docker Compose to
@@ -27,40 +38,23 @@ services:
     image: postgres:17-alpine
     container_name: png-downloading-platform
     restart: on-failure
-    user: user
+    environment:
+      POSTGRES_DB: imalchemy
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: qaz@123QAZ
+#      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+    ports:
+      - 5432:5432
     secrets:
       - db-password
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=imalchemy
-      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
-    expose:
-      - 5432:5432
     healthcheck:
       test: [ "CMD", "pg_isready" ]
       interval: 10s
       timeout: 5s
       retries: 5
-volumes:
-  db-data:
+    volumes:
+      - ./data/db/postgres:/var/lib/postgresql/data
 
 secrets:
   db-password:
     file: ./data/db/password.txt
-
-
-#version: "3"
-#services:
-#  postgres-user:
-#    image: postgres:17-alpine
-#    container_name: png-downloading-platform
-#    environment:
-#      POSTGRES_DB: imalchemy
-#      POSTGRES_USER: user
-#      POSTGRES_PASSWORD: qaz@123QAZ
-#      PGDATA: /data/postgres
-#    ports:
-#      - "5432:5432"
-#    volumes:
-#      - ./data/db/postgres:/data/postgres

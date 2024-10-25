@@ -8,7 +8,7 @@ spring:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:flyway_migration}
+    url: jdbc:postgresql://${DATABASE_HOST:localhost}:${DATABASE_PORT:5432}/${DATABASE_NAME:imalchemy}
     username: ${DATABASE_USERNAME:user}
     password: ${DATABASE_PASSWORD:qaz@123QAZ}
 

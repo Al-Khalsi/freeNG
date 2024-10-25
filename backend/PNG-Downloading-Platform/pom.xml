@@ -109,8 +109,6 @@
                 </configuration>
             </plugin>
         </plugins>
-
-        <finalName>png-downloading-platform</finalName>
     </build>
 
 </project>
