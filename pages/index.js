@@ -244,7 +244,7 @@ function Index() {
           <section className='grid gap-10 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
             {currentImages.map((image) => (
               <Link href={`/product/${image.id}`} key={image.id}>
-                <div className='card w-full h-96 rounded-2xl overflow-hidden bg-darkBlue'>
+                <div className='card w-full h-80 rounded-2xl overflow-hidden bg-darkBlue'>
                   <div className='inside-card h-full w-full p-3'>
                     <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
                       <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
@@ -255,15 +255,15 @@ function Index() {
                     <div className='info-img w-full h-1/3 px-2 py-3'>
                       <h3 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.Title}</h3>
                       <div className='flex justify-between mt-3'>
-                        <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
+                        <div className='flex flex-col w-1/3 text-center pr-2 text-lightBlue'>
                           <span className='block text-sm'>{image.Size}</span>
                           <span className='text-xs'>Size</span>
                         </div>
-                        <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue border-x-2 border-lightGray'>
+                        <div className='flex flex-col w-1/3 text-center text-lightBlue border-x-2 border-lightGray'>
                           <span className='block text-sm'>{image.Dimensions}</span>
                           <span className='text-xs'>Dimensions</span>
                         </div>
-                        <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
+                        <div className='flex flex-col w-1/3 text-center pl-2 text-lightBlue'>
                           <span className='block text-sm'>{image.Download}</span>
                           <span className='text-xs'>Download</span>
                         </div>

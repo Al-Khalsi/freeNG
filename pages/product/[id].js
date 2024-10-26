@@ -75,10 +75,17 @@ const Product = () => {
             </header>
 
             <div className='wrapper'>
-                <main className='product-div bg-white'>
-                    <div className='product-div-left'></div>
-                    <div className='product-div-right'></div>
-                </main>
+                <div className='product-div bg-white'>
+                    <div className='product-div-left'>
+                        <div className="img-container">
+                            <img src="" alt="" />
+                        </div>
+                    </div>
+                    <div className='product-div-right'>
+                        <h1 className='image-title'>Image Title Testing</h1>
+                        
+                    </div>
+                </div>
             </div>
         </div>
     );
