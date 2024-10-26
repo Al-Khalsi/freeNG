@@ -39,6 +39,11 @@ body {
   height: 100%;
 }
 
+img {
+  width: 100%;
+  display: block;
+}
+
 main aside {
   flex-shrink: 0.25;
 }

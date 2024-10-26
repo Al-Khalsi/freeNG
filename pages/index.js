@@ -11,22 +11,9 @@ import { useRouter } from 'next/router';
 
 function Index() {
   const router = useRouter();
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [openSelect, setOpenSelect] = useState(null);
-  const itemsPerPage = 16;
+  const itemsPerPage = 20;
   const currentPage = parseInt(router.query.page) || 1;
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
-
-  const toggleTheme = () => {
-    setIsDarkMode(prevMode => !prevMode);
-  };
 
   const options1 = ['html', 'css', 'js', 'react', 'next'];
   const options2 = ['node', 'express', 'mongodb', 'graphql'];
@@ -171,7 +158,7 @@ function Index() {
   return (
     <>
       <div className="app">
-        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center bg-white text-black dark:bg-darkBlue dark:text-white'>
+        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center bg-darkBlue text-white'>
           <div className='bg-logo'>
             <div className='logo'>LOGO</div>
           </div>
@@ -230,9 +217,6 @@ function Index() {
             <button className='sm:hidden flex justify-center items-center w-10 h-10 mr-4 rounded-full text-xl bg-black text-white'>
               <FaSearch />
             </button>
-            <button className='change-background flex justify-center items-center w-10 h-10 mr-4 rounded-full' onClick={toggleTheme}>
-              {isDarkMode ? <FaSun /> : <FaMoon />}
-            </button>
             <Link href="/validation" className='w-10 h-10 rounded-full overflow-hidden'>
               <img src="/img/user.png" className='userPng w-full ' alt='profile' title='profile' />
             </Link>
@@ -277,7 +261,7 @@ function Index() {
                         </div>
                         <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue border-x-2 border-lightGray'>
                           <span className='block text-sm'>{image.Dimensions}</span>
-                          <span className='text-xs'>Resolution</span>
+                          <span className='text-xs'>Dimensions</span>
                         </div>
                         <div className='flex flex-col w-1/3 text-center p-2 text-lightBlue'>
                           <span className='block text-sm'>{image.Download}</span>
