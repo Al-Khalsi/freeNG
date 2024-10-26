@@ -15,15 +15,17 @@ services:
     ports:
       - 8080:8080
     environment:
-#      - SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/imalchemy
-#      - SPRING_DATASOURCE_USERNAME: postgres
-#      - SPRING_DATASOURCE_PASSWORD_FILE: /run/secrets/db-password
-      DATABASE_HOST: db
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=imalchemy
+      - DATABASE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD_FILE=/run/secrets/db-password
     depends_on:
       db:
         condition: service_healthy
-#    secrets:
-#      - db-password
+    secrets:
+      - db-password
 
   # The commented out section below is an example of how to define a PostgreSQL
   # database that your application can use. `depends_on` tells Docker Compose to
@@ -39,10 +41,9 @@ services:
     container_name: png-downloading-platform
     restart: on-failure
     environment:
-      POSTGRES_DB: imalchemy
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: qaz@123QAZ
-#      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+      - POSTGRES_DB=imalchemy
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
     ports:
       - 5432:5432
     secrets:
