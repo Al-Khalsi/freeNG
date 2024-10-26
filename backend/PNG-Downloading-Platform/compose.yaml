@@ -20,7 +20,7 @@ services:
       - DATABASE_PORT=5432
       - DATABASE_NAME=imalchemy
       - DATABASE_USERNAME=user
-      - SPRING_DATASOURCE_PASSWORD_FILE=/run/secrets/db-password
+      - DATABASE_PASSWORD_FILE=/run/secrets/db-password
     depends_on:
       db:
         condition: service_healthy
