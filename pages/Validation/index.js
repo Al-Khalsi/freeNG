@@ -1,31 +1,96 @@
-import { useState } from 'react'
+import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { FaUser, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
+import { useAuth } from '../context/AuthContext'; // Adjust the path as necessary
 
-function index() {
-
+function AuthForm() {
+    const { storeToken } = useAuth(); // Access the storeToken function from context
     const [isActive, setIsActive] = useState(false);
-
+    const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
+    const [error, setError] = useState('');
 
     const handleClick = (action) => {
         setIsActive(action === "register");
     };
 
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setCredentials({ ...credentials, [name]: value });
+    };
+
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        const result = await signIn('credentials', {
+            redirect: false,
+            username: credentials.username,
+            password: credentials.password,
+        });
+
+        if (result.error) {
+            setError(result.error);
+        } else {
+            // Handle successful login (e.g., redirect or show a message)
+            console.log('Login successful');
+        }
+    };
+
+    const handleRegistration = async (e) => {
+        e.preventDefault();
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: credentials.username,
+                email: credentials.email,
+                password: credentials.password,
+            }),
+        });
+
+        const data = await response.json();
+        if (data.success) {
+            // Store the token in context
+            storeToken(data.token); // Assuming the token is returned in data.token
+
+            // Optionally, you can log in the user after successful registration
+            const loginResult = await signIn('credentials', {
+                redirect: false,
+                username: credentials.username,
+                password: credentials.password,
+            });
+
+            if (loginResult.error) {
+                setError(loginResult.error);
+            } else {
+                console.log('Registration and login successful');
+            }
+        } else {
+            setError(data.error || 'Registration failed');
+        }
+    };
+
     return (
-        <div className='Validaion w-full h-full flex justify-center items-center min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
+        <div className='Validation w-full h-full flex justify-center items-center min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
             <div className={`wrapper relative w-custom-212 h-custom-136 m-5 bg-white rounded-3xl shadow-xl overflow-hidden ${isActive ? 'active' : ''}`}>
                 <div className='login form-box absolute right-0 w-1/2 h-full flex items-center p-10 bg-white text-center z-10'>
-                    <form action="#" className='w-full'>
+                    <form onSubmit={handleLogin} className='w-full'>
                         <h2 className='text-4xl my-2.5'>Login</h2>
+                        {error && <p className='text-red-500'>{error}</p>}
                         <div className="inputBox relative my-7 ">
                             <input type="text"
+                                name="username"
+                                onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium'
                                 placeholder='Username' required />
                             <FaUser className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <div className="inputBox relative my-7">
                             <input type="password"
+                                name="password"
+                                onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
                             <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
@@ -42,22 +107,29 @@ function index() {
                 </div>
 
                 <div className='register form-box absolute right-0 w-1/2 h-full flex items-center p-10 bg-white text-center z-10'>
-                    <form action="#" className='w-full'>
+                    <form onSubmit={handleRegistration} className='w-full'>
                         <h2 className='text-4xl my-2.5'>Register</h2>
+                        {error && <p className='text-red-500'>{error}</p>}
                         <div className="inputBox relative my-7">
                             <input type="text"
+                                name="username"
+                                onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium'
                                 placeholder='Username' required />
                             <FaUser className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <div className="inputBox relative my-7 ">
                             <input type="email"
+                                name="email"
+                                onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium'
                                 placeholder='Email' required />
                             <MdEmail className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <div className="inputBox relative my-7">
                             <input type="password"
+                                name="password"
+                                onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
                             <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
@@ -89,7 +161,7 @@ function index() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default index
+export default AuthForm;
