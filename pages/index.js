@@ -243,7 +243,12 @@ function Index() {
         <main className='main flex justify-center w-full py-8 px-2 lg:px-12'>
           <section className='grid gap-10 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
             {currentImages.map((image) => (
-              <Link href={`/product/${image.id}`} key={image.id}>
+              <Link href={`/product/${image.id}
+              ?title=${encodeURIComponent(image.Title)}
+              &size=${encodeURIComponent(image.Size)}
+              &dimensions=${encodeURIComponent(image.Dimensions)}
+              &download=${encodeURIComponent(image.Download)}
+              &src=${encodeURIComponent(image.Src)}`} key={image.id}>
                 <div className='card w-full h-80 rounded-2xl overflow-hidden bg-darkBlue'>
                   <div className='inside-card h-full w-full p-3'>
                     <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>

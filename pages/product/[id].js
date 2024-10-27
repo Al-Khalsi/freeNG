@@ -4,8 +4,7 @@ import Link from 'next/link';
 
 const Product = () => {
     const router = useRouter();
-
-    const { id } = router.query;
+    const { id, title, size, dimensions, download, src } = router.query;
 
     return (
         <div className='imageSinglePage w-full min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
@@ -74,15 +73,15 @@ const Product = () => {
                 </div>
             </header>
 
-            <div className='wrapper'>
-                <div className='product-div bg-white'>
-                    <div className='product-div-left'>
-                        <div className="img-container">
-                            <img src="" alt="" />
+            <div className='wrapper p-12'>
+                <div className='product-div w-full h-80 flex bg-white rounded-xl overflow-hidden'>
+                    <div className='product-div-left bg-img w-1/3'>
+                        <div className="img-container w-full h-full">
+                            <img src={src} className='w-full h-full object-continer' alt={title} />
                         </div>
                     </div>
-                    <div className='product-div-right'>
-                        <h1 className='image-title'>Image Title Testing</h1>
+                    <div className='product-div-right w-2/3 bg-darkBlue text-white'>
+                        <h1 className='image-title'>{title}</h1>
                         
                     </div>
                 </div>
