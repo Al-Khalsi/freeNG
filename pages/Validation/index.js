@@ -75,14 +75,14 @@ function index() {
 
                 <div className="toggle-form absolute left-0 w-full h-full">
                     <div className='toggle-panel toggle-left absolute left-0 w-1/2 h-full flex flex-col justify-center items-center text-white z-20'>
-                        <h4 className='text-3xl mb-2'>Hello, Welcome!</h4>
-                        <p className='mb-5'>Don't have an account?</p>
+                        <h4 className='text-3xl mb-2 hidden md:block'>Hello, Welcome!</h4>
+                        <p className='mb-5 hidden md:block'>Don't have an account?</p>
                         <button className='btn w-40 h-12 bg-transparent border-2 rounded-lg text-base font-semibold cursor-pointer'
                             onClick={() => handleClick("register")}>Register</button>
                     </div>
                     <div className='toggle-panel toggle-right absolute -right-1/2 w-1/2 h-full flex flex-col justify-center items-center text-white z-20'>
-                        <h4 className='text-3xl mb-2'>Welcome Back!</h4>
-                        <p className='mb-5'>Already have an account?</p>
+                        <h4 className='text-3xl mb-2 hidden md:block'>Welcome Back!</h4>
+                        <p className='mb-5 hidden md:block'>Already have an account?</p>
                         <button className='btn w-40 h-12 bg-transparent border-2 rounded-lg text-base font-semibold cursor-pointer'
                             onClick={() => handleClick("login")}>Login</button>
                     </div>
