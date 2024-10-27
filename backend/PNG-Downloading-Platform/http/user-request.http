@@ -1,6 +1,6 @@
 ### create user
 // @no-log
-POST http://localhost:8080/api/v1/user
+POST http://localhost:8080/api/v1/auth
 Content-Type: application/json
 
 {
@@ -8,7 +8,3 @@ Content-Type: application/json
   "email": "someone",
   "password": "someone"
 }
-
-### user by email
-// @no-log
-GET http://localhost:8080/api/v1/user/someone

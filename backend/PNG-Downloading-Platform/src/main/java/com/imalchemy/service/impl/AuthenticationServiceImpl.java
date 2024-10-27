@@ -6,26 +6,27 @@ import com.imalchemy.model.dto.RoleDTO;
 import com.imalchemy.model.dto.UserDTO;
 import com.imalchemy.repository.RolesRepository;
 import com.imalchemy.repository.UserRepository;
-import com.imalchemy.service.UserService;
+import com.imalchemy.service.AuthenticationService;
 import com.imalchemy.util.converter.UserConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final UserRepository userRepository;
     private final RolesRepository roleRepository;
     private final UserConverter userConverter;
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDTO registerUser(UserDTO userDTO) {
         User user = this.userConverter.toEntity(userDTO);
 
         // Encode password
@@ -60,6 +61,11 @@ public class UserServiceImpl implements UserService {
 
         // Convert back to DTO and return
         return this.userConverter.toDto(savedUser);
+    }
+
+    @Override
+    public Map<String, Object> login(UserDTO userDTO) {
+        return Map.of();
     }
 
 }
