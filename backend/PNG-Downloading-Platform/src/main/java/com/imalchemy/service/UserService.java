@@ -1,11 +1,9 @@
 package com.imalchemy.service;
 
-import com.imalchemy.model.domain.User;
+import com.imalchemy.model.dto.UserDTO;
 
 public interface UserService {
 
-    User getUser(String email);
-
-    User createUser(User user);
+    UserDTO createUser(UserDTO userDTO);
 
 }
