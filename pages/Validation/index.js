@@ -9,11 +9,7 @@ function index() {
 
 
     const handleClick = (action) => {
-        if (action === "register") {
-            setIsActive(true);
-        } else if (action === "login") {
-            setIsActive(false);
-        }
+        setIsActive(action === "register");
     };
 
     return (

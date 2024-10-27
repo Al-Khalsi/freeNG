@@ -74,10 +74,10 @@ const Product = () => {
             </header>
 
             <div className='wrapper p-12'>
-                <div className='product-div w-full h-80 flex bg-white rounded-xl overflow-hidden'>
+                <div className='product-div w-full h-80 flex bg-white rounded-3xl m-5 overflow-hidden'>
                     <div className='product-div-left bg-img w-1/3'>
                         <div className="img-container w-full h-full">
-                            <img src={src} className='w-full h-full object-continer' alt={title} />
+                            <img src={src} className='w-full h-full object-cover' alt={title} />
                         </div>
                     </div>
                     <div className='product-div-right w-2/3 bg-darkBlue text-white'>
