@@ -3,10 +3,10 @@ import { signIn } from 'next-auth/react';
 import { FaUser, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
-import { useAuth } from '../context/AuthContext'; // Adjust the path as necessary
+import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
 
 function AuthForm() {
-    const { clearToken } = useAuth(); // Adjusted to clearToken
+    const { storeToken, clearToken } = useAuth(); // Adjusted to storeToken
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
@@ -22,23 +22,22 @@ function AuthForm() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const result = await signIn('credentials', {
-            redirect: false,
-            username: credentials.username,
-            password: credentials.password,
-        });
+        const response = await fetch('http://localhost:3001/users');
+        const users = await response.json();
+        const user = users.find(user => user.username === credentials.username && user.password === credentials.password);
 
-        if (result.error) {
-            setError(result.error);
-        } else {
+        if (user) {
             // Assuming the backend sets the HTTP-only cookie
+            storeToken(user.token); // Store the token
             console.log('Login successful');
+        } else {
+            setError('Invalid username or password');
         }
     };
 
     const handleRegistration = async (e) => {
         e.preventDefault();
-        const response = await fetch('/api/register', {
+        const response = await fetch('http://localhost:3001/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,34 +46,17 @@ function AuthForm() {
                 username: credentials.username,
                 email: credentials.email,
                 password: credentials.password,
+                token: Math.random().toString(36).substring(2), // Generate a random token
             }),
         });
 
         const data = await response.json();
-        if (data.success) {
-            // Call the API to set the cookie with the token
-            await fetch('/api/set-cookie', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ token: data.token }), // Assuming the token is returned in data.token
-            });
-
-            // Optionally, you can log in the user after successful registration
-            const loginResult = await signIn('credentials', {
-                redirect: false,
-                username: credentials.username,
-                password: credentials.password,
-            });
-
-            if (loginResult.error) {
-                setError(loginResult.error);
-            } else {
-                console.log('Registration and login successful');
-            }
+        if (data) {
+            // Store the token after registration
+            storeToken(data.token);
+            console.log('Registration successful:', data);
         } else {
-            setError(data.error || 'Registration failed');
+            setError('Registration failed');
         }
     };
 
@@ -88,6 +70,7 @@ function AuthForm() {
                         <div className="inputBox relative my-7 ">
                             <input type="text"
                                 name="username"
+                                value={credentials.username}
                                 onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium'
                                 placeholder='Username' required />
@@ -96,6 +79,7 @@ function AuthForm() {
                         <div className="inputBox relative my-7">
                             <input type="password"
                                 name="password"
+                                value={credentials.password}
                                 onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
@@ -119,6 +103,7 @@ function AuthForm() {
                         <div className="inputBox relative my-7">
                             <input type="text"
                                 name="username"
+                                value={credentials.username}
                                 onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium'
                                 placeholder='Username' required />
@@ -127,6 +112,7 @@ function AuthForm() {
                         <div className="inputBox relative my-7 ">
                             <input type="email"
                                 name="email"
+                                value={credentials.email}
                                 onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium'
                                 placeholder='Email' required />
@@ -135,6 +121,7 @@ function AuthForm() {
                         <div className="inputBox relative my-7">
                             <input type="password"
                                 name="password"
+                                value={credentials.password}
                                 onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-inputwhite rounded-lg border-none outline-none text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
