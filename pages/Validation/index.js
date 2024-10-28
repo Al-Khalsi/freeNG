@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import { FaUser, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
@@ -10,6 +11,7 @@ function AuthForm() {
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
+    const router = useRouter();
 
     const handleClick = (action) => {
         setIsActive(action === "register");
@@ -28,8 +30,9 @@ function AuthForm() {
 
         if (user) {
             // Assuming the backend sets the HTTP-only cookie
-            storeToken(user.token); // Store the token
+            storeToken(user.token, user.username); // Store the token
             console.log('Login successful');
+            router.push('/');
         } else {
             setError('Invalid username or password');
         }
@@ -53,8 +56,9 @@ function AuthForm() {
         const data = await response.json();
         if (data) {
             // Store the token after registration
-            storeToken(data.token);
+            storeToken(data.token, credentials.username); // Store the token and username
             console.log('Registration successful:', data);
+            router.push('/');
         } else {
             setError('Registration failed');
         }

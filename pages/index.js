@@ -1,5 +1,6 @@
 // pages/index.js
 import Link from 'next/link';
+import { useAuth } from '../context/AuthContext'; // Import the Auth context
 import { FaSun, FaMoon, FaSearch, FaMicrophone } from "react-icons/fa";
 import { AiOutlineFullscreen } from "react-icons/ai";
 import { useEffect, useState } from "react";
@@ -10,6 +11,7 @@ import Images from "../data/db.json";
 import { useRouter } from 'next/router';
 
 function Index() {
+  const { token, username } = useAuth(); // Destructure token and username from Auth context
   const router = useRouter();
   const [openSelect, setOpenSelect] = useState(null);
   const itemsPerPage = 20;
@@ -217,9 +219,13 @@ function Index() {
             <button className='sm:hidden flex justify-center items-center w-10 h-10 mr-4 rounded-full text-xl bg-black text-white'>
               <FaSearch />
             </button>
-            <Link href="/validation" className='w-10 h-10 rounded-full overflow-hidden'>
-              <img src="/img/user.png" className='userPng w-full ' alt='profile' title='profile' />
-            </Link>
+            {token ? ( // Check if token exists
+              <span className='text-white'>{username}</span> // Display username
+            ) : (
+              <Link href="/validation" className='w-10 h-10 rounded-full overflow-hidden'>
+                <img src="/img/user.png" className='userPng w-full ' alt='profile' title='profile' />
+              </Link>
+            )}
           </div>
         </header>
 
