@@ -1,10 +1,22 @@
-### create user
+### register
 // @no-log
-POST http://localhost:8080/api/v1/auth
+POST http://localhost:8080/api/v1/auth/register
 Content-Type: application/json
 
 {
-  "username": "someone",
-  "email": "someone",
-  "password": "someone"
+  "username": "seyed",
+  "email": "seyed@gmail.com",
+  "password": "1"
 }
+
+### login
+// @no-log
+POST http://localhost:8080/api/v1/auth/login
+Content-Type: application/json
+
+{
+  "email": "seyed@gmail.com",
+  "password": "1"
+}
+
+> {% client.global.set("auth_token", response.body.data.token); %}

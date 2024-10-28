@@ -1,15 +1,21 @@
 package com.imalchemy.service.impl;
 
+import com.imalchemy.config.security.jwt.JwtProvider;
 import com.imalchemy.model.domain.Roles;
 import com.imalchemy.model.domain.User;
 import com.imalchemy.model.dto.RoleDTO;
 import com.imalchemy.model.dto.UserDTO;
+import com.imalchemy.model.payload.request.LoginRequest;
 import com.imalchemy.repository.RolesRepository;
 import com.imalchemy.repository.UserRepository;
 import com.imalchemy.service.AuthenticationService;
 import com.imalchemy.util.converter.UserConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -24,12 +30,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final RolesRepository roleRepository;
     private final UserConverter userConverter;
+    private final JwtProvider jwtProvider;
+    private final AuthenticationManager authenticationManager;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDTO registerUser(UserDTO userDTO) {
         User user = this.userConverter.toEntity(userDTO);
 
         // Encode password
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 
         // Handle roles
         Set<Roles> roles = new HashSet<>();
@@ -64,8 +74,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public Map<String, Object> login(UserDTO userDTO) {
-        return Map.of();
+    public Map<String, Object> login(LoginRequest loginRequest) {
+        Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(loginRequest.email(), loginRequest.password());
+        Authentication authenticationResponse = this.authenticationManager.authenticate(authentication);
+
+        if (authenticationResponse == null || !authenticationResponse.isAuthenticated()) {
+            throw new IllegalArgumentException("unauthorized");
+        }
+        String token = this.jwtProvider.createToken(authenticationResponse);
+
+        return Map.of(
+                "token", token,
+                "userDetails", this.jwtProvider.extractClaims(token, this.jwtProvider.extractSecretKey())
+        );
     }
 
 }
