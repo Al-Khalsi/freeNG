@@ -6,7 +6,7 @@ import { MdEmail } from "react-icons/md";
 import { useAuth } from '../context/AuthContext'; // Adjust the path as necessary
 
 function AuthForm() {
-    const { storeToken } = useAuth(); // Access the storeToken function from context
+    const { clearToken } = useAuth(); // Adjusted to clearToken
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
@@ -31,7 +31,7 @@ function AuthForm() {
         if (result.error) {
             setError(result.error);
         } else {
-            // Handle successful login (e.g., redirect or show a message)
+            // Assuming the backend sets the HTTP-only cookie
             console.log('Login successful');
         }
     };
@@ -52,8 +52,14 @@ function AuthForm() {
 
         const data = await response.json();
         if (data.success) {
-            // Store the token in context
-            storeToken(data.token); // Assuming the token is returned in data.token
+            // Call the API to set the cookie with the token
+            await fetch('/api/set-cookie', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ token: data.token }), // Assuming the token is returned in data.token
+            });
 
             // Optionally, you can log in the user after successful registration
             const loginResult = await signIn('credentials', {
