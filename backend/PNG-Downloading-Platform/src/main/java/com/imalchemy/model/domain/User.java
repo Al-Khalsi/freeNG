@@ -66,26 +66,4 @@ public class User extends BaseEntity<UUID> {
     )
     private Set<Roles> roles = new HashSet<>();
 
-
-    // -------------------- Methods --------------------
-    public void addRole(Roles role) {
-        // Add the role to the user's roles
-        roles.add(role);
-        // Add the user to the role's users
-        role.getUsers().add(this);
-    }
-
-    /**
-     * Remove a role from the user.
-     * <p>
-     * This method will remove the role from the user's roles and also remove
-     * the user from the role's users.
-     *
-     * @param role the role to remove
-     */
-    public void removeRole(Roles role) {
-        roles.remove(role);
-        role.getUsers().remove(this);
-    }
-
 }
