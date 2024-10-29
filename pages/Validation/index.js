@@ -40,7 +40,19 @@ function AuthForm() {
 
     const handleRegistration = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3001/users', {
+
+        // Check for existing username or email
+        const response = await fetch('http://localhost:3001/users');
+        const users = await response.json();
+        const existingUser = users.find(user => user.username === credentials.username || user.email === credentials.email);
+
+        if (existingUser) {
+            setError('Username or email already exists');
+            return; // Stop the registration process
+        }
+
+        // Proceed with registration if no existing user
+        const registerResponse = await fetch('http://localhost:3001/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -53,7 +65,7 @@ function AuthForm() {
             }),
         });
 
-        const data = await response.json();
+        const data = await registerResponse.json();
         if (data) {
             // Store the token after registration
             storeToken(data.token, credentials.username); // Store the token and username
