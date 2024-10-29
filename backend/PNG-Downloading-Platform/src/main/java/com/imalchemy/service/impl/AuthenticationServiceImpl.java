@@ -1,6 +1,6 @@
 package com.imalchemy.service.impl;
 
-import com.imalchemy.config.security.jwt.JwtProvider;
+import com.imalchemy.config.security.jwt.JWTProvider;
 import com.imalchemy.model.domain.Roles;
 import com.imalchemy.model.domain.User;
 import com.imalchemy.model.dto.RoleDTO;
@@ -30,7 +30,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final UserRepository userRepository;
     private final RolesRepository roleRepository;
     private final UserConverter userConverter;
-    private final JwtProvider jwtProvider;
+    private final JWTProvider jwtProvider;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
 

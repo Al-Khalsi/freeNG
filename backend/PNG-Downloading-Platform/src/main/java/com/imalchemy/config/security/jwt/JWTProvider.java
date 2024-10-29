@@ -24,7 +24,7 @@ import static com.imalchemy.util.constants.ApplicationConstants.JWT_SECRET_KEY;
 
 @Component
 @RequiredArgsConstructor
-public class JwtProvider {
+public class JWTProvider {
 
     private @Value("${spring.application.name}") String applicationName;
     private @Value("${token.jwt.expires_in}") long expiresIn;
@@ -57,12 +57,12 @@ public class JwtProvider {
         Claims claims = Jwts.parser().verifyWith(secretKey).build() // jwt token validation
                 .parseSignedClaims(token).getPayload();// fetch user details
 
-        String username = String.valueOf(claims.get("username"));
+        String username = String.valueOf(claims.get("email"));
         String authorities = String.valueOf(claims.get("authorities")); // comma separated authorities
 
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList(authorities);
 
-        return Map.of("username", username, "authorities", grantedAuthorities);
+        return Map.of("email", username, "authorities", grantedAuthorities);
     }
 
 }

@@ -35,3 +35,4 @@ build/
 ### Application Data ###
 /data
 /src/main/resources/.env
+/src/main/resources/uploads
