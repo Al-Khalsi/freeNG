@@ -164,7 +164,7 @@ function Index() {
 
   return (
     <>
-      <div className="app">
+      <div className="app relative">
         <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center bg-darkBlue text-white'>
           <div className='bg-logo'>
             <div className='logo'>LOGO</div>
@@ -261,13 +261,13 @@ function Index() {
         <main className='main flex justify-center w-full py-8 px-2 lg:px-12'>
           <section className='grid gap-10 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
             {currentImages.map((image) => (
-              <Link href={`/product/${image.id}
-              ?title=${encodeURIComponent(image.Title)}
-              &size=${encodeURIComponent(image.Size)}
-              &dimensions=${encodeURIComponent(image.Dimensions)}
-              &download=${encodeURIComponent(image.Download)}
-              &src=${encodeURIComponent(image.Src)}`} key={image.id}>
-                <div className='card w-full h-80 rounded-2xl overflow-hidden bg-darkBlue'>
+              // <Link href={`/product/${image.id}
+              // ?title=${encodeURIComponent(image.Title)}
+              // &size=${encodeURIComponent(image.Size)}
+              // &dimensions=${encodeURIComponent(image.Dimensions)}
+              // &download=${encodeURIComponent(image.Download)}
+              // &src=${encodeURIComponent(image.Src)}`} key={image.id}>
+                <div className='card w-full h-80 rounded-2xl overflow-hidden bg-darkBlue' key={image.id}>
                   <div className='inside-card h-full w-full p-3'>
                     <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
                       <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
@@ -294,7 +294,7 @@ function Index() {
                     </div>
                   </div>
                 </div>
-              </Link>
+              // </Link>
             ))}
           </section>
         </main>
@@ -303,6 +303,12 @@ function Index() {
         <div className="pagination flex justify-center py-4">
           {renderPagination()}
         </div>
+
+        <button 
+        className='fixed left-2 bottom-2 
+        w-10 h-10 p-6 flex justify-center items-center
+        bg-blue-700 text-white text-2xl outline-none
+        rounded-full cursor-pointer'>+</button>
 
       </div>
     </>
