@@ -30,7 +30,7 @@ function AuthForm() {
 
         if (user) {
             // Assuming the backend sets the HTTP-only cookie
-            storeToken(user.token, user.username); // Store the token
+            storeToken(user.token, user.username, user.email, user.id); // Store the token
             console.log('Login successful');
             router.push('/');
         } else {
@@ -68,7 +68,7 @@ function AuthForm() {
         const data = await registerResponse.json();
         if (data) {
             // Store the token after registration
-            storeToken(data.token, credentials.username); // Store the token and username
+            storeToken(data.token, data.id, credentials.username, credentials.email); // Store the token and username
             console.log('Registration successful:', data);
             router.push('/');
         } else {

@@ -1,13 +1,17 @@
 import { useRouter } from 'next/router';
 
+
 const Profile = () => {
     const router = useRouter();
-    const { id } = router.query;
+    const { userId, username, email } = router.query; 
+
 
     return (
         <div>
-            <h1>page product</h1>
-            <p>This page is about product number {id}.</p>
+            <h1>صفحه پروفایل</h1>
+            <p>userId: {userId}</p>
+            <p>username: {username.trim()}</p>
+            <p>email: {email.trim()}</p>
         </div>
     );
 };

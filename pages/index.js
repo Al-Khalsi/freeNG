@@ -11,7 +11,7 @@ import Images from "../data/db.json";
 import { useRouter } from 'next/router';
 
 function Index() {
-  const { token, username } = useAuth(); // Destructure token and username from Auth context
+  const { token, username, email, clearToken, userId } = useAuth(); // Destructure token and username from Auth context
   const router = useRouter();
   const [openSelect, setOpenSelect] = useState(null);
   const itemsPerPage = 20;
@@ -157,6 +157,11 @@ function Index() {
     return pagination;
   };
 
+  const handleLogout = () => {
+    clearToken(); // Clear the token
+    router.push('/validation'); // Redirect to the login page
+  };
+
   return (
     <>
       <div className="app">
@@ -220,7 +225,14 @@ function Index() {
               <FaSearch />
             </button>
             {token ? ( // Check if token exists
-              <span className='text-white'>{username}</span> // Display username
+              <div>
+                <Link href={`/profile/${userId}?username=${encodeURIComponent(username.trim())}&email=${encodeURIComponent(email.trim())}`}>
+                  <span className='text-white'>{username}</span>
+                </Link>
+                <button onClick={handleLogout} className='ml-4 px-4 py-2 rounded-lg bg-red-500 text-white'>
+                  Logout
+                </button>
+              </div>
             ) : (
               <Link href="/validation" className='w-10 h-10 rounded-full overflow-hidden'>
                 <img src="/img/user.png" className='userPng w-full ' alt='profile' title='profile' />
