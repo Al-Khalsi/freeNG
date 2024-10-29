@@ -1,12 +1,15 @@
 package com.imalchemy.config.security.filter;
 
-import com.imalchemy.config.security.jwt.JwtProvider;
+import com.imalchemy.config.security.jwt.JWTProvider;
+import jakarta.annotation.PostConstruct;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,8 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import static com.imalchemy.util.constants.ApplicationConstants.JWT_AUTHORIZATION_HEADER;
@@ -27,15 +28,18 @@ import static com.imalchemy.util.constants.ApplicationConstants.JWT_AUTHORIZATIO
 @RequiredArgsConstructor
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
-    private final JwtProvider jwtProvider;
+    private final JWTProvider jwtProvider;
 
-    private static final List<String> EXCLUDED_PATHS = Arrays.asList(
-            "/api/v1/auth/login",
-            "/api/v1/auth/register"
-    );
+    private @Value("${base.url}") String baseUrl;
+    private String EXCLUDED_PATH = "";
+
+    @PostConstruct
+    public void init() {
+        this.EXCLUDED_PATH = this.baseUrl + "/auth";
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         // read the authorization header
         String jwt = request.getHeader(JWT_AUTHORIZATION_HEADER);
         if (jwt != null) {
@@ -63,10 +67,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        boolean shouldNotFilter = EXCLUDED_PATHS.stream()
-                .anyMatch(path::equals);
-
-        System.out.println("Path: " + path + ", Should not filter: " + shouldNotFilter);
-        return shouldNotFilter;
+        return path.startsWith(this.EXCLUDED_PATH);
     }
+
 }
