@@ -35,28 +35,4 @@ public class Roles extends BaseEntity<Long> {
     @JsonIgnore
     private Set<User> users = new HashSet<>();
 
-    // -------------------- Methods --------------------
-
-    /**
-     * Add a user to the role. This method will add the user to the role's users
-     * and also add the role to the user's roles.
-     *
-     * @param user the user to add
-     */
-    public void addUser(User user) {
-        users.add(user);
-        user.getRoles().add(this);
-    }
-
-    /**
-     * Remove a user from the role. This method will remove the user from the
-     * role's users and also remove the role from the user's roles.
-     *
-     * @param user the user to remove
-     */
-    public void removeUser(User user) {
-        users.remove(user);
-        user.getRoles().remove(this);
-    }
-
 }
