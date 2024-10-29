@@ -9,9 +9,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
 @Setter
@@ -65,5 +63,8 @@ public class User extends BaseEntity<UUID> {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Roles> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
+    private List<File> files = new ArrayList<>();
 
 }
