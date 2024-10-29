@@ -1,17 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { signIn } from 'next-auth/react';
 import { FaUser, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
 import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
+import withAuthRedirect from '../../utils/withAuthRedirect'; // Adjust the path as necessary
 
 function AuthForm() {
-    const { storeToken, clearToken } = useAuth(); // Adjusted to storeToken
+    const { token, storeToken } = useAuth(); // Adjusted to storeToken
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
     const router = useRouter();
+
+    // Effect to prevent navigation back to login/register if already logged in
+    useEffect(() => {
+        if (token) {
+            // If the user is logged in, redirect to home
+            router.push('/');
+        }
+    }, [token, router]);
 
     const handleClick = (action) => {
         setIsActive(action === "register");
@@ -173,4 +182,4 @@ function AuthForm() {
     );
 }
 
-export default AuthForm;
+export default withAuthRedirect(AuthForm);
