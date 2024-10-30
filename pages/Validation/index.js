@@ -33,35 +33,40 @@ function AuthForm() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3001/users');
-        const users = await response.json();
-        const user = users.find(user => user.username === credentials.username && user.password === credentials.password);
+        const response = await fetch('http://localhost:3001/users' , { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: credentials.username,
+                password: credentials.password,
+            }),
+        });
 
-        if (user) {
-            // Assuming the backend sets the HTTP-only cookie
-            storeToken(user.token, user.username, user.email, user.id); // Store the token
+        if (response.ok) {
+            const data = await response.json();
+            const userToken = data.token; 
+            const userId = data.userId;
+
+            // Decode the token if necessary (assuming it's a JWT)
+            const decodedToken = JSON.parse(atob(userToken.split('.')[1]));
+
+            // Store token and userId
+            storeToken(userToken, userId)
             console.log('Login successful');
             router.push('/');
         } else {
             setError('Invalid username or password');
         }
+
     };
 
     const handleRegistration = async (e) => {
         e.preventDefault();
 
         // Check for existing username or email
-        const response = await fetch('http://localhost:3001/users');
-        const users = await response.json();
-        const existingUser = users.find(user => user.username === credentials.username || user.email === credentials.email);
-
-        if (existingUser) {
-            setError('Username or email already exists');
-            return; // Stop the registration process
-        }
-
-        // Proceed with registration if no existing user
-        const registerResponse = await fetch('http://localhost:3001/users', {
+        const response = await fetch('http://localhost:3001/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,14 +75,25 @@ function AuthForm() {
                 username: credentials.username,
                 email: credentials.email,
                 password: credentials.password,
-                token: Math.random().toString(36).substring(2), // Generate a random token
             }),
         });
 
-        const data = await registerResponse.json();
-        if (data) {
-            // Store the token after registration
-            storeToken(data.token, data.id, credentials.username, credentials.email); // Store the token and username
+        if (existingUser) {
+            setError('Username or email already exists');
+            return; // Stop the registration process
+        }
+
+
+        if (response.ok) {
+            const data = await response.json();
+            const userToken = data.token;
+            const userId = data.userId;
+
+            // Decode the token if necessary
+            const decodedToken = JSON.parse(atob(userToken.split('.')[1]));
+
+             // Store token and userId
+            storeToken(userToken);
             console.log('Registration successful:', data);
             router.push('/');
         } else {

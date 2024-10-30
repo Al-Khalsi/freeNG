@@ -1,11 +1,9 @@
 // pages/index.js
 import Link from 'next/link';
-import { useAuth } from '../context/AuthContext'; // Import the Auth context
+import { useAuth } from '../context/AuthContext';
 import { FaSun, FaMoon, FaSearch, FaMicrophone } from "react-icons/fa";
-import { AiOutlineFullscreen } from "react-icons/ai";
 import { useEffect, useState } from "react";
 import { MdFullscreen } from "react-icons/md";
-import Head from 'next/head';
 import SelectWithSearch from "../components/modules/SelectWithSearch";
 import Images from "../data/db.json";
 import { useRouter } from 'next/router';
@@ -37,13 +35,13 @@ function Index() {
     router.push(`/?page=${page}`);
   };
 
-  // تابع برای ایجاد دکمه‌های پیجینیشن
+
   const renderPagination = () => {
     const pagination = [];
-    const maxVisiblePages = 5; // تعداد صفحاتی که قبل و بعد از صفحه فعلی نشان داده می‌شود
+    const maxVisiblePages = 5;
 
     if (totalPages <= maxVisiblePages + 2) {
-      // اگر تعداد کل صفحات کمتر یا برابر با 7 باشد، همه صفحات را نشان بده
+
       for (let i = 1; i <= totalPages; i++) {
         pagination.push(
           <button
@@ -299,7 +297,6 @@ function Index() {
           </section>
         </main>
 
-        {/* دکمه‌های پیجینیشن */}
         <div className="pagination flex justify-center py-4">
           {renderPagination()}
         </div>

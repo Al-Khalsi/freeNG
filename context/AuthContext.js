@@ -12,30 +12,24 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         // Loading token, username, and email from cookies when loading component
         const storedToken = Cookies.get('token');
-        const storedUsername = Cookies.get('username');
-        const storedEmail = Cookies.get('email'); // Load email from cookies
-        const storedUserId = Cookies.get('userId'); // Load user ID from cookies
         if (storedToken) {
             setToken(storedToken);
+
+            // Decode the token to extract user information
+            const decodedToken = JSON.parse(atob(storedToken.split('.')[1]));
+            setUsername(decodedToken.username); // Extract username
+            setEmail(decodedToken.email); // Extract email
+            // If userId is not in the token, you should fetch it from your backend
         }
-        if (storedUsername) {
-            setUsername(storedUsername);
-        }
-        if (storedEmail) {
-            setEmail(storedEmail); // Set email from cookies
-        }
-        if (storedUserId) setUserId(storedUserId); // Set user ID from cookies
     }, []);
 
-    const storeToken = (newToken, newUsername, newEmail, newUserId) => {
+    const storeToken = (newToken, newUserId) => {
         setToken(newToken);
-        setUsername(newUsername); // Store username
-        setEmail(newEmail); // Store email
-        setUserId(newUserId); // Store user ID
+        const decodedToken = JSON.parse(atob(newToken.split('.')[1]));
+        setUsername(decodedToken.username); // Store username from token
+        setEmail(decodedToken.email); // Store email from token
+        setUserId(newUserId); // Store user ID separately
         Cookies.set('token', newToken); // Save token in cookie
-        Cookies.set('username', newUsername); // Save username in cookie
-        Cookies.set('email', newEmail); // Save email in cookie
-        Cookies.set('userId', newUserId); // Save user ID in cookie
     };
 
     const clearToken = () => {
@@ -44,13 +38,10 @@ export const AuthProvider = ({ children }) => {
         setEmail(null); // Clear email
         setUserId(null); // Clear user ID
         Cookies.remove('token'); // Remove the token from the cookie
-        Cookies.remove('username'); // Remove username from cookie
-        Cookies.remove('email'); // Remove email from cookie
-        Cookies.remove('userId'); // Remove user ID from cookie
     };
 
     return (
-        <AuthContext.Provider value={{ token, username, email, userId, storeToken, clearToken }}>
+        <AuthContext.Provider value={{ token, userId, username, email, storeToken, clearToken }}>
             {children}
         </AuthContext.Provider>
     );
