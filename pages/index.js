@@ -238,7 +238,9 @@ function Index() {
         className='fixed left-2 bottom-2 
         w-10 h-10 p-6 flex justify-center items-center
         bg-blue-700 text-white text-2xl outline-none
-        rounded-full cursor-pointer'>+</button>
+        rounded-full cursor-pointer'>
+          <Link href={'/uploadImage'}>+</Link>
+        </button>
 
       </div>
     </>
