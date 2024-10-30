@@ -9,6 +9,7 @@
 # https://github.com/docker/awesome-compose
 services:
   server:
+    container_name: png-downloading-platform
     build:
       context: .
       dockerfile: /Dockerfile
@@ -38,7 +39,7 @@ services:
   #         condition: service_healthy
   db:
     image: postgres:17-alpine
-    container_name: png-downloading-platform
+    container_name: postgres_db_container
     restart: on-failure
     environment:
       - POSTGRES_DB=imalchemy
