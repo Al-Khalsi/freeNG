@@ -21,6 +21,24 @@ public class User extends BaseEntity<UUID> {
 
     @Id
     private UUID id;
+    private String username;
+    private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+    @CreatedDate
+    private LocalDateTime createdAt;
+    private LocalDateTime lastLogin;
+    private int loginAttempts;
+    // -------------------- Relationships --------------------
+    @ManyToMany
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Roles> roles = new HashSet<>();
+    @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
+    private List<File> files = new ArrayList<>();
 
     /**
      * Overrides the default method to provide a clearer name.
@@ -43,28 +61,5 @@ public class User extends BaseEntity<UUID> {
             id = UUID.randomUUID();
         }
     }
-
-    private String username;
-    private String email;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-    @CreatedDate
-    private LocalDateTime createdAt;
-    private LocalDateTime lastLogin;
-
-    private int loginAttempts;
-
-
-    // -------------------- Relationships --------------------
-    @ManyToMany
-    @JoinTable(
-            name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Set<Roles> roles = new HashSet<>();
-
-    @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
-    private List<File> files = new ArrayList<>();
 
 }

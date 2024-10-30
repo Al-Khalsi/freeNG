@@ -36,6 +36,16 @@ file:
   storage:
     location: "src/main/resources/uploads"
 
+--- #Swagger
+#springdoc:
+#  api-docs:
+#    path: /api-docs
+#  swagger-ui:
+#    path: /swagger-ui.html
+#    operationsSorter: method
+#    tagsSorter: alpha
+#    disable-swagger-default-url: true
+
 --- ###Custom Variables
 token:
   jwt:

@@ -1,14 +1,13 @@
 package com.imalchemy.config.security.filter;
 
 import com.imalchemy.config.security.jwt.JWTProvider;
-import jakarta.annotation.PostConstruct;
+import com.imalchemy.util.SecurityUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,14 +28,7 @@ import static com.imalchemy.util.constants.ApplicationConstants.JWT_AUTHORIZATIO
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
     private final JWTProvider jwtProvider;
-
-    private @Value("${base.url}") String baseUrl;
-    private String EXCLUDED_PATH = "";
-
-    @PostConstruct
-    public void init() {
-        this.EXCLUDED_PATH = this.baseUrl + "/auth";
-    }
+    private final SecurityUtil securityUtil;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
@@ -44,6 +36,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
         String jwt = request.getHeader(JWT_AUTHORIZATION_HEADER);
         if (jwt != null) {
             try {
+                jwt = jwt.substring("Bearer ".length());
                 Map<String, Object> claimsMap = this.jwtProvider.extractClaims(jwt, this.jwtProvider.extractSecretKey());
                 String email = String.valueOf(claimsMap.get("email"));
                 String authorities = String.valueOf(claimsMap.get("authorities"));
@@ -67,7 +60,8 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.startsWith(this.EXCLUDED_PATH);
+        // return true if any excluding path matches
+        return this.securityUtil.getPERMITTED_URLS().stream().anyMatch(path::startsWith);
     }
 
 }

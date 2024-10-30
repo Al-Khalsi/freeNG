@@ -4,9 +4,9 @@ import com.imalchemy.config.security.entrypoint.CustomAccessDeniedHandler;
 import com.imalchemy.config.security.entrypoint.CustomBasicAuthenticationEntryPoint;
 import com.imalchemy.config.security.filter.JWTTokenGeneratorFilter;
 import com.imalchemy.config.security.filter.JWTTokenValidatorFilter;
-import jakarta.annotation.PostConstruct;
+import com.imalchemy.util.SecurityUtil;
+import com.imalchemy.util.converter.JavaDataTypeConverter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -31,20 +31,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @RequiredArgsConstructor
 public class SecurityConfiguration {
 
-    private @Value("${base.url}") String BASE_URL;
-    private String[] PERMITTED_URLS = {};
-
-    @PostConstruct
-    public void init() {
-        this.PERMITTED_URLS = new String[]{
-                this.BASE_URL + "/auth/**",
-        };
-    }
-
+    private final SecurityUtil securityUtil;
     private final CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final JWTTokenGeneratorFilter jwtTokenGeneratorFilter;
     private final JWTTokenValidatorFilter jwtTokenValidatorFilter;
+    private final JavaDataTypeConverter javaDataTypeConverter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -52,8 +44,21 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable) //TODO: configure this
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authz -> authz
-                                .requestMatchers(this.PERMITTED_URLS).permitAll()
-//                                .requestMatchers(this.BASE_URL + "/auth/**").permitAll()
+//                        .requestMatchers(this.javaDataTypeConverter.convertListToArray(this.securityUtil.getPERMITTED_URLS())).permitAll()
+                                .requestMatchers( //TODO: configure to use permitted urls as dynamic and to follow DRY
+                                        "/api/v1/auth/login",
+                                        "/api/v1/auth/register",
+                                        "/v2/api-docs",
+                                        "/v3/api-docs",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources",
+                                        "/swagger-resources/**",
+                                        "/configuration/ui",
+                                        "/configuration/security",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html",
+                                        "/webjars/**"
+                                ).permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(this.jwtTokenValidatorFilter, BasicAuthenticationFilter.class)

@@ -21,18 +21,16 @@ public class Roles extends BaseEntity<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String roleName;
+    // -------------------- Relationships --------------------
+    @ManyToMany(mappedBy = "roles")
+    @JsonIgnore
+    private Set<User> users = new HashSet<>();
 
     @Override
     @JsonProperty("id")
     public Long getId() {
         return id;
     }
-
-    private String roleName;
-
-    // -------------------- Relationships --------------------
-    @ManyToMany(mappedBy = "roles")
-    @JsonIgnore
-    private Set<User> users = new HashSet<>();
 
 }
