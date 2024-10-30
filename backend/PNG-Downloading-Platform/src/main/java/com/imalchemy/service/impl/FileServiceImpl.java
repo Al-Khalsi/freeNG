@@ -26,11 +26,10 @@ import java.util.Objects;
 @Profile("!prod")
 public class FileServiceImpl implements FileService {
 
-    private @Value("${file.storage.location}") String fileLocation;
-
     private final FileRepository fileRepository;
     private final Path fileStorageLocation;
     private final SecurityUtil securityUtil;
+    private @Value("${file.storage.location}") String fileLocation;
 
     public FileServiceImpl(FileRepository fileRepository, SecurityUtil securityUtil) throws IOException {
         this.fileRepository = fileRepository;

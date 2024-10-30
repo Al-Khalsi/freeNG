@@ -27,7 +27,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
         // TODO: remove the if and else block for dev profile
-        if (this.passwordEncoder.matches(password,userDetails.getPassword()))
+        if (this.passwordEncoder.matches(password, userDetails.getPassword()))
             return new UsernamePasswordAuthenticationToken(email,
                     password,
                     userDetails.getAuthorities()

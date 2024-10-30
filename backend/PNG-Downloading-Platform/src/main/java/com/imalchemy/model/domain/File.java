@@ -1,7 +1,10 @@
 package com.imalchemy.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -18,6 +21,18 @@ public class File extends BaseEntity<UUID> {
 
     @Id
     private UUID id;
+    private String fileTitle;
+    private String filePath;
+    private String contentType;
+    private long size;
+    private int height;
+    private int width;
+    private long downloadCount;
+    private boolean isActive;
+    private BigDecimal averageRating;
+    // -------------------- Relationships --------------------
+    @ManyToOne
+    private User uploadedBy;
 
     /**
      * Overrides the default method to provide a clearer name.
@@ -40,19 +55,5 @@ public class File extends BaseEntity<UUID> {
             id = UUID.randomUUID();
         }
     }
-
-    private String fileTitle;
-    private String filePath;
-    private String contentType;
-    private long size;
-    private int height;
-    private int width;
-    private long downloadCount;
-    private boolean isActive;
-    private BigDecimal averageRating;
-
-    // -------------------- Relationships --------------------
-    @ManyToOne
-    private User uploadedBy;
 
 }
