@@ -9,7 +9,7 @@
 # https://github.com/docker/awesome-compose
 services:
   server:
-    container_name: png-downloading-platform
+    container_name: imalchemy:0.1
     build:
       context: .
       dockerfile: /Dockerfile
