@@ -3,6 +3,13 @@ package com.imalchemy.controller;
 import com.imalchemy.model.domain.File;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +24,31 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${base.url}/file")
+@Tag(name = "File API", description = "Endpoints for file operations")
+@SecurityRequirement(name = "BearerToken")
 public class FileController {
 
     private final FileService fileService;
 
     // Endpoint for uploading a file
+    @Operation(
+            summary = "Upload a file",
+            description = "Upload a file to the server"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "File successfully uploaded",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Result.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Failed to upload file"
+            )
+    })
     @PostMapping("/upload")
     public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile) {
         try {

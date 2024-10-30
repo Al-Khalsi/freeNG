@@ -26,10 +26,9 @@ import static com.imalchemy.util.constants.ApplicationConstants.JWT_SECRET_KEY;
 @RequiredArgsConstructor
 public class JWTProvider {
 
+    private final Environment env;
     private @Value("${spring.application.name}") String applicationName;
     private @Value("${token.jwt.expires_in}") long expiresIn;
-
-    private final Environment env;
 
     public SecretKey extractSecretKey() {
         if (this.env == null) {
