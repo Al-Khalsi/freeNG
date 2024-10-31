@@ -6,6 +6,10 @@ const availableCategories = [
   'category1',
   'category2',
   'category3',
+  'category4',
+  'category5',
+  'category6',
+  'category7',
 ];
 
 function UploadImage() {
@@ -83,8 +87,8 @@ function UploadImage() {
       <form onSubmit={handleSubmit} className='bg-white p-6 rounded shadow-md w-96'>
         <h2 className='text-xl font-bold mb-4'>Upload Image</h2>
 
-        <div 
-          onDrop={handleDrop} 
+        <div
+          onDrop={handleDrop}
           onDragOver={handleDragOver}
           onClick={() => document.querySelector('input[type="file"]').click()}
           className='border-2 border-dashed border-gray-400 rounded p-4 mb-4 flex items-center justify-center cursor-pointer'
@@ -94,29 +98,29 @@ function UploadImage() {
           ) : (
             <p>Drop your image here or click to select</p>
           )}
-          <input 
-            type='file' 
-            accept='image/*' 
-            onChange={handleImageChange} 
+          <input
+            type='file'
+            accept='image/*'
+            onChange={handleImageChange}
             className='hidden'
             required
           />
         </div>
 
-        <input 
-          type='text' 
-          placeholder='Image Name' 
-          value={imageName} 
-          onChange={(e) => setImageName(e.target.value)} 
+        <input
+          type='text'
+          placeholder='Image Name'
+          value={imageName}
+          onChange={(e) => setImageName(e.target.value)}
           className='border border-gray-300 rounded p-2 mb-4 w-full'
           required
         />
 
         {/* Dropdown for Categories */}
         <div className='mb-4 relative'>
-          <button 
-            type='button' 
-            onClick={() => setDropdownOpen(!dropdownOpen)} 
+          <button
+            type='button'
+            onClick={() => setDropdownOpen(!dropdownOpen)}
             className='border border-gray-300 rounded p-2 w-full text-left'
           >
             {selectedCategories.length > 0 ? `Categories (${selectedCategories.length})` : 'Categories'}
@@ -125,11 +129,11 @@ function UploadImage() {
             <div className='absolute z-10 bg-white border border-gray-300 rounded shadow-md mt-1 w-full'>
               {availableCategories.map((category) => (
                 <label key={category} className='block p-2'>
-                  <input 
-                    type='checkbox' 
-                    value={category} 
-                    checked={selectedCategories.includes(category)} 
-                    onChange={handleCategoryChange} 
+                  <input
+                    type='checkbox'
+                    value={category}
+                    checked={selectedCategories.includes(category)}
+                    onChange={handleCategoryChange}
                     className='mr-2'
                   />
                   {category}
@@ -140,13 +144,19 @@ function UploadImage() {
         </div>
 
         {/* Display selected categories as tags */}
-        <div className='mb-4'>
+        <div className='grid gap-1 grid-cols-3'>
           {selectedCategories.map((category) => (
-            <span key={category} className='inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded'>
-              {category}
-              <button 
-                type='button' 
-                onClick={() => handleRemoveCategory(category)} 
+            <span
+              key={category}
+              className='inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium mb-2 -mt-2 px-2.5 py-0.5 rounded overflow-hidden whitespace-nowrap'
+              style={{ maxWidth: '100%' }} // Ensure it doesn't exceed the parent width
+            >
+              <span className='flex-1 overflow-hidden text-ellipsis'>
+                {category}
+              </span>
+              <button
+                type='button'
+                onClick={() => handleRemoveCategory(category)}
                 className='ml-1 text-blue-500 hover:text-blue-700'
               >
                 &times;
@@ -155,28 +165,37 @@ function UploadImage() {
           ))}
         </div>
 
-        <select 
-          value={style} 
-          onChange={(e) => setStyle(e.target.value)} 
+        <select
+          value={style}
+          onChange={(e) => setStyle(e.target.value)}
           className='border border-gray-300 rounded p-2 mb-4 w-full'
           required
         >
           <option value=''>Select Style</option>
+          <option value='style1'>3D</option>
+          <option value='style2'>Anime</option>
+          <option value='style1'>Cartoon</option>
+          <option value='style1'>Character Design</option>
           <option value='style1'>Style 1</option>
-          <option value='style2'>Style 2</option>
+          <option value='style1'>Style 1</option>
+          <option value='style1'>Style 1</option>
+          <option value='style1'>Style 1</option>
+          <option value='style1'>Style 1</option>
+
+          <option value='style2'>Pixel</option>
           <option value='style3'>Style 3</option>
         </select>
 
-        <input 
-          type='text' 
-          placeholder='Tags (comma separated)' 
-          value={tags} 
-          onChange={(e) => setTags(e.target.value)} 
+        <input
+          type='text'
+          placeholder='Tags (comma separated)'
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
           className='border border-gray-300 rounded p-2 mb-4 w-full'
         />
 
-        <button 
-          type='submit' 
+        <button
+          type='submit'
           className='bg-blue-500 text-white rounded p-2 w-full'
         >
           Upload
