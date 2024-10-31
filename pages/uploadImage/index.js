@@ -2,13 +2,20 @@ import React, { useState, useCallback } from 'react';
 import { apiFetch } from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 
+const availableCategories = [
+  'category1',
+  'category2',
+  'category3',
+];
+
 function UploadImage() {
   const { token } = useAuth();
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
-  const [category, setCategory] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const [style, setStyle] = useState('');
   const [tags, setTags] = useState('');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
@@ -19,7 +26,7 @@ function UploadImage() {
 
   const handleDrop = useCallback((event) => {
     event.preventDefault();
-    event.stopPropagation(); // جلوگیری از رفتار پیش‌فرض
+    event.stopPropagation();
     const file = event.dataTransfer.files[0];
     if (file) {
       setImage(file);
@@ -27,9 +34,24 @@ function UploadImage() {
   }, []);
 
   const handleDragOver = useCallback((event) => {
-    event.preventDefault(); // جلوگیری از رفتار پیش‌فرض
-    event.stopPropagation(); // جلوگیری از رفتار پیش‌فرض
+    event.preventDefault();
+    event.stopPropagation();
   }, []);
+
+  const handleCategoryChange = (event) => {
+    const value = event.target.value;
+    setSelectedCategories((prev) => {
+      if (prev.includes(value)) {
+        return prev.filter((category) => category !== value);
+      } else {
+        return [...prev, value];
+      }
+    });
+  };
+
+  const handleRemoveCategory = (category) => {
+    setSelectedCategories((prev) => prev.filter((c) => c !== category));
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -37,7 +59,7 @@ function UploadImage() {
     const formData = new FormData();
     formData.append('image', image);
     formData.append('imageName', imageName);
-    formData.append('category', category);
+    formData.append('categories', JSON.stringify(selectedCategories));
     formData.append('style', style);
     formData.append('tags', tags.split(',').map(tag => tag.trim()));
 
@@ -60,12 +82,11 @@ function UploadImage() {
     <div className='w-full h-full flex items-center justify-center'>
       <form onSubmit={handleSubmit} className='bg-white p-6 rounded shadow-md w-96'>
         <h2 className='text-xl font-bold mb-4'>Upload Image</h2>
-        
-        {/* ناحیه درگ و دراپ */}
+
         <div 
           onDrop={handleDrop} 
-          onDragOver={handleDragOver} // اضافه کردن رویداد درگ اوور
-          onClick={() => document.querySelector('input[type="file"]').click()} // این خط اضافه شده است
+          onDragOver={handleDragOver}
+          onClick={() => document.querySelector('input[type="file"]').click()}
           className='border-2 border-dashed border-gray-400 rounded p-4 mb-4 flex items-center justify-center cursor-pointer'
         >
           {image ? (
@@ -81,7 +102,7 @@ function UploadImage() {
             required
           />
         </div>
-        
+
         <input 
           type='text' 
           placeholder='Image Name' 
@@ -91,17 +112,48 @@ function UploadImage() {
           required
         />
 
-        <select 
-          value={category} 
-          onChange={(e) => setCategory(e.target.value)} 
-          className='border border-gray-300 rounded p-2 mb-4 w-full'
-          required
-        >
-          <option value=''>Select Category</option>
-          <option value='category1'>Category 1</option>
-          <option value='category2'>Category 2</option>
-          <option value='category3'>Category 3</option>
-        </select>
+        {/* Dropdown for Categories */}
+        <div className='mb-4 relative'>
+          <button 
+            type='button' 
+            onClick={() => setDropdownOpen(!dropdownOpen)} 
+            className='border border-gray-300 rounded p-2 w-full text-left'
+          >
+            {selectedCategories.length > 0 ? `Categories (${selectedCategories.length})` : 'Categories'}
+          </button>
+          {dropdownOpen && (
+            <div className='absolute z-10 bg-white border border-gray-300 rounded shadow-md mt-1 w-full'>
+              {availableCategories.map((category) => (
+                <label key={category} className='block p-2'>
+                  <input 
+                    type='checkbox' 
+                    value={category} 
+                    checked={selectedCategories.includes(category)} 
+                    onChange={handleCategoryChange} 
+                    className='mr-2'
+                  />
+                  {category}
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Display selected categories as tags */}
+        <div className='mb-4'>
+          {selectedCategories.map((category) => (
+            <span key={category} className='inline-flex items-center bg-blue-100 text-blue-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded'>
+              {category}
+              <button 
+                type='button' 
+                onClick={() => handleRemoveCategory(category)} 
+                className='ml-1 text-blue-500 hover:text-blue-700'
+              >
+                &times;
+              </button>
+            </span>
+          ))}
+        </div>
 
         <select 
           value={style} 
