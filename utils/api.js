@@ -1,13 +1,15 @@
-export const apiFetch = async (url, method = 'GET', body = null) => {
+export const apiFetch = async (url, method = 'GET', body = null, customOptions = {}) => {
     const options = {
         method,
-        headers: {
-            'Content-Type': 'application/json',
-        },
+        ...customOptions, // اضافه کردن گزینه‌های سفارشی
     };
 
     if (body) {
-        options.body = JSON.stringify(body);
+        if (body instanceof FormData) {
+            options.body = body; // اگر body از نوع FormData باشد، مستقیماً ارسال می‌شود
+        } else {
+            options.body = JSON.stringify(body);
+        }
     }
 
     try {
@@ -18,6 +20,6 @@ export const apiFetch = async (url, method = 'GET', body = null) => {
         return await response.json();
     } catch (error) {
         console.error('Fetch error:', error);
-        throw error; // Rethrow the error for handling in the calling function
+        throw error; // دوباره پرتاب کردن خطا برای مدیریت در تابع فراخوانی
     }
 };
