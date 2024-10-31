@@ -19,8 +19,8 @@ import java.util.List;
 public class SecurityUtil {
 
     private final UserRepository userRepository;
-    private @Value("${base.url}") String BASE_URL;
     private final List<String> PERMITTED_URLS = new ArrayList<>();
+    private @Value("${base.url}") String BASE_URL;
 
     @PostConstruct
     public void init() {

@@ -4,7 +4,7 @@
     request.variables.set("auth_token", request.variables.get("auth_token"));
 %} #TODO: fix this. when it is removed, only then it works.
 POST http://localhost:8080/api/v1/file/upload
-Authorization: {{auth_token}}
+Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
