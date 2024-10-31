@@ -25,11 +25,11 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
-@Profile("!prod")
+@Profile("prod")
 @EnableWebSecurity
 @EnableMethodSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+public class SecurityConfigProd {
 
     private final SecurityUtil securityUtil;
     private final CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint;
@@ -81,7 +81,7 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-        CustomAuthenticationProvider authenticationProvider = new CustomAuthenticationProvider(userDetailsService, passwordEncoder);
+        CustomAuthenticationProviderProd authenticationProvider = new CustomAuthenticationProviderProd(userDetailsService, passwordEncoder);
 
         ProviderManager providerManager = new ProviderManager(authenticationProvider);
         providerManager.setEraseCredentialsAfterAuthentication(false);

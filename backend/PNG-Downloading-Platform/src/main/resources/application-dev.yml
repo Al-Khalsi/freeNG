@@ -32,9 +32,9 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
-file:
-  storage:
-    location: "src/main/resources/uploads"
+#file:
+#  storage:
+#    location: "src/main/resources/uploads"
 
 --- #Swagger
 #springdoc:
