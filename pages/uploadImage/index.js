@@ -19,10 +19,16 @@ function UploadImage() {
 
   const handleDrop = useCallback((event) => {
     event.preventDefault();
+    event.stopPropagation(); // جلوگیری از رفتار پیش‌فرض
     const file = event.dataTransfer.files[0];
     if (file) {
       setImage(file);
     }
+  }, []);
+
+  const handleDragOver = useCallback((event) => {
+    event.preventDefault(); // جلوگیری از رفتار پیش‌فرض
+    event.stopPropagation(); // جلوگیری از رفتار پیش‌فرض
   }, []);
 
   const handleSubmit = async (event) => {
@@ -58,13 +64,14 @@ function UploadImage() {
         {/* ناحیه درگ و دراپ */}
         <div 
           onDrop={handleDrop} 
-          onDragOver={handleDragOver} 
-          className='border-2 border-dashed border-gray-400 rounded p-4 mb-4 flex items-center justify-center'
+          onDragOver={handleDragOver} // اضافه کردن رویداد درگ اوور
+          onClick={() => document.querySelector('input[type="file"]').click()} // این خط اضافه شده است
+          className='border-2 border-dashed border-gray-400 rounded p-4 mb-4 flex items-center justify-center cursor-pointer'
         >
           {image ? (
             <p>{image.name}</p>
           ) : (
-            <p>Drag & drop your image here or click to select</p>
+            <p>Drop your image here or click to select</p>
           )}
           <input 
             type='file' 
