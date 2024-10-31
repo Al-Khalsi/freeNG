@@ -12,7 +12,8 @@ services:
     container_name: imalchemy
     build:
       context: .
-      dockerfile: /Dockerfile
+      dockerfile: ./Dockerfile
+    container_name: backend_server
     ports:
       - 8080:8080
     environment:
@@ -22,6 +23,10 @@ services:
       - DATABASE_NAME=imalchemy
       - DATABASE_USERNAME=user
       - DATABASE_PASSWORD_FILE=/run/secrets/db-password
+      - FILE_UPLOAD_LOCATION=/app/uploads
+    volumes:
+      - file-uploads:/app/uploads  # Use a named volume for persistent file storage
+      - ./data/db/password.txt:/run/secrets/db-password
     depends_on:
       db:
         condition: service_healthy
@@ -34,12 +39,9 @@ services:
   # database data between container restarts. The `db-password` secret is used
   # to set the database password. You must create `db/password.txt` and add
   # a password of your choosing to it before running `docker-compose up`.
-  #     depends_on:
-  #       db:
-  #         condition: service_healthy
   db:
     image: postgres:17-alpine
-    container_name: postgres_db_container
+    container_name: database
     restart: on-failure
     environment:
       - POSTGRES_DB=imalchemy
@@ -56,6 +58,11 @@ services:
       retries: 5
     volumes:
       - ./data/db/postgres:/var/lib/postgresql/data
+
+# Define the named volume for file uploads
+volumes:
+  file-uploads:
+    driver: local
 
 secrets:
   db-password:
