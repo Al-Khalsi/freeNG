@@ -1,8 +1,5 @@
 ### upload
 // @no-log
-< {%
-    request.variables.set("auth_token", request.variables.get("auth_token"));
-%} #TODO: fix this. when it is removed, only then it works.
 POST http://localhost:8080/api/v1/file/upload
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
@@ -13,3 +10,8 @@ Content-Type: image/png
 
 < ../documentation/imalchemy.png
 --WebAppBoundary--
+
+### download
+// @no-log
+GET http://localhost:8080/api/v1/file/download/249169f2-465c-4b38-bd25-6611f169bdff
+Accept: application/octet-stream
