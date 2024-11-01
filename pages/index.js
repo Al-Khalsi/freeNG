@@ -198,7 +198,7 @@ function Index() {
               // &dimensions=${encodeURIComponent(image.Dimensions)}
               // &download=${encodeURIComponent(image.Download)}
               // &src=${encodeURIComponent(image.Src)}`} key={image.id}>
-                <div className='card w-full h-80 rounded-2xl overflow-hidden bg-darkBlue' key={image.id}>
+                <div className='card w-full h-80 rounded-2xl overflow-hidden bg-bgDarkGray' key={image.id}>
                   <div className='inside-card h-full w-full p-3'>
                     <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
                       <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
