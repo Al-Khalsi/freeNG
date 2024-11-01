@@ -198,10 +198,10 @@ main aside {
   background-repeat: no-repeat;
   background-position: 0 0;
   background-image: conic-gradient(#05071b,
-      #4d6dff 5%,
+      var(--bg-lightPurple) 5%,
       #05071b 14%,
       #05071b 50%,
-      #6e8cff 60%,
+      var(--bg-lightPurple) 60%,
       #05071b 64%);
   transition: all 2s;
 }
@@ -289,10 +289,10 @@ main aside {
   background-repeat: no-repeat;
   background-position: 0 0;
   background-image: conic-gradient(#000,
-      #4d6dff 5%,
+      var(--bg-purple) 5%,
       #000 38%,
       #000 50%,
-      #6e8cff 60%,
+      var(--bg-purple) 60%,
       #000 87%);
   transition: all 2s;
 }
@@ -506,6 +506,11 @@ main aside {
   border: none;
   outline: none;
   padding: 12px 18px;
+}
+.btn-uploadImage {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
 }
 .button::before,
 .button::after {
