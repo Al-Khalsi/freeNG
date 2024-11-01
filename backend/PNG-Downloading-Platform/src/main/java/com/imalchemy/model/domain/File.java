@@ -1,13 +1,13 @@
 package com.imalchemy.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Getter
@@ -27,12 +27,35 @@ public class File extends BaseEntity<UUID> {
     private long size;
     private int height;
     private int width;
-    private long downloadCount;
     private boolean isActive;
+    private String keywords; // Comma-separated keywords for search
+    // Color palette for better search-ability
+    @ElementCollection
+    @CollectionTable(
+            name = "file_colors",
+            joinColumns = @JoinColumn(name = "file_id")
+    )
+    private Set<String> dominantColors = new HashSet<>();
+    // Statistics and metrics
+    private long viewCount;
+    private long downloadCount;
     private BigDecimal averageRating;
+    private LocalDateTime lastDownloadedAt;
+
     // -------------------- Relationships --------------------
     @ManyToOne
     private User uploadedBy;
+
+    @ManyToMany
+    @JoinTable(
+            name = "files_categories",
+            joinColumns = @JoinColumn(name = "file_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    @ToString.Exclude
+    private Set<Category> categories = new HashSet<>();
+
+    // -------------------- Methods --------------------
 
     /**
      * Overrides the default method to provide a clearer name.
@@ -54,6 +77,17 @@ public class File extends BaseEntity<UUID> {
         if (id == null) {
             id = UUID.randomUUID();
         }
+    }
+
+    // Helper methods for category management
+    public void addCategory(Category category) {
+        categories.add(category);
+        category.getFiles().add(this);
+    }
+
+    public void removeCategory(Category category) {
+        categories.remove(category);
+        category.getFiles().remove(this);
     }
 
 }
