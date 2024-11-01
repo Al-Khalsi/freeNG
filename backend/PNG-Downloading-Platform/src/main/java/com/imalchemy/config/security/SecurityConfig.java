@@ -44,22 +44,22 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) //TODO: configure this
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authz -> authz
-//                        .requestMatchers(this.javaDataTypeConverter.convertListToArray(this.securityUtil.getPERMITTED_URLS())).permitAll()
-                                .requestMatchers( //TODO: configure to use permitted urls as dynamic and to follow DRY
-                                        "/api/v1/auth/login",
-                                        "/api/v1/auth/register",
-                                        "/v2/api-docs",
-                                        "/v3/api-docs",
-                                        "/v3/api-docs/**",
-                                        "/swagger-resources",
-                                        "/swagger-resources/**",
-                                        "/configuration/ui",
-                                        "/configuration/security",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html",
-                                        "/webjars/**"
-                                ).permitAll()
-                                .anyRequest().authenticated()
+                        .requestMatchers( //TODO: configure to use permitted urls as dynamic and to follow DRY
+                                "/api/v1/auth/login",
+                                "/api/v1/auth/register",
+                                "/api/v1/file/download/**",
+                                "/v2/api-docs",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**",
+                                "/swagger-resources",
+                                "/swagger-resources/**",
+                                "/configuration/ui",
+                                "/configuration/security",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/webjars/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .addFilterBefore(this.jwtTokenValidatorFilter, BasicAuthenticationFilter.class)
                 .addFilterAfter(this.jwtTokenGeneratorFilter, BasicAuthenticationFilter.class)

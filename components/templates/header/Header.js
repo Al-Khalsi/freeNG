@@ -3,7 +3,7 @@ import { FaSearch, FaMicrophone } from 'react-icons/fa';
 
 function Header({ token, username, email, userId, handleLogout }) {
     return (
-        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center  text-white'>
+        <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center text-white'>
             <div className='bg-logo'>
                 <div className='logo'>LOGO</div>
             </div>
@@ -72,11 +72,29 @@ function Header({ token, username, email, userId, handleLogout }) {
                         </button>
                     </div>
                 ) : (
-                    <button className='w-10 h-10 bg-bgTurquoise'>
-                        <Link href="/validation" className=''>
+                    <button type="button" class="button">
+                        <span class="fold"></span>
 
-                        </Link>
+                        <div class="points_wrapper">
+                            <i class="point"></i>
+                            <i class="point"></i>
+                            <i class="point"></i>
+                            <i class="point"></i>
+                            <i class="point"></i>
+                            <i class="point"></i>
+                            <i class="point"></i>
+                            <i class="point"></i>
+                            <i class="point"></i>
+                            <i class="point"></i>
+                        </div>
+
+                        <span class="inner">
+                            <Link href="/validation" className=''>
+                                Login / Register
+                            </Link>
+                        </span>
                     </button>
+
                 )}
             </div>
         </header>
