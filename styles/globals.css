@@ -43,8 +43,8 @@
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
   height: 100%;
-  background-color: #c9c9c9;
-  color: black;
+  background-color: var(--bg-darkBlue);
+  color: var(--bg-white);
 }
 
 .app {
