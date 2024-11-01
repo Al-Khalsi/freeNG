@@ -6,6 +6,8 @@ import com.imalchemy.repository.FileRepository;
 import com.imalchemy.service.FileService;
 import com.imalchemy.util.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -13,11 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Objects;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -43,7 +47,6 @@ public class FileServiceImpl implements FileService {
         log.info("-> FILE -> File storage location set. File Location: {}", fileStoragePath);
 
         try {
-
             // Create the directory if it doesn't exist
             Files.createDirectories(this.fileStorageLocation);
             // Ensure it's writable
@@ -51,7 +54,6 @@ public class FileServiceImpl implements FileService {
                 log.error("-> FILE -> File storage location is not writable: {}", this.fileStorageLocation);
                 throw new IOException("File storage location is not writable: " + this.fileStorageLocation);
             }
-
         } catch (IOException e) {
             log.error("-> FILE -> Failed to create directory: {}. Cause=[{}]", this.fileStorageLocation, e.getMessage());
             throw new IOException("Could not create the directory where the uploaded files will be stored", e);
@@ -77,8 +79,12 @@ public class FileServiceImpl implements FileService {
             }
             // Copy the file to the target location, replacing if it already exists
             Files.copy(multipartFile.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            // Store only the relative path in the database
+            String relativePath = this.fileStorageLocation.relativize(targetLocation).toString();
+
             // Create a new File to store in the database
-            File file = createFileDomain(multipartFile, fileName, targetLocation);
+            File file = createFileDomain(multipartFile, fileName, relativePath);
 
             // Save the file metadata to the database and return the entity
             return this.fileRepository.save(file);
@@ -88,10 +94,10 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private File createFileDomain(MultipartFile multipartFile, String fileName, Path targetLocation) {
+    private File createFileDomain(MultipartFile multipartFile, String fileName, String relativePath) {
         File file = new File();
         file.setFileTitle(fileName);
-        file.setFilePath(targetLocation.toString());
+        file.setFilePath(relativePath); // Store only the relative path
         file.setContentType(multipartFile.getContentType());
         file.setSize(multipartFile.getSize());
         file.setActive(true);
@@ -102,6 +108,32 @@ public class FileServiceImpl implements FileService {
         file.setWidth(0);
 
         return file;
+    }
+
+    // Method to load a file as a Resource
+    public Resource loadFileAsResource(String fileId) throws IOException {
+        // Find the file metadata in the database
+        File file = this.fileRepository.findById(UUID.fromString(fileId))
+                .orElseThrow(() -> new IOException("File not found with id " + fileId));
+
+        try {
+            // Combine the base storage location with the relative path from the database
+            Path absolutePath = this.fileStorageLocation.resolve(file.getFilePath()).normalize();
+
+            // Ensure the resolved path is still within our base directory (security check)
+            if (!absolutePath.startsWith(this.fileStorageLocation)) {
+                log.error("-> FILE -> File cannot be stored outside the storage location directory: {}", file.getFilePath());
+                throw new IOException("Invalid file path");
+            }
+
+            Resource resource = new UrlResource(absolutePath.toUri());
+            if (resource.exists()) return resource;
+            else throw new IOException("File not found: " + file.getFileTitle());
+
+        } catch (MalformedURLException ex) {
+            log.error("File not found. Filename: {} - Cause: [{}]", file.getFileTitle(), ex.getMessage());
+            throw new IOException("File not found " + file.getFileTitle(), ex);
+        }
     }
 
 }
