@@ -9,7 +9,9 @@
   --bg-white: #fff;
   --bg-gray: #c2c3c5;
   --bg-black: #000;
-  --bg-turquoise: #21e786;
+  --bg-darkPurple: #25003e;
+  --bg-purple: #520089;
+  --bg-lightPurple: #973fd1;
   --bg-darkBlue: #05071b;
   --bg-navyBlue: #040b11;
   --bg-lightBlue: #798DA3;
@@ -19,7 +21,9 @@
   --cl-white: #fff;
   --cl-gray: #c2c3c5;
   --cl-black: #000;
-  --cl-turquoise: #21e786;
+  --cl-darkPurple: #25003e;
+  --cl-purple: #520089;
+  --cl-lightPurple: #973fd1;
   --cl-darkBlue: #05071b;
   --cl-navyBlue: #040b11;
   --cl-lightBlue: #798DA3;
@@ -59,11 +63,6 @@ img {
 
 main aside {
   flex-shrink: 0.25;
-}
-
-header {
-  background-color: #000000;
-  color: rgb(255, 255, 255);
 }
 
 .btn-search {

@@ -172,7 +172,7 @@ function Index() {
           handleLogout={handleLogout} 
         />
 
-        <aside className="filter-sidebar w-full">
+        {/* <aside className="filter-sidebar w-full">
           <div className="flex px-12 py-2 bg-gray-0">
             <SelectWithSearch
               options={options1}
@@ -187,7 +187,7 @@ function Index() {
               onToggle={() => handleSelectToggle(2)}
             />
           </div>
-        </aside>
+        </aside> */}
 
         <main className='main flex justify-center w-full py-8 px-2 lg:px-12'>
           <section className='grid gap-10 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
