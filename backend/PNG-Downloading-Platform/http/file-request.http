@@ -9,6 +9,10 @@ Content-Disposition: form-data; name="file"; filename="imalchemy.png"
 Content-Type: image/png
 
 < ../documentation/imalchemy.png
+--WebAppBoundary
+Content-Disposition: form-data; name="categoryName"
+
+roses
 --WebAppBoundary--
 
 ### download
