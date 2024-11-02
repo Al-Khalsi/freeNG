@@ -687,17 +687,21 @@ main aside {
   position: relative;
   color: var(--cl-lightPurple);
   cursor: pointer;
-  padding: 0.38rem 1.25rem;
+  height: 56px;
+  padding: 0.25rem 1.25rem;
   border: 0.15rem solid var(--cl-lightPurple);
   border-radius: 0.45rem;
   background: none;
   perspective: 2rem;
   font-size: 2rem;
   font-weight: 900;
-  letter-spacing: 0.5rem;
+  letter-spacing: 0.25rem;
   box-shadow: inset 0 0 0.5em 0 var(--cl-lightPurple),
   0 0 0.5rem 0 var(--cl-lightPurple);
   animation: bg-logo 2s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .logo {
@@ -722,15 +726,22 @@ main aside {
   right: 0;
   opacity: 0;
   z-index: -1;
-  background-color: var(--bg-lightPurple);
-  box-shadow: 0 0 2rem 0.2rem var(--cl-lightPurple);
+  background: radial-gradient(
+        65.28% 65.28% at 50% 100%,
+        rgba(223, 113, 255, 0.8) 0%,
+        rgba(223, 113, 255, 0) 100%
+      ),
+      linear-gradient(0deg, #7a5af8, #7a5af8);
+  box-shadow: 0 0 2rem 0.2rem #7a5af8;
   transition: opacity 100ms linear;
+  border-radius: 0.45rem;
 }
 
 .bg-logo:hover {
   color: rgba(0, 0, 0, 0.8);
   text-shadow: none;
   animation: none;
+  border-color: #7a5af8;
 }
 
 .bg-logo:hover .logo {
@@ -831,4 +842,15 @@ main aside {
   100% {
     opacity: 1;
   }
+}
+
+.bg-logo:hover .logo span {
+  animation: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+.logo span.burnt {
+  opacity: 0.3;
+  animation: none;
 }
