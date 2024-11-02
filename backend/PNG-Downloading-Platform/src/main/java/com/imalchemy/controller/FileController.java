@@ -52,9 +52,9 @@ public class FileController {
             )
     })
     @PostMapping("/upload")
-    public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile) {
+    public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile, @RequestParam String categoryName) {
         try {
-            File file = this.fileService.storeFile(multipartFile);
+            File file = this.fileService.storeFile(multipartFile,categoryName);
             return ResponseEntity.ok(Result.builder()
                     .flag(true)
                     .code(HttpStatus.CREATED)

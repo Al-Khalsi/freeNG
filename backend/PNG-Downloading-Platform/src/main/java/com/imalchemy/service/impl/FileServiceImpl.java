@@ -1,7 +1,9 @@
 package com.imalchemy.service.impl;
 
 import com.imalchemy.config.FileStorageProperties;
+import com.imalchemy.model.domain.Category;
 import com.imalchemy.model.domain.File;
+import com.imalchemy.repository.CategoryRepository;
 import com.imalchemy.repository.FileRepository;
 import com.imalchemy.service.FileService;
 import com.imalchemy.util.SecurityUtil;
@@ -29,11 +31,13 @@ import java.util.UUID;
 public class FileServiceImpl implements FileService {
 
     private final FileRepository fileRepository;
+    private final CategoryRepository categoryRepository;
     private final Path fileStorageLocation;
     private final SecurityUtil securityUtil;
 
-    public FileServiceImpl(FileStorageProperties fileStorageProperties, FileRepository fileRepository, SecurityUtil securityUtil) throws IOException {
+    public FileServiceImpl(FileStorageProperties fileStorageProperties, FileRepository fileRepository, CategoryRepository categoryRepository, SecurityUtil securityUtil) throws IOException {
         this.fileRepository = fileRepository;
+        this.categoryRepository = categoryRepository;
         this.securityUtil = securityUtil;
         String fileStoragePath = fileStorageProperties.getLocation();
 
@@ -61,7 +65,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File storeFile(MultipartFile multipartFile) throws IOException {
+    public File storeFile(MultipartFile multipartFile, String categoryName) throws IOException {
         try {
             // Clean the filename to remove any potential security risks
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
@@ -84,7 +88,7 @@ public class FileServiceImpl implements FileService {
             String relativePath = this.fileStorageLocation.relativize(targetLocation).toString();
 
             // Create a new File to store in the database
-            File file = createFileDomain(multipartFile, fileName, relativePath);
+            File file = createFileDomain(multipartFile, fileName, relativePath, categoryName);
 
             // Save the file metadata to the database and return the entity
             return this.fileRepository.save(file);
@@ -94,7 +98,7 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    private File createFileDomain(MultipartFile multipartFile, String fileName, String relativePath) {
+    private File createFileDomain(MultipartFile multipartFile, String fileName, String relativePath, String categoryName) throws IOException {
         File file = new File();
         file.setFileTitle(fileName);
         file.setFilePath(relativePath); // Store only the relative path
@@ -106,6 +110,10 @@ public class FileServiceImpl implements FileService {
         file.setUploadedBy(this.securityUtil.getAuthenticatedUser());
         file.setHeight(0);
         file.setWidth(0);
+
+        Category category = this.categoryRepository.findByName(categoryName)
+                .orElse(this.categoryRepository.findByName("defaultCategory").get());
+        file.getCategories().add(category);
 
         return file;
     }
