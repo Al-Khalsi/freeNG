@@ -4,9 +4,14 @@ import { FaSearch, FaMicrophone } from 'react-icons/fa';
 function Header({ token, username, email, userId, handleLogout }) {
     return (
         <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center text-white'>
+
             <div className='bg-logo'>
-                <div className='logo'>LOGO</div>
+                <div className='logo'>
+                    I<span>m</span>Alchem<span>y</span>
+                </div>
             </div>
+
+
 
             <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
                 <div id="search-container" className="flex justify-center items-center">
@@ -72,7 +77,7 @@ function Header({ token, username, email, userId, handleLogout }) {
                         </button>
                     </div>
                 ) : (
-                    <button type="button" class="button">
+                    <button type="button" class="button rounded-xl">
                         <span class="fold"></span>
 
                         <div class="points_wrapper">
