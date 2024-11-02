@@ -8,7 +8,7 @@ import java.io.IOException;
 
 public interface FileService {
 
-    File storeFile(MultipartFile multipartFile) throws IOException;
+    File storeFile(MultipartFile multipartFile, String categoryName) throws IOException;
 
     Resource loadFileAsResource(String fileId) throws IOException;
 
