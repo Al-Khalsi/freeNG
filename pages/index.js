@@ -189,8 +189,11 @@ function Index() {
           </div>
         </aside> */}
 
-        <main className='main flex justify-center w-full py-8 px-2 lg:px-12'>
-          <section className='grid gap-10 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+        <main className='main flex justify-between w-full py-8 px-2 lg:px-4 '>
+          <aside className='filter-sidebar w-1/6 bg-bgDarkGray2 rounded-2xl mr-10'>
+
+          </aside>
+          <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {currentImages.map((image) => (
               // <Link href={`/product/${image.id}
               // ?title=${encodeURIComponent(image.Title)}
@@ -234,13 +237,13 @@ function Index() {
           {renderPagination()}
         </div>
 
-        <button 
+        {/* <button 
         className='fixed left-2 bottom-2 
         w-10 h-10 p-6 flex justify-center items-center
         bg-blue-700 text-white text-2xl outline-none
         rounded-full cursor-pointer'>
           <Link href={'/uploadImage'}>+</Link>
-        </button>
+        </button> */}
 
       </div>
     </>

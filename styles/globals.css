@@ -88,10 +88,6 @@ main aside {
   position: absolute;
 }
 
-.filter-sidebar {
-  background-color: #ffffff00;
-}
-
 .bg-img {
   background:
     radial-gradient(circle farthest-side at 0% 50%, var(--bg-darkGray2) 23.5%, #0000 0)21px 30px,
