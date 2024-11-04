@@ -1,7 +1,8 @@
 package com.imalchemy.config.security;
 
-import com.imalchemy.config.security.entrypoint.CustomAccessDeniedHandler;
 import com.imalchemy.config.security.entrypoint.CustomBasicAuthenticationEntryPoint;
+import com.imalchemy.config.security.entrypoint.CustomBearerTokenAccessDeniedHandler;
+import com.imalchemy.config.security.entrypoint.CustomBearerTokenAuthenticationEntryPoint;
 import com.imalchemy.config.security.filter.JWTTokenGeneratorFilter;
 import com.imalchemy.config.security.filter.JWTTokenValidatorFilter;
 import com.imalchemy.util.SecurityUtil;
@@ -32,8 +33,9 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class SecurityConfig {
 
     private final SecurityUtil securityUtil;
+    private final CustomBearerTokenAuthenticationEntryPoint customBearerTokenAuthenticationEntryPoint;
+    private final CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler;
     private final CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint;
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final JWTTokenGeneratorFilter jwtTokenGeneratorFilter;
     private final JWTTokenValidatorFilter jwtTokenValidatorFilter;
     private final JavaDataTypeConverter javaDataTypeConverter;
@@ -63,9 +65,12 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(this.jwtTokenValidatorFilter, BasicAuthenticationFilter.class)
                 .addFilterAfter(this.jwtTokenGeneratorFilter, BasicAuthenticationFilter.class)
-                .exceptionHandling(excHandling -> excHandling
+                .httpBasic(httpBasicConfig -> httpBasicConfig
                         .authenticationEntryPoint(this.customBasicAuthenticationEntryPoint)
-                        .accessDeniedHandler(this.customAccessDeniedHandler)
+                )
+                .exceptionHandling(excHandling -> excHandling
+                        .authenticationEntryPoint(this.customBearerTokenAuthenticationEntryPoint)
+                        .accessDeniedHandler(this.customBearerTokenAccessDeniedHandler)
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
