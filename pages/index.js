@@ -164,12 +164,12 @@ function Index() {
     <>
       <div className="app relative">
 
-      <Header 
-          token={token} 
-          username={username} 
-          email={email} 
-          userId={userId} 
-          handleLogout={handleLogout} 
+        <Header
+          token={token}
+          username={username}
+          email={email}
+          userId={userId}
+          handleLogout={handleLogout}
         />
 
         {/* <aside className="filter-sidebar w-full">
@@ -189,11 +189,22 @@ function Index() {
           </div>
         </aside> */}
 
-        <main className='main flex justify-between w-full py-8 px-2 lg:px-4 '>
-          <aside className='filter-sidebar w-1/6 bg-bgDarkGray2 rounded-2xl mr-10'>
-
+        <main className='main flex justify-between w-full py-8 px-2 lg:px-8 '>
+          <aside className='filter-sidebar flex flex-col w-1/4 bg-bgDarkGray2 rounded-2xl mr-8'>
+            <SelectWithSearch
+              options={options1}
+              defaultText="Category"
+              isOpen={openSelect === 1}
+              onToggle={() => handleSelectToggle(1)}
+            />
+            <SelectWithSearch
+              options={options2}
+              defaultText="Style"
+              isOpen={openSelect === 2}
+              onToggle={() => handleSelectToggle(2)}
+            />
           </aside>
-          <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+          <section className='grid gap-8 w-4/4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {currentImages.map((image) => (
               // <Link href={`/product/${image.id}
               // ?title=${encodeURIComponent(image.Title)}
@@ -201,33 +212,33 @@ function Index() {
               // &dimensions=${encodeURIComponent(image.Dimensions)}
               // &download=${encodeURIComponent(image.Download)}
               // &src=${encodeURIComponent(image.Src)}`} key={image.id}>
-                <div className='card w-full h-80 rounded-2xl overflow-hidden bg-bgDarkGray' key={image.id}>
-                  <div className='inside-card h-full w-full p-3'>
-                    <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
-                      <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
-                        <MdFullscreen className='text-xl' />
-                      </div>
-                      <img src={image.Src} alt={image.Title} className='w-full h-full object-continer' />
+              <div className='card w-full h-80 rounded-2xl overflow-hidden bg-bgDarkGray' key={image.id}>
+                <div className='inside-card h-full w-full p-3'>
+                  <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
+                    <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
+                      <MdFullscreen className='text-xl' />
                     </div>
-                    <div className='info-img w-full h-1/3 px-2 py-3'>
-                      <h3 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.Title}</h3>
-                      <div className='flex justify-between mt-3'>
-                        <div className='flex flex-col w-1/3 text-center pr-2 text-lightBlue'>
-                          <span className='block text-sm'>{image.Size}</span>
-                          <span className='text-xs'>Size</span>
-                        </div>
-                        <div className='flex flex-col w-1/3 text-center text-lightBlue border-x-2 border-lightGray'>
-                          <span className='block text-sm'>{image.Dimensions}</span>
-                          <span className='text-xs'>Dimensions</span>
-                        </div>
-                        <div className='flex flex-col w-1/3 text-center pl-2 text-lightBlue'>
-                          <span className='block text-sm'>{image.Download}</span>
-                          <span className='text-xs'>Download</span>
-                        </div>
+                    <img src={image.Src} alt={image.Title} className='w-full h-full object-continer' />
+                  </div>
+                  <div className='info-img w-full h-1/3 px-2 py-3'>
+                    <h3 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.Title}</h3>
+                    <div className='flex justify-between mt-3'>
+                      <div className='flex flex-col w-1/3 text-center pr-2 text-lightBlue'>
+                        <span className='block text-sm'>{image.Size}</span>
+                        <span className='text-xs'>Size</span>
+                      </div>
+                      <div className='flex flex-col w-1/3 text-center text-lightBlue border-x-2 border-lightGray'>
+                        <span className='block text-sm'>{image.Dimensions}</span>
+                        <span className='text-xs'>Dimensions</span>
+                      </div>
+                      <div className='flex flex-col w-1/3 text-center pl-2 text-lightBlue'>
+                        <span className='block text-sm'>{image.Download}</span>
+                        <span className='text-xs'>Download</span>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
               // </Link>
             ))}
           </section>
