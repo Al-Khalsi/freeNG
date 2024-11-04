@@ -10,11 +10,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 
 /**
- * This class handles unsuccessful basic authentication.
- * We implement AuthenticationEntryPoint and then delegate the exception handler to HandlerExceptionResolver.
+ * This class handles unsuccessful JWT authentication.
  */
 @Component
-public class CustomBasicAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class CustomBearerTokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     /*
      * Here we've injected the DefaultHandlerExceptionResolver and delegated the handler to this resolver.
@@ -23,19 +22,14 @@ public class CustomBasicAuthenticationEntryPoint implements AuthenticationEntryP
     private final HandlerExceptionResolver resolver;
 
     @Autowired
-    public CustomBasicAuthenticationEntryPoint(
+    public CustomBearerTokenAuthenticationEntryPoint(
             @Qualifier("handlerExceptionResolver") HandlerExceptionResolver resolver
     ) {
         this.resolver = resolver;
     }
 
     @Override
-    public void commence(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            AuthenticationException authException
-    ) {
-        response.addHeader("WWW-Authenticate", "Basic realm=\"Realm\"");
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) {
         this.resolver.resolveException(request, response, null, authException);
     }
 
