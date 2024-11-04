@@ -7,7 +7,7 @@
   --bg-input: #eee;
 
   --bg-white: #fff;
-  --bg-gray: #c2c3c5;
+  --bg-gray: #585858;
   --bg-black: #000;
   --bg-darkPurple: #25003e;
   --bg-purple: #7a5af8;
@@ -104,17 +104,17 @@ main aside {
   background-color: #3d5275;
 }
 
-/* .bg-img {
+.bg-img.lightMod {
   background:
-    radial-gradient(circle farthest-side at 0% 50%, var(--bg-darkGray2) 23.5%, #0000 0)21px 30px,
-    radial-gradient(circle farthest-side at 0% 50%, var(--bg-darkGray) 24%, #0000 0)19px 30px,
-    linear-gradient(var(--bg-darkGray2) 14%, #0000 0, #0000 85%, var(--bg-darkGray2) 0)0 0,
-    linear-gradient(150deg, var(--bg-darkGray2) 24%, var(--bg-darkGray) 0, var(--bg-darkGray) 26%, #0000 0, #0000 74%, var(--bg-darkGray) 0, var(--bg-darkGray) 76%, var(--bg-darkGray2) 0)0 0,
-    linear-gradient(30deg, var(--bg-darkGray2) 24%, var(--bg-darkGray) 0, var(--bg-darkGray) 26%, #0000 0, #0000 74%, var(--bg-darkGray) 0, var(--bg-darkGray) 76%, var(--bg-darkGray2) 0)0 0,
-    linear-gradient(90deg, var(--bg-darkGray) 2%, var(--bg-darkGray2) 0, var(--bg-darkGray2) 98%, var(--bg-darkGray) 0%)0 0 var(--bg-darkGray2);
+    radial-gradient(circle farthest-side at 0% 50%, var(--bg-gray) 23.5%, #0000 0)21px 30px,
+    radial-gradient(circle farthest-side at 0% 50%, var(--bg-white) 24%, #0000 0)19px 30px,
+    linear-gradient(var(--bg-gray) 14%, #0000 0, #0000 85%, var(--bg-gray) 0)0 0,
+    linear-gradient(150deg, var(--bg-gray) 24%, var(--bg-white) 0, var(--bg-white) 26%, #0000 0, #0000 74%, var(--bg-white) 0, var(--bg-white) 76%, var(--bg-gray) 0)0 0,
+    linear-gradient(30deg, var(--bg-gray) 24%, var(--bg-white) 0, var(--bg-white) 26%, #0000 0, #0000 74%, var(--bg-white) 0, var(--bg-white) 76%, var(--bg-gray) 0)0 0,
+    linear-gradient(90deg, var(--bg-white) 2%, var(--bg-gray) 0, var(--bg-gray) 98%, var(--bg-white) 0%)0 0 var(--bg-gray);
   background-size: 40px 60px;
   background-color: #3d5275;
-} */
+}
 
 .input {
   background-color: #05071b;
@@ -697,7 +697,7 @@ main aside {
   font-weight: 900;
   letter-spacing: 0.25rem;
   box-shadow: inset 0 0 0.5em 0 var(--cl-lightPurple),
-  0 0 0.5rem 0 var(--cl-lightPurple);
+  0 0 1rem 0 var(--cl-lightPurple);
   animation: bg-logo 2s linear infinite;
   display: flex;
   justify-content: center;
