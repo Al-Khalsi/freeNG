@@ -116,12 +116,12 @@ main aside {
   background-color: #05071b;
   width: 391px;
   height: 56px;
-  color: #a9c7ff;
+  color: var(--cl-purple);
   padding-inline: 59px;
 }
 
 .input::placeholder {
-  color: #6e8cff;
+  color: var(--cl-purple);
 }
 
 .input:focus {
@@ -133,7 +133,7 @@ main aside {
   width: 30px;
   height: 20px;
   position: absolute;
-  background: #4d6dff;
+  background: var(--bg-purple);
   top: 10px;
   left: 5px;
   filter: blur(20px);
@@ -308,8 +308,9 @@ main aside {
   isolation: isolate;
   overflow: hidden;
   border-radius: 10px;
-  background: linear-gradient(180deg, #1c2452, #05071b, #2a3875);
+  background: linear-gradient(180deg, var(--bg-darkBlue), var(--bg-darkGray), var(--bg-darkBlue));
   border: 1px solid transparent;
+  cursor: pointer;
 }
 
 .wormhole-border {
@@ -335,10 +336,10 @@ main aside {
   background-position: 0 0;
   filter: brightness(1.35);
   background-image: conic-gradient(rgba(0, 0, 0, 0),
-      #4d6dff,
+      var(--bg-darkGray),
       rgba(0, 0, 0, 0) 50%,
       rgba(0, 0, 0, 0) 50%,
-      #6e8cff,
+      var(--bg-darkGray),
       rgba(0, 0, 0, 0) 100%);
   animation: rotate 4s linear infinite;
 }
