@@ -15,10 +15,10 @@ function Index() {
   const itemsPerPage = 20;
   const currentPage = parseInt(router.query.page) || 1;
 
-  const options1 = ['html', 'css', 'js', 'react', 'next'];
-  const options2 = ['node', 'express', 'mongodb', 'graphql'];
-  const options3 = ['node', 'express', 'mongodb', 'graphql'];
-  const options4 = ['node', 'express', 'mongodb', 'graphql'];
+  const options1 = ['Animation', 'Character', 'Technology', 'Nature', 'Game', 'Space'];
+  const options2 = ['Cartoon', 'Upset', 'Mobile', 'sea', 'Console', 'Star'];
+  const options3 = ['Logo', '3D', 'Pixel', 'Anime'];
+  const options4 = ['Black', 'Blue', 'Red', 'Green', 'Purple', 'White'];
 
   const handleSelectToggle = (selectId) => {
     if (openSelect === selectId) {
