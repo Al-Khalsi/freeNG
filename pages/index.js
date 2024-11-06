@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { useAuth } from '../context/AuthContext';
 import { useEffect, useState } from "react";
 import { MdFullscreen } from "react-icons/md";
-import SelectWithSearch from "../components/modules/SelectWithSearch";
 import Images from "../data/db.json";
 import { useRouter } from 'next/router';
-import Header from '@/components/templates/header/Header';
+import Header from '@/components/templates/Header';
+import Aside from '@/components/templates/Aside';
 
 function Index() {
   const { token, username, email, clearToken, userId } = useAuth(); // Destructure token and username from Auth context
@@ -175,34 +175,11 @@ function Index() {
         />
 
         <main className='main flex justify-between w-full py-8 px-2 lg:px-8 '>
-          <aside className='filter-sidebar flex flex-col w-1/6 bg-bgDarkGray2 rounded-2xl mr-8'>
-            <div className='filtering'>
-              <SelectWithSearch
-                options={options1}
-                defaultText="Categories"
-                isOpen={openSelect === 1}
-                onToggle={() => handleSelectToggle(1)}
-              />
-              <SelectWithSearch
-                options={options2}
-                defaultText="Sub Categories"
-                isOpen={openSelect === 2}
-                onToggle={() => handleSelectToggle(2)}
-              />
-              <SelectWithSearch
-                options={options3}
-                defaultText="Type"
-                isOpen={openSelect === 3}
-                onToggle={() => handleSelectToggle(3)}
-              />
-              <SelectWithSearch
-                options={options4}
-                defaultText="Color"
-                isOpen={openSelect === 4}
-                onToggle={() => handleSelectToggle(4)}
-              />
-            </div>
-          </aside>
+          <Aside
+            openSelect={openSelect}
+            handleSelectToggle={handleSelectToggle}
+            options={[options1, options2, options3, options4]} // Pass options as an array
+          />
           <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {currentImages.map((image) => (
               // <Link href={`/product/${image.id}
