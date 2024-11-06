@@ -44,6 +44,31 @@
   height: 100%;
 }
 
+/* Custom scrollbar for Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the vertical scrollbar */
+  height: 8px; /* Height of the horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darkGray2); /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--bg-purple); /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cl-lightPurple); /* Color of the scrollbar thumb on hover */
+}
+
+/* Custom scrollbar for Firefox */
+html {
+  scrollbar-width: thin; /* Can be 'auto' or 'thin' */
+  scrollbar-color: var(--bg-purple) var(--bg-darkGray2); /* Thumb color and track color */
+}
+
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
   height: 100%;
