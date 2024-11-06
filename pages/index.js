@@ -17,6 +17,8 @@ function Index() {
 
   const options1 = ['html', 'css', 'js', 'react', 'next'];
   const options2 = ['node', 'express', 'mongodb', 'graphql'];
+  const options3 = ['node', 'express', 'mongodb', 'graphql'];
+  const options4 = ['node', 'express', 'mongodb', 'graphql'];
 
   const handleSelectToggle = (selectId) => {
     if (openSelect === selectId) {
@@ -172,39 +174,36 @@ function Index() {
           handleLogout={handleLogout}
         />
 
-        {/* <aside className="filter-sidebar w-full">
-          <div className="flex px-12 py-2 bg-gray-0">
-            <SelectWithSearch
-              options={options1}
-              defaultText="Category"
-              isOpen={openSelect === 1}
-              onToggle={() => handleSelectToggle(1)}
-            />
-            <SelectWithSearch
-              options={options2}
-              defaultText="Style"
-              isOpen={openSelect === 2}
-              onToggle={() => handleSelectToggle(2)}
-            />
-          </div>
-        </aside> */}
-
         <main className='main flex justify-between w-full py-8 px-2 lg:px-8 '>
-          <aside className='filter-sidebar flex flex-col w-1/4 bg-bgDarkGray2 rounded-2xl mr-8'>
-            <SelectWithSearch
-              options={options1}
-              defaultText="Category"
-              isOpen={openSelect === 1}
-              onToggle={() => handleSelectToggle(1)}
-            />
-            <SelectWithSearch
-              options={options2}
-              defaultText="Style"
-              isOpen={openSelect === 2}
-              onToggle={() => handleSelectToggle(2)}
-            />
+          <aside className='filter-sidebar flex flex-col w-1/6 bg-bgDarkGray2 rounded-2xl mr-8'>
+            <div className='filtering'>
+              <SelectWithSearch
+                options={options1}
+                defaultText="Categories"
+                isOpen={openSelect === 1}
+                onToggle={() => handleSelectToggle(1)}
+              />
+              <SelectWithSearch
+                options={options2}
+                defaultText="Sub Categories"
+                isOpen={openSelect === 2}
+                onToggle={() => handleSelectToggle(2)}
+              />
+              <SelectWithSearch
+                options={options3}
+                defaultText="Type"
+                isOpen={openSelect === 3}
+                onToggle={() => handleSelectToggle(3)}
+              />
+              <SelectWithSearch
+                options={options4}
+                defaultText="Color"
+                isOpen={openSelect === 4}
+                onToggle={() => handleSelectToggle(4)}
+              />
+            </div>
           </aside>
-          <section className='grid gap-8 w-4/4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+          <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {currentImages.map((image) => (
               // <Link href={`/product/${image.id}
               // ?title=${encodeURIComponent(image.Title)}

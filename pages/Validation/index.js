@@ -102,9 +102,9 @@ function AuthForm() {
     };
 
     return (
-        <div className='Validation w-full h-full flex justify-center items-center min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
-            <div className={`wrapper relative w-custom-212 h-custom-136 m-5 bg-white rounded-3xl shadow-xl overflow-hidden ${isActive ? 'active' : ''}`}>
-                <div className='login form-box absolute right-0 w-1/2 h-full flex items-center p-10 bg-white text-center z-10'>
+        <div className='Validation w-full h-full flex justify-center items-center min-h-screen bg-gradient-to-r from-bgPurple to-bgLightPurple'>
+            <div className={`wrapper relative w-custom-212 h-custom-136 m-5 bg-bgDarkGray rounded-3xl shadow-xl overflow-hidden ${isActive ? 'active' : ''}`}>
+                <div className='login form-box absolute right-0 w-1/2 h-full flex items-center p-10 bg-bgDarkGray text-center z-10'>
                     <form onSubmit={handleLogin} className='w-full'>
                         <h2 className='text-4xl my-2.5'>Login</h2>
                         {error && <p className='text-red-500'>{error}</p>}
