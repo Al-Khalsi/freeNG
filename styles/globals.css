@@ -7,7 +7,7 @@
   --bg-input: #eee;
 
   --bg-white: #fff;
-  --bg-gray: #585858;
+  --bg-gray: #eee;
   --bg-black: #000;
   --bg-darkPurple: #25003e;
   --bg-purple: #7a5af8;
@@ -19,7 +19,7 @@
   --bg-darkGray2: #141b22;
 
   --cl-white: #fff;
-  --cl-gray: #c2c3c5;
+  --cl-gray: #eee;
   --cl-black: #000;
   --cl-darkPurple: #25003e;
   --cl-purple: #7a5af8;
@@ -414,13 +414,21 @@ main aside {
   visibility: visible;
 }
 
+.wrapper.active .form-box.login {
+  visibility: hidden;
+}
+
+.wrapper .form-box.login {
+  visibility: visible;
+}
+
 .toggle-form::before {
   content: '';
   position: absolute;
   left: -250%;
   width: 300%;
   height: 100%;
-  /* background: var(--bg-white); */
+  background-color: var(--bg-darkGray);
   border-radius: 150px;
   z-index: 20;
   transition: 1.8s ease-in-out;
