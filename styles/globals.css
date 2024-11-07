@@ -7,7 +7,7 @@
   --bg-input: #eee;
 
   --bg-white: #fff;
-  --bg-gray: #585858;
+  --bg-gray: #eee;
   --bg-black: #000;
   --bg-darkPurple: #25003e;
   --bg-purple: #7a5af8;
@@ -19,7 +19,7 @@
   --bg-darkGray2: #141b22;
 
   --cl-white: #fff;
-  --cl-gray: #c2c3c5;
+  --cl-gray: #eee;
   --cl-black: #000;
   --cl-darkPurple: #25003e;
   --cl-purple: #7a5af8;
@@ -42,6 +42,31 @@
 
 .antialiased {
   height: 100%;
+}
+
+/* Custom scrollbar for Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the vertical scrollbar */
+  height: 8px; /* Height of the horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darkGray2); /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--bg-purple); /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cl-lightPurple); /* Color of the scrollbar thumb on hover */
+}
+
+/* Custom scrollbar for Firefox */
+html {
+  scrollbar-width: thin; /* Can be 'auto' or 'thin' */
+  scrollbar-color: var(--bg-purple) var(--bg-darkGray2); /* Thumb color and track color */
 }
 
 body {
@@ -88,10 +113,6 @@ main aside {
   position: absolute;
 }
 
-.filter-sidebar {
-  background-color: #ffffff00;
-}
-
 .bg-img {
   background:
     radial-gradient(circle farthest-side at 0% 50%, var(--bg-darkGray2) 23.5%, #0000 0)21px 30px,
@@ -120,12 +141,12 @@ main aside {
   background-color: #05071b;
   width: 391px;
   height: 56px;
-  color: #a9c7ff;
+  color: var(--cl-purple);
   padding-inline: 59px;
 }
 
 .input::placeholder {
-  color: #6e8cff;
+  color: var(--cl-purple);
 }
 
 .input:focus {
@@ -137,7 +158,7 @@ main aside {
   width: 30px;
   height: 20px;
   position: absolute;
-  background: #4d6dff;
+  background: var(--bg-purple);
   top: 10px;
   left: 5px;
   filter: blur(20px);
@@ -312,8 +333,9 @@ main aside {
   isolation: isolate;
   overflow: hidden;
   border-radius: 10px;
-  background: linear-gradient(180deg, #1c2452, #05071b, #2a3875);
+  background: linear-gradient(180deg, var(--bg-darkBlue), var(--bg-darkGray), var(--bg-darkBlue));
   border: 1px solid transparent;
+  cursor: pointer;
 }
 
 .wormhole-border {
@@ -339,10 +361,10 @@ main aside {
   background-position: 0 0;
   filter: brightness(1.35);
   background-image: conic-gradient(rgba(0, 0, 0, 0),
-      #4d6dff,
+      var(--bg-darkGray),
       rgba(0, 0, 0, 0) 50%,
       rgba(0, 0, 0, 0) 50%,
-      #6e8cff,
+      var(--bg-darkGray),
       rgba(0, 0, 0, 0) 100%);
   animation: rotate 4s linear infinite;
 }
@@ -392,16 +414,25 @@ main aside {
   visibility: visible;
 }
 
+.wrapper.active .form-box.login {
+  visibility: hidden;
+}
+
+.wrapper .form-box.login {
+  visibility: visible;
+}
+
 .toggle-form::before {
   content: '';
   position: absolute;
   left: -250%;
   width: 300%;
   height: 100%;
-  background: var(--bg-darkBlue);
+  background-color: var(--bg-darkGray);
   border-radius: 150px;
   z-index: 20;
   transition: 1.8s ease-in-out;
+  
 }
 
 .toggle-panel {

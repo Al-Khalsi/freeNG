@@ -14,7 +14,7 @@ module.exports = {
         "custom-136": "34rem",
       },
       colors: {
-        bgWhite: "var(--bg-fff)",
+        bgWhite: "var(--bg-white)",
         bgGray: "var(--bg-gray)",
         bgBlack: "var(--bg-black)",
         bgDarkPurple: "var(--bg-darkPurple)",
@@ -25,7 +25,7 @@ module.exports = {
         bgLightBlue: "var(--bg-lightBlue)",
         bgDarkGray: "var(--bg-darkGray)",
         bgDarkGray2: "var(--bg-darkGray2)",
-        clWhite: "var(--cl-fff)",
+        clWhite: "var(--cl-white)",
         clGray: "var(--cl-gray)",
         clBlack: "var(--cl-black)",
         clDarkPurple: "var(--cl-darkPurple)",
