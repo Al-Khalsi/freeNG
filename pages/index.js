@@ -224,13 +224,13 @@ function Index() {
           {renderPagination()}
         </div>
 
-        {/* <button 
-        className='fixed left-2 bottom-2 
+        <button 
+        className='fixed right-3 bottom-3 
         w-10 h-10 p-6 flex justify-center items-center
         bg-blue-700 text-white text-2xl outline-none
         rounded-full cursor-pointer'>
           <Link href={'/uploadImage'}>+</Link>
-        </button> */}
+        </button>
 
       </div>
     </>
