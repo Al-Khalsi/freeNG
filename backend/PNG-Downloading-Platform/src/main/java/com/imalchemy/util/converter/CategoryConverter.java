@@ -28,13 +28,17 @@ public class CategoryConverter implements Converter<Category, CategoryDTO> {
     public CategoryDTO toDto(Category entity) {
         if (entity == null) return null;
 
+        long parentId = 0;
+        if (entity.getParent() != null)
+            parentId = entity.getParent().getId();
+
         return CategoryDTO.builder()
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .iconUrl(entity.getIconUrl())
                 .displayOrder(entity.getDisplayOrder())
                 .level(entity.getLevel())
-                .parentId(entity.getParent().getId())
+                .parentId(parentId)
                 .isActive(entity.isActive())
                 .build();
     }
