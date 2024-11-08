@@ -12,6 +12,7 @@
   "dependencies": {
     "@tsparticles/all": "^3.5.0",
     "@tsparticles/react": "^3.0.0",
+    "axios": "^1.7.7",
     "js-cookie": "^3.0.5",
     "next": "^14.2.14",
     "next-auth": "^4.24.10",
