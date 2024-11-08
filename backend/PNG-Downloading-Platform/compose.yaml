@@ -13,6 +13,7 @@ services:
       context: .
       dockerfile: ./Dockerfile
     container_name: backend_server
+    image: dukeofjava/imalchemy:0.1-BETA
     ports:
       - 8080:8080
     environment:
