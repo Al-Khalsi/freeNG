@@ -3,10 +3,12 @@ package com.imalchemy.service.impl;
 import com.imalchemy.config.FileStorageProperties;
 import com.imalchemy.model.domain.Category;
 import com.imalchemy.model.domain.File;
+import com.imalchemy.model.dto.FileDTO;
 import com.imalchemy.repository.CategoryRepository;
 import com.imalchemy.repository.FileRepository;
 import com.imalchemy.service.FileService;
 import com.imalchemy.util.SecurityUtil;
+import com.imalchemy.util.converter.FileConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -22,6 +24,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,11 +37,13 @@ public class FileServiceImpl implements FileService {
     private final CategoryRepository categoryRepository;
     private final Path fileStorageLocation;
     private final SecurityUtil securityUtil;
+    private final FileConverter fileConverter;
 
-    public FileServiceImpl(FileStorageProperties fileStorageProperties, FileRepository fileRepository, CategoryRepository categoryRepository, SecurityUtil securityUtil) throws IOException {
+    public FileServiceImpl(FileStorageProperties fileStorageProperties, FileRepository fileRepository, CategoryRepository categoryRepository, SecurityUtil securityUtil, FileConverter fileConverter) throws IOException {
         this.fileRepository = fileRepository;
         this.categoryRepository = categoryRepository;
         this.securityUtil = securityUtil;
+        this.fileConverter = fileConverter;
         String fileStoragePath = fileStorageProperties.getLocation();
 
         if (fileStoragePath == null || fileStoragePath.trim().isEmpty()) {
@@ -65,7 +70,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File storeFile(MultipartFile multipartFile, String categoryName) throws IOException {
+    public FileDTO storeFile(MultipartFile multipartFile, String parentCategoryName, List<String> subCategoryNames, List<String> dominantColors, String style) throws IOException {
         try {
             // Clean the filename to remove any potential security risks
             String fileName = StringUtils.cleanPath(Objects.requireNonNull(multipartFile.getOriginalFilename()));
@@ -88,17 +93,17 @@ public class FileServiceImpl implements FileService {
             String relativePath = this.fileStorageLocation.relativize(targetLocation).toString();
 
             // Create a new File to store in the database
-            File file = createFileDomain(multipartFile, fileName, relativePath, categoryName);
+            File file = createFileDomain(multipartFile, fileName, relativePath, parentCategoryName, subCategoryNames, dominantColors, style);
 
             // Save the file metadata to the database and return the entity
-            return this.fileRepository.save(file);
+            return this.fileConverter.toDto(this.fileRepository.save(file));
         } catch (IOException e) {
             log.error("-> FILE -> Failed to store file: {}", e.getMessage());
             throw e;
         }
     }
 
-    private File createFileDomain(MultipartFile multipartFile, String fileName, String relativePath, String categoryName) throws IOException {
+    private File createFileDomain(MultipartFile multipartFile, String fileName, String relativePath, String parentCategoryName, List<String> subCategoryNames, List<String> dominantColors, String style) throws IOException {
         File file = new File();
         file.setFileTitle(fileName);
         file.setFilePath(relativePath); // Store only the relative path
@@ -110,10 +115,19 @@ public class FileServiceImpl implements FileService {
         file.setUploadedBy(this.securityUtil.getAuthenticatedUser());
         file.setHeight(0);
         file.setWidth(0);
+        file.setStyle(style);
+        dominantColors.forEach(dominantColor -> file.getDominantColors().add(dominantColor));
 
-        Category category = this.categoryRepository.findByName(categoryName)
-                .orElse(this.categoryRepository.findByName("defaultCategory").get());
-        file.getCategories().add(category);
+        subCategoryNames.forEach(subCategoryName -> {
+            Category parentCategory = this.categoryRepository.findByNameIgnoreCase(parentCategoryName)
+                    .orElse(this.categoryRepository.findByNameIgnoreCase("defaultCategory").get());
+            file.getCategories().add(parentCategory);
+            if (!subCategoryName.isEmpty()) {
+                Category subCategory = this.categoryRepository.findByNameIgnoreCase(subCategoryName)
+                        .orElse(null);
+                file.getCategories().add(subCategory);
+            }
+        });
 
         return file;
     }

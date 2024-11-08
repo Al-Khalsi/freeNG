@@ -1,5 +1,6 @@
 package com.imalchemy.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -38,6 +39,7 @@ public class User extends BaseEntity<UUID> {
     )
     private Set<Roles> roles = new HashSet<>();
     @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<File> files = new ArrayList<>();
 
     /**

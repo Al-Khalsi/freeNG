@@ -1,0 +1,5 @@
+ALTER TABLE file
+    ADD style VARCHAR(255);
+
+ALTER TABLE file
+    ALTER COLUMN view_count SET NOT NULL;

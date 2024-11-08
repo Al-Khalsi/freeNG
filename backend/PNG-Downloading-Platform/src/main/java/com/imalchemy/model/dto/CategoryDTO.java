@@ -23,6 +23,7 @@ public class CategoryDTO implements Serializable {
     private int displayOrder;
     private int level;
     private boolean isActive;
+    private boolean isParent = false;
 
     private Long parentId;
 

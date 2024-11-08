@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -54,13 +55,13 @@ public class AuthenticationController {
     })
     @PostMapping("/register")
     public ResponseEntity<Result> register(@RequestBody UserDTO userDTO) {
-        UserDTO result = this.authenticationService.registerUser(userDTO);
+        Map<String, Object> responseMap = this.authenticationService.registerUser(userDTO);
 
         return ResponseEntity.ok(Result.builder()
                 .flag(true)
                 .code(HttpStatus.CREATED)
                 .message("User created successfully")
-                .data(result)
+                .data(responseMap)
                 .build()
         );
     }

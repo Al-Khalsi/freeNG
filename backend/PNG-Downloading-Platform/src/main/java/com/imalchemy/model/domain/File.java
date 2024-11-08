@@ -29,6 +29,7 @@ public class File extends BaseEntity<UUID> {
     private int width;
     private boolean isActive;
     private String keywords; // Comma-separated keywords for search
+    private String style;
     // Color palette for better search-ability
     @ElementCollection
     @CollectionTable(

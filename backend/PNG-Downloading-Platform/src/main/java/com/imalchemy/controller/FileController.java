@@ -1,6 +1,6 @@
 package com.imalchemy.controller;
 
-import com.imalchemy.model.domain.File;
+import com.imalchemy.model.dto.FileDTO;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,14 +53,18 @@ public class FileController {
             )
     })
     @PostMapping("/upload")
-    public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile, @RequestParam String categoryName) {
+    public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
+                                             @RequestParam String parentCategoryName,
+                                             @RequestParam List<String> subCategoryNames,
+                                             @RequestParam List<String> dominantColors,
+                                             @RequestParam String style) {
         try {
-            File file = this.fileService.storeFile(multipartFile,categoryName);
+            FileDTO fileDTO = this.fileService.storeFile(multipartFile, parentCategoryName, subCategoryNames, dominantColors, style);
             return ResponseEntity.ok(Result.builder()
                     .flag(true)
                     .code(HttpStatus.CREATED)
                     .message("File uploaded")
-                    .data(file) //TODO: file response is OK and no json response is getting populated
+                    .data(fileDTO) //TODO: file response is OK and no json response is getting populated
                     .build()
             );
         } catch (IOException e) {

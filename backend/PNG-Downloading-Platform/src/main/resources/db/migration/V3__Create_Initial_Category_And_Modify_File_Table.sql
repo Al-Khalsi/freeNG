@@ -11,6 +11,7 @@ CREATE TABLE category
     display_order INTEGER                                 NOT NULL,
     total_files   INTEGER                                 NOT NULL,
     level         INTEGER                                 NOT NULL,
+    is_parent     BOOLEAN DEFAULT TRUE                    NOT NULL,
     parent_id     BIGINT,
     CONSTRAINT pk_category PRIMARY KEY (id)
 );
