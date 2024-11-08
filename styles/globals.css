@@ -3,16 +3,33 @@
 @tailwind utilities;
 
 :root {
-  --bg-darkBlue: #05071b;
-  --cl-lightBlue: #a9c7ff;
-  --cl-gray: rgba(255, 255, 255, 0.13);
-  --bg-lightGray:  #e2e2e2;
-  --bg-lightBlue2: #c9d6ff;
-  --bg-white: #fff;
-  --cl-darkGray: #333;
+  --cl-gray-m1: rgba(255, 255, 255, 0.13);
   --bg-input: #eee;
-}
 
+  --bg-white: #fff;
+  --bg-gray: #eee;
+  --bg-black: #000;
+  --bg-darkPurple: #25003e;
+  --bg-purple: #7a5af8;
+  --bg-lightPurple: #DF71FFCC;
+  --bg-darkBlue: #05071b;
+  --bg-navyBlue: #040b11;
+  --bg-lightBlue: #798DA3;
+  --bg-darkGray: #1E2835;
+  --bg-darkGray2: #141b22;
+
+  --cl-white: #fff;
+  --cl-gray: #eee;
+  --cl-black: #000;
+  --cl-darkPurple: #25003e;
+  --cl-purple: #7a5af8;
+  --cl-lightPurple: #DF71FFCC;
+  --cl-darkBlue: #05071b;
+  --cl-navyBlue: #040b11;
+  --cl-lightBlue: #798DA3;
+  --cl-darkGray: #1E2835;
+  --cl-darkGray2: #141b22;
+}
 * {
   margin: 0;
   padding: 0;
@@ -27,11 +44,36 @@
   height: 100%;
 }
 
+/* Custom scrollbar for Chrome, Safari, and Edge */
+::-webkit-scrollbar {
+  width: 8px; /* Width of the vertical scrollbar */
+  height: 8px; /* Height of the horizontal scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-darkGray2); /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--bg-purple); /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--cl-lightPurple); /* Color of the scrollbar thumb on hover */
+}
+
+/* Custom scrollbar for Firefox */
+html {
+  scrollbar-width: thin; /* Can be 'auto' or 'thin' */
+  scrollbar-color: var(--bg-purple) var(--bg-darkGray2); /* Thumb color and track color */
+}
+
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
   height: 100%;
-  background-color: #c9c9c9;
-  color: black;
+  background-color: var(--bg-darkBlue);
+  color: var(--bg-white);
 }
 
 .app {
@@ -46,11 +88,6 @@ img {
 
 main aside {
   flex-shrink: 0.25;
-}
-
-header {
-  background-color: #000000;
-  color: rgb(255, 255, 255);
 }
 
 .btn-search {
@@ -76,32 +113,40 @@ header {
   position: absolute;
 }
 
-.filter-sidebar {
-  background-color: #ffffff00;
-}
-
-.bg-img {
+/* .bg-img {
   background:
-    radial-gradient(circle farthest-side at 0% 50%, #3d5275 23.5%, #0000 0)21px 30px,
-    radial-gradient(circle farthest-side at 0% 50%, #00bbff 24%, #0000 0)19px 30px,
-    linear-gradient(#3d5275 14%, #0000 0, #0000 85%, #3d5275 0)0 0,
-    linear-gradient(150deg, #3d5275 24%, #00bbff 0, #00bbff 26%, #0000 0, #0000 74%, #00bbff 0, #00bbff 76%, #3d5275 0)0 0,
-    linear-gradient(30deg, #3d5275 24%, #00bbff 0, #00bbff 26%, #0000 0, #0000 74%, #00bbff 0, #00bbff 76%, #3d5275 0)0 0,
-    linear-gradient(90deg, #00bbff 2%, #3d5275 0, #3d5275 98%, #00bbff 0%)0 0 #3d5275;
+    radial-gradient(circle farthest-side at 0% 50%, var(--bg-darkGray2) 23.5%, #0000 0)21px 30px,
+    radial-gradient(circle farthest-side at 0% 50%, var(--bg-purple) 24%, #0000 0)19px 30px,
+    linear-gradient(var(--bg-darkGray2) 14%, #0000 0, #0000 85%, var(--bg-darkGray2) 0)0 0,
+    linear-gradient(150deg, var(--bg-darkGray2) 24%, var(--bg-purple) 0, var(--bg-purple) 26%, #0000 0, #0000 74%, var(--bg-purple) 0, var(--bg-purple) 76%, var(--bg-darkGray2) 0)0 0,
+    linear-gradient(30deg, var(--bg-darkGray2) 24%, var(--bg-purple) 0, var(--bg-purple) 26%, #0000 0, #0000 74%, var(--bg-purple) 0, var(--bg-purple) 76%, var(--bg-darkGray2) 0)0 0,
+    linear-gradient(90deg, var(--bg-purple) 2%, var(--bg-darkGray2) 0, var(--bg-darkGray2) 98%, var(--bg-purple) 0%)0 0 var(--bg-darkGray2);
   background-size: 40px 60px;
   background-color: #3d5275;
+} */
+
+.bg-img {
+  background: radial-gradient(circle, transparent 20%, #141b22 20%, #141b22 80%, transparent 80%, transparent) 0% 0% / 30px 30px, radial-gradient(circle, transparent 20%, #141b22 20%, #141b22 80%, transparent 80%, transparent) 15px 15px / 30px 30px, linear-gradient(#7a5af8 1px, transparent 1px) 0px -0.5px / 15px 15px, linear-gradient(90deg, #7a5af8 1px, #141b22 1px) -0.5px 0px / 15px 15px #141b22;
+background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
+background-color: #141b22;
+}
+
+.bg-img.lightMod {
+  background: radial-gradient(circle, transparent 20%, #eeeeee 20%, #eeeeee 80%, transparent 80%, transparent) 0% 0% / 30px 30px, radial-gradient(circle, transparent 20%, #eeeeee 20%, #eeeeee 80%, transparent 80%, transparent) 15px 15px / 30px 30px, linear-gradient(#05071b 1px, transparent 1px) 0px -0.5px / 15px 15px, linear-gradient(90deg, #05071b 1px, #eeeeee 1px) -0.5px 0px / 15px 15px #eeeeee;
+  background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
+  background-color: #eeeeee;
 }
 
 .input {
   background-color: #05071b;
   width: 391px;
   height: 56px;
-  color: #a9c7ff;
+  color: var(--cl-purple);
   padding-inline: 59px;
 }
 
 .input::placeholder {
-  color: #6e8cff;
+  color: var(--cl-purple);
 }
 
 .input:focus {
@@ -113,7 +158,7 @@ header {
   width: 30px;
   height: 20px;
   position: absolute;
-  background: #4d6dff;
+  background: var(--bg-purple);
   top: 10px;
   left: 5px;
   filter: blur(20px);
@@ -174,10 +219,10 @@ header {
   background-repeat: no-repeat;
   background-position: 0 0;
   background-image: conic-gradient(#05071b,
-      #4d6dff 5%,
+      var(--bg-lightPurple) 5%,
       #05071b 14%,
       #05071b 50%,
-      #6e8cff 60%,
+      var(--bg-lightPurple) 60%,
       #05071b 64%);
   transition: all 2s;
 }
@@ -265,10 +310,10 @@ header {
   background-repeat: no-repeat;
   background-position: 0 0;
   background-image: conic-gradient(#000,
-      #4d6dff 5%,
+      var(--bg-purple) 5%,
       #000 38%,
       #000 50%,
-      #6e8cff 60%,
+      var(--bg-purple) 60%,
       #000 87%);
   transition: all 2s;
 }
@@ -288,8 +333,9 @@ header {
   isolation: isolate;
   overflow: hidden;
   border-radius: 10px;
-  background: linear-gradient(180deg, #1c2452, #05071b, #2a3875);
+  background: linear-gradient(180deg, var(--bg-darkBlue), var(--bg-darkGray), var(--bg-darkBlue));
   border: 1px solid transparent;
+  cursor: pointer;
 }
 
 .wormhole-border {
@@ -315,10 +361,10 @@ header {
   background-position: 0 0;
   filter: brightness(1.35);
   background-image: conic-gradient(rgba(0, 0, 0, 0),
-      #4d6dff,
+      var(--bg-darkGray),
       rgba(0, 0, 0, 0) 50%,
       rgba(0, 0, 0, 0) 50%,
-      #6e8cff,
+      var(--bg-darkGray),
       rgba(0, 0, 0, 0) 100%);
   animation: rotate 4s linear infinite;
 }
@@ -368,16 +414,25 @@ header {
   visibility: visible;
 }
 
+.wrapper.active .form-box.login {
+  visibility: hidden;
+}
+
+.wrapper .form-box.login {
+  visibility: visible;
+}
+
 .toggle-form::before {
   content: '';
   position: absolute;
   left: -250%;
   width: 300%;
   height: 100%;
-  background: var(--bg-darkBlue);
+  background-color: var(--bg-darkGray);
   border-radius: 150px;
   z-index: 20;
   transition: 1.8s ease-in-out;
+  
 }
 
 .toggle-panel {
@@ -451,4 +506,382 @@ header {
   .wrapper.active .toggle-panel.toggle-right {
     bottom: 0;
   }
+}
+
+
+
+
+/*-------------------- button login css --------------------*/
+/*-------------------- button login css --------------------*/
+/*-------------------- button login css --------------------*/
+
+/* From Uiverse.io by ilkhoeri */ 
+.button {
+    --round: 0.75rem;
+    cursor: pointer;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    background: radial-gradient(
+        65.28% 65.28% at 50% 100%,
+        rgba(223, 113, 255, 0.8) 0%,
+        rgba(223, 113, 255, 0) 100%
+      ),
+      linear-gradient(0deg, #7a5af8, #7a5af8);
+    border-radius: var(--round);
+    border: none;
+    outline: none;
+    padding: 12px 18px;
+}
+
+.button:active {
+  transform: scale(0.95);
+}
+
+.fold {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 1rem;
+  width: 1rem;
+  display: inline-block;
+  transition: all 0.5s ease-in-out;
+  background: radial-gradient(
+    100% 75% at 55%,
+    var(--bg-lightPurple) 0%,
+    rgba(223, 113, 255, 0) 100%
+  );
+  box-shadow: 0 0 3px black;
+  border-bottom-left-radius: 0.5rem;
+  border-top-right-radius: var(--round);
+}
+.fold::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 150%;
+  height: 150%;
+  transform: rotate(45deg) translateX(0%) translateY(-18px);
+  background-color: #e8e8e8;
+  pointer-events: none;
+}
+.button:hover .fold {
+  margin-top: -1rem;
+  margin-right: -1rem;
+}
+
+.points_wrapper {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  position: absolute;
+  z-index: 1;
+}
+
+.points_wrapper .point {
+  bottom: -10px;
+  position: absolute;
+  animation: floating-points infinite ease-in-out;
+  pointer-events: none;
+  width: 2px;
+  height: 2px;
+  background-color: #fff;
+  border-radius: 9999px;
+}
+@keyframes floating-points {
+  0% {
+    transform: translateY(0);
+  }
+  85% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(-55px);
+    opacity: 0;
+  }
+}
+.points_wrapper .point:nth-child(1) {
+  left: 10%;
+  opacity: 1;
+  animation-duration: 2.35s;
+  animation-delay: 0.2s;
+}
+.points_wrapper .point:nth-child(2) {
+  left: 30%;
+  opacity: 0.7;
+  animation-duration: 2.5s;
+  animation-delay: 0.5s;
+}
+.points_wrapper .point:nth-child(3) {
+  left: 25%;
+  opacity: 0.8;
+  animation-duration: 2.2s;
+  animation-delay: 0.1s;
+}
+.points_wrapper .point:nth-child(4) {
+  left: 44%;
+  opacity: 0.6;
+  animation-duration: 2.05s;
+}
+.points_wrapper .point:nth-child(5) {
+  left: 50%;
+  opacity: 1;
+  animation-duration: 1.9s;
+}
+.points_wrapper .point:nth-child(6) {
+  left: 75%;
+  opacity: 0.5;
+  animation-duration: 1.5s;
+  animation-delay: 1.5s;
+}
+.points_wrapper .point:nth-child(7) {
+  left: 88%;
+  opacity: 0.9;
+  animation-duration: 2.2s;
+  animation-delay: 0.2s;
+}
+.points_wrapper .point:nth-child(8) {
+  left: 58%;
+  opacity: 0.8;
+  animation-duration: 2.25s;
+  animation-delay: 0.2s;
+}
+.points_wrapper .point:nth-child(9) {
+  left: 98%;
+  opacity: 0.6;
+  animation-duration: 2.6s;
+  animation-delay: 0.1s;
+}
+.points_wrapper .point:nth-child(10) {
+  left: 65%;
+  opacity: 1;
+  animation-duration: 2.5s;
+  animation-delay: 0.2s;
+}
+
+.inner {
+  z-index: 2;
+  gap: 6px;
+  position: relative;
+  width: 100%;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: color 0.2s ease-in-out;
+}
+
+.inner svg.icon {
+  width: 18px;
+  height: 18px;
+  transition: fill 0.1s linear;
+}
+
+.button:focus svg.icon {
+  fill: white;
+}
+.button:hover svg.icon {
+  fill: transparent;
+  animation:
+    dasharray 1s linear forwards,
+    filled 0.1s linear forwards 0.95s;
+}
+@keyframes dasharray {
+  from {
+    stroke-dasharray: 0 0 0 0;
+  }
+  to {
+    stroke-dasharray: 68 68 0 0;
+  }
+}
+@keyframes filled {
+  to {
+    fill: white;
+  }
+}
+
+
+
+/*-------------------- LOGO css --------------------*/
+/*-------------------- LOGO css --------------------*/
+/*-------------------- LOGO css --------------------*/
+
+.bg-logo {
+  position: relative;
+  color: var(--cl-lightPurple);
+  cursor: pointer;
+  height: 56px;
+  padding: 0.25rem 1.25rem;
+  border: 0.15rem solid var(--cl-lightPurple);
+  border-radius: 0.45rem;
+  background: none;
+  perspective: 2rem;
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.25rem;
+  box-shadow: inset 0 0 0.5em 0 var(--cl-lightPurple),
+  0 0 1rem 0 var(--cl-lightPurple);
+  animation: bg-logo 2s linear infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  float: left;
+  margin-right: -0.8rem;
+  text-shadow: 0 0 0.125rem hsl(0 0% 100% / 0.3), 
+  0 0 0.45rem var(--cl-lightPurple);
+  animation: lamp-logo 3s linear infinite;
+}
+
+.logo span {
+  opacity: 0.5;
+  animation: letter-lamp 2s linear infinite;
+}
+
+.bg-logo::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0;
+  z-index: -1;
+  background: radial-gradient(
+        65.28% 65.28% at 50% 100%,
+        rgba(223, 113, 255, 0.8) 0%,
+        rgba(223, 113, 255, 0) 100%
+      ),
+      linear-gradient(0deg, #7a5af8, #7a5af8);
+  box-shadow: 0 0 2rem 0.2rem #7a5af8;
+  transition: opacity 100ms linear;
+  border-radius: 0.45rem;
+}
+
+.bg-logo:hover {
+  color: rgba(0, 0, 0, 0.8);
+  text-shadow: none;
+  animation: none;
+  border-color: #7a5af8;
+}
+
+.bg-logo:hover .logo {
+  animation: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+.bg-logo:hover:after {
+  opacity: 1;
+}
+
+@keyframes letter-lamp {
+  0% {
+    opacity: 0.1;
+  }
+  2% {
+    opacity: 0.1;
+  }
+  4% {
+    opacity: 0.5;
+  }
+  19% {
+    opacity: 0.5;
+  }
+  21% {
+    opacity: 0.1;
+  }
+  23% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  83% {
+    opacity: 0.4;
+  }
+  87% {
+    opacity: 1;
+  }
+}
+
+/* @keyframes lamp-logo {
+  0% {
+    opacity: 0.1;
+  }
+  2% {
+    opacity: 1;
+  }
+  8% {
+    opacity: 0.1;
+  }
+  9% {
+    opacity: 1;
+  }
+  12% {
+    opacity: 0.1;
+  }
+  20% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  72% {
+    opacity: 0.2;
+  }
+  77% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.9;
+  }
+} */
+
+@keyframes bg-logo {
+  0% {
+    opacity: 0.1;
+  }
+  2% {
+    opacity: 1;
+  }
+  4% {
+    opacity: 0.1;
+  }
+  8% {
+    opacity: 1;
+  }
+  70% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.bg-logo:hover .logo span {
+  animation: none;
+  text-shadow: none;
+  opacity: 1;
+}
+
+.logo span.burnt {
+  opacity: 0.3;
+  animation: none;
 }

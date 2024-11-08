@@ -15,7 +15,7 @@ const SelectWithSearch = ({ options, defaultText, isOpen, onToggle }) => { // د
     };
 
     return (
-        <div className="relative w-52 mr-6">
+        <div className="relative w-full mr-6">
             <div 
                 className="cursor-pointer border border-gray-300 bg-gray-800 text-white p-2 rounded" 
                 onClick={onToggle} // استفاده از onToggle برای باز و بسته کردن
