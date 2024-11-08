@@ -5,6 +5,7 @@ import com.imalchemy.model.domain.File;
 import com.imalchemy.model.domain.User;
 import com.imalchemy.model.dto.CategoryDTO;
 import com.imalchemy.model.dto.FileDTO;
+import com.imalchemy.model.dto.RoleDTO;
 import com.imalchemy.model.dto.UserDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class FileConverter implements Converter<File, FileDTO> {
 
     private final CategoryConverter categoryConverter;
+    private final RoleConverter roleConverter;
 
     @Override
     public File toEntity(FileDTO dto) {
@@ -31,6 +33,7 @@ public class FileConverter implements Converter<File, FileDTO> {
                 .width(dto.getWidth())
                 .isActive(dto.isActive())
                 .keywords(dto.getKeywords())
+                .style(dto.getStyle())
                 .dominantColors(dto.getDominantColors())
                 .viewCount(dto.getViewCount())
                 .downloadCount(dto.getDownloadCount())
@@ -61,8 +64,6 @@ public class FileConverter implements Converter<File, FileDTO> {
         if (entity == null) return null;
 
         FileDTO fileDTO = FileDTO.builder()
-                .createdAt(entity.getCreatedAt()) // Assuming you have a createdAt field in DTO
-                .updatedAt(entity.getUpdatedAt()) // Assuming you have an updatedAt field in DTO
                 .fileTitle(entity.getFileTitle())
                 .filePath(entity.getFilePath())
                 .contentType(entity.getContentType())
@@ -71,6 +72,7 @@ public class FileConverter implements Converter<File, FileDTO> {
                 .width(entity.getWidth())
                 .isActive(entity.isActive())
                 .keywords(entity.getKeywords())
+                .style(entity.getStyle())
                 .dominantColors(entity.getDominantColors())
                 .viewCount(entity.getViewCount())
                 .downloadCount(entity.getDownloadCount())
@@ -79,9 +81,15 @@ public class FileConverter implements Converter<File, FileDTO> {
                 .build();
 
         // Handle uploadedBy user if present
-        if (entity.getUploadedBy() != null) {
+        User uploadedBy = entity.getUploadedBy();
+        if (uploadedBy != null) {
             UserDTO uploadedByDTO = new UserDTO();
-            uploadedByDTO.setId(entity.getUploadedBy().getId()); // Set the user ID from entity
+            uploadedByDTO.setId(uploadedBy.getId()); // Set the user ID from entity
+            uploadedByDTO.setEmail(uploadedBy.getEmail());
+            uploadedByDTO.setUsername(uploadedBy.getUsername());
+            Set<RoleDTO> roleDTOS = uploadedBy.getRoles().stream().map(this.roleConverter::toDto).collect(Collectors.toSet());
+            uploadedByDTO.setRoles(roleDTOS);
+
             fileDTO.setUploadedBy(uploadedByDTO);
         }
 

@@ -1,5 +1,6 @@
 package com.imalchemy.model.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,16 +28,18 @@ public class Category extends BaseEntity<Long> {
     private int displayOrder = 0; // For controlling the display sequence
     private int totalFiles; // Cache for file count
     private int level; // Hierarchy level
+    private boolean isParent;
 
     // -------------------- Relationships --------------------
     // Self-referential relationship for parent-child categories
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     @ToString.Exclude
-    private Category parent;
+    private Category parentCategory;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parentCategory")
     @ToString.Exclude
+    @JsonIgnore
     private Set<Category> subCategories = new HashSet<>();
 
     // Bidirectional many-to-many relationship with File
@@ -55,14 +58,6 @@ public class Category extends BaseEntity<Long> {
     @JsonProperty("id")
     public Long getId() {
         return this.id;
-    }
-
-    public boolean isParentCategory() {
-        return parent == null;
-    }
-
-    public boolean hasSubCategories() {
-        return !subCategories.isEmpty();
     }
 
 }

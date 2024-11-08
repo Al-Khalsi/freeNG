@@ -37,4 +37,22 @@ public class Result {
         this.data = data;
     }
 
+    public static Result success(String message, Object data) {
+        return Result.builder()
+                .flag(true)
+                .code(HttpStatus.OK)
+                .message(message)
+                .data(data)
+                .build();
+    }
+
+    public static Result error(HttpStatus status, String message) {
+        return Result.builder()
+                .flag(false)
+                .code(status)
+                .message(message)
+                .data(null)
+                .build();
+    }
+
 }

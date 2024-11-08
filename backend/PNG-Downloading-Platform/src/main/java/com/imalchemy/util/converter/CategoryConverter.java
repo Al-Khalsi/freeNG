@@ -19,6 +19,7 @@ public class CategoryConverter implements Converter<Category, CategoryDTO> {
                 .description(dto.getDescription())
                 .iconUrl(dto.getIconUrl())
                 .isActive(true)
+                .isParent(dto.isParent())
                 .displayOrder(dto.getDisplayOrder())
                 .level(dto.getLevel())
                 .build();
@@ -29,10 +30,11 @@ public class CategoryConverter implements Converter<Category, CategoryDTO> {
         if (entity == null) return null;
 
         long parentId = 0;
-        if (entity.getParent() != null)
-            parentId = entity.getParent().getId();
+        if (entity.getParentCategory() != null)
+            parentId = entity.getParentCategory().getId();
 
         return CategoryDTO.builder()
+                .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())
                 .iconUrl(entity.getIconUrl())
@@ -40,6 +42,7 @@ public class CategoryConverter implements Converter<Category, CategoryDTO> {
                 .level(entity.getLevel())
                 .parentId(parentId)
                 .isActive(entity.isActive())
+                .isParent(entity.isParent())
                 .build();
     }
 
