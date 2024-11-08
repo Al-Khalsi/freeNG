@@ -33,13 +33,13 @@ function AuthForm() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3001/users' , { 
+        const response = await fetch('http://localhost:8080/api/v1/auth/login' , { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: credentials.username,
+                email: credentials.email,
                 password: credentials.password,
             }),
         });
@@ -66,7 +66,7 @@ function AuthForm() {
         e.preventDefault();
 
         // Check for existing username or email
-        const response = await fetch('http://localhost:3001/users', {
+        const response = await fetch('http://localhost:8080/api/v1/auth/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -78,10 +78,10 @@ function AuthForm() {
             }),
         });
 
-        if (existingUser) {
-            setError('Username or email already exists');
-            return; // Stop the registration process
-        }
+        // if (existingUser) {
+        //     setError('Username or email already exists');
+        //     return; // Stop the registration process
+        // }
 
 
         if (response.ok) {
@@ -90,10 +90,10 @@ function AuthForm() {
             const userId = data.userId;
 
             // Decode the token if necessary
-            const decodedToken = JSON.parse(atob(userToken.split('.')[1]));
+            //const decodedToken = JSON.parse(atob(userToken.split('.')[1]));
 
              // Store token and userId
-            storeToken(userToken);
+            // storeToken(userToken);
             console.log('Registration successful:', data);
             router.push('/');
         } else {
@@ -110,11 +110,11 @@ function AuthForm() {
                         {error && <p className='text-red-500'>{error}</p>}
                         <div className="inputBox relative my-7 ">
                             <input type="text"
-                                name="username"
-                                value={credentials.username}
+                                name="email"
+                                value={credentials.email}
                                 onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium'
-                                placeholder='Username' required />
+                                placeholder='Email' required />
                             <FaUser className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <div className="inputBox relative my-7">
