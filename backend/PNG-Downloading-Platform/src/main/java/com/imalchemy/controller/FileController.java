@@ -1,6 +1,6 @@
 package com.imalchemy.controller;
 
-import com.imalchemy.model.domain.File;
+import com.imalchemy.model.dto.FileDTO;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,9 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.List;
 
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${base.url}/file")
@@ -52,24 +57,24 @@ public class FileController {
             )
     })
     @PostMapping("/upload")
-    public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile, @RequestParam String categoryName) {
+    public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
+                                             @RequestParam String parentCategoryName,
+                                             @RequestParam List<String> subCategoryNames,
+                                             @RequestParam List<String> dominantColors,
+                                             @RequestParam String style) {
         try {
-            File file = this.fileService.storeFile(multipartFile,categoryName);
-            return ResponseEntity.ok(Result.builder()
-                    .flag(true)
-                    .code(HttpStatus.CREATED)
-                    .message("File uploaded")
-                    .data(file) //TODO: file response is OK and no json response is getting populated
-                    .build()
-            );
+
+            FileDTO fileDTO = this.fileService.storeFile(multipartFile, parentCategoryName, subCategoryNames, dominantColors, style);
+            return ResponseEntity.ok(Result.success("File uploaded successfully", fileDTO));
+
+        } catch (IllegalArgumentException e) {
+            log.warn("Invalid input for file upload: {}", e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body(Result.error(BAD_REQUEST, "Invalid input: " + e.getMessage()));
         } catch (IOException e) {
-            return ResponseEntity.badRequest().body(Result.builder()
-                    .flag(false)
-                    .code(HttpStatus.BAD_REQUEST)
-                    .message(e.getMessage())
-                    .data(null)
-                    .build()
-            );
+            log.error("Failed to upload file: {}", e.getMessage());
+            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
+                    .body(Result.error(INTERNAL_SERVER_ERROR, "Failed to upload file: " + e.getMessage()));
         }
     }
 

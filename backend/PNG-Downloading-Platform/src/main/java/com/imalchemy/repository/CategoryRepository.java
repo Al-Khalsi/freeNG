@@ -19,7 +19,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     @Query("SELECT COALESCE(MAX(c.totalFiles), 0) FROM Category c")
     Integer findMaxFiles();
 
-    Optional<Category> findByName(String name);
+    Optional<Category> findByNameIgnoreCase(String name);
 
-    List<Category> findByParent_Name(String name);
+    List<Category> findByParentCategory_Name(String name);
 }

@@ -36,17 +36,19 @@ public class CategoryServiceImpl implements CategoryService {
         // Determine parent category if provided
         Category parentCategory = null;
         Long parentCategoryId = categoryDTO.getParentId();
-        if (parentCategoryId != null) {
+        if (parentCategoryId != null && parentCategoryId > 0) {
             parentCategory = this.categoryRepository.findById(parentCategoryId)
                     .orElseThrow(() -> new EntityNotFoundException("Parent category not found"));
         }
         category.setSlug(this.slugGenerator.generateSlug(category.getName()));
         category.setDisplayOrder(nextDisplayOrder);
-        category.setParent(parentCategory);
+        category.setParentCategory(parentCategory);
+        category.setParent(true);
         category.setLevel(parentCategory != null ? parentCategory.getLevel() + 1 : 0); // Set level based on parent
 
         // If there's a parent, add this category to its subcategories
         if (parentCategory != null) {
+            category.setParent(false);
             parentCategory.getSubCategories().add(category);
         }
 
@@ -55,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO updateCategory(String categoryName, CategoryDTO categoryDTO) {
-        Category foundCategory = this.categoryRepository.findByName(categoryName)
+        Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
         foundCategory.setName(categoryDTO.getName());
@@ -73,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
             parentCategory = this.categoryRepository.findById(parentCategoryId)
                     .orElseThrow(() -> new EntityNotFoundException("Parent category not found"));
         }
-        foundCategory.setParent(parentCategory);
+        foundCategory.setParentCategory(parentCategory);
 
         // If there's a parent, add this category to its subcategories
         if (parentCategory != null) {
@@ -85,10 +87,10 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public String deleteParentCategory(String categoryName) {
-        Category foundCategory = this.categoryRepository.findByName(categoryName)
+        Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
         foundCategory.getSubCategories().forEach(subCategory -> {
-            subCategory.setParent(null);
+            subCategory.setParentCategory(null);
             this.categoryRepository.save(subCategory);
             this.categoryRepository.flush();
             this.categoryRepository.deleteById(subCategory.getId());
@@ -107,9 +109,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public String deleteSubCategory(String categoryName) {
-        Category foundCategory = this.categoryRepository.findByName(categoryName)
+        Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-        foundCategory.setParent(null);
+        foundCategory.setParentCategory(null);
         foundCategory.getFiles().forEach(file -> {
             file.setCategories(null);
             this.fileRepository.save(file);
@@ -128,14 +130,14 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> getSubcategories(String parentName) {
-        return this.categoryRepository.findByParent_Name(parentName)
+        return this.categoryRepository.findByParentCategory_Name(parentName)
                 .stream().map(this.categoryConverter::toDto)
                 .toList();
     }
 
     @Override
     public void assignCategoryToFile(String categoryName, String fileName) {
-        Category foundCategory = this.categoryRepository.findByName(categoryName)
+        Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
         File foundFile = this.fileRepository.findByFileTitle(fileName)
                 .orElseThrow(() -> new EntityNotFoundException("File not found"));
