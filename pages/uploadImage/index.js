@@ -28,7 +28,7 @@ function UploadImage() {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const categoriesResponse = await apiFetch('/api/categories', 'GET', null, {
+        const categoriesResponse = await apiFetch('localhost:', 'GET', null, {
           headers: {
             'Authorization': `Bearer ${token}`,
           },

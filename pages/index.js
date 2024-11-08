@@ -7,11 +7,13 @@ import Images from "../data/db.json";
 import { useRouter } from 'next/router';
 import Header from '@/components/templates/Header';
 import Aside from '@/components/templates/Aside';
+import { apiFetch } from '../utils/api'; // Import the apiFetch function
 
 function Index() {
   const { token, username, email, clearToken, userId } = useAuth(); // Destructure token and username from Auth context
   const router = useRouter();
   const [openSelect, setOpenSelect] = useState(null);
+  const [images, setImages] = useState([]); // State to store images from the backend
   const itemsPerPage = 20;
   const currentPage = parseInt(router.query.page) || 1;
 
@@ -27,6 +29,24 @@ function Index() {
       setOpenSelect(selectId);
     }
   };
+
+  // Fetch images from the backend
+  useEffect(() => {
+    const fetchImages = async () => {
+        try {
+            const response = await apiFetch('/api/images', 'GET', null, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            setImages(response.images); // Assuming the response structure has an images array
+        } catch (error) {
+            console.error('Failed to fetch images:', error);
+        }
+    };
+
+    fetchImages();
+}, [token]);
 
   const indexOfLastImage = currentPage * itemsPerPage;
   const indexOfFirstImage = indexOfLastImage - itemsPerPage;
