@@ -20,8 +20,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class FileDTO implements Serializable {
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private String fileTitle;
     private String filePath;
     private String contentType;
@@ -30,6 +28,7 @@ public class FileDTO implements Serializable {
     private int width;
     private boolean isActive;
     private String keywords;
+    private String style;
     private Set<String> dominantColors;
     private long viewCount;
     private long downloadCount;

@@ -35,7 +35,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDTO registerUser(UserDTO userDTO) {
+    public Map<String, Object> registerUser(UserDTO userDTO) {
         User user = this.userConverter.toEntity(userDTO);
 
         // Encode password
@@ -69,8 +69,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         // Save the user
         User savedUser = this.userRepository.save(user);
 
-        // Convert back to DTO and return
-        return this.userConverter.toDto(savedUser);
+        // Convert back to DTO
+        this.userConverter.toDto(savedUser);
+
+        Authentication authentication = UsernamePasswordAuthenticationToken.unauthenticated(user.getEmail(), user.getPassword());
+
+        return Map.of(
+                "userDTO", userDTO,
+                "token", this.jwtProvider.createToken(authentication)
+        );
     }
 
     @Override

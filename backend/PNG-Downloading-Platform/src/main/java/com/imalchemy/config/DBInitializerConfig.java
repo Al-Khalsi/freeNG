@@ -14,7 +14,7 @@ public class DBInitializerConfig {
     public CommandLineRunner commandLineRunner(CategoryRepository categoryRepository, SlugGenerator slugGenerator) {
         return args -> {
             String defaultCategoryName = "defaultCategory";
-            categoryRepository.findByName(defaultCategoryName)
+            categoryRepository.findByNameIgnoreCase(defaultCategoryName)
                     .ifPresentOrElse(category -> category.setName(defaultCategoryName), () -> {
                         Category category = Category.builder()
                                 .name(defaultCategoryName)
@@ -23,7 +23,7 @@ public class DBInitializerConfig {
                                 .isActive(true)
                                 .displayOrder(0)
                                 .level(0)
-                                .parent(null)
+                                .parentCategory(null)
                                 .subCategories(null)
                                 .slug(slugGenerator.generateSlug(defaultCategoryName))
                                 .build();
