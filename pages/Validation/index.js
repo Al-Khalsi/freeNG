@@ -6,18 +6,18 @@ import { FcGoogle } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
 import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
 import withAuthRedirect from '../../utils/withAuthRedirect'; // Adjust the path as necessary
+import jwt_decode from 'jwt-decode';
+import axios from 'axios'; // Import Axios
 
 function AuthForm() {
-    const { token, storeToken } = useAuth(); // Adjusted to storeToken
+    const { token, storeToken, setUserId } = useAuth(); // اضافه کردن setUserId
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
     const router = useRouter();
 
-    // Effect to prevent navigation back to login/register if already logged in
     useEffect(() => {
         if (token) {
-            // If the user is logged in, redirect to home
             router.push('/');
         }
     }, [token, router]);
@@ -33,70 +33,77 @@ function AuthForm() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:8080/api/v1/auth/login' , { 
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+        try {
+            const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
                 email: credentials.email,
                 password: credentials.password,
-            }),
-        });
+            });
 
-        if (response.ok) {
-            const data = await response.json();
-            const userToken = data.token; 
-            const userId = data.userId;
 
-            // Decode the token if necessary (assuming it's a JWT)
-            const decodedToken = JSON.parse(atob(userToken.split('.')[1]));
+            const data = response.data.data; // Get the response data
+            const userToken = data.token; // User token
+            const userId = data.userId; // User ID
+            console.log(data);
+            
 
-            // Store token and userId
-            storeToken(userToken, userId)
-            console.log('Login successful');
-            router.push('/');
-        } else {
+
+            if (userToken) {
+                storeToken(userToken); // Store the token
+
+                // Decode the token
+                const decodedToken = jwt_decode(userToken);
+                console.log('Decoded Token:', decodedToken);
+
+                // Store user information from token
+                setUserId(userId); // Store user ID separately
+                setUsername(decodedToken.username); // If username exists in token
+                setEmail(decodedToken.email); // If email exists in token
+                setRole(decodedToken.role); // If role exists in token
+
+                console.log('Login successful');
+                router.push('/');
+            } else {
+                setError('Failed to retrieve token');
+            }
+        } catch (error) {
+            console.error('Login error:', error.response.data.data); // Log the error response
             setError('Invalid username or password');
         }
-
     };
 
     const handleRegistration = async (e) => {
         e.preventDefault();
-
-        // Check for existing username or email
-        const response = await fetch('http://localhost:8080/api/v1/auth/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+        try {
+            const response = await axios.post('http://localhost:8080/api/v1/auth/register', {
                 username: credentials.username,
                 email: credentials.email,
                 password: credentials.password,
-            }),
-        });
+            });
 
-        // if (existingUser) {
-        //     setError('Username or email already exists');
-        //     return; // Stop the registration process
-        // }
+            const data = response.data; // Get the response data
+            const userToken = data.token; // User token
+            const userId = data.userId; // User ID
 
+            if (userToken) {
+                storeToken(userToken); // Store the token
 
-        if (response.ok) {
-            const data = await response.json();
-            const userToken = data.token;
-            const userId = data.userId;
+                // Decode the token
+                const decodedToken = jwt_decode(userToken);
+                console.log('Decoded Token:', decodedToken);
 
-            // Decode the token if necessary
-            //const decodedToken = JSON.parse(atob(userToken.split('.')[1]));
+                // Store user information from token
+                setUserId(userId); // Store user ID separately
+                setUsername(decodedToken.username); // If username exists in token
+                setEmail(decodedToken.email); // If email exists in token
+                setRole(decodedToken.role); // If role exists in token
 
-             // Store token and userId
-            // storeToken(userToken);
-            console.log('Registration successful:', data);
-            router.push('/');
-        } else {
+                console.log('Registration successful:', data);
+                router.push('/');
+            } else {
+                setError('Failed to retrieve token');
+            }
+        } catch (error) {
+            console.error('Registration error:', error.response.data); // Log the error response
             setError('Registration failed');
         }
     };
@@ -113,7 +120,7 @@ function AuthForm() {
                                 name="email"
                                 value={credentials.email}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium'
                                 placeholder='Email' required />
                             <FaUser className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
@@ -122,7 +129,7 @@ function AuthForm() {
                                 name="password"
                                 value={credentials.password}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium placeholder-font-normal'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
                             <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
@@ -146,7 +153,7 @@ function AuthForm() {
                                 name="username"
                                 value={credentials.username}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium'
                                 placeholder='Username' required />
                             <FaUser className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
@@ -155,7 +162,7 @@ function AuthForm() {
                                 name="email"
                                 value={credentials.email}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium'
                                 placeholder='Email' required />
                             <MdEmail className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
@@ -164,12 +171,12 @@ function AuthForm() {
                                 name="password"
                                 value={credentials.password}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium placeholder-font-normal'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
                             <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <button type='submit'
-                            className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-base font-semibold cursor-pointer'>
+                            className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-clBlack text-base font-semibold cursor-pointer'>
                             Register
                         </button>
                         <p className='text-base my-4'>or</p>

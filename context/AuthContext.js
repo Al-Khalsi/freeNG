@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -45,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ token, userId, username, email, role, storeToken, clearToken }}>
+        <AuthContext.Provider value={{ token, userId, setUserId, username, email, role, storeToken, clearToken }}>
             {children}
         </AuthContext.Provider>
     );
