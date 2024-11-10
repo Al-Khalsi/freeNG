@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import Header from '@/components/templates/Header';
 import Aside from '@/components/templates/Aside';
 import { apiFetch } from '../utils/api'; // Import the apiFetch function
+import Footer from '@/components/templates/Footer';
 
 function Index() {
   const { token, username, email, clearToken, userId } = useAuth(); // Destructure token and username from Auth context
@@ -243,6 +244,8 @@ function Index() {
         <div className="pagination flex justify-center py-4">
           {renderPagination()}
         </div>
+
+        <Footer />
 
         <button 
         className='fixed right-3 bottom-3 
