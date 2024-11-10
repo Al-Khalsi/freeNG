@@ -1,14 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
-
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState(null);
-    const [username, setUsername] = useState(null); // New state for username
-    const [email, setEmail] = useState(null); // New state for email
-    const [userId, setUserId] = useState(null); // New state for user ID
+    const [username, setUsername] = useState(null); // State for username
+    const [email, setEmail] = useState(null); // State for email
     const [role, setRole] = useState(null); // State for role
 
     useEffect(() => {
@@ -22,31 +20,28 @@ export const AuthProvider = ({ children }) => {
             setUsername(decodedToken.username); // Extract username
             setEmail(decodedToken.email); // Extract email
             setRole(decodedToken.role); // Extract role from token
-            // If userId is not in the token, you should fetch it from your backend
         }
     }, []);
 
-    const storeToken = (newToken, newUserId) => {
+    const storeToken = (newToken) => {
         setToken(newToken);
         const decodedToken = JSON.parse(atob(newToken.split('.')[1]));
-        setUsername(decodedToken.username);
-        setEmail(decodedToken.email);
+        setUsername(decodedToken.username); // Store username from token
+        setEmail(decodedToken.email); // Store email from token
         setRole(decodedToken.role); // Store role from token
-        setUserId(newUserId); // Store user ID separately
-        Cookies.set('token', newToken);
+        Cookies.set('token', newToken); // Store token in cookies
     };
 
     const clearToken = () => {
         setToken(null);
         setUsername(null); // Clear username
         setEmail(null); // Clear email
-        setUserId(null); // Clear user ID
         setRole(null); // Clear role
         Cookies.remove('token'); // Remove the token from the cookie
     };
 
     return (
-        <AuthContext.Provider value={{ token, userId, setUserId, username, email, role, storeToken, clearToken }}>
+        <AuthContext.Provider value={{ token, username, email, role, storeToken, clearToken }}>
             {children}
         </AuthContext.Provider>
     );

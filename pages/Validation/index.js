@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios'; // Import Axios
 
 function AuthForm() {
-    const { token, storeToken, setUserId } = useAuth(); // اضافه کردن setUserId
+    const { token, storeToken, setUsername, setEmail, setRole } = useAuth(); // Added setUsername, setEmail, and setRole
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
@@ -18,17 +18,17 @@ function AuthForm() {
 
     useEffect(() => {
         if (token) {
-            router.push('/');
+            router.push('/'); // Redirect to home if token exists
         }
     }, [token, router]);
 
     const handleClick = (action) => {
-        setIsActive(action === "register");
+        setIsActive(action === "register"); // Toggle between login and registration
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCredentials({ ...credentials, [name]: value });
+        setCredentials({ ...credentials, [name]: value }); // Update credentials state
     };
 
     const handleLogin = async (e) => {
@@ -39,13 +39,14 @@ function AuthForm() {
                 password: credentials.password,
             });
 
+            // Log the entire response and response.data
+            console.log('Response:', response); // Log the entire response object
+            console.log('Response Data:', response.data); // Log the data part of the response
 
-            const data = response.data.data; // Get the response data
-            const userToken = data.token; // User token
-            const userId = data.userId; // User ID
-            console.log(data);
-            
-
+            const data = response.data.data; // Get response data
+            const userToken = data.token; // Get user token
+            const username = data.userDetails.username; // Extract username from response
+            console.log(data); // Log the data received
 
             if (userToken) {
                 storeToken(userToken); // Store the token
@@ -55,19 +56,25 @@ function AuthForm() {
                 console.log('Decoded Token:', decodedToken);
 
                 // Store user information from token
-                setUserId(userId); // Store user ID separately
-                setUsername(decodedToken.username); // If username exists in token
-                setEmail(decodedToken.email); // If email exists in token
-                setRole(decodedToken.role); // If role exists in token
+                setUsername(username); // Store username from response
+                setEmail(decodedToken.email); // Store email from token
+                setRole(decodedToken.role); // Store role from token
 
                 console.log('Login successful');
-                router.push('/');
+                router.push('/'); // Redirect to home after successful login
             } else {
-                setError('Failed to retrieve token');
+                setError('Failed to retrieve token'); // Error handling
             }
         } catch (error) {
-            console.error('Login error:', error.response.data.data); // Log the error response
-            setError('Invalid username or password');
+            // Improved error handling
+            if (error.response) {
+                console.error('Login error response:', error.response); // Log the entire error response
+                console.error('Login error data:', error.response.data); // Log the data part of the error response
+                setError('Invalid username or password'); // Error message for invalid credentials
+            } else {
+                console.error('Login error:', error.message); // Log the error message
+                setError('An error occurred during login'); // Generic error message
+            }
         }
     };
 
@@ -80,9 +87,13 @@ function AuthForm() {
                 password: credentials.password,
             });
 
-            const data = response.data; // Get the response data
-            const userToken = data.token; // User token
-            const userId = data.userId; // User ID
+            // Log the entire response and response.data
+            console.log('Response:', response); // Log the entire response object
+            console.log('Response Data:', response.data); // Log the data part of the response
+
+            const data = response.data.data; // Get response data
+            const userToken = data.token; // Get user token
+            const username = data.userDetails.username; // Extract username from response
 
             if (userToken) {
                 storeToken(userToken); // Store the token
@@ -92,19 +103,31 @@ function AuthForm() {
                 console.log('Decoded Token:', decodedToken);
 
                 // Store user information from token
-                setUserId(userId); // Store user ID separately
-                setUsername(decodedToken.username); // If username exists in token
-                setEmail(decodedToken.email); // If email exists in token
-                setRole(decodedToken.role); // If role exists in token
+                setUsername(username); // Store username from response
+                setEmail(decodedToken.email); // Store email from token
+                setRole(decodedToken.role); // Store role from token
 
                 console.log('Registration successful:', data);
-                router.push('/');
+                router.push('/'); // Redirect to home after successful registration
             } else {
-                setError('Failed to retrieve token');
+                setError('Failed to retrieve token'); // Error handling
             }
         } catch (error) {
-            console.error('Registration error:', error.response.data); // Log the error response
-            setError('Registration failed');
+            // Improved error handling
+            if (error.response) {
+                // Log the error response
+                console.error('Registration error:', error.response); // Log the entire error response
+                console.error('Registration error data:', error.response.data); // Log the data part of the error response
+                setError(error.response.data.message || 'Registration failed'); // Set error message from response or default
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error('No response received:', error.request); // Log request
+                setError('No response from server'); // Set a generic error message
+            } else {
+                // Something happened in setting up the request
+                console.error('Error setting up request:', error.message); // Log error message
+                setError('Error during registration'); // Set a generic error message
+            }
         }
     };
 
