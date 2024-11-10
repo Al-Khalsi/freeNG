@@ -1,7 +1,7 @@
 package com.imalchemy.config.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.imalchemy.config.security.jwt.JWTProvider;
+import com.imalchemy.config.security.jwt.TokenService;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.util.SecurityUtil;
 import io.jsonwebtoken.security.SignatureException;
@@ -32,7 +32,7 @@ import static com.imalchemy.util.constants.ApplicationConstants.JWT_AUTHORIZATIO
 @RequiredArgsConstructor
 public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
-    private final JWTProvider jwtProvider;
+    private final TokenService tokenService;
     private final SecurityUtil securityUtil;
     private final ObjectMapper objectMapper;
 
@@ -43,7 +43,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
         if (jwt != null) {
             try {
                 jwt = jwt.substring("Bearer ".length());
-                Map<String, Object> claimsMap = this.jwtProvider.extractClaims(jwt, this.jwtProvider.extractSecretKey());
+                Map<String, Object> claimsMap = this.tokenService.validateTokenAndExtractClaims(jwt);
                 String email = String.valueOf(claimsMap.get("email"));
                 String authorities = String.valueOf(claimsMap.get("authorities"));
 
