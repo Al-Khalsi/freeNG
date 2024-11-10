@@ -5,13 +5,12 @@ import { IoIosArrowDown, IoMdColorPalette } from "react-icons/io";
 import { FaShapes } from "react-icons/fa";
 
 const Aside = () => {
-    // Using an object to track the open state of each menu
     const [openMenus, setOpenMenus] = useState({});
 
     const toggleMenu = (menuIndex) => {
         setOpenMenus((prev) => ({
             ...prev,
-            [menuIndex]: !prev[menuIndex] // Toggle the specific menu
+            [menuIndex]: !prev[menuIndex]
         }));
     };
 
@@ -28,7 +27,7 @@ const Aside = () => {
                                 <BiSolidCategory />
                                 <span className="grow">Category</span>
                             </div>
-                            <IoIosArrowDown className="shrink-0" />
+                            <IoIosArrowDown className={`shrink-0 transition-transform duration-300 ${openMenus[1] ? 'rotate-180' : 'rotate-0'}`} />
                         </button>
                         <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenus[1] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <li>test 1</li>
@@ -47,7 +46,7 @@ const Aside = () => {
                                 <PiTreeViewFill />
                                 <span>Sub Category</span>
                             </div>
-                            <IoIosArrowDown />
+                            <IoIosArrowDown className={`shrink-0 transition-transform duration-300 ${openMenus[2] ? 'rotate-180' : 'rotate-0'}`} />
                         </button>
                         <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenus[2] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <li>test 1</li>
@@ -66,7 +65,7 @@ const Aside = () => {
                                 <FaShapes />
                                 <span>Style PNG</span>
                             </div>
-                            <IoIosArrowDown />
+                            <IoIosArrowDown className={`shrink-0 transition-transform duration-300 ${openMenus[3] ? 'rotate-180' : 'rotate-0'}`} />
                         </button>
                         <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenus[3] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <li>test 1</li>
@@ -85,7 +84,7 @@ const Aside = () => {
                                 <IoMdColorPalette className="text-lg" />
                                 <span>Color</span>
                             </div>
-                            <IoIosArrowDown />
+                            <IoIosArrowDown className={`shrink-0 transition-transform duration-300 ${openMenus[4] ? 'rotate-180' : 'rotate-0'}`} />
                         </button>
                         <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenus[4] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <li>test 1</li>
