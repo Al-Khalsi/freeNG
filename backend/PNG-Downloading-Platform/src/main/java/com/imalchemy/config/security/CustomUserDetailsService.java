@@ -3,7 +3,6 @@ package com.imalchemy.config.security;
 import com.imalchemy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,14 +18,21 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return this.userRepository.findByEmail(username)
-                .map(user -> {
-                    List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
-                            .map(roles -> new SimpleGrantedAuthority(roles.getRoleName()))
-                            .toList();
+        return userRepository.findByEmail(username)
+                .map(this::createUserDetails)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
+    }
 
-                    return new User(user.getEmail(), user.getPassword(), authorities);
-                }).orElseThrow(() -> new UsernameNotFoundException("user with the given info was not found: " + username));
+    private UserDetails createUserDetails(com.imalchemy.model.domain.User user) {
+        List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
+                .map(roles -> new SimpleGrantedAuthority(roles.getRoleName()))
+                .toList();
+
+        return org.springframework.security.core.userdetails.User.builder()
+                .username(user.getEmail())
+                .password(user.getPassword())
+                .authorities(authorities)
+                .build();
     }
 
 }
