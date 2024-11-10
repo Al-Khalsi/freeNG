@@ -5,10 +5,14 @@ import { IoIosArrowDown, IoMdColorPalette } from "react-icons/io";
 import { FaShapes } from "react-icons/fa";
 
 const Aside = () => {
-    const [openMenu, setOpenMenu] = useState(null);
+    // Using an object to track the open state of each menu
+    const [openMenus, setOpenMenus] = useState({});
 
     const toggleMenu = (menuIndex) => {
-        setOpenMenu(openMenu === menuIndex ? null : menuIndex);
+        setOpenMenus((prev) => ({
+            ...prev,
+            [menuIndex]: !prev[menuIndex] // Toggle the specific menu
+        }));
     };
 
     return (
@@ -26,7 +30,7 @@ const Aside = () => {
                             </div>
                             <IoIosArrowDown className="shrink-0" />
                         </button>
-                        <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenu === 1 ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                        <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenus[1] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <li>test 1</li>
                             <li>test 2</li>
                             <li>test 3</li>
@@ -45,7 +49,7 @@ const Aside = () => {
                             </div>
                             <IoIosArrowDown />
                         </button>
-                        <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenu === 2 ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                        <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenus[2] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <li>test 1</li>
                             <li>test 2</li>
                             <li>test 3</li>
@@ -64,7 +68,7 @@ const Aside = () => {
                             </div>
                             <IoIosArrowDown />
                         </button>
-                        <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenu === 3 ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                        <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenus[3] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <li>test 1</li>
                             <li>test 2</li>
                             <li>test 3</li>
@@ -83,7 +87,7 @@ const Aside = () => {
                             </div>
                             <IoIosArrowDown />
                         </button>
-                        <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenu === 4 ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+                        <ul className={`sub-menu transition-all duration-300 ease-in-out ${openMenus[4] ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
                             <li>test 1</li>
                             <li>test 2</li>
                             <li>test 3</li>
