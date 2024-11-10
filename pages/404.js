@@ -1,139 +1,114 @@
-import { useEffect, useRef, useState } from 'react';
+// pages/404.js
+import { useEffect } from 'react';
 
-const notFound = () => {
-
-  const canvasRef = useRef(null);
-  const [collapse, setCollapse] = useState(false);
-  const [expanse, setExpanse] = useState(false);
-  const stars = useRef([]);
-  const maxorbit = 255;
-  const centerx = 0;
-  const centery = 0;
-
+const NotFoundPage = () => {
   useEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    const h = canvas.height;
-    const w = canvas.width;
+    const body = document.body;
+    const createStar = () => {
+      const right = Math.random() * 500;
+      const top = Math.random() * window.innerHeight;
+      const star = document.createElement('div');
 
-    const setDPI = (canvas, dpi) => {
-      const scaleFactor = dpi / 96;
-      canvas.width = Math.ceil(canvas.width * scaleFactor);
-      canvas.height = Math.ceil(canvas.height * scaleFactor);
-      context.scale(scaleFactor, scaleFactor);
-    };
+      // اضافه کردن کلاس‌ها به صورت جداگانه
+      star.classList.add('absolute', 'w-1', 'h-1', 'bg-white', 'rounded-full', 'star');
+      body.appendChild(star);
+      star.style.top = `${top}px`;
+      let starRight = right;
 
-    const rotate = (cx, cy, x, y, angle) => {
-      const radians = angle;
-      const cos = Math.cos(radians);
-      const sin = Math.sin(radians);
-      const nx = (cos * (x - cx)) + (sin * (y - cy)) + cx;
-      const ny = (cos * (y - cy)) - (sin * (x - cx)) + cy;
-      return [nx, ny];
-    };
-
-    const star = function() {
-      const rands = [Math.random() * (maxorbit / 2) + 1, Math.random() * (maxorbit / 2) + maxorbit];
-      this.orbital = rands.reduce((p, c) => p + c, 0) / rands.length;
-      this.x = centerx;
-      this.y = centery + this.orbital;
-      this.yOrigin = centery + this.orbital;
-      this.speed = (Math.floor(Math.random() * 2.5) + 1.5) * Math.PI / 180;
-      this.rotation = 0;
-      this.startRotation = (Math.floor(Math.random() * 360) + 1) * Math.PI / 180;
-      this.id = stars.current.length;
-      this.collapseBonus = this.orbital - (maxorbit * 0.7);
-      this.collapseBonus = this.collapseBonus < 0 ? 0 : this.collapseBonus;
-      stars.current.push(this);
-      this.color = `rgba(255,255,255,${1 - (this.orbital / 255)})`;
-      this.hoverPos = centery + (maxorbit / 2) + this.collapseBonus;
-      this.expansePos = centery + (this.id % 100) * -10 + (Math.floor(Math.random() * 20) + 1);
-      this.prevR = this.startRotation;
-      this.prevX = this.x;
-      this.prevY = this.y;
-    };
-
-    star.prototype.draw = function() {
-      if (!expanse) {
-        this.rotation = this.startRotation + (performance.now() / 50) * this.speed;
-        if (!collapse) {
-          if (this.y > this.yOrigin) {
-            this.y -= 2.5;
-          }
-          if (this.y < this.yOrigin - 4) {
-            this.y += (this.yOrigin - this.y) / 10;
-          }
+      const runStar = setInterval(() => {
+        if (starRight >= window.innerWidth) {
+          clearInterval(runStar);
+          star.remove();
         } else {
-          if (this.y > this.hoverPos) {
-            this.y -= (this.hoverPos - this.y) / -5;
-          }
-          if (this.y < this.hoverPos - 4) {
-            this.y += 2.5;
-          }
+          starRight += 3;
+          star.style.right = `${starRight}px`;
         }
-      } else {
-        this.rotation = this.startRotation + (performance.now() / 50) * (this.speed / 2);
-        if (this.y > this.expansePos) {
-          this.y -= Math.floor(this.expansePos - this.y) / -140;
-        }
-      }
-
-      context.save();
-      context.fillStyle = this.color;
-      context.strokeStyle = this.color;
-      context.beginPath();
-      const oldPos = rotate(centerx, centery, this.prevX, this.prevY, -this.prevR);
-      context.moveTo(oldPos[0], oldPos[1]);
-      context.translate(centerx, centery);
-      context.rotate(this.rotation);
-      context.translate(-centerx, -centery);
-      context.lineTo(this.x, this.y);
-      context.stroke();
-      context.restore();
-
-      this.prevR = this.rotation;
-      this.prevX = this.x;
-      this.prevY = this.y;
+      }, 10);
     };
 
-    const initStars = () => {
-      for (let i = 0; i < 2500; i++) {
-        new star();
-      }
-    };
+    const starInterval = setInterval(createStar, 100);
 
-    const loop = () => {
-      context.fillStyle = 'rgba(25,25,25,0.2)';
-      context.fillRect(0, 0, w, h);
-      stars.current.forEach((star) => star.draw());
-      requestAnimationFrame(loop);
+    return () => {
+      clearInterval(starInterval);
     };
-
-    setDPI(canvas, 192);
-    initStars();
-    loop();
-  }, [collapse, expanse]);
+  }, []);
 
   return (
-    <div className="relative w-full h-full bg-black">
-      <canvas ref={canvasRef} className="absolute inset-0" />
-      <div
-        className={`absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full flex items-center justify-center cursor-pointer transition-all duration-500 ${expanse ? 'opacity-0 pointer-events-none' : ''}`}
-        onClick={() => {
-          setCollapse(false);
-          setExpanse(true);
-        }}
-        onMouseEnter={() => !expanse && setCollapse(true)}
-        onMouseLeave={() => !expanse && setCollapse(false)}
-      >
-        <span className={`text-gray-600 text-lg relative transition-all duration-500`}>
-          <span className="before:block before:w-4 before:h-px before:bg-gray-600 before:absolute before:-left-4 before:top-1/2 before:transform before:-translate-y-1/2" />
-          ENTER
-          <span className="after:block after:w-4 after:h-px after:bg-gray-600 after:absolute after:-right-4 after:top-1/2 after:transform after:-translate-y-1/2" />
-        </span>
+    <div className="flex justify-center items-center h-screen bg-gradient-to-t from-[#2e1753] to-[#050819] relative overflow-hidden">
+      <div className="absolute top-10 text-white text-center">
+        <div>ERROR</div>
+        <h1 className="text-5xl">404</h1>
+        <hr className="my-4" />
+        <div>Page Not Found</div>
       </div>
+      <div className="absolute top-1/2 transform -translate-y-1/2 animate-astronautFly">
+        <img
+          src="https://images.vexels.com/media/users/3/152639/isolated/preview/506b575739e90613428cdb399175e2c8-space-astronaut-cartoon-by-vexels.png"
+          alt="Astronaut"
+          className="w-24"
+        />
+      </div>
+      <style jsx>{`
+        @keyframes astronautFly {
+          0% {
+            left: -100px;
+          }
+          25% {
+            top: 50%;
+            transform: rotate(30deg);
+          }
+          50% {
+            transform: rotate(45deg);
+            top: 55%;
+          }
+          75% {
+            top: 60%;
+            transform: rotate(30deg);
+          }
+          100% {
+            left: 110%;
+            transform: rotate(45deg);
+          }
+        }
+        
+        @keyframes starTwinkle {
+          0% {
+            background: rgba(255, 255, 255, 0.4);
+          }
+          25% {
+            background: rgba(255, 255, 255, 0.8);
+          }
+          50% {
+            background: rgba(255, 255, 255, 1);
+          }
+          75% {
+            background: rgba(255, 255, 255, 0.8);
+          }
+          100% {
+            background: rgba(255, 255, 255, 0.4);
+          }
+        }
+
+        .animate-astronautFly {
+          animation: astronautFly 6s infinite linear;
+        }
+
+        .star {
+          animation: starTwinkle 3s infinite linear;
+        }
+      `}</style>
+      <style jsx global>{`
+        body {
+          margin: 0;
+          overflow: hidden; /* جلوگیری از اسکرول */
+          height: 100vh; /* اطمینان از اینکه ارتفاع به درستی تنظیم شده است */
+        }
+        *, *::before, *::after {
+          box-sizing: border-box; /* اطمینان از محاسبه درست اندازه‌ها */
+        }
+      `}</style>
     </div>
   );
 };
 
-export default notFound
+export default NotFoundPage;
