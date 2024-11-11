@@ -181,7 +181,6 @@ function Index() {
 
   const handleLogout = () => {
     clearToken(); // Clear the token
-    router.push('/validation'); // Redirect to the login page
   };
 
   return (
@@ -256,7 +255,7 @@ function Index() {
           <Link href={'/uploadImage'}>+</Link>
         </button>
 
-        <MouseEffect />
+        {/* <MouseEffect /> */}
 
       </div>
     </>

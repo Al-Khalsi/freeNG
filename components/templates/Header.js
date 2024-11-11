@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { FaSearch, FaMicrophone } from 'react-icons/fa';
+import { IoLogOut } from "react-icons/io5";
 
-function Header({ token, username, email, userId, handleLogout }) {
+function Header({ token, username, email, handleLogout }) {
     return (
         <header className='header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white'>
             <div className='bg-logo'>
@@ -78,13 +79,11 @@ function Header({ token, username, email, userId, handleLogout }) {
             </button>
 
             {token ? ( // بررسی وجود توکن
-                <div>
-                    <Link href={`/profile/${userId}?email=${encodeURIComponent(email.trim())}`}>
-                        <span className='text-white'>{email}</span>
-                    </Link>
-                    <button onClick={handleLogout} className='ml-4 px-4 py-2 rounded-lg bg-red-500 text-white'>
-                        Logout
-                    </button>
+                <div className='flex items-center border-2 border-bgLightPurple rounded-md py-1 px-2'>
+                    <div>
+                        <span className='text-white'>{username}</span>
+                    </div>
+                    <IoLogOut onClick={handleLogout} className='ml-4 text-red-600 cursor-pointer' />
                 </div>
             ) : (
                 <button type="button" className="button rounded-xl">
