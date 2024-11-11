@@ -9,6 +9,7 @@ import Header from '@/components/templates/Header';
 import Aside from '@/components/templates/Aside';
 import { apiFetch } from '../utils/api'; // Import the apiFetch function
 import Footer from '@/components/templates/Footer';
+import MouseEffect from '@/components/modules/MouseEffect';
 
 function Index() {
   const { token, username, email, clearToken, userId } = useAuth(); // Destructure token and username from Auth context
@@ -254,6 +255,8 @@ function Index() {
         rounded-full cursor-pointer'>
           <Link href={'/uploadImage'}>+</Link>
         </button>
+
+        <MouseEffect />
 
       </div>
     </>
