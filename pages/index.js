@@ -201,7 +201,7 @@ function Index() {
             handleSelectToggle={handleSelectToggle}
             options={[options1, options2, options3, options4]} // Pass options as an array
           />
-          <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+          <section className='grid gap-6 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {currentImages.map((image) => (
               <Card key={image.id} image={image} />
             ))}
