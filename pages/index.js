@@ -35,20 +35,20 @@ function Index() {
   // Fetch images from the backend
   useEffect(() => {
     const fetchImages = async () => {
-        try {
-            const response = await apiFetch('/api/images', 'GET', null, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
-            setImages(response.images); // Assuming the response structure has an images array
-        } catch (error) {
-            console.error('Failed to fetch images:', error);
-        }
+      try {
+        const response = await apiFetch('/api/images', 'GET', null, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        setImages(response.images); // Assuming the response structure has an images array
+      } catch (error) {
+        console.error('Failed to fetch images:', error);
+      }
     };
 
     fetchImages();
-}, [token]);
+  }, [token]);
 
   const indexOfLastImage = currentPage * itemsPerPage;
   const indexOfFirstImage = indexOfLastImage - itemsPerPage;
@@ -203,7 +203,7 @@ function Index() {
           />
           <section className='grid gap-8 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
             {currentImages.map((image) => (
-               <Card key={image.id} image={image} />
+              <Card key={image.id} image={image} />
             ))}
           </section>
         </main>
@@ -214,8 +214,8 @@ function Index() {
 
         <Footer />
 
-        <button 
-        className='fixed right-3 bottom-3 
+        <button
+          className='fixed right-3 bottom-3 
         w-10 h-10 p-6 flex justify-center items-center
         bg-blue-700 text-white text-2xl outline-none
         rounded-full cursor-pointer'>

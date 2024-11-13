@@ -1,5 +1,6 @@
 import React from 'react'
-import { MdFullscreen } from "react-icons/md";
+import { MdFullscreen, MdPhotoSizeSelectLarge } from "react-icons/md";
+import { FaCloudDownloadAlt, FaImage } from "react-icons/fa";
 
 function Card({ image }) {
     return (
@@ -13,18 +14,18 @@ function Card({ image }) {
                 </div>
                 <div className='info-img w-full h-1/3 px-2 py-3'>
                     <h3 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.Title}</h3>
-                    <div className='flex justify-between mt-3'>
-                        <div className='flex flex-col w-1/3 text-center pr-2 text-lightBlue'>
-                            <span className='block text-sm'>{image.Size}</span>
-                            <span className='text-xs'>Size</span>
+                    <div className='flex mt-3'>
+                        <div className='flex justify-between items-center bg-gray-600 px-2 py-1 rounded text-xs text-lightBlue'>
+                            <FaImage />
+                            <span className='block ml-1'>{image.Size}</span>
                         </div>
-                        <div className='flex flex-col w-1/3 text-center text-lightBlue border-x-2 border-lightGray'>
-                            <span className='block text-sm'>{image.Dimensions}</span>
-                            <span className='text-xs'>Dimensions</span>
+                        <div className='flex justify-between items-center bg-gray-600 ml-2 px-2 py-1 rounded text-xs text-lightBlue border-lightGray'>
+                            <MdPhotoSizeSelectLarge />
+                            <span className='block ml-1'>{image.Dimensions}</span>
                         </div>
-                        <div className='flex flex-col w-1/3 text-center pl-2 text-lightBlue'>
-                            <span className='block text-sm'>{image.Download}</span>
-                            <span className='text-xs'>Download</span>
+                        <div className='flex justify-between items-center bg-gray-600 ml-2 px-2 py-1 rounded text-xs text-lightBlue'>
+                            <FaCloudDownloadAlt />
+                            <span className='block ml-1'>{image.Download}</span>
                         </div>
                     </div>
                 </div>
