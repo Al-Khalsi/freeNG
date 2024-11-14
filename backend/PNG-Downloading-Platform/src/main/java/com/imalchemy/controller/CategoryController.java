@@ -28,14 +28,74 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PostMapping
-    @Operation(summary = "Create a new category", description = "Creates a new category with the provided details")
+    @Operation(summary = "Create Category", description = """
+            Create a new category with two possible scenarios:
+
+            1. Parent Category Creation:
+                - Set 'parent' to true
+                - 'parentId' will be 0 by default
+
+            2. Subcategory Creation:
+                - Set 'parent' to false
+                - Provide the parent category's ID in 'parentId'
+
+            📌 Important Notes:
+            - When creating a parent category, parentId is not required
+            - When creating a subcategory, parentId must be specified
+            """)
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Category created successfully",
-                    content = @Content(schema = @Schema(implementation = Result.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Category Created Successfully - Parent Category",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "flag": true,
+                                        "code": "CREATED",
+                                        "message": "Category created successfully",
+                                        "data": {
+                                            "id": 2,
+                                            "name": "string",
+                                            "description": "string",
+                                            "iconUrl": "string",
+                                            "displayOrder": 1,
+                                            "level": 0,
+                                            "parentId": 0,
+                                            "active": true,
+                                            "parent": true
+                                        }
+                                    }
+                                    """)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Category Created Successfully - Subcategory",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "flag": true,
+                                        "code": "CREATED",
+                                        "message": "Category created successfully",
+                                        "data": {
+                                            "id": 2,
+                                            "name": "string",
+                                            "description": "string",
+                                            "iconUrl": "string",
+                                            "displayOrder": 1,
+                                            "level": 0,
+                                            "parentId": 2,
+                                            "active": true,
+                                            "parent": false
+                                        }
+                                    }
+                                    """)
+                    )
+            )
     })
+    @PostMapping
     public ResponseEntity<Result> createCategory(@RequestBody CategoryDTO categoryDTO) {
         CategoryDTO createdCategory = this.categoryService.createCategory(categoryDTO);
 

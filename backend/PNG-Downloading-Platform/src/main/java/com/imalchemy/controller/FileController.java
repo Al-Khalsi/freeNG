@@ -58,13 +58,14 @@ public class FileController {
     })
     @PostMapping("/upload")
     public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
+                                             @RequestParam String fileName,
                                              @RequestParam String parentCategoryName,
                                              @RequestParam List<String> subCategoryNames,
                                              @RequestParam List<String> dominantColors,
                                              @RequestParam String style) {
         try {
 
-            FileDTO fileDTO = this.fileService.storeFile(multipartFile, parentCategoryName, subCategoryNames, dominantColors, style);
+            FileDTO fileDTO = this.fileService.storeFile(multipartFile, fileName, parentCategoryName, subCategoryNames, dominantColors, style);
             return ResponseEntity.ok(Result.success("File uploaded successfully", fileDTO));
 
         } catch (IllegalArgumentException e) {

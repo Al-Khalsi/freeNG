@@ -6,98 +6,128 @@ import { FcGoogle } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
 import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
 import withAuthRedirect from '../../utils/withAuthRedirect'; // Adjust the path as necessary
+import jwt_decode from 'jwt-decode';
+import axios from 'axios'; // Import Axios
 
 function AuthForm() {
-    const { token, storeToken } = useAuth(); // Adjusted to storeToken
+    const { token, storeToken, setUsername, setEmail, setRole } = useAuth(); // Added setUsername, setEmail, and setRole
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
     const router = useRouter();
 
-    // Effect to prevent navigation back to login/register if already logged in
     useEffect(() => {
         if (token) {
-            // If the user is logged in, redirect to home
-            router.push('/');
+            router.push('/'); // Redirect to home if token exists
         }
     }, [token, router]);
 
     const handleClick = (action) => {
-        setIsActive(action === "register");
+        setIsActive(action === "register"); // Toggle between login and registration
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setCredentials({ ...credentials, [name]: value });
+        setCredentials({ ...credentials, [name]: value }); // Update credentials state
     };
 
     const handleLogin = async (e) => {
         e.preventDefault();
-        const response = await fetch('http://localhost:3001/users' , { 
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: credentials.username,
+        try {
+            const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
+                email: credentials.email,
                 password: credentials.password,
-            }),
-        });
+            });
 
-        if (response.ok) {
-            const data = await response.json();
-            const userToken = data.token; 
-            const userId = data.userId;
+            // Log the entire response and response.data
+            console.log('Response:', response); // Log the entire response object
+            console.log('Response Data:', response.data); // Log the data part of the response
 
-            // Decode the token if necessary (assuming it's a JWT)
-            const decodedToken = JSON.parse(atob(userToken.split('.')[1]));
+            const data = response.data.data; // Get response data
+            const userToken = data.token; // Get user token
+            const username = data.userDetails.username; // Extract username from response
+            console.log(data); // Log the data received
 
-            // Store token and userId
-            storeToken(userToken, userId)
-            console.log('Login successful');
-            router.push('/');
-        } else {
-            setError('Invalid username or password');
+            if (userToken) {
+                storeToken(userToken); // Store the token
+
+                // Decode the token
+                const decodedToken = jwt_decode(userToken);
+                console.log('Decoded Token:', decodedToken);
+
+                // Store user information from token
+                setUsername(username); // Store username from response
+                setEmail(decodedToken.email); // Store email from token
+                setRole(decodedToken.role); // Store role from token
+
+                console.log('Login successful');
+                router.push('/'); // Redirect to home after successful login
+            } else {
+                setError('Failed to retrieve token'); // Error handling
+            }
+        } catch (error) {
+            // Improved error handling
+            if (error.response) {
+                console.error('Login error response:', error.response); // Log the entire error response
+                console.error('Login error data:', error.response.data); // Log the data part of the error response
+                setError('Invalid username or password'); // Error message for invalid credentials
+            } else {
+                console.error('Login error:', error.message); // Log the error message
+                setError('An error occurred during login'); // Generic error message
+            }
         }
-
     };
 
     const handleRegistration = async (e) => {
         e.preventDefault();
-
-        // Check for existing username or email
-        const response = await fetch('http://localhost:3001/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
+        try {
+            const response = await axios.post('http://localhost:8080/api/v1/auth/register', {
                 username: credentials.username,
                 email: credentials.email,
                 password: credentials.password,
-            }),
-        });
+            });
 
-        if (existingUser) {
-            setError('Username or email already exists');
-            return; // Stop the registration process
-        }
+            // Log the entire response and response.data
+            console.log('Response:', response); // Log the entire response object
+            console.log('Response Data:', response.data); // Log the data part of the response
 
+            const data = response.data.data; // Get response data
+            const userToken = data.token; // Get user token
+            const username = data.userDetails.username; // Extract username from response
 
-        if (response.ok) {
-            const data = await response.json();
-            const userToken = data.token;
-            const userId = data.userId;
+            if (userToken) {
+                storeToken(userToken); // Store the token
 
-            // Decode the token if necessary
-            const decodedToken = JSON.parse(atob(userToken.split('.')[1]));
+                // Decode the token
+                const decodedToken = jwt_decode(userToken);
+                console.log('Decoded Token:', decodedToken);
 
-             // Store token and userId
-            storeToken(userToken);
-            console.log('Registration successful:', data);
-            router.push('/');
-        } else {
-            setError('Registration failed');
+                // Store user information from token
+                setUsername(username); // Store username from response
+                setEmail(decodedToken.email); // Store email from token
+                setRole(decodedToken.role); // Store role from token
+
+                console.log('Registration successful:', data);
+                router.push('/'); // Redirect to home after successful registration
+            } else {
+                setError('Failed to retrieve token'); // Error handling
+            }
+        } catch (error) {
+            // Improved error handling
+            if (error.response) {
+                // Log the error response
+                console.error('Registration error:', error.response); // Log the entire error response
+                console.error('Registration error data:', error.response.data); // Log the data part of the error response
+                setError(error.response.data.message || 'Registration failed'); // Set error message from response or default
+            } else if (error.request) {
+                // The request was made but no response was received
+                console.error('No response received:', error.request); // Log request
+                setError('No response from server'); // Set a generic error message
+            } else {
+                // Something happened in setting up the request
+                console.error('Error setting up request:', error.message); // Log error message
+                setError('Error during registration'); // Set a generic error message
+            }
         }
     };
 
@@ -110,11 +140,11 @@ function AuthForm() {
                         {error && <p className='text-red-500'>{error}</p>}
                         <div className="inputBox relative my-7 ">
                             <input type="text"
-                                name="username"
-                                value={credentials.username}
+                                name="email"
+                                value={credentials.email}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium'
-                                placeholder='Username' required />
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium'
+                                placeholder='Email' required />
                             <FaUser className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <div className="inputBox relative my-7">
@@ -122,7 +152,7 @@ function AuthForm() {
                                 name="password"
                                 value={credentials.password}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium placeholder-font-normal'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
                             <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
@@ -146,7 +176,7 @@ function AuthForm() {
                                 name="username"
                                 value={credentials.username}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium'
                                 placeholder='Username' required />
                             <FaUser className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
@@ -155,7 +185,7 @@ function AuthForm() {
                                 name="email"
                                 value={credentials.email}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium'
                                 placeholder='Email' required />
                             <MdEmail className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
@@ -164,12 +194,12 @@ function AuthForm() {
                                 name="password"
                                 value={credentials.password}
                                 onChange={handleChange}
-                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-base font-medium placeholder-font-normal'
+                                className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
                             <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <button type='submit'
-                            className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-base font-semibold cursor-pointer'>
+                            className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-clBlack text-base font-semibold cursor-pointer'>
                             Register
                         </button>
                         <p className='text-base my-4'>or</p>

@@ -7,11 +7,15 @@ import Images from "../data/db.json";
 import { useRouter } from 'next/router';
 import Header from '@/components/templates/Header';
 import Aside from '@/components/templates/Aside';
+import { apiFetch } from '../utils/api'; // Import the apiFetch function
+import Footer from '@/components/templates/Footer';
+import MouseEffect from '@/components/modules/MouseEffect';
 
 function Index() {
   const { token, username, email, clearToken, userId } = useAuth(); // Destructure token and username from Auth context
   const router = useRouter();
   const [openSelect, setOpenSelect] = useState(null);
+  const [images, setImages] = useState([]); // State to store images from the backend
   const itemsPerPage = 20;
   const currentPage = parseInt(router.query.page) || 1;
 
@@ -27,6 +31,24 @@ function Index() {
       setOpenSelect(selectId);
     }
   };
+
+  // Fetch images from the backend
+  useEffect(() => {
+    const fetchImages = async () => {
+        try {
+            const response = await apiFetch('/api/images', 'GET', null, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            setImages(response.images); // Assuming the response structure has an images array
+        } catch (error) {
+            console.error('Failed to fetch images:', error);
+        }
+    };
+
+    fetchImages();
+}, [token]);
 
   const indexOfLastImage = currentPage * itemsPerPage;
   const indexOfFirstImage = indexOfLastImage - itemsPerPage;
@@ -188,9 +210,9 @@ function Index() {
               // &dimensions=${encodeURIComponent(image.Dimensions)}
               // &download=${encodeURIComponent(image.Download)}
               // &src=${encodeURIComponent(image.Src)}`} key={image.id}>
-              <div className='card w-full h-80 rounded-2xl overflow-hidden bg-bgDarkGray' key={image.id}>
+              <div className='card w-full h-80 rounded-lg overflow-hidden bg-bgDarkGray' key={image.id}>
                 <div className='inside-card h-full w-full p-3'>
-                  <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-xl'>
+                  <div className='bg-img relative w-full h-2/3 flex justify-center items-center p-2 rounded-md'>
                     <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
                       <MdFullscreen className='text-xl' />
                     </div>
@@ -224,6 +246,8 @@ function Index() {
           {renderPagination()}
         </div>
 
+        <Footer />
+
         <button 
         className='fixed right-3 bottom-3 
         w-10 h-10 p-6 flex justify-center items-center
@@ -231,6 +255,8 @@ function Index() {
         rounded-full cursor-pointer'>
           <Link href={'/uploadImage'}>+</Link>
         </button>
+
+        <MouseEffect />
 
       </div>
     </>
