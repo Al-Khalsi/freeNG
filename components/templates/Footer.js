@@ -4,6 +4,36 @@ import { FaInstagram, FaYoutube, FaEnvelope } from 'react-icons/fa'; // Importin
 function Footer() {
     return (
         <footer className='footer w-full bg-gray-800 text-white py-6'>
+            <div className='footer-top w-full'>
+                <span style="--i:1;"></span>
+                <span style="--i:2;"></span>
+                <span style="--i:3;"></span>
+                <span style="--i:4;"></span>
+                <span style="--i:5;"></span>
+                <span style="--i:6;"></span>
+                <span style="--i:7;"></span>
+                <span style="--i:8;"></span>
+                <span style="--i:9;"></span>
+                <span style="--i:10;"></span>
+                <span style="--i:11;"></span>
+                <span style="--i:12;"></span>
+                <span style="--i:13;"></span>
+                <span style="--i:14;"></span>
+                <span style="--i:15;"></span>
+                <span style="--i:16;"></span>
+
+                <svg>
+                    <filter id="gooey">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        <feColorMatrix values="
+                1 0 0 0 0
+                0 1 0 0 0
+                0 0 1 0 0
+                0 0 0 20 -10
+                " />
+                    </filter>
+                </svg>
+            </div>
             <div className='footer-content w-full flex flex-col md:flex-row justify-between'>
                 {/* Left Section */}
                 <div className='left w-full md:w-1/3 flex flex-col items-start px-4'>
