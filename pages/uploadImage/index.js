@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import axios from 'axios'; // Import axios
 import Card from '@/components/templates/Card'; // فرض بر این است که کامپوننت Card در همان دایرکتوری است.
+import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
 
 function UploadImage() {
+  const { token } = useAuth(); // Get the token from the auth context
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
   const [category, setCategory] = useState('');
@@ -9,6 +12,7 @@ function UploadImage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showCard, setShowCard] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(''); // State to store the uploaded file info
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -20,23 +24,41 @@ function UploadImage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleUploadSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage(''); // Reset error message
+
     if (!image) {
       setErrorMessage('Please upload an image.');
       return;
     }
-    setIsLoading(true);
 
-    // شبیه‌سازی بارگذاری
-    setTimeout(() => {
-      console.log("Image:", image);
-      console.log("Image Name:", imageName);
-      console.log("Category:", category);
-      console.log("Subcategory:", subCategory);
+    setIsLoading(true);
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('imageName', imageName);
+    formData.append('category', category);
+    formData.append('subCategory', subCategory);
+
+    try {
+      const UPLOAD_BACKEND_URL = 'http://localhost:8080/api/v1/file/upload';
+      const response = await axios.post(UPLOAD_BACKEND_URL, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}` // Include the token in the headers
+        },
+      });
+
+      // Extract the 'file' property from the response body
+      const uploadedFileData = response.data.file; // Assuming response body is { "file": "string" }
+      setUploadedFile(uploadedFileData); // Store the uploaded file info in state
+      alert('Upload successful: ' + uploadedFileData); // Notify the user
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setErrorMessage(error.response?.data?.message || 'Error uploading file.');
+    } finally {
       setIsLoading(false);
-      alert('Image uploaded successfully!');
-    }, 2000);
+    }
   };
 
   const handleShowDemo = () => {
@@ -59,7 +81,7 @@ function UploadImage() {
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
         {!showCard ? (
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleUploadSubmit}>
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Image</label>
               <input
@@ -122,14 +144,14 @@ function UploadImage() {
           </form>
         ) : (
           <div className="w-full">
-            <Card 
-              image={{ 
-                Src: URL.createObjectURL(image), 
-                Title: imageName 
-              }} 
+            <Card
+              image={{
+                Src: URL.createObjectURL(image),
+                Title: imageName
+              }}
             />
-            <button 
-              onClick={handleCloseCard} 
+            <button
+              onClick={handleCloseCard}
               className="bg-red-500 text-white rounded p-2 mt-4 w-full hover:bg-red-600"
             >
               Close
@@ -144,6 +166,13 @@ function UploadImage() {
           >
             Show Demo
           </button>
+        )}
+
+        {/* Optionally display the uploaded file info */}
+        {uploadedFile && (
+          <div className="mt-4 text-black">
+            <p>Uploaded File: {uploadedFile}</p>
+          </div>
         )}
       </div>
     </div>
