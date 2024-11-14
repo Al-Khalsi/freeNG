@@ -1,234 +1,150 @@
-import React, { useState, useEffect } from 'react';
-import { useDropzone } from 'react-dropzone';
-import axios from 'axios';
+import React, { useState } from 'react';
+import Card from '@/components/templates/Card'; // فرض بر این است که کامپوننت Card در همان دایرکتوری است.
 
 function UploadImage() {
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
   const [category, setCategory] = useState('');
   const [subCategory, setSubCategory] = useState('');
-  const [categories, setCategories] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
-  const [newCategoryName, setNewCategoryName] = useState('');
-  const [newSubCategoryName, setNewSubCategoryName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showCard, setShowCard] = useState(false);
 
-  const onDrop = (acceptedFiles) => {
-    if (acceptedFiles.length > 0) {
-      setImage(acceptedFiles[0]);
-      setImageName(acceptedFiles[0].name);
-      console.log('Accepted file:', acceptedFiles[0]);
-    }
-  };
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: 'image/*',
-  });
-
-  const handleImageNameChange = (event) => {
-    setImageName(event.target.value);
-    console.log('Image name changed:', event.target.value);
-  };
-
-  const handleCategoryChange = (event) => {
-    const selectedCategoryId = event.target.value;
-    setCategory(selectedCategoryId);
-    setSubCategory(''); // Reset sub-category when category changes
-
-    // Fetch sub-categories based on selected category
-    if (selectedCategoryId) {
-      fetchSubCategories(selectedCategoryId);
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setImage(file);
+      setErrorMessage('');
     } else {
-      setSubCategories([]); // Clear sub-categories if no category is selected
-    }
-    console.log('Category changed:', selectedCategoryId);
-  };
-
-  const handleSubCategoryChange = (event) => {
-    setSubCategory(event.target.value);
-    console.log('Sub-category changed:', event.target.value);
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/api/v1/category');
-      setCategories(response.data); // Assuming response.data is an array of categories
-      console.log('Fetched categories:', response.data);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
+      setErrorMessage('Please select a valid image file.');
     }
   };
 
-  const fetchSubCategories = async (categoryId) => {
-    try {
-      const response = await axios.get(`http://localhost:8080/api/v1/category/${categoryId}/subcategories`);
-      setSubCategories(response.data); // Assuming response.data is an array of subcategories
-      console.log('Fetched sub-categories for category ID:', categoryId, response.data);
-    } catch (error) {
-      console.error('Error fetching sub-categories:', error);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!image) {
+      setErrorMessage('Please upload an image.');
+      return;
+    }
+    setIsLoading(true);
+
+    // شبیه‌سازی بارگذاری
+    setTimeout(() => {
+      console.log("Image:", image);
+      console.log("Image Name:", imageName);
+      console.log("Category:", category);
+      console.log("Subcategory:", subCategory);
+      setIsLoading(false);
+      alert('Image uploaded successfully!');
+    }, 2000);
+  };
+
+  const handleShowDemo = () => {
+    if (image && imageName) {
+      setShowCard(true);
+    } else {
+      setErrorMessage('Please complete the image name and upload an image to show the demo.');
     }
   };
 
-  const handleAddCategory = async () => {
-    const categoryData = {
-      name: newCategoryName,
-      description: 'Description for ' + newCategoryName,
-      iconUrl: '',
-      displayOrder: 0,
-      level: 0,
-      parentId: 0,
-      parent: true,
-      active: true,
-    };
-
-    try {
-      const response = await axios.post('http://localhost:8080/api/v1/category', categoryData);
-      console.log('Category added successfully:', response.data);
-      fetchCategories(); // Refresh categories after adding
-      setNewCategoryName(''); // Clear input
-    } catch (error) {
-      console.error('Error adding category:', error);
-    }
+  const handleCloseCard = () => {
+    setShowCard(false);
   };
-
-  const handleAddSubCategory = async () => {
-    const subCategoryData = {
-      name: newSubCategoryName,
-      description: 'Description for ' + newSubCategoryName,
-      iconUrl: '',
-      displayOrder: 0,
-      level: 1,
-      parentId: category, // Use selected category ID as parentId
-      parent: false,
-      active: true,
-    };
-
-    try {
-      const response = await axios.post('http://localhost:8080/api/v1/category', subCategoryData);
-      console.log('Sub-category added successfully:', response.data);
-      fetchSubCategories(category); // Refresh sub-categories after adding
-      setNewSubCategoryName(''); // Clear input
-    } catch (error) {
-      console.error('Error adding sub-category:', error);
-    }
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log('Form submitted');
-
-    // Create a FormData object to hold the data
-    const formData = new FormData();
-    formData.append('image', image);
-
-    // Store the image name and file temporarily in session storage
-    sessionStorage.setItem('uploadedImage', imageName);
-    sessionStorage.setItem('uploadedImageFile', image);
-
-    try {
-      const response = await axios.post('http://localhost:8080/api/v1/file/upload', {
-        file: imageName,
-      });
-
-      console.log('Upload successful:', response);
-      console.log('Response Data:', response.data);
-      console.log('Response Status:', response.status);
-      console.log('Response Headers:', response.headers);
-    } catch (error) {
-      console.error('Error uploading the image:', error.response ? error.response.data : error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories(); // Fetch categories on component mount
-  }, []);
 
   return (
-    <div className='UploadImage w-full h-full flex justify-center items-center'>
-      <div className="max-w-md mx-auto p-4 bg-white text-black shadow-md rounded-lg">
-        <h2 className="text-lg font-semibold mb-4">Upload Image</h2>
-        <form onSubmit={handleSubmit}>
-          <div {...getRootProps()} className={`mb-4 border-2 border-dashed rounded-md p-4 cursor-pointer ${isDragActive ? 'border-blue-500' : 'border-gray-300'}`}>
-            <input {...getInputProps()} />
-            {
-              isDragActive ? (
-                <p className="text-gray-600">Drop the files here ...</p>
-              ) : (
-                <p className="text-gray-600">Drop image files here, or click to select files</p>
-              )
-            }
-          </div>
+    <div className='UploadImage w-full h-full flex justify-center items-center bg-bgDarkBlue'>
+      <div className="flex flex-col items-center justify-center bg-gray-100 p-6 rounded shadow-md w-96">
+        <h2 className="text-xl font-bold mb-4 text-black">Upload Image</h2>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Image Name</label>
-            <input
-              type="text"
-              value={imageName}
-              onChange={handleImageNameChange}
-              className="mt-1 block w-full border border-gray-300 text-gray-700 rounded-md p-2"
-              required
-            />
-          </div>
+        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Category</label>
-            <select
-              value={category}
-              onChange={handleCategoryChange}
-              className="mt-1 block w-full border border-gray-300 text-gray-700 rounded-md p-2 cursor-pointer"
-              required
+        {!showCard ? (
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="border rounded p-2 w-full text-black"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Image Name</label>
+              <input
+                type="text"
+                value={imageName}
+                onChange={(e) => setImageName(e.target.value)}
+                className="border rounded p-2 w-full text-black"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Category</label>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="border rounded p-2 w-full text-black"
+                required
+              >
+                <option value="">Select a category</option>
+                <option value="category1">Category 1</option>
+                <option value="category2">Category 2</option>
+                <option value="category3">Category 3</option>
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Subcategory</label>
+              <select
+                value={subCategory}
+                onChange={(e) => setSubCategory(e.target.value)}
+                className="border rounded p-2 w-full text-black"
+                required
+              >
+                <option value="">Select a subcategory</option>
+                <option value="subcategory1">Subcategory 1</option>
+                <option value="subcategory2">Subcategory 2</option>
+                <option value="subcategory3">Subcategory 3</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              className={`bg-blue-500 text-white rounded p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading}
             >
-              <option value="">Select Category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>{cat.name}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              value={newCategoryName}
-              onChange={(e) => setNewCategoryName(e.target.value)}
-              placeholder="New Category Name"
-              className="mt-2 block w-full border border-gray-300 text-gray-700 rounded-md p-2"
+              {isLoading ? 'Uploading...' : 'Upload'}
+            </button>
+          </form>
+        ) : (
+          <div className="w-full">
+            <Card 
+              image={{ 
+                Src: URL.createObjectURL(image), 
+                Title: imageName 
+              }} 
             />
-            <button type="button" onClick={handleAddCategory} className="mt-2 w-full bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600">
-              Add Category
+            <button 
+              onClick={handleCloseCard} 
+              className="bg-red-500 text-white rounded p-2 mt-4 w-full hover:bg-red-600"
+            >
+              Close
             </button>
           </div>
+        )}
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Sub-category</label>
-            <select
-              value={subCategory}
-              onChange={handleSubCategoryChange}
-              className="mt-1 block w-full border border-gray-300 text-gray-700 rounded-md p-2 cursor-pointer"
-              disabled={!category} // Disable until a category is selected
-              required
-            >
-              <option value="">Select Sub-category</option>
-              {subCategories.map((subCat) => (
-                <option key={subCat.id} value={subCat.name}>{subCat.name}</option>
-              ))}
-            </select>
-            <input
-              type="text"
-              value={newSubCategoryName}
-              onChange={(e) => setNewSubCategoryName(e.target.value)}
-              placeholder="New Sub-category Name"
-              className="mt-2 block w-full border border-gray-300 text-gray-700 rounded-md p-2"
-              disabled={!category} // Disable input until a category is selected
-            />
-            <button type="button" onClick={handleAddSubCategory} className="mt-2 w-full bg-green-500 text-white font-semibold py-2 rounded-md hover:bg-green-600" disabled={!category}>
-              Add Sub-category
-            </button>
-          </div>
-
+        {!showCard && (
           <button
-            type="submit"
-            className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600"
+            onClick={handleShowDemo}
+            className="bg-green-500 text-white rounded p-2 mt-4 w-full hover:bg-green-600"
           >
-            Upload
+            Show Demo
           </button>
-        </form>
+        )}
       </div>
     </div>
   );
