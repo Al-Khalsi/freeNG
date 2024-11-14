@@ -5,7 +5,6 @@ import com.imalchemy.model.payload.request.LoginRequest;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -21,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
@@ -42,15 +40,47 @@ public class AuthenticationController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "201",
-                    description = "User successfully registered",
+                    description = "User created successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Result.class)
+                            schema = @Schema(example = """
+                                    {
+                                      "flag": true,
+                                      "code": "CREATED",
+                                      "message": "User created successfully",
+                                      "data": {
+                                        "token": "eyJhbGciOiJIUzI1NiJ9...",
+                                        "userDTO": {
+                                          "id": "9962c489-70e1-4043-b8a5-7044a344321b",
+                                          "username": "string",
+                                          "email": "string",
+                                          "password": null,
+                                          "roles": [
+                                            {
+                                              "id": 1,
+                                              "roleName": "ROLE_USER"
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    }
+                                    """)
                     )
             ),
             @ApiResponse(
-                    responseCode = "400",
-                    description = "Invalid input data"
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "flag":false,
+                                        "code":"INTERNAL_SERVER_ERROR",
+                                        "message":"internal server error occurred.",
+                                        "data":"some message from exception.getMessage()"
+                                    }
+                                    """)
+                    )
             )
     })
     @PostMapping("/register")
@@ -66,26 +96,59 @@ public class AuthenticationController {
         );
     }
 
-    @Operation(
-            summary = "User login",
-            description = "Authenticates user and returns JWT token + add the token in the header"
-    )
+    @Operation(summary = "User Login", description = "Authenticate user and generate access token")
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "Successfully logged in",
+                    description = "Successful Login",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = Result.class)
-                    ),
-                    headers = @Header(
-                            name = HttpHeaders.AUTHORIZATION,
-                            description = "JWT token for authentication"
+                            schema = @Schema(example = """
+                                    {
+                                        "flag":true,
+                                        "code":"CREATED",
+                                        "message":"User logged-in successfully",
+                                        "data": {
+                                            "token":"eyJhbGciOiJIUzI1NiJ9...",
+                                            "userDetails": {
+                                                "email":"string",
+                                                "username":"string",
+                                                "authorities":"ROLE_USER"
+                                            }
+                                        }
+                                    }
+                                    """)
                     )
             ),
             @ApiResponse(
                     responseCode = "401",
-                    description = "Invalid credentials"
+                    description = "Unauthorized - Invalid Credentials",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                            "flag":false,
+                                            "code":"UNAUTHORIZED",
+                                            "message":"username or password is incorrect.",
+                                            "data":"User not found: stringg"
+                                    }
+                                    """)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Internal Server Error",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(example = """
+                                    {
+                                        "flag":false,
+                                        "code":"INTERNAL_SERVER_ERROR",
+                                        "message":"internal server error occurred.",
+                                        "data":"some message from exception.getMessage()"
+                                    }
+                                    """)
+                    )
             )
     })
     @PostMapping("/login")
@@ -96,7 +159,7 @@ public class AuthenticationController {
                 .header(HttpHeaders.AUTHORIZATION, String.valueOf(result.get("token")))
                 .body(Result.builder()
                         .flag(true)
-                        .code(HttpStatus.CREATED)
+                        .code(HttpStatus.OK)
                         .message("User logged-in successfully")
                         .data(result)
                         .build()

@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>com.imalchemy</groupId>
-    <artifactId>PNG-Downloading-Platform</artifactId>
+    <artifactId>imalchemy</artifactId>
     <version>0.1-BETA</version>
 
     <name>PNG-Downloading-Platform</name>
@@ -162,6 +162,18 @@
                             <version>${lombok.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+
+            <!-- Google JIB for Docker -->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.3.2</version>
+                <configuration>
+                    <to>
+                        <image>dukeofjava/${project.artifactId}:${project.version}</image>
+                    </to>
                 </configuration>
             </plugin>
         </plugins>
