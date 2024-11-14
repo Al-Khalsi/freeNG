@@ -48,12 +48,12 @@ public class LocalFileStorageStrategy implements FileStorageStrategy {
     }
 
     @Override
-    public Path store(MultipartFile file, String fileName) throws IOException {
+    public Path store(MultipartFile file, String originalFileName) throws IOException {
         // Resolve the path where the file will be saved
-        Path targetLocation = this.fileStorageLocation.resolve(fileName);
+        Path targetLocation = this.fileStorageLocation.resolve(originalFileName);
         // Ensure we're not writing outside the intended directory
         if (!targetLocation.normalize().startsWith(this.fileStorageLocation.normalize())) {
-            log.error("-> FILE -> Cannot store file outside the current directory: {}", fileName);
+            log.error("-> FILE -> Cannot store file outside the current directory: {}", originalFileName);
             throw new IOException("Cannot store file outside the current directory");
         }
         // Copy the file to the target location, replacing if it already exists

@@ -32,15 +32,15 @@ public class FileServiceImpl implements FileService {
     private final FileMetadataService fileMetadataService;
 
     @Override
-    public FileDTO storeFile(MultipartFile multipartFile, String parentCategoryName,
+    public FileDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName,
                              List<String> subCategoryNames, List<String> dominantColors,
                              String style) throws IOException {
         try {
 
-            String fileName = Objects.requireNonNull(multipartFile.getOriginalFilename());
             this.fileValidationService.validateFile(fileName);
 
-            Path relativePath = this.fileStorageStrategy.store(multipartFile, fileName);
+            String originalFileName = Objects.requireNonNull(multipartFile.getOriginalFilename());
+            Path relativePath = this.fileStorageStrategy.store(multipartFile, originalFileName);
             File file = this.fileMetadataService.createFileDomain(multipartFile, fileName, relativePath.toString(),
                     dominantColors, style);
 
