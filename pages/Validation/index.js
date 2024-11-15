@@ -10,7 +10,7 @@ import jwt_decode from 'jwt-decode';
 import axios from 'axios'; // Import Axios
 
 function AuthForm() {
-    const { token, storeToken, setUsername, setEmail, setRole } = useAuth(); // Added setUsername, setEmail, and setRole
+    const { token, storeToken, setUsername, setEmail, setRole } = useAuth(); // Added setUsername
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
@@ -87,13 +87,12 @@ function AuthForm() {
                 password: credentials.password,
             });
 
-            // Log the entire response and response.data
             console.log('Response:', response); // Log the entire response object
             console.log('Response Data:', response.data); // Log the data part of the response
 
             const data = response.data.data; // Get response data
             const userToken = data.token; // Get user token
-            const username = data.userDetails.username; // Extract username from response
+            console.log(data); // Log the data received
 
             if (userToken) {
                 storeToken(userToken); // Store the token
@@ -103,7 +102,7 @@ function AuthForm() {
                 console.log('Decoded Token:', decodedToken);
 
                 // Store user information from token
-                setUsername(username); // Store username from response
+                setUsername(credentials.username); // Store username from registration form
                 setEmail(decodedToken.email); // Store email from token
                 setRole(decodedToken.role); // Store role from token
 
@@ -115,16 +114,13 @@ function AuthForm() {
         } catch (error) {
             // Improved error handling
             if (error.response) {
-                // Log the error response
                 console.error('Registration error:', error.response); // Log the entire error response
                 console.error('Registration error data:', error.response.data); // Log the data part of the error response
                 setError(error.response.data.message || 'Registration failed'); // Set error message from response or default
             } else if (error.request) {
-                // The request was made but no response was received
                 console.error('No response received:', error.request); // Log request
                 setError('No response from server'); // Set a generic error message
             } else {
-                // Something happened in setting up the request
                 console.error('Error setting up request:', error.message); // Log error message
                 setError('Error during registration'); // Set a generic error message
             }

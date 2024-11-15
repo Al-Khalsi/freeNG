@@ -3,8 +3,58 @@ import { FaInstagram, FaYoutube, FaEnvelope } from 'react-icons/fa'; // Importin
 
 function Footer() {
     return (
-        <footer className='footer w-full bg-gray-800 text-white py-6'>
-            <div className='footer-content w-full flex flex-col md:flex-row justify-between'>
+        <footer className='footer w-full bg-gray-800 text-white py-6 mt-6'>
+            <style>
+                {`
+                    @keyframes moveUp {
+                        0% {
+                            transform: translateY(0);
+                        }
+                        50% {
+                            transform: translateY(-40px); /* Move up by 30px */
+                        }
+                        100% {
+                            transform: translateY(0);
+                        }
+                    }
+
+                    .span-animation {
+                        animation: moveUp 3.5s ease-in-out infinite; /* Animation duration and infinite loop */
+                        display: inline-block; /* Ensure spans are block elements for animation */
+                    }
+
+                    .footer-top {
+                        filter: url(#gooey);
+                        overflow: visible;
+                    }
+
+                    .span {
+                        box-shadow: 0 0 30px #000000;
+                        background: linear-gradient(#000000, #000000);
+                    }
+                `}
+            </style>
+            <div className='footer-top w-full flex relative'>
+                {[...Array(26)].map((_, index) => (
+                    <span
+                        key={index}
+                        className={`rounded-full w-8 h-8 bg-gray-800 ml-8 span-animation`}
+                        style={{ animationDelay: `${Math.random() * 1}s` }} // Random delay for each span
+                    ></span>
+                ))}
+                <svg className='absolute left-0 right-0 top-0'>
+                    <filter id="gooey">
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="10" />
+                        <feColorMatrix values="
+                            1 0 0 0 0
+                            0 1 0 0 0
+                            0 0 1 0 0
+                            0 0 0 20 -10
+                        " />
+                    </filter>
+                </svg>
+            </div>
+            <div className='footer-content w-full flex flex-col md:flex-row justify-between mt-6'>
                 {/* Left Section */}
                 <div className='left w-full md:w-1/3 flex flex-col items-start px-4'>
                     <div className='bg-logo mb-2'>

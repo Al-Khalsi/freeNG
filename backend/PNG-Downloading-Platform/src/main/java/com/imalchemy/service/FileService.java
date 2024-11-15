@@ -13,4 +13,6 @@ public interface FileService {
 
     Resource loadFileAsResource(String fileId) throws IOException;
 
+    List<FileDTO> listAllFiles();
+
 }

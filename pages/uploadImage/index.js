@@ -1,253 +1,244 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import { apiFetch } from '../../utils/api';
-import { useAuth } from '../../context/AuthContext';
-
-// Color options with names and hex values (static)
-const colorOptions = [
-  { name: 'Red', hex: '#FF0000' },
-  { name: 'Green', hex: '#00FF00' },
-  { name: 'Blue', hex: '#0000FF' },
-  { name: 'Yellow', hex: '#FFFF00' },
-  { name: 'Purple', hex: '#800080' },
-  { name: 'Orange', hex: '#FFA500' },
-];
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import axios
+import Card from '@/components/templates/Card'; // فرض بر این است که کامپوننت Card در همان دایرکتوری است.
+import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
 
 function UploadImage() {
-  const { token } = useAuth();
+  const { token } = useAuth(); // Get the token from the auth context
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
-  const [availableCategories, setAvailableCategories] = useState([]);
-  const [subCategoriesMap, setSubCategoriesMap] = useState({});
-  const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedSubCategory, setSelectedSubCategory] = useState('');
-  const [selectedColor, setSelectedColor] = useState('');
-  const [type, setType] = useState('');
-  const [colorDropdownOpen, setColorDropdownOpen] = useState(false);
+  const [category, setCategory] = useState('');
+  const [subCategory, setSubCategory] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showCard, setShowCard] = useState(false);
+  const [uploadedFile, setUploadedFile] = useState(''); // State to store the uploaded file info
+  const [cats, setCats] = useState([]); // State to store categories
+  const [subCategories, setSubCategories] = useState([]);
 
-  // Fetch categories and subcategories on component mount
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const categoriesResponse = await apiFetch('localhost:', 'GET', null, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-
-        setAvailableCategories(categoriesResponse.categories);
-        setSubCategoriesMap(categoriesResponse.subCategoriesMap); // Assuming your API returns this structure
-      } catch (error) {
-        console.error('Failed to fetch categories:', error);
-      }
-    };
-
-    fetchCategories();
-  }, [token]);
-
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
       setImage(file);
+      setErrorMessage('');
+    } else {
+      setErrorMessage('Please select a valid image file.');
     }
   };
 
-  const handleDrop = useCallback((event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const file = event.dataTransfer.files[0];
-    if (file) {
-      setImage(file);
+  const handleUploadSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage(''); // Reset error message
+
+    if (!image) {
+      setErrorMessage('Please upload an image.');
+      return;
     }
-  }, []);
 
-  const handleDragOver = useCallback((event) => {
-    event.preventDefault();
-    event.stopPropagation();
-  }, []);
-
-  const handleCategoryChange = (event) => {
-    const value = event.target.value;
-    setSelectedCategory(value);
-    setSelectedSubCategory(''); // Reset subcategory when category changes
-  };
-
-  const handleSubCategoryChange = (event) => {
-    setSelectedSubCategory(event.target.value);
-  };
-
-  const handleColorSelect = (color) => {
-    setSelectedColor(color);
-    setColorDropdownOpen(false); // Close dropdown after selection
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+    setIsLoading(true);
     const formData = new FormData();
-    formData.append('image', image);
-    formData.append('imageName', imageName);
-    formData.append('category', selectedCategory);
-    formData.append('subCategory', selectedSubCategory);
-    formData.append('color', selectedColor);
-    formData.append('type', type);
+    formData.append('file', image);
+    formData.append('fileName', imageName);
+    formData.append('parentCategoryName', category);
+    formData.append('subCategoryNames', subCategory);
+    formData.append('dominantColors', null);
+    formData.append('style', null);
 
     try {
-      const response = await apiFetch('/api/upload', 'POST', formData, {
+      const UPLOAD_BACKEND_URL = 'http://localhost:8080/api/v1/file/upload';
+      const response = await axios.post(UPLOAD_BACKEND_URL, formData, {
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}` // Include the token in the headers
         },
       });
 
-      if (response) {
-        console.log('Image uploaded successfully', response);
-      }
+      // Extract the 'file' property from the response body
+      const uploadedFileData = response.data.file; // Assuming response body is { "file": "string" }
+      setUploadedFile(uploadedFileData); // Store the uploaded file info in state
+      alert('Upload successful: ' + uploadedFileData); // Notify the user
     } catch (error) {
-      console.error('Failed to upload image:', error);
+      console.error('Error uploading file:', error);
+      setErrorMessage(error.response?.data?.message || 'Error uploading file.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const getParentCategories = async () => {
+    try {
+      const UPLOAD_BACKEND_URL = 'http://localhost:8080/api/v1/category/list/parent';
+      const response = await axios.get(UPLOAD_BACKEND_URL, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
+      const fetchedCats = response.data.data;
+      setCats(fetchedCats);
+    } catch (error) {
+      console.error('Error fetching parent categories:', error);
+      setErrorMessage(error.response?.data?.message || 'Error fetching parent categories.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getSubCategories = async (parentCategoryName) => {
+    try {
+      const SUBCATEGORY_BACKEND_URL = `http://localhost:8080/api/v1/category/sub/${parentCategoryName}`;
+      const response = await axios.get(SUBCATEGORY_BACKEND_URL, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
+      const fetchedSubCats = response.data.data;
+      setSubCategories(fetchedSubCats);
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+      setErrorMessage(error.response?.data?.message || 'Error fetching subcategories.');
+    }
+  };
+
+  const handleShowDemo = () => {
+    if (image && imageName) {
+      setShowCard(true);
+    } else {
+      setErrorMessage('Please complete the image name and upload an image to show the demo.');
+    }
+  };
+
+  useEffect(() => {
+    getParentCategories(); // Call the function on component mount
+  }, []);
+
+  useEffect(() => {
+    if (category) {
+      getSubCategories(category); // Fetch subcategories when category changes
+    } else {
+      setSubCategories([]); // Reset subcategories if no category is selected
+    }
+  }, [category]);
+
+  const handleCloseCard = () => {
+    setShowCard(false);
+  };
+
   return (
-    <div className='w-full h-full flex items-center justify-center'>
-      <form onSubmit={handleSubmit} className='bg-gradient-to-t from-bgPurple to-bgLightPurple p-6 rounded shadow-md w-96'>
-        <h2 className='text-xl font-bold mb-4'>Upload Image</h2>
+    <div className='UploadImage w-full h-full flex justify-center items-center bg-bgDarkBlue'>
+      <div className="flex flex-col items-center justify-center bg-gray-100 p-6 rounded shadow-md w-96">
+        <h2 className="text-xl font-bold mb-4 text-black">Upload Image</h2>
 
-        <div
-          onDrop={handleDrop}
-          onDragOver={handleDragOver}
-          onClick={() => document.querySelector('input[type="file"]').click()}
-          className='border-2 border-dashed border-gray-100 rounded p-4 mb-4 flex items-center justify-center cursor-pointer'
-        >
-          {image ? (
-            <p>{image.name}</p>
-          ) : (
-            <p>Drop your image here or click to select</p>
-          )}
-          <input
-            type='file'
-            accept='image/*'
-            onChange={handleImageChange}
-            className='hidden'
-            required
-          />
-        </div>
+        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
-        <input
-          type='text'
-          placeholder='Image Name'
-          value={imageName}
-          onChange={(e) => setImageName(e.target.value)}
-          className='border border-gray-300 rounded text-black p-2 mb-4 w-full'
-          required
-        />
+        {!showCard ? (
+          <form onSubmit={handleUploadSubmit}>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="border rounded p-2 w-full text-black"
+                required
+              />
+            </div>
 
-        {/* Dropdown for Categories */}
-        <select
-          value={selectedCategory}
-          onChange={handleCategoryChange}
-          className='border border-gray-300 text-black rounded p-2 mb-4 w-full'
-          required
-        >
-          <option value=''>Select Category</option>
-          {availableCategories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
-          ))}
-        </select>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Image Name</label>
+              <input
+                type="text"
+                value={imageName}
+                onChange={(e) => setImageName(e.target.value)}
+                className="border rounded p-2 w-full text-black"
+                required
+              />
+            </div>
 
-        {/* Subcategory dropdown */}
-        {selectedCategory && (
-          <select
-            value={selectedSubCategory}
-            onChange={handleSubCategoryChange}
-            className='border border-gray-300 text-black rounded p-2 mb-4 w-full'
-            required
-          >
-            <option value=''>Select Subcategory</option>
-            {subCategoriesMap[selectedCategory]?.map((subCategory) => (
-              <option key={subCategory} value={subCategory}>
-                {subCategory}
-              </option>
-            ))}
-          </select>
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Category</label>
+              <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="border rounded p-2 w-full text-black"
+                  required
+              >
+                {cats && cats.length > 0 ? (
+                    cats.map((cat) => (
+                        <option key={cat.name} value={cat.name}>
+                          {cat.name}
+                        </option>
+                    ))
+                ) : (
+                    <option value="">No categories available</option>
+                )}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Subcategory</label>
+              <select
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  className="border rounded p-2 w-full text-black"
+                  required
+              >
+                {subCategories.length > 0 ? (
+                    subCategories.map((subCat) => (
+                        <option key={subCat.name} value={subCat.name}>
+                          {subCat.name}
+                        </option>
+                    ))
+                ) : (
+                    <option value="">No subcategories available</option>
+                )}
+              </select>
+            </div>
+
+            <button
+                type="submit"
+                className={`bg-blue-500 text-white rounded p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLoading}
+            >
+              {isLoading ? 'Uploading...' : 'Upload'}
+            </button>
+          </form>
+        ) : (
+            <div className="w-full">
+              <Card
+                  image={{
+                    Src: URL.createObjectURL(image),
+                    Title: imageName
+                  }}
+              />
+              <button
+              onClick={handleCloseCard}
+              className="bg-red-500 text-white rounded p-2 mt-4 w-full hover:bg-red-600"
+            >
+              Close
+            </button>
+          </div>
         )}
 
-        {/* Custom Color Selector */}
-        <div className='relative mb-4'>
+        {!showCard && (
           <button
-            type='button'
-            onClick={() => setColorDropdownOpen(!colorDropdownOpen)}
-            className='border border-gray-300 rounded p-2 w-full text-left flex items-center justify-between'
+            onClick={handleShowDemo}
+            className="bg-green-500 text-white rounded p-2 mt-4 w-full hover:bg-green-600"
           >
-            {selectedColor ? (
-              <span style={{ display: 'flex', alignItems: 'center' }}>
-                <span
-                  style={{
-                    display: 'inline-block',
-                    width: '20px',
-                    height: '20px',
-                    backgroundColor: selectedColor,
-                    borderRadius: '50%',
-                    marginRight: '8px',
-                  }}
-                />
-                Color Selected
-              </span>
-            ) : (
-              'Select Color'
-            )}
-            <span>{colorDropdownOpen ? '▲' : '▼'}</span>
+            Show Demo
           </button>
+        )}
 
-          {colorDropdownOpen && (
-            <div className='absolute z-10 bg-white border border-gray-300 text-black rounded shadow-md mt-1 w-full'>
-              {colorOptions.map((color) => (
-                <div
-                  key={color.name}
-                  onClick={() => handleColorSelect(color.hex)}
-                  className='flex items-center p-2 cursor-pointer hover:bg-gray-200'
-                >
-                  <span
-                    style={{
-                      display: 'inline-block',
-                      width: '20px',
-                      height: '20px',
-                      backgroundColor: color.hex,
-                      borderRadius: '50%',
-                      marginRight: '8px',
-                    }}
-                  />
-                  {color.name}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <select
-          value={type}
-          onChange={(e) => setType(e.target.value)}
-          className='border border-gray-300 text-black rounded p-2 mb-4 w-full'
-          required
-        >
-          <option value=''>Select Style</option>
-          <option value='type1'>3D</option>
-          <option value='type2'>Anime</option>
-          <option value='type3'>Cartoon</option>
-          <option value='type4'>Character Design</option>
-          <option value='type5'>Pixel</option>
-        </select>
-
-        <div className='flex justify-between items-center'>
-          <button
-            type='submit'
-            className='bg-bgDarkBlue text-white rounded p-2 w-1/2 mr-2'
-          >
-            Upload
-          </button>
-          <button className='bg-blue-800 text-white rounded p-2 w-1/2 ml-2'>Show demo</button>
-        </div>
-      </form>
+        {/* Optionally display the uploaded file info */}
+        {uploadedFile && (
+          <div className="mt-4 text-black">
+            <p>Uploaded File: {uploadedFile}</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

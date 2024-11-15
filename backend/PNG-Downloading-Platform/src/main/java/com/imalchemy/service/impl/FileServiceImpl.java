@@ -60,4 +60,11 @@ public class FileServiceImpl implements FileService {
         return this.fileStorageStrategy.load(file.getFilePath());
     }
 
+    @Override
+    public List<FileDTO> listAllFiles() {
+        return this.fileRepository.findAll()
+                .stream().map(this.fileConverter::toDto)
+                .toList();
+    }
+
 }

@@ -22,4 +22,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByNameIgnoreCase(String name);
 
     List<Category> findByParentCategory_Name(String name);
+    List<Category> findByParentCategory(Category parentCategory);
+
 }
