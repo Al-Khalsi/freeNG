@@ -36,9 +36,11 @@ function UploadImage() {
     setIsLoading(true);
     const formData = new FormData();
     formData.append('file', image);
-    formData.append('imageName', imageName);
-    formData.append('category', category);
-    formData.append('subCategory', subCategory);
+    formData.append('fileName', imageName);
+    formData.append('parentCategoryName', category);
+    formData.append('subCategoryNames', subCategory);
+    formData.append('dominantColors', null);
+    formData.append('style', null);
 
     try {
       const UPLOAD_BACKEND_URL = 'http://localhost:8080/api/v1/file/upload';
