@@ -3,7 +3,7 @@ import { FaInstagram, FaYoutube, FaEnvelope } from 'react-icons/fa'; // Importin
 
 function Footer() {
     return (
-        <footer className='footer w-full bg-gray-800 text-white py-6'>
+        <footer className='footer w-full bg-gray-800 text-white py-6 mt-6'>
             <style>
                 {`
                     @keyframes moveUp {
@@ -11,7 +11,7 @@ function Footer() {
                             transform: translateY(0);
                         }
                         50% {
-                            transform: translateY(-60px); /* Move up by 30px */
+                            transform: translateY(-40px); /* Move up by 30px */
                         }
                         100% {
                             transform: translateY(0);
