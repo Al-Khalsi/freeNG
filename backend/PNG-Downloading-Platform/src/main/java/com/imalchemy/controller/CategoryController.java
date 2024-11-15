@@ -209,6 +209,19 @@ public class CategoryController {
         );
     }
 
+    @GetMapping("/list/parent")
+    public ResponseEntity<Result> listParentCategories() {
+        List<CategoryDTO> parentCategories = this.categoryService.listParentCategories();
+
+        return ResponseEntity.ok(Result.builder()
+                .flag(true)
+                .code(OK)
+                .message("Category List")
+                .data(parentCategories)
+                .build()
+        );
+    }
+
     @PostMapping("/assign/{categoryName}/file/{fileName}")
     @Operation(summary = "Assign category to file", description = "Assigns a category to a specific file")
     @ApiResponses(value = {

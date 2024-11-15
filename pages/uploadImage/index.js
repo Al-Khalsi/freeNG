@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios'; // Import axios
 import Card from '@/components/templates/Card'; // فرض بر این است که کامپوننت Card در همان دایرکتوری است.
 import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
@@ -13,6 +13,8 @@ function UploadImage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [showCard, setShowCard] = useState(false);
   const [uploadedFile, setUploadedFile] = useState(''); // State to store the uploaded file info
+  const [cats, setCats] = useState([]); // State to store categories
+  const [subCategories, setSubCategories] = useState([]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -63,6 +65,44 @@ function UploadImage() {
     }
   };
 
+  const getParentCategories = async () => {
+    try {
+      const UPLOAD_BACKEND_URL = 'http://localhost:8080/api/v1/category/list/parent';
+      const response = await axios.get(UPLOAD_BACKEND_URL, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
+      const fetchedCats = response.data.data;
+      setCats(fetchedCats);
+    } catch (error) {
+      console.error('Error fetching parent categories:', error);
+      setErrorMessage(error.response?.data?.message || 'Error fetching parent categories.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getSubCategories = async (parentCategoryName) => {
+    try {
+      const SUBCATEGORY_BACKEND_URL = `http://localhost:8080/api/v1/category/sub/${parentCategoryName}`;
+      const response = await axios.get(SUBCATEGORY_BACKEND_URL, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+      });
+
+      const fetchedSubCats = response.data.data;
+      setSubCategories(fetchedSubCats);
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+      setErrorMessage(error.response?.data?.message || 'Error fetching subcategories.');
+    }
+  };
+
   const handleShowDemo = () => {
     if (image && imageName) {
       setShowCard(true);
@@ -70,6 +110,18 @@ function UploadImage() {
       setErrorMessage('Please complete the image name and upload an image to show the demo.');
     }
   };
+
+  useEffect(() => {
+    getParentCategories(); // Call the function on component mount
+  }, []);
+
+  useEffect(() => {
+    if (category) {
+      getSubCategories(category); // Fetch subcategories when category changes
+    } else {
+      setSubCategories([]); // Reset subcategories if no category is selected
+    }
+  }, [category]);
 
   const handleCloseCard = () => {
     setShowCard(false);
@@ -109,50 +161,60 @@ function UploadImage() {
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Category</label>
               <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="border rounded p-2 w-full text-black"
-                required
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="border rounded p-2 w-full text-black"
+                  required
               >
-                <option value="">Select a category</option>
-                <option value="category1">Category 1</option>
-                <option value="category2">Category 2</option>
-                <option value="category3">Category 3</option>
+                {cats && cats.length > 0 ? (
+                    cats.map((cat) => (
+                        <option key={cat.name} value={cat.name}>
+                          {cat.name}
+                        </option>
+                    ))
+                ) : (
+                    <option value="">No categories available</option>
+                )}
               </select>
             </div>
 
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Subcategory</label>
               <select
-                value={subCategory}
-                onChange={(e) => setSubCategory(e.target.value)}
-                className="border rounded p-2 w-full text-black"
-                required
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  className="border rounded p-2 w-full text-black"
+                  required
               >
-                <option value="">Select a subcategory</option>
-                <option value="subcategory1">Subcategory 1</option>
-                <option value="subcategory2">Subcategory 2</option>
-                <option value="subcategory3">Subcategory 3</option>
+                {subCategories.length > 0 ? (
+                    subCategories.map((subCat) => (
+                        <option key={subCat.name} value={subCat.name}>
+                          {subCat.name}
+                        </option>
+                    ))
+                ) : (
+                    <option value="">No subcategories available</option>
+                )}
               </select>
             </div>
 
             <button
-              type="submit"
-              className={`bg-blue-500 text-white rounded p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isLoading}
+                type="submit"
+                className={`bg-blue-500 text-white rounded p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLoading}
             >
               {isLoading ? 'Uploading...' : 'Upload'}
             </button>
           </form>
         ) : (
-          <div className="w-full">
-            <Card
-              image={{
-                Src: URL.createObjectURL(image),
-                Title: imageName
-              }}
-            />
-            <button
+            <div className="w-full">
+              <Card
+                  image={{
+                    Src: URL.createObjectURL(image),
+                    Title: imageName
+                  }}
+              />
+              <button
               onClick={handleCloseCard}
               className="bg-red-500 text-white rounded p-2 mt-4 w-full hover:bg-red-600"
             >
