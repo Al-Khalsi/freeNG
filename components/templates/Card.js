@@ -11,10 +11,11 @@ function Card({ image }) {
                     <div className='absolute top-2 right-2 bg-darkBlue text-white p-1 rounded-md opacity-60'>
                         <MdFullscreen className='text-xl' />
                     </div>
-                    <img src={image.Src} alt={image.Title} className='w-full h-full object-continer' />
+                    <img src={`../../img/${image.path}`} alt={image.fileTitle} className='w-full h-full object-continer' />
+                    {/*<img src={`C:/Users/Al-Khalsi/Desktop/WebSite/freeng/public/img/earth.png`} alt={image.fileTitle} className='w-full h-full object-continer' />*/}
                 </div>
                 <div className='info-img w-full py-3'>
-                    <h3 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.Title}</h3>
+                    <h3 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.title}</h3>
                     <div className='flex mt-3'>
                         <div className='flex justify-between items-center bg-gray-600 px-2 py-1 rounded text-xs text-lightBlue'>
                             <FaImage />

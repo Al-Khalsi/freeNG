@@ -14,7 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -130,8 +132,21 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDTO> getSubcategories(String parentName) {
-        return this.categoryRepository.findByParentCategory_Name(parentName)
+        // Fetch the parent category using its name
+        Category parentCategory = categoryRepository.findByNameIgnoreCase(parentName).get();
+
+        // Fetch and return the subcategories for the found parent category
+        return categoryRepository.findByParentCategory(parentCategory)
                 .stream().map(this.categoryConverter::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<CategoryDTO> listParentCategories() {
+        List<Category> allCategories = categoryRepository.findAll();
+        return allCategories.stream()
+                .filter(Category::isParent) // Filter only parent categories
+                .map(this.categoryConverter::toDto)
                 .toList();
     }
 

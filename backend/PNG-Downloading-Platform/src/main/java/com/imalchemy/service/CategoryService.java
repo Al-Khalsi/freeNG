@@ -20,4 +20,6 @@ public interface CategoryService {
 
     void assignCategoryToFile(String categoryName, String fileName);
 
+    List<CategoryDTO> listParentCategories();
+
 }

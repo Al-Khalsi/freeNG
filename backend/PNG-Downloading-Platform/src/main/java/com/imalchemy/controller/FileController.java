@@ -1,5 +1,6 @@
 package com.imalchemy.controller;
 
+import com.imalchemy.model.domain.File;
 import com.imalchemy.model.dto.FileDTO;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
@@ -121,6 +122,32 @@ public class FileController {
         } catch (IOException e) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    // Endpoint for fetching files
+    @Operation(
+            summary = "List all files",
+            description = "Fetches all the files from the database."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List all files.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Result.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "File not found"
+            )
+    })
+    @GetMapping("/list")
+    public ResponseEntity<Result> fetchFiles() {
+        List<FileDTO> fileDTOs = this.fileService.listAllFiles();
+
+        return ResponseEntity.ok(Result.success("List files.", fileDTOs));
     }
 
 }
