@@ -156,10 +156,7 @@ function AuthForm() {
                             <p className='text-base no-underline'>Forgot password?</p>
                         </div>
                         <button type='submit' className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-base font-semibold cursor-pointer'>Login</button>
-                        <p className='text-base my-4'>or</p>
-                        <div className='social-icon'>
-                            <p className='w-full h-12 rounded-lg flex justify-center items-center bg-bgWhite text-clBlack shadow-lg text-lg'><FcGoogle className='mr-2 text-2xl' />Login With Google</p>
-                        </div>
+                        
                     </form>
                 </div>
 
@@ -198,10 +195,7 @@ function AuthForm() {
                             className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-clBlack text-base font-semibold cursor-pointer'>
                             Register
                         </button>
-                        <p className='text-base my-4'>or</p>
-                        <div className='social-icon'>
-                            <p className='w-full h-12 rounded-lg flex justify-center items-center bg-bgWhite text-clBlack shadow-lg text-lg'><FcGoogle className='mr-2 text-2xl' /> Register With Google</p>
-                        </div>
+                    
                     </form>
                 </div>
 
