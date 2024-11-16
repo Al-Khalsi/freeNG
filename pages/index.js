@@ -18,10 +18,10 @@ function Index() {
   const itemsPerPage = 20;
   const currentPage = parseInt(router.query.page) || 1;
 
-  const options1 = ['Animation', 'Character', 'Technology', 'Nature', 'Game', 'Space'];
-  const options2 = ['Cartoon', 'Upset', 'Mobile', 'sea', 'Console', 'Star'];
-  const options3 = ['Logo', '3D', 'Pixel', 'Anime'];
-  const options4 = ['Black', 'Blue', 'Red', 'Green', 'Purple', 'White'];
+  // const options1 = ['Animation', 'Character', 'Technology', 'Nature', 'Game', 'Space'];
+  // const options2 = ['Cartoon', 'Upset', 'Mobile', 'sea', 'Console', 'Star'];
+  // const options3 = ['Logo', '3D', 'Pixel', 'Anime'];
+  // const options4 = ['Black', 'Blue', 'Red', 'Green', 'Purple', 'White'];
 
   const handleSelectToggle = (selectId) => {
     if (openSelect === selectId) {
@@ -201,12 +201,12 @@ function Index() {
           />
 
           <main className='main flex justify-between w-full py-8 px-2 lg:px-8 '>
-            <Aside
+            {/* <Aside
                 openSelect={openSelect}
                 handleSelectToggle={handleSelectToggle}
                 options={[options1, options2, options3, options4]} // Pass options as an array
-            />
-            <section className='grid gap-6 w-5/6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+            /> */}
+            <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
               {currentImages.map((image) => (
                   <Card key={image.id} image={image} />
               ))}
