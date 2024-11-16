@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from 'axios'; 
 import Card from '@/components/templates/Card';
-import AddCategoryModal from '@/components/templates/AddCategoryModal';
 import { useAuth } from '../../context/AuthContext';
+import AddCategoryModal from '@/components/templates/AddCategoryModal'; // Import the modal component
 
 function UploadImage() {
-  const { token } = useAuth(); // Get the token from the auth context
+  const { token } = useAuth();
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
   const [category, setCategory] = useState('');
@@ -13,8 +13,8 @@ function UploadImage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showCard, setShowCard] = useState(false);
-  const [uploadedFile, setUploadedFile] = useState(''); // State to store the uploaded file info
-  const [cats, setCats] = useState([]); // State to store categories
+  const [uploadedFile, setUploadedFile] = useState('');
+  const [cats, setCats] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
@@ -55,7 +55,6 @@ function UploadImage() {
         },
       });
 
-      // Extract the 'file' property from the response body
       const uploadedFileData = response.data.file; // Assuming response body is { "file": "string" }
       setUploadedFile(uploadedFileData); // Store the uploaded file info in state
       alert('Upload successful: ' + uploadedFileData); // Notify the user
@@ -150,7 +149,67 @@ function UploadImage() {
 
         {!showCard ? (
           <form onSubmit={handleUploadSubmit}>
-            {/* ... Existing form fields ... */}
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Image</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="border rounded p-2 w-full text-black"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Image Name</label>
+              <input
+                type="text"
+                value={imageName}
+                onChange={(e) => setImageName(e.target.value)}
+                className="border rounded p-2 w-full text-black"
+                required
+              />
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Category</label>
+              <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="border rounded p-2 w-full text-black"
+                  required
+              >
+                {cats && cats.length > 0 ? (
+                    cats.map((cat) => (
+                        <option key={cat.name} value={cat.name}>
+                          {cat.name}
+                        </option>
+                    ))
+                ) : (
+                    <option value="">No categories available</option>
+                )}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block text-gray-700 mb-2">Subcategory</label>
+              <select
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  className="border rounded p-2 w-full text-black"
+                  required
+              >
+                {subCategories.length > 0 ? (
+                    subCategories.map((subCat) => (
+                        <option key={subCat.name} value={subCat.name}>
+                          {subCat.name}
+                        </option>
+                    ))
+                ) : (
+                    <option value="">No subcategories available</option>
+                )}
+              </select>
+            </div>
 
             <button
               type="submit"
