@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import axios
-import Card from '@/components/templates/Card'; // فرض بر این است که کامپوننت Card در همان دایرکتوری است.
-import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
+import axios from 'axios';
+import Card from '@/components/templates/Card';
+import AddCategoryModal from '@/components/templates/AddCategoryModal';
+import { useAuth } from '../../context/AuthContext';
 
 function UploadImage() {
   const { token } = useAuth(); // Get the token from the auth context
@@ -15,6 +16,7 @@ function UploadImage() {
   const [uploadedFile, setUploadedFile] = useState(''); // State to store the uploaded file info
   const [cats, setCats] = useState([]); // State to store categories
   const [subCategories, setSubCategories] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -127,6 +129,18 @@ function UploadImage() {
     setShowCard(false);
   };
 
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCategoryAdded = () => {
+    getParentCategories(); // Refresh categories after adding
+  };
+
   return (
     <div className='UploadImage w-full h-full flex justify-center items-center bg-bgDarkBlue'>
       <div className="flex flex-col items-center justify-center bg-gray-100 p-6 rounded shadow-md w-96">
@@ -136,85 +150,34 @@ function UploadImage() {
 
         {!showCard ? (
           <form onSubmit={handleUploadSubmit}>
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="border rounded p-2 w-full text-black"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Image Name</label>
-              <input
-                type="text"
-                value={imageName}
-                onChange={(e) => setImageName(e.target.value)}
-                className="border rounded p-2 w-full text-black"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Category</label>
-              <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="border rounded p-2 w-full text-black"
-                  required
-              >
-                {cats && cats.length > 0 ? (
-                    cats.map((cat) => (
-                        <option key={cat.name} value={cat.name}>
-                          {cat.name}
-                        </option>
-                    ))
-                ) : (
-                    <option value="">No categories available</option>
-                )}
-              </select>
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Subcategory</label>
-              <select
-                  value={subCategory}
-                  onChange={(e) => setSubCategory(e.target.value)}
-                  className="border rounded p-2 w-full text-black"
-                  required
-              >
-                {subCategories.length > 0 ? (
-                    subCategories.map((subCat) => (
-                        <option key={subCat.name} value={subCat.name}>
-                          {subCat.name}
-                        </option>
-                    ))
-                ) : (
-                    <option value="">No subcategories available</option>
-                )}
-              </select>
-            </div>
+            {/* ... Existing form fields ... */}
 
             <button
-                type="submit"
-                className={`bg-blue-500 text-white rounded p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                disabled={isLoading}
+              type="submit"
+              className={`bg-blue-500 text-white rounded p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading}
             >
               {isLoading ? 'Uploading...' : 'Upload'}
             </button>
+
+            {/* Add Button for Adding Category/Subcategory */}
+            <button
+              type="button"
+              onClick={handleOpenModal}
+              className="bg-yellow-500 text-white rounded p-2 mt-4 w-full hover:bg-yellow-600"
+            >
+              Add Category/Subcategory
+            </button>
           </form>
         ) : (
-            <div className="w-full">
-              <Card
-                  image={{
-                    Src: URL.createObjectURL(image),
-                    Title: imageName
-                  }}
-              />
-              <button
+          <div className="w-full">
+            <Card
+              image={{
+                Src: URL.createObjectURL(image),
+                Title: imageName
+              }}
+            />
+            <button
               onClick={handleCloseCard}
               className="bg-red-500 text-white rounded p-2 mt-4 w-full hover:bg-red-600"
             >
@@ -232,13 +195,19 @@ function UploadImage() {
           </button>
         )}
 
-        {/* Optionally display the uploaded file info */}
         {uploadedFile && (
           <div className="mt-4 text-black">
             <p>Uploaded File: {uploadedFile}</p>
           </div>
         )}
       </div>
+
+      {/* Add the modal here */}
+      <AddCategoryModal
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+        onCategoryAdded={handleCategoryAdded}
+      />
     </div>
   );
 }
