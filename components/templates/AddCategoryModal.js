@@ -18,7 +18,7 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                         Authorization: `Bearer ${token}`, // Add the token to the headers
                     },
                 });
-                
+
                 setParentCategories(response.data.data);
             } catch (error) {
                 console.error('Error fetching parent categories:', error);
@@ -85,24 +85,17 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
             <div className="modal-content">
                 <span className="close" onClick={onClose}>&times;</span>
                 <h3 className='text-black'>Add Filter</h3>
-                <div>
-                    <label className='text-black'>
-                        <input
-                            type="radio"
-                            checked={!isSubCategory}
-                            onChange={() => setIsSubCategory(false)}
-                        />
-                        Category
-                    </label>
-                    <label className='text-black'>
-                        <input
-                            type="radio"
-                            checked={isSubCategory}
-                            onChange={() => setIsSubCategory(true)}
-                        />
-                        Subcategory
-                    </label>
-                </div>
+                
+                    <div class="radio-input">
+                        <label class="label">
+                            <input value="value-1" checked={!isSubCategory} onChange={() => setIsSubCategory(false)} name="value-radio" id="value-1" type="radio" />
+                            <span class="text">Category</span>
+                        </label>
+                        <label class="label">
+                            <input value="value-1" checked={isSubCategory} onChange={() => setIsSubCategory(true)} name="value-radio" id="value-1" type="radio" />
+                            <span class="text">SubCategorhy</span>
+                        </label>
+                    </div>
 
                 {!isSubCategory ? (
                     <>
