@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
 
 const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
+    const { token } = useAuth();
     const [isSubCategory, setIsSubCategory] = useState(false);
     const [categoryName, setCategoryName] = useState('');
     const [subCategoryName, setSubCategoryName] = useState('');
@@ -11,7 +13,12 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
     useEffect(() => {
         const fetchParentCategories = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/v1/category/list/parent');
+                const response = await axios.get('http://localhost:8080/api/v1/category/list/parent', {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Add the token to the headers
+                    },
+                });
+                
                 setParentCategories(response.data.data);
             } catch (error) {
                 console.error('Error fetching parent categories:', error);
@@ -21,7 +28,7 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
         if (isOpen) {
             fetchParentCategories();
         }
-    }, [isOpen]);
+    }, [isOpen, token]); // Ensure token is included in the dependency array
 
     const handleAddCategory = async () => {
         try {
@@ -35,7 +42,11 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                 active: true,
             };
 
-            await axios.post('http://localhost:8080/api/v1/category', categoryData);
+            await axios.post('http://localhost:8080/api/v1/category', categoryData, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Add the token to the headers
+                },
+            });
             onCategoryAdded();
             onClose();
         } catch (error) {
@@ -55,7 +66,11 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                 active: true,
             };
 
-            await axios.post('http://localhost:8080/api/v1/category', subCategoryData);
+            await axios.post('http://localhost:8080/api/v1/category', subCategoryData, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Add the token to the headers
+                },
+            });
             onCategoryAdded();
             onClose();
         } catch (error) {
