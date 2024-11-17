@@ -69,9 +69,9 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
         <div className="modal">
             <div className="modal-content">
                 <span className="close" onClick={onClose}>&times;</span>
-                <h2>Add Category/Subcategory</h2>
+                <h3 className='text-black'>Add Filter</h3>
                 <div>
-                    <label>
+                    <label className='text-black'>
                         <input
                             type="radio"
                             checked={!isSubCategory}
@@ -79,7 +79,7 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                         />
                         Category
                     </label>
-                    <label>
+                    <label className='text-black'>
                         <input
                             type="radio"
                             checked={isSubCategory}
@@ -93,15 +93,16 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                     <>
                         <input
                             type="text"
+                            className='text-black'
                             placeholder="Category Name"
                             value={categoryName}
                             onChange={(e) => setCategoryName(e.target.value)}
                         />
-                        <button onClick={handleAddCategory}>Add Category</button>
+                        <button onClick={handleAddCategory} className='text-black'>Add Category</button>
                     </>
                 ) : (
                     <>
-                        <select onChange={(e) => setSelectedParentId(e.target.value)} required>
+                        <select onChange={(e) => setSelectedParentId(e.target.value)} required className='text-black bg-bgGray'>
                             <option value="">Select Parent Category</option>
                             {parentCategories.map((cat) => (
                                 <option key={cat.id} value={cat.id}>
@@ -111,11 +112,12 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                         </select>
                         <input
                             type="text"
+                            className='text-black'
                             placeholder="Subcategory Name"
                             value={subCategoryName}
                             onChange={(e) => setSubCategoryName(e.target.value)}
                         />
-                        <button onClick={handleAddSubCategory}>Add Subcategory</button>
+                        <button onClick={handleAddSubCategory} className='text-black'>Add Subcategory</button>
                     </>
                 )}
             </div>
