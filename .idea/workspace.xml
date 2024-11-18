@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="672254a3-5fff-4402-905e-ebf0cdbc0f0c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/PNG-Downloading-Platform/src/main/java/com/imalchemy/service/impl/CategoryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/backend/PNG-Downloading-Platform/src/main/java/com/imalchemy/service/impl/CategoryServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/components/templates/AddCategoryModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/components/templates/AddCategoryModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pages/uploadImage/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/pages/uploadImage/index.js" afterDir="false" />
-    </list>
+    <list default="true" id="672254a3-5fff-4402-905e-ebf0cdbc0f0c" name="Changes" comment="(bck): feat: searching files by title or keyword (WIP)&#10;&#10;&gt; Right now, it's returning any files, that is starting with the provided query. Like, if the user enters &quot;pl&quot; and the db only has &quot;planet&quot; and &quot;plant&quot;, it'll return all the files with pl.&#10;&gt; &lt;u&gt;or maybe this is what it is supposed to be like?&lt;/u&gt;" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -16,6 +12,9 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
   </component>
   <component name="KubernetesApiPersistence">{}</component>
   <component name="KubernetesApiProvider">{
@@ -38,8 +37,8 @@
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.PngDownloadingPlatformApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;hotfix/category&quot;,
+    &quot;Spring Boot.PngDownloadingPlatformApplication.executor&quot;: &quot;Debug&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature/search&quot;,
     &quot;js.last.introduce.type&quot;: &quot;CONST&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -99,10 +98,35 @@
       <updated>1731822345019</updated>
       <workItem from="1731822346143" duration="4866000" />
       <workItem from="1731864319950" duration="1049000" />
+      <workItem from="1731935376022" duration="4771000" />
     </task>
+    <task id="LOCAL-00001" summary="(bck): feat: searching files by title or keyword (WIP)&#10;&#10;&gt; Right now, it's returning any files, that is starting with the provided query. Like, if the user enters &quot;pl&quot; and the db only has &quot;planet&quot; and &quot;plant&quot;, it'll return all the files with pl.&#10;&gt; &lt;u&gt;or maybe this is what it is supposed to be like?&lt;/u&gt;">
+      <option name="closed" value="true" />
+      <created>1731942372225</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1731942372225</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="(bck): feat: searching files by title or keyword (WIP)&#10;&#10;&gt; Right now, it's returning any files, that is starting with the provided query. Like, if the user enters &quot;pl&quot; and the db only has &quot;planet&quot; and &quot;plant&quot;, it'll return all the files with pl.&#10;&gt; &lt;u&gt;or maybe this is what it is supposed to be like?&lt;/u&gt;" />
+    <option name="LAST_COMMIT_MESSAGE" value="(bck): feat: searching files by title or keyword (WIP)&#10;&#10;&gt; Right now, it's returning any files, that is starting with the provided query. Like, if the user enters &quot;pl&quot; and the db only has &quot;planet&quot; and &quot;plant&quot;, it'll return all the files with pl.&#10;&gt; &lt;u&gt;or maybe this is what it is supposed to be like?&lt;/u&gt;" />
   </component>
 </project>
