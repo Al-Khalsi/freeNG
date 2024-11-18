@@ -15,4 +15,6 @@ public interface FileService {
 
     List<FileDTO> listAllFiles();
 
+    List<FileDTO> searchFiles(String query);
+
 }

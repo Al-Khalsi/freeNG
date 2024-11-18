@@ -80,15 +80,4 @@ public class File extends BaseEntity<UUID> {
         }
     }
 
-    // Helper methods for category management
-    public void addCategory(Category category) {
-        categories.add(category);
-        category.getFiles().add(this);
-    }
-
-    public void removeCategory(Category category) {
-        categories.remove(category);
-        category.getFiles().remove(this);
-    }
-
 }
