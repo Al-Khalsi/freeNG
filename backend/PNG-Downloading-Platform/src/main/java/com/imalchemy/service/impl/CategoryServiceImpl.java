@@ -14,9 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -31,6 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+        categoryDTO.setName(this.capitalizeCategoryName(categoryDTO.getName()));
         Category category = this.categoryConverter.toEntity(categoryDTO);
         // Fetch the next display order from the repository
         int nextDisplayOrder = this.categoryRepository.findMaxDisplayOrder() + 1;
@@ -55,6 +54,24 @@ public class CategoryServiceImpl implements CategoryService {
         }
 
         return this.categoryConverter.toDto(this.categoryRepository.save(category));
+    }
+
+    private String capitalizeCategoryName(String categoryName) {
+        // Split the sentence into words using space as the delimiter
+        String[] words = categoryName.split(" ");
+        StringBuilder capitalizedSentence = new StringBuilder();
+
+        // Iterate through each word
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                // Capitalize the first letter and append the rest of the word
+                String capitalizedWord = word.substring(0, 1).toUpperCase() + word.substring(1);
+                capitalizedSentence.append(capitalizedWord).append(" ");
+            }
+        }
+
+        // Trim the final string to remove the trailing space
+        return capitalizedSentence.toString().trim();
     }
 
     @Override
