@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; 
+import axios from 'axios';
 import Card from '@/components/templates/Card';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '@/context/AuthContext';
 import AddCategoryModal from '@/components/templates/AddCategoryModal'; // Import the modal component
 
 function UploadImage() {
@@ -17,6 +17,15 @@ function UploadImage() {
   const [cats, setCats] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+
+  // --------------------------- Backend URLs ---------------------------
+  const BACKEND_API_VERSION = "api/v1"
+  const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`
+  const BACKEND_UPLOAD_URL= `${BACKEND_BASE_URL}/file`
+  const BACKEND_CATEGORY_URL= `${BACKEND_BASE_URL}/category`
+
+  const BACKEND_UPLOAD_FILE_URL = `${BACKEND_UPLOAD_URL}/upload`;
+  const BACKEND_LIST_PARENT_CATEGORIES_URL = `${BACKEND_CATEGORY_URL}/list/parent`;
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -47,8 +56,7 @@ function UploadImage() {
     formData.append('style', null);
 
     try {
-      const UPLOAD_BACKEND_URL = 'http://localhost:8080/api/v1/file/upload';
-      const response = await axios.post(UPLOAD_BACKEND_URL, formData, {
+      const response = await axios.post(BACKEND_UPLOAD_FILE_URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}` // Include the token in the headers
@@ -68,8 +76,7 @@ function UploadImage() {
 
   const getParentCategories = async () => {
     try {
-      const UPLOAD_BACKEND_URL = 'http://localhost:8080/api/v1/category/list/parent';
-      const response = await axios.get(UPLOAD_BACKEND_URL, {
+      const response = await axios.get(BACKEND_LIST_PARENT_CATEGORIES_URL, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -88,8 +95,7 @@ function UploadImage() {
 
   const getSubCategories = async (parentCategoryName) => {
     try {
-      const SUBCATEGORY_BACKEND_URL = `http://localhost:8080/api/v1/category/sub/${parentCategoryName}`;
-      const response = await axios.get(SUBCATEGORY_BACKEND_URL, {
+      const response = await axios.get(`${BACKEND_CATEGORY_URL}/sub/${parentCategoryName}`, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

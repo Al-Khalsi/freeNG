@@ -34,11 +34,11 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
         try {
             const categoryData = {
                 name: categoryName,
-                description: '',
-                iconUrl: '',
-                displayOrder: 0,
-                level: 0,
-                parent: true,
+                // description: '',
+                // iconUrl: '',
+                // displayOrder: 0,
+                // level: 0,
+                // parent: true,
                 active: true,
             };
 
@@ -58,10 +58,10 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
         try {
             const subCategoryData = {
                 name: subCategoryName,
-                description: '',
-                iconUrl: '',
-                displayOrder: 0,
-                level: 1,
+                // description: '',
+                // iconUrl: '',
+                // displayOrder: 0,
+                // level: 1,
                 parentId: selectedParentId,
                 active: true,
             };

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -64,6 +65,34 @@ public class FileServiceImpl implements FileService {
     public List<FileDTO> listAllFiles() {
         return this.fileRepository.findAll()
                 .stream().map(this.fileConverter::toDto)
+                .toList();
+    }
+
+    @Override // todo: needs modification!!! not working as expected
+    public List<FileDTO> searchFiles(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Format the query for PostgreSQL full-text search
+        String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
+
+        // First attempt to find exact matches
+        List<File> exactMatches = this.fileRepository.searchFiles(formattedQuery);
+        if (!exactMatches.isEmpty()) {
+            return exactMatches.stream()
+                    .filter(File::isActive)
+//                    .limit(50) // Limit results
+                    .map(this.fileConverter::toDto)
+                    .toList();
+        }
+
+        // If no exact matches found, search for similar entries
+        List<File> similarMatches = this.fileRepository.searchSimilarFiles(query);
+        return similarMatches.stream()
+                .filter(File::isActive)
+//                .limit(50) // Limit results
+                .map(this.fileConverter::toDto)
                 .toList();
     }
 

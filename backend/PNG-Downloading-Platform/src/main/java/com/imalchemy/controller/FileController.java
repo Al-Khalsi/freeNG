@@ -1,6 +1,5 @@
 package com.imalchemy.controller;
 
-import com.imalchemy.model.domain.File;
 import com.imalchemy.model.dto.FileDTO;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
@@ -148,6 +147,32 @@ public class FileController {
         List<FileDTO> fileDTOs = this.fileService.listAllFiles();
 
         return ResponseEntity.ok(Result.success("List files.", fileDTOs));
+    }
+
+    // Endpoint for searching files
+    @Operation(
+            summary = "Search files",
+            description = "Searches the files from the database."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Search files.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = Result.class)
+                    )
+            )
+    })
+    @GetMapping("/search")
+    public ResponseEntity<Result> searchFiles(@RequestParam String query) {
+        List<FileDTO> searchedFiles = this.fileService.searchFiles(query);
+
+        if (searchedFiles.isEmpty()) {
+            return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedFiles));
+        }
+
+        return ResponseEntity.ok(Result.success("Search files result.", searchedFiles));
     }
 
 }
