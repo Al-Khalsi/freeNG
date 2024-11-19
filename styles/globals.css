@@ -894,27 +894,8 @@ background-color: #141b22;
 /*-------------------- Modal css --------------------*/
 /*-------------------- Modal css --------------------*/
 
-/* From Uiverse.io by m1her */ 
-.radio-input {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  background-color: black;
-  padding: 4px;
-  border-radius: 10px;
-  z-index: -1;
-}
-
-.radio-input input {
-  display: none;
-}
-
 .radio-input .label {
   background: linear-gradient(to bottom, #333333, rgb(36, 35, 35));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   padding: 0.75rem 0.5rem;
   transition: all 0.1s linear;
   border-top: 1px solid #4e4d4d;
