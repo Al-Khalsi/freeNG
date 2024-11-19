@@ -83,16 +83,26 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
     return (
         <div className="modal fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-white/[.3]">
             <div className="modal-content relative w-80 p-5 rounded bg-bgDarkGray">
-                <span className="close absolute right-0 top-0 w-4 h-4 flex justify-center items-center p-3 bg-red-600 rounded-full cursor-pointer " onClick={onClose}>&times;</span>
-                <h3 className='text-black'>Add Filter</h3>
-
+                <span className="close absolute right-0 top-0 w-4 h-4 flex justify-center items-center p-3 bg-red-600 cursor-pointer " onClick={onClose}>&times;</span>
                 <div class="radio-input flex items-center gap-1 p-1 rounded-lg -z-10 bg-bgBlack">
-                    <label class="label flex flex-col justify-center items-center">
-                        <input className='hidden' value="value-1" checked={!isSubCategory} onChange={() => setIsSubCategory(false)} name="value-radio" id="value-1" type="radio" />
+                    <label class="label relative flex flex-col justify-center items-center py-3 px-2 cursor-pointer">
+                        <input className='hidden' 
+                        value="value-1" 
+                        checked={!isSubCategory} 
+                        onChange={() => setIsSubCategory(false)} 
+                        name="value-radio" 
+                        id="value-1" 
+                        type="radio" />
                         <span class="text">Category</span>
                     </label>
-                    <label class="label">
-                        <input className='hidden' value="value-1" checked={isSubCategory} onChange={() => setIsSubCategory(true)} name="value-radio" id="value-1" type="radio" />
+                    <label class="label relative flex flex-col justify-center items-center py-3 px-2 cursor-pointer">
+                        <input className='hidden' 
+                        value="value-1" 
+                        checked={isSubCategory} 
+                        onChange={() => setIsSubCategory(true)}
+                        name="value-radio" 
+                        id="value-1" 
+                        type="radio" />
                         <span class="text">SubCategorhy</span>
                     </label>
                 </div>
@@ -101,7 +111,7 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                     <>
                         <input
                             type="text"
-                            className='text-black'
+                            className='text-black w-full'
                             placeholder="Category Name"
                             value={categoryName}
                             onChange={(e) => setCategoryName(e.target.value)}
@@ -110,7 +120,9 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                     </>
                 ) : (
                     <>
-                        <select onChange={(e) => setSelectedParentId(e.target.value)} required className='text-black bg-bgGray'>
+                        <select onChange={(e) => setSelectedParentId(e.target.value)} 
+                        required 
+                        className='text-black w-full bg-bgGray'>
                             <option value="">Select Parent Category</option>
                             {parentCategories.map((cat) => (
                                 <option key={cat.id} value={cat.id}>
@@ -120,12 +132,12 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                         </select>
                         <input
                             type="text"
-                            className='text-black'
+                            className='text-black w-full'
                             placeholder="Subcategory Name"
                             value={subCategoryName}
                             onChange={(e) => setSubCategoryName(e.target.value)}
                         />
-                        <button onClick={handleAddSubCategory} className='text-black'>Add Subcategory</button>
+                        <button onClick={handleAddSubCategory} className='bg-green-600 text-white'>Add Subcategory</button>
                     </>
                 )}
             </div>
