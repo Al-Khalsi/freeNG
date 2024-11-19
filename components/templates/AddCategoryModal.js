@@ -44,7 +44,7 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
 
             await axios.post('http://localhost:8080/api/v1/category', categoryData, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Add the token to the headers
+                    Authorization: `Bearer ${token}`,
                 },
             });
             onCategoryAdded();
@@ -68,7 +68,7 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
 
             await axios.post('http://localhost:8080/api/v1/category', subCategoryData, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // Add the token to the headers
+                    Authorization: `Bearer ${token}`,
                 },
             });
             onCategoryAdded();
@@ -81,21 +81,21 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
     if (!isOpen) return null;
 
     return (
-        <div className="modal">
-            <div className="modal-content">
-                <span className="close" onClick={onClose}>&times;</span>
+        <div className="modal fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-white/[.3]">
+            <div className="modal-content relative w-80 p-5 rounded bg-bgDarkGray">
+                <span className="close absolute right-0 top-0 w-4 h-4 flex justify-center items-center p-3 bg-red-600 rounded-full cursor-pointer " onClick={onClose}>&times;</span>
                 <h3 className='text-black'>Add Filter</h3>
-                
-                    <div class="radio-input">
-                        <label class="label">
-                            <input value="value-1" checked={!isSubCategory} onChange={() => setIsSubCategory(false)} name="value-radio" id="value-1" type="radio" />
-                            <span class="text">Category</span>
-                        </label>
-                        <label class="label">
-                            <input value="value-1" checked={isSubCategory} onChange={() => setIsSubCategory(true)} name="value-radio" id="value-1" type="radio" />
-                            <span class="text">SubCategorhy</span>
-                        </label>
-                    </div>
+
+                <div class="radio-input">
+                    <label class="label">
+                        <input value="value-1" checked={!isSubCategory} onChange={() => setIsSubCategory(false)} name="value-radio" id="value-1" type="radio" />
+                        <span class="text">Category</span>
+                    </label>
+                    <label class="label">
+                        <input value="value-1" checked={isSubCategory} onChange={() => setIsSubCategory(true)} name="value-radio" id="value-1" type="radio" />
+                        <span class="text">SubCategorhy</span>
+                    </label>
+                </div>
 
                 {!isSubCategory ? (
                     <>
@@ -106,7 +106,7 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                             value={categoryName}
                             onChange={(e) => setCategoryName(e.target.value)}
                         />
-                        <button onClick={handleAddCategory} className='text-black'>Add Category</button>
+                        <button onClick={handleAddCategory} className='bg-green-600 text-white'>Add Category</button>
                     </>
                 ) : (
                     <>
