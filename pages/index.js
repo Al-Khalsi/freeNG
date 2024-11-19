@@ -1,12 +1,10 @@
-// pages/index.js
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useEffect, useState } from "react";
-// import JsonServerImages from "../data/db.json";
 import { useRouter } from 'next/router';
 import Header from '@/components/templates/Header';
 import Aside from '@/components/templates/Aside';
-import { apiFetch } from '@/utils/api'; // Import the apiFetch function
+import { apiFetch } from '@/utils/api';
 import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
 
@@ -80,8 +78,8 @@ function Index() {
             <button
                 key={i}
                 onClick={() => handlePageChange(i)}
-                className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
+                className={`mx-2 px-4 py-2 rounded-lg 
+                ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
               {i}
             </button>
         );
@@ -92,8 +90,8 @@ function Index() {
             <button
                 key={1}
                 onClick={() => handlePageChange(1)}
-                className={`mx-2 px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
+                className={`mx-2 px-4 py-2 rounded-lg 
+                ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
               {1}
             </button>
         );
@@ -102,8 +100,8 @@ function Index() {
             <button
                 key={currentPage - 1}
                 onClick={() => handlePageChange(currentPage - 1)}
-                className={`mx-2 px-4 py-2 rounded-lg ${currentPage === currentPage - 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
+                className={`mx-2 px-4 py-2 rounded-lg 
+                  ${currentPage === currentPage - 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
               {currentPage - 1}
             </button>
         );
@@ -111,8 +109,8 @@ function Index() {
             <button
                 key={currentPage}
                 onClick={() => handlePageChange(currentPage)}
-                className={`mx-2 px-4 py-2 rounded-lg ${currentPage === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
+                className={`mx-2 px-4 py-2 rounded-lg 
+                  ${currentPage === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
               {currentPage}
             </button>
         );
@@ -120,8 +118,8 @@ function Index() {
             <button
                 key={currentPage + 1}
                 onClick={() => handlePageChange(currentPage + 1)}
-                className={`mx-2 px-4 py-2 rounded-lg ${currentPage === currentPage + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
+                className={`mx-2 px-4 py-2 rounded-lg 
+                  ${currentPage === currentPage + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
               {currentPage + 1}
             </button>
         );
@@ -130,8 +128,8 @@ function Index() {
             <button
                 key={totalPages}
                 onClick={() => handlePageChange(totalPages)}
-                className={`mx-2 px-4 py-2 rounded-lg ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
+                className={`mx-2 px-4 py-2 rounded-lg 
+                  ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
               {totalPages}
             </button>
         );
@@ -141,8 +139,8 @@ function Index() {
               <button
                   key={i}
                   onClick={() => handlePageChange(i)}
-                  className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-              >
+                  className={`mx-2 px-4 py-2 rounded-lg 
+                    ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
                 {i}
               </button>
           );
@@ -152,8 +150,8 @@ function Index() {
             <button
                 key={totalPages}
                 onClick={() => handlePageChange(totalPages)}
-                className={`mx-2 px-4 py-2 rounded-lg ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
+                className={`mx-2 px-4 py-2 rounded-lg 
+                  ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
               {totalPages}
             </button>
         );
@@ -162,8 +160,8 @@ function Index() {
             <button
                 key={1}
                 onClick={() => handlePageChange(1)}
-                className={`mx-2 px-4 py-2 rounded-lg ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-            >
+                className={`mx-2 px-4 py-2 rounded-lg 
+                  ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
               {1}
             </button>
         );
@@ -173,8 +171,8 @@ function Index() {
               <button
                   key={i}
                   onClick={() => handlePageChange(i)}
-                  className={`mx-2 px-4 py-2 rounded-lg ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}
-              >
+                  className={`mx-2 px-4 py-2 rounded-lg 
+                    ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
                 {i}
               </button>
           );
