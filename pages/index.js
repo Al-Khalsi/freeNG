@@ -48,6 +48,8 @@ function Index() {
             categories: file.categories.map(category => category.name).join(', '), // Join category names
           }));
           setImages(fetchedImages); // Set the state with fetched images
+          console.log("response.data:" + response.data);
+          
         } else {
           console.error('Failed to fetch images: ', response.message);
         }
