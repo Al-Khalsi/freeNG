@@ -1,32 +1,29 @@
 import { useRouter } from 'next/router';
-import { useAuth } from '@/context/AuthContext'
 import { useEffect } from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 
 const Downloader = () => {
-    const { token } = useAuth();
     const router = useRouter(); 
-    const { id:fileId, title, path } = router.query; 
+    const { id: fileId, title, path } = router.query; 
 
     const handleDownload = async () => {
-        if (!fileId) return; // Ensure id is available
+        if (!fileId) {
+            console.warn('File ID is not available for download.');
+            return; // Ensure id is available
+        }
+
+        console.log(`Initiating download for file ID: ${fileId}`);
 
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/file/download/${fileId}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
+            const response = await axios.get(`http://localhost:8080/api/v1/file/download/${fileId}`, {
+                responseType: 'blob', // Important for downloading files
             });
 
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            console.log('Download response received:', response);
 
             // Create a blob from the response
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+            const url = window.URL.createObjectURL(new Blob([response.data]));
             const a = document.createElement('a');
             a.href = url;
             a.download = title || 'download'; // Use the title as the file name
@@ -34,6 +31,8 @@ const Downloader = () => {
             a.click();
             a.remove();
             window.URL.revokeObjectURL(url); // Clean up the URL object
+
+            console.log('Download initiated successfully.');
         } catch (error) {
             console.error('Error downloading the file:', error);
         }
