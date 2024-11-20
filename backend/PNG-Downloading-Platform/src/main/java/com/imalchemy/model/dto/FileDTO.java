@@ -20,6 +20,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class FileDTO implements Serializable {
 
+    private String id;
     private String fileTitle;
     private String filePath;
     private String contentType;
