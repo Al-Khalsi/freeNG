@@ -184,6 +184,12 @@ function Index() {
     clearToken(); // Clear the token
   };
 
+   // Function to handle search action
+   const handleSearch = () => {
+    // Update the router to include the search query
+    router.push(`/?search=${encodeURIComponent(searchQuery)}`);
+  };
+
   return (
     <>
       <div className="app relative">
@@ -195,6 +201,7 @@ function Index() {
           handleLogout={handleLogout}
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery} // Pass the state setter
+          handleSearch={handleSearch} // Pass the search handler
         />
 
         <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>

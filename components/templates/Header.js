@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { FaSearch, FaMicrophone } from 'react-icons/fa';
 import { IoLogOut } from "react-icons/io5";
 
-function Header({ token, username, email, handleLogout, searchQuery, setSearchQuery }) {
+function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
     return (
         <header className='header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white'>
             <div className='bg-logo'>
@@ -47,7 +47,9 @@ function Header({ token, username, email, handleLogout, searchQuery, setSearchQu
                         <div id="cosmic-glow"></div>
                         <div className="wormhole-border"></div>
                         <div id="wormhole-icon">
-                            <FaMicrophone className='text-blue-300' />
+                            <button type='button' className='text-blue-300' onClick={handleSearch}>
+                                Enter
+                            </button>
                         </div>
                         <div id="search-icon">
                             <svg
