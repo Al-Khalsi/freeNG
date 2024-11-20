@@ -64,6 +64,7 @@ public class FileConverter implements Converter<File, FileDTO> {
         if (entity == null) return null;
 
         FileDTO fileDTO = FileDTO.builder()
+                .id(entity.getId().toString())
                 .fileTitle(entity.getFileTitle())
                 .filePath(entity.getFilePath())
                 .contentType(entity.getContentType())
