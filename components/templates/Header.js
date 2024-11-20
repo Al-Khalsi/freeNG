@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { FaSearch, FaMicrophone } from 'react-icons/fa';
 import { IoLogOut } from "react-icons/io5";
 
-function Header({ token, username, email, handleLogout }) {
+function Header({ token, username, email, handleLogout, searchQuery, setSearchQuery }) {
     return (
         <header className='header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white'>
             <div className='bg-logo'>
@@ -23,7 +23,6 @@ function Header({ token, username, email, handleLogout }) {
                 </div>
             </div>
 
-
             <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
                 <div id="search-container" className="flex justify-center items-center">
                     <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
@@ -42,6 +41,8 @@ function Header({ token, username, email, handleLogout }) {
                             name="text"
                             type="text"
                             placeholder="Search..."
+                            value={searchQuery} // Bind the input value to the searchQuery state
+                            onChange={(e) => setSearchQuery(e.target.value)} // Update the search query
                         />
                         <div id="cosmic-glow"></div>
                         <div className="wormhole-border"></div>
@@ -71,14 +72,13 @@ function Header({ token, username, email, handleLogout }) {
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <button className='sm:hidden flex justify-center items-center w-10 h-10 mr-4 rounded-full text-xl bg-black text-white'>
                 <FaSearch />
             </button>
 
-            {token ? ( // بررسی وجود توکن
+            {token ? (
                 <div className='flex items-center border-2 border-bgLightPurple rounded-md py-1 px-2'>
                     <div>
                         <span className='text-white'>{username}</span>
