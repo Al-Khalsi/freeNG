@@ -1,25 +1,23 @@
+import axios from 'axios';
+
 export const apiFetch = async (url, method = 'GET', body = null, customOptions = {}) => {
     const options = {
         method,
-        ...customOptions, // اضافه کردن گزینه‌های سفارشی
+        ...customOptions, // Add custom options
     };
 
-    if (body) {
-        if (body instanceof FormData) {
-            options.body = body; // اگر body از نوع FormData باشد، مستقیماً ارسال می‌شود
-        } else {
-            options.body = JSON.stringify(body);
-        }
-    }
-
     try {
-        const response = await fetch(url, options);
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return await response.json();
+        const response = await axios({
+            url,
+            method,
+            data: body instanceof FormData ? body : body ? JSON.stringify(body) : null,
+            ...options, // Include any other options passed in
+        });
+
+        // Axios automatically resolves the response, so we can return response.data directly
+        return response.data;
     } catch (error) {
         console.error('Fetch error:', error);
-        throw error; // دوباره پرتاب کردن خطا برای مدیریت در تابع فراخوانی
+        throw error; // Re-throw the error for handling in the calling function
     }
 };

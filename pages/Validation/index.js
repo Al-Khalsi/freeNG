@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { signIn } from 'next-auth/react';
 import { FaUser, FaLock } from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
 import { MdEmail } from "react-icons/md";
 import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
 import withAuthRedirect from '../../utils/withAuthRedirect'; // Adjust the path as necessary
