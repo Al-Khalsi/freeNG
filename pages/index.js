@@ -31,9 +31,12 @@ function Index() {
         const url = searchQuery
           ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(searchQuery)}`
           : 'http://localhost:8080/api/v1/file/list';
-
+  
+        console.log('Fetching images from URL:', url); // Log the URL being fetched
+  
         const response = await apiFetch(url, 'GET', null, {});
-
+        console.log('Response received:', response); // Log the response
+  
         if (response.flag && response.data) {
           const fetchedImages = response.data.map((file) => ({
             id: file.id,
@@ -44,6 +47,8 @@ function Index() {
             uploadedBy: file.uploadedBy.username,
             categories: file.categories.map(category => category.name).join(', '),
           }));
+  
+          console.log('Fetched images:', fetchedImages); // Log the fetched images
           setImages(fetchedImages);
         } else {
           console.error('Failed to fetch images: ', response.message);
@@ -52,7 +57,7 @@ function Index() {
         console.error('Failed to fetch images:', error);
       }
     };
-
+  
     fetchImages();
   }, [token, searchQuery]);
 
