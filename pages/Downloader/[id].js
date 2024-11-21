@@ -1,89 +1,60 @@
 import { useRouter } from 'next/router';
-import { FaSearch, FaMicrophone } from "react-icons/fa";
+import { useEffect } from 'react';
 import Link from 'next/link';
+import axios from 'axios';
 
-const Product = () => {
-    const router = useRouter();
-    const { id } = router.query; 
-    const { title, path } = router.query; 
+const Downloader = () => {
+    const router = useRouter(); 
+    const { id: fileId, title, path } = router.query; 
+
+    const handleDownload = async () => {
+        if (!fileId) {
+            console.warn('File ID is not available for download.');
+            return; // Ensure id is available
+        }
+
+        console.log(`Initiating download for file ID: ${fileId}`);
+
+        try {
+            const response = await axios.get(`http://localhost:8080/api/v1/file/download/${fileId}`, {
+                responseType: 'blob', // Important for downloading files
+            });
+
+            console.log('Download response received:', response);
+
+            // Create a blob from the response
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = title || 'download'; // Use the title as the file name
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url); // Clean up the URL object
+
+            console.log('Download initiated successfully.');
+        } catch (error) {
+            console.error('Error downloading the file:', error);
+        }
+    };
 
     return (
         <div className='imageSinglePage w-full min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
-            <header className='header w-full h-24 overflow-hidden px-2 md:px-12 flex justify-between items-center bg-darkBlue text-white'>
-                <div className='bg-logo'>
-                    <div className='logo'>LOGO</div>
-                </div>
-
-                <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
-                    <div id="search-container" className="flex justify-center items-center">
-                        <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
-                        <div className="starfield w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
-                        <div className="cosmic-dust"></div>
-                        <div className="cosmic-dust"></div>
-                        <div className="cosmic-dust"></div>
-
-                        <div className="stardust w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm max-h-16"></div>
-
-                        <div className="cosmic-ring w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
-
-                        <div id="main">
-                            <input
-                                className="input border-none rounded-xl text-lg"
-                                name="text"
-                                type="text"
-                                placeholder="Search..."
-                            />
-                            <div id="cosmic-glow"></div>
-                            <div className="wormhole-border"></div>
-                            <div id="wormhole-icon">
-                                <FaMicrophone className='text-blue-300' />
-                            </div>
-                            <div id="search-icon">
-                                <svg
-                                    strokeLinejoin="round"
-                                    strokeLinecap="round"
-                                    strokeWidth="2"
-                                    stroke="url(#cosmic-search)"
-                                    fill="none"
-                                    height="24"
-                                    width="24"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <circle r="8" cy="11" cx="11"></circle>
-                                    <line y2="16.65" x2="16.65" y1="21" x1="21"></line>
-                                    <defs>
-                                        <linearGradient gradientTransform="rotate(45)" id="cosmic-search">
-                                            <stop stopColor="#a9c7ff" offset="0%"></stop>
-                                            <stop stopColor="#6e8cff" offset="100%"></stop>
-                                        </linearGradient>
-                                    </defs>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div className='right-header flex py-1'>
-                    <button className='sm:hidden flex justify-center items-center w-10 h-10 mr-4 rounded-full text-xl bg-black text-white'>
-                        <FaSearch />
-                    </button>
-                    <Link href="/validation" className='w-10 h-10 rounded-full overflow-hidden'>
-                        <img src="/img/user.png" className='userPng w-full ' alt='profile' title='profile' />
-                    </Link>
-                </div>
-            </header>
-
             <div className='wrapper p-12'>
-                <div className='product-div w-full h-80 flex bg-white rounded-3xl m-5 overflow-hidden'>
+                <div className='product-div w-full h-80 flex bg-bgDarkGray rounded-3xl m-5 overflow-hidden'>
                     <div className='product-div-left bg-img w-1/3'>
                         <div className="img-container w-full h-full">
-                            <img src={path} className='w-full h-full object-cover' alt={title} />
+                            <img src={`../../img/${path}`} className='w-full h-full object-cover' alt={title} />
                         </div>
                     </div>
                     <div className='product-div-right w-2/3 bg-darkBlue text-white'>
                         <h1 className='image-title'>{title}</h1>
-                        
+                        <button
+                            onClick={handleDownload}
+                            className='mt-4 bg-blue-500 text-white py-2 px-4 rounded'
+                        >
+                            Download
+                        </button>
                     </div>
                 </div>
             </div>
@@ -91,4 +62,4 @@ const Product = () => {
     );
 };
 
-export default Product;
+export default Downloader;
