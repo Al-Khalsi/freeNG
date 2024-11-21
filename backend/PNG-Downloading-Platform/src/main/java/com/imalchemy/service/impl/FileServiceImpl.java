@@ -6,8 +6,8 @@ import com.imalchemy.repository.FileRepository;
 import com.imalchemy.service.FileService;
 import com.imalchemy.service.FileStorageStrategy;
 import com.imalchemy.util.converter.FileConverter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,6 @@ import java.util.UUID;
 @Slf4j
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
     private final FileRepository fileRepository;
@@ -32,13 +31,25 @@ public class FileServiceImpl implements FileService {
     private final FileValidationService fileValidationService;
     private final FileMetadataService fileMetadataService;
 
+    public FileServiceImpl(FileRepository fileRepository,
+                           @Qualifier("parsPackDownloadHostFileStorageStrategy") FileStorageStrategy fileStorageStrategy,
+                           FileConverter fileConverter,
+                           FileValidationService fileValidationService,
+                           FileMetadataService fileMetadataService) {
+        this.fileRepository = fileRepository;
+        this.fileStorageStrategy = fileStorageStrategy;
+        this.fileConverter = fileConverter;
+        this.fileValidationService = fileValidationService;
+        this.fileMetadataService = fileMetadataService;
+    }
+
     @Override
     public FileDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName,
                              List<String> subCategoryNames, List<String> dominantColors,
                              String style) throws IOException {
         try {
 
-            this.fileValidationService.validateFile(fileName);
+            this.fileValidationService.validateFileName(fileName);
 
             String originalFileName = Objects.requireNonNull(multipartFile.getOriginalFilename());
             Path relativePath = this.fileStorageStrategy.store(multipartFile, originalFileName);

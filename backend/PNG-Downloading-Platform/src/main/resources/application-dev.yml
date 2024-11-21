@@ -35,6 +35,10 @@ spring:
 file:
   storage:
     location: ${FILE_UPLOAD_LOCATION:C:\Users\Al-Khalsi\Desktop\WebSite\freeng\public\img}
+ftp:
+  host: 2193182589.cloudydl.com
+  username: pz20122
+  password: xzAJ8nrN
 
 --- #Swagger
 #springdoc:
