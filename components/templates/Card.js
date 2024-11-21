@@ -5,7 +5,7 @@ import { RxDimensions } from "react-icons/rx";
 import Link from 'next/link';
 
 function Card({ image }) {
-   
+
     const downloadLink = `/downloader/${image.id}?title=${encodeURIComponent(image.title)}&path=${encodeURIComponent(image.path)}`;
 
     return (
@@ -33,9 +33,12 @@ function Card({ image }) {
                             <span className='block ml-1'>{image.download}</span>
                         </div>
                     </div>
-                    <button type='button' className='w-full bg-bgDarkBlue rounded mt-3 py-2'>
+                    {/* <button type='button' className='w-full bg-bgDarkBlue rounded mt-3 py-2'>
                         <Link href={downloadLink}>Download</Link> 
-                    </button>
+                    </button> */}
+                    <Link href={downloadLink} class="Download-button w-full rounded mt-3 py-2">
+                        <span>Download</span>
+                    </Link>
                 </div>
             </div>
         </div>
