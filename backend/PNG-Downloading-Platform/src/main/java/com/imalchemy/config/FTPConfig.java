@@ -6,12 +6,13 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import java.io.IOException;
 
 @Slf4j
 @Configuration
-//@Profile("prod")
+@Profile("prod")
 public class FTPConfig {
 
     private @Value("${ftp.host}") String host;

@@ -3,6 +3,7 @@ package com.imalchemy.service.impl;
 import com.imalchemy.config.FileStorageProperties;
 import com.imalchemy.service.FileStorageStrategy;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import java.nio.file.StandardCopyOption;
 
 @Slf4j
 @Component
+@Primary
 public class LocalFileStorageStrategy implements FileStorageStrategy {
 
     private final Path fileStorageLocation;

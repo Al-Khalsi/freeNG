@@ -32,7 +32,7 @@ public class FileServiceImpl implements FileService {
     private final FileMetadataService fileMetadataService;
 
     public FileServiceImpl(FileRepository fileRepository,
-                           @Qualifier("parsPackDownloadHostFileStorageStrategy") FileStorageStrategy fileStorageStrategy,
+                           FileStorageStrategy fileStorageStrategy,
                            FileConverter fileConverter,
                            FileValidationService fileValidationService,
                            FileMetadataService fileMetadataService) {

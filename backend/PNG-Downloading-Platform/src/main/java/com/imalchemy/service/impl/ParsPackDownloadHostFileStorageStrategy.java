@@ -4,6 +4,7 @@ import com.imalchemy.service.FileStorageStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.nio.file.Paths;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Profile("prod")
 public class ParsPackDownloadHostFileStorageStrategy implements FileStorageStrategy {
 
     private final FTPClient ftpClient;
