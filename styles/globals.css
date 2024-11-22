@@ -1044,3 +1044,32 @@ background-color: #141b22;
   border-bottom-left-radius: 0px;
   transform: translate(-5px, 15px) rotate(45deg);
 }
+
+
+
+/* styles/globals.css or your specific CSS module */
+/* styles/globals.css or your specific CSS module */
+/* styles/globals.css or your specific CSS module */
+
+.fixed {
+  position: fixed;
+}
+
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.bg-black {
+  background-color: black;
+}
+
+.bg-opacity-75 {
+  opacity: 0.75;
+}
+
+.z-50 {
+  z-index: 50;
+}

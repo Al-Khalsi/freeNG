@@ -88,7 +88,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     <IoLogOut onClick={handleLogout} className='ml-4 text-red-600 cursor-pointer' />
                 </div>
             ) : (
-                <button type="button" className="button rounded-xl">
+                <Link href="/validation" className="button rounded-xl">
                     <span className="fold"></span>
                     <div className="points_wrapper">
                         <i className="point"></i>
@@ -102,11 +102,9 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                         <i className="point"></i>
                     </div>
                     <span className="inner">
-                        <Link href="/validation" className=''>
-                            Login / Register
-                        </Link>
+                        Login / Register
                     </span>
-                </button>
+                </Link>
             )}
         </header>
     );

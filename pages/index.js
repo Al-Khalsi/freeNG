@@ -27,48 +27,51 @@ function Index() {
     };
 
     // Fetch images from the backend
-    useEffect(() => {
-        const fetchImages = async () => {
-            setLoading(true); // Set loading state to true before starting the fetch
-            try {
-                // Determine the URL based on the search query
-                const url = searchQuery
-                    ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(searchQuery)}`
-                    : 'http://localhost:8080/api/v1/file/list';
+    const fetchImages = async (query = '') => {
+        setLoading(true); // Set loading state to true before starting the fetch
+        try {
+            // Determine the URL based on the search query
+            const url = query
+                ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}`
+                : 'http://localhost:8080/api/v1/file/list';
 
-                console.log('Fetching images from URL:', url); // Log the URL being fetched
+            console.log('Fetching images from URL:', url); // Log the URL being fetched
 
-                // Call the apiFetch function to get the images
-                const response = await apiFetch(url, 'GET', null, {});
-                console.log('Response received:', response); // Log the response received
+            // Call the apiFetch function to get the images
+            const response = await apiFetch(url, 'GET', null, {});
+            console.log('Response received:', response); // Log the response received
 
-                // Check if the response contains valid data
-                if (response.flag && response.data) {
-                    // Map the response data to the desired format
-                    const fetchedImages = response.data.map((file) => ({
-                        id: file.id,
-                        title: file.fileTitle,
-                        path: file.filePath,
-                        contentType: file.contentType,
-                        size: file.size,
-                        uploadedBy: file.uploadedBy.username,
-                        categories: file.categories.map(category => category.name).join(', '),
-                    }));
+            // Check if the response contains valid data
+            if (response.flag && response.data) {
+                // Map the response data to the desired format
+                const fetchedImages = response.data.map((file) => ({
+                    id: file.id,
+                    title: file.fileTitle,
+                    path: file.filePath,
+                    contentType: file.contentType,
+                    size: file.size,
+                    width: file.width,
+                    height: file.height,
+                    uploadedBy: file.uploadedBy.username,
+                    categories: file.categories.map(category => category.name).join(', '),
+                }));
 
-                    console.log('Fetched images:', fetchedImages); // Log the fetched images
-                    setImages(fetchedImages); // Update state with the fetched images
-                } else {
-                    console.error('Failed to fetch images: ', response.message); // Log an error if the response is not valid
-                }
-            } catch (error) {
-                console.error('Failed to fetch images:', error); // Log any errors that occur during the fetch
-            } finally {
-                setLoading(false); // Set loading state to false after the fetch is complete
+                console.log('Fetched images:', fetchedImages); // Log the fetched images
+                setImages(fetchedImages); // Update state with the fetched images
+            } else {
+                console.error('Failed to fetch images: ', response.message); // Log an error if the response is not valid
             }
-        };
+        } catch (error) {
+            console.error('Failed to fetch images:', error); // Log any errors that occur during the fetch
+        } finally {
+            setLoading(false); // Set loading state to false after the fetch is complete
+        }
+    };
 
-        fetchImages(); // Call the fetchImages function
-    }, [token, searchQuery]); // Dependency array to re-run effect when token or searchQuery changes
+    // Fetch images when the component mounts or when the token changes
+    useEffect(() => {
+        fetchImages(); // Call the fetchImages function without a query
+    }, [token]); // Only run when the token changes
 
     // Pagination logic
     const indexOfLastImage = currentPage * itemsPerPage; // Index of the last image on the current page
@@ -202,8 +205,8 @@ function Index() {
 
     // Function to handle search action
     const handleSearch = () => {
-        // Update the router to include the search query
-        router.push(`/?search=${encodeURIComponent(searchQuery)}`);
+        fetchImages(searchQuery); // Fetch images based on the search query
+        router.push(`/?search=${encodeURIComponent(searchQuery)}`); // Update the router to include the search query
     };
 
     return (
