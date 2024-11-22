@@ -10,7 +10,7 @@ import java.io.IOException;
 @Service
 public class FileValidationService {
 
-    public void validateFile(String fileName) throws IOException {
+    public void validateFileName(String fileName) throws IOException {
         if (fileName == null || fileName.trim().isEmpty()) {
             log.error("-> FILE -> File name is null or empty");
             throw new IOException("File name cannot be empty");

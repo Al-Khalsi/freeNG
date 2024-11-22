@@ -73,7 +73,6 @@ public class FileController {
             return ResponseEntity.badRequest()
                     .body(Result.error(BAD_REQUEST, "Invalid input: " + e.getMessage()));
         } catch (IOException e) {
-            log.error("Failed to upload file: {}", e.getMessage());
             return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                     .body(Result.error(INTERNAL_SERVER_ERROR, "Failed to upload file: " + e.getMessage()));
         }
