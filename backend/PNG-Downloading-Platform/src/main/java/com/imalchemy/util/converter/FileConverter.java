@@ -7,6 +7,7 @@ import com.imalchemy.model.dto.CategoryDTO;
 import com.imalchemy.model.dto.FileDTO;
 import com.imalchemy.model.dto.RoleDTO;
 import com.imalchemy.model.dto.UserDTO;
+import com.imalchemy.service.impl.FileMetadataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,7 @@ public class FileConverter implements Converter<File, FileDTO> {
 
     private final CategoryConverter categoryConverter;
     private final RoleConverter roleConverter;
+    private final FileMetadataService fileMetadataService;
 
     @Override
     public File toEntity(FileDTO dto) {
@@ -28,7 +30,7 @@ public class FileConverter implements Converter<File, FileDTO> {
                 .fileTitle(dto.getFileTitle())
                 .filePath(dto.getFilePath())
                 .contentType(dto.getContentType())
-                .size(dto.getSize())
+                .size(Long.parseLong(dto.getSize()))
                 .height(dto.getHeight())
                 .width(dto.getWidth())
                 .isActive(dto.isActive())
@@ -68,7 +70,7 @@ public class FileConverter implements Converter<File, FileDTO> {
                 .fileTitle(entity.getFileTitle())
                 .filePath(entity.getFilePath())
                 .contentType(entity.getContentType())
-                .size(entity.getSize())
+                .size(this.fileMetadataService.formatFileSize(entity.getSize()))
                 .height(entity.getHeight())
                 .width(entity.getWidth())
                 .isActive(entity.isActive())

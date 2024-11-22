@@ -53,4 +53,4 @@ ftp:
 --- ###Custom Variables
 token:
   jwt:
-    expires_in: 60
+    expires_in: 1440 # 60min * 24hours = 1440min
