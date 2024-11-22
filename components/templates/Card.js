@@ -26,7 +26,7 @@ function Card({ image }) {
                         </div>
                         <div className='flex justify-between items-center bg-gray-600 ml-2 px-2 py-1 rounded text-xs text-lightBlue'>
                             <RxDimensions />
-                            <span className='block ml-1'>{image.dimensions}</span>
+                            <span className='block ml-1'>{`${image.width} × ${image.height}`}</span>
                         </div>
                     </div>
                     {/* <button type='button' className='w-full bg-bgDarkBlue rounded mt-3 py-2'>

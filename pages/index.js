@@ -51,6 +51,8 @@ function Index() {
                         path: file.filePath,
                         contentType: file.contentType,
                         size: file.size,
+                        width: file.width,
+                        height: file.height,
                         uploadedBy: file.uploadedBy.username,
                         categories: file.categories.map(category => category.name).join(', '),
                     }));
