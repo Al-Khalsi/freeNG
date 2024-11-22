@@ -10,7 +10,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@tsparticles/all": "^3.5.0",
     "axios": "^1.7.7",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
