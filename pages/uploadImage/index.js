@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Card from '@/components/templates/Card';
 import { useAuth } from '@/context/AuthContext';
-import AddCategoryModal from '@/components/templates/AddCategoryModal'; // Import the modal component
+import AddCategoryModal from '@/components/templates/AddCategoryModal';
 
 function UploadImage() {
   const { token } = useAuth();
@@ -16,13 +16,14 @@ function UploadImage() {
   const [uploadedFile, setUploadedFile] = useState('');
   const [cats, setCats] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLightMode, setIsLightMode] = useState(false); // State for light mode
 
   // --------------------------- Backend URLs ---------------------------
-  const BACKEND_API_VERSION = "api/v1"
-  const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`
-  const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/file`
-  const BACKEND_CATEGORY_URL = `${BACKEND_BASE_URL}/category`
+  const BACKEND_API_VERSION = "api/v1";
+  const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`;
+  const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/file`;
+  const BACKEND_CATEGORY_URL = `${BACKEND_BASE_URL}/category`;
 
   const BACKEND_UPLOAD_FILE_URL = `${BACKEND_UPLOAD_URL}/upload`;
   const BACKEND_LIST_PARENT_CATEGORIES_URL = `${BACKEND_CATEGORY_URL}/list/parent`;
@@ -39,7 +40,7 @@ function UploadImage() {
 
   const handleUploadSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(''); // Reset error message
+    setErrorMessage('');
 
     if (!image) {
       setErrorMessage('Please upload an image.');
@@ -54,18 +55,28 @@ function UploadImage() {
     formData.append('subCategoryNames', subCategory);
     formData.append('dominantColors', null);
     formData.append('style', null);
+    formData.append('isLightMode', isLightMode); // Send the boolean value directly
+
+    console.log('Uploading with formData:', {
+      file: image,
+      fileName: imageName,
+      parentCategoryName: category,
+      subCategoryNames: subCategory,
+      isLightMode
+    });
 
     try {
       const response = await axios.post(BACKEND_UPLOAD_FILE_URL, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}` // Include the token in the headers
+          'Authorization': `Bearer ${token}`
         },
       });
 
+      console.log('Upload response:', response.data); // Log response data
       const uploadedFileData = response.data.file; // Assuming response body is { "file": "string" }
-      setUploadedFile(uploadedFileData); // Store the uploaded file info in state
-      alert('Upload successful: ' + uploadedFileData); // Notify the user
+      setUploadedFile(uploadedFileData);
+      alert('Upload successful: ' + uploadedFileData);
     } catch (error) {
       console.error('Error uploading file:', error);
       setErrorMessage(error.response?.data?.message || 'Error uploading file.');
@@ -119,14 +130,14 @@ function UploadImage() {
   };
 
   useEffect(() => {
-    getParentCategories(); // Call the function on component mount
+    getParentCategories();
   }, []);
 
   useEffect(() => {
     if (category) {
-      getSubCategories(category); // Fetch subcategories when category changes
+      getSubCategories(category);
     } else {
-      setSubCategories([]); // Reset subcategories if no category is selected
+      setSubCategories([]);
     }
   }, [category]);
 
@@ -143,13 +154,29 @@ function UploadImage() {
   };
 
   const handleCategoryAdded = () => {
-    getParentCategories(); // Refresh categories after adding
+    getParentCategories();
+  };
+
+  // Add this function to toggle the isLightMode state
+  const toggleLightMode = () => {
+    setIsLightMode(prevMode => !prevMode);
   };
 
   return (
-    <div className='UploadImage w-full h-full flex justify-center items-center bg-bgDarkBlue'>
+    <div className={`UploadImage w-full h-full flex justify-center items-center bg-bgDarkBlue`}>
       <div className="flex flex-col items-center justify-center w-96 p-6 bg-bgDarkGray text-clWhite rounded shadow-md">
         <h2 className="text-xl font-bold mb-4">Upload Image</h2>
+
+        <div className="mb-4">
+          <label className="block mb-2">Light Mode</label>
+          <button
+            type="button"
+            onClick={toggleLightMode}
+            className={`border rounded p-2 w-full ${isLightMode ? 'bg-yellow-500' : 'bg-gray-500'} text-white`}
+          >
+            {isLightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
+          </button>
+        </div>
 
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
@@ -226,7 +253,7 @@ function UploadImage() {
                 {isLoading ? 'Uploading...' : 'Upload'}
               </button>
 
-              {/* Add Button for Adding Category/Subcategory */}
+              {/* Button to open modal for adding category */}
               <button
                 type="button"
                 onClick={handleOpenModal}

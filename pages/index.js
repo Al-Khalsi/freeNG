@@ -30,20 +30,16 @@ function Index() {
     const fetchImages = async (query = '') => {
         setLoading(true); // Set loading state to true before starting the fetch
         try {
-            // Determine the URL based on the search query
             const url = query
                 ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}`
                 : 'http://localhost:8080/api/v1/file/list';
-
+    
             console.log('Fetching images from URL:', url); // Log the URL being fetched
-
-            // Call the apiFetch function to get the images
+    
             const response = await apiFetch(url, 'GET', null, {});
             console.log('Response received:', response); // Log the response received
-
-            // Check if the response contains valid data
+    
             if (response.flag && response.data) {
-                // Map the response data to the desired format
                 const fetchedImages = response.data.map((file) => ({
                     id: file.id,
                     title: file.fileTitle,
@@ -54,8 +50,9 @@ function Index() {
                     height: file.height,
                     uploadedBy: file.uploadedBy.username,
                     categories: file.categories.map(category => category.name).join(', '),
+                    isLightMode: file.isLightMode // Ensure this property is included
                 }));
-
+    
                 console.log('Fetched images:', fetchedImages); // Log the fetched images
                 setImages(fetchedImages); // Update state with the fetched images
             } else {

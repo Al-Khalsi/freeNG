@@ -131,7 +131,7 @@ background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
 background-color: #141b22;
 }
 
-.bg-img.lightMod {
+.lightMod {
   background: radial-gradient(circle, transparent 20%, #eeeeee 20%, #eeeeee 80%, transparent 80%, transparent) 0% 0% / 30px 30px, radial-gradient(circle, transparent 20%, #eeeeee 20%, #eeeeee 80%, transparent 80%, transparent) 15px 15px / 30px 30px, linear-gradient(#05071b 1px, transparent 1px) 0px -0.5px / 15px 15px, linear-gradient(90deg, #05071b 1px, #eeeeee 1px) -0.5px 0px / 15px 15px #eeeeee;
   background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
   background-color: #eeeeee;
@@ -900,7 +900,6 @@ background-color: #141b22;
   transition: all 0.1s linear;
   border-top: 1px solid #4e4d4d;
   background-color: #333333;
-  box-shadow: 0px 17px 5px 1px rgba(0, 0, 0, 0.2);
 }
 
 .label:has(input[type="radio"]:checked) {
