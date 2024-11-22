@@ -35,6 +35,10 @@ spring:
 file:
   storage:
     location: ${FILE_UPLOAD_LOCATION:C:\Users\Al-Khalsi\Desktop\WebSite\freeng\public\img}
+ftp:
+  host: 2193182589.cloudydl.com
+  username: pz20122
+  password: xzAJ8nrN
 
 --- #Swagger
 #springdoc:
@@ -49,4 +53,4 @@ file:
 --- ###Custom Variables
 token:
   jwt:
-    expires_in: 60
+    expires_in: 1440 # 60min * 24hours = 1440min

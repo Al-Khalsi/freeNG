@@ -49,4 +49,8 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
     return useContext(AuthContext);
+    // این برای تست نوشته شده مستر محمد حسن، بزار باشه من برای تست ازش استفاده میکنم.
+    // const context = useContext(AuthContext);
+    // const testToken = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJQTkctRG93bmxvYWRpbmctUGxhdGZvcm0iLCJzdWIiOiJzZXllZEBnbWFpbC5jb20iLCJhdXRob3JpdGllcyI6IlJPTEVfVVNFUiIsInVzZXJuYW1lIjoic2V5ZWQiLCJlbWFpbCI6InNleWVkQGdtYWlsLmNvbSIsImlhdCI6MTczMjI4NTU4MiwiZXhwIjoxNzMyMzcxOTgyfQ.Dj6rEocTX1o4xLXk2FY7sG-T2CIQFz5Kok8vTP4A7Ns';
+    // return {...context, token: testToken}; // Override the token
 };

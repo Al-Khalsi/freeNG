@@ -43,6 +43,7 @@
     <properties>
         <java.version>17</java.version>
         <jwt.version>0.12.5</jwt.version>
+        <ftp.version>3.11.0</ftp.version>
     </properties>
 
     <dependencies>
@@ -54,6 +55,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- File handling (FTP Protocol) -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>${ftp.version}</version>
         </dependency>
 
         <!-- JWT -->

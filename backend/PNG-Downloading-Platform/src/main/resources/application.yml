@@ -10,9 +10,5 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
-logging:
-  pattern:
-    console: ${LOG_PATTERN_CONSOLE:%green(%d{dd-MMM-yyyy HH:mm:ss.SSS}) %blue(%-5level) %red([ %thread ]) %yellow(%logger{ 15 }) - %msg%n}}
-
 base:
   url: /api/v1

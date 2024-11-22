@@ -24,7 +24,7 @@ public class FileDTO implements Serializable {
     private String fileTitle;
     private String filePath;
     private String contentType;
-    private long size;
+    private String size;
     private int height;
     private int width;
     private boolean isActive;
