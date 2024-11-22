@@ -30,6 +30,7 @@ public class FileDTO implements Serializable {
     private boolean isActive;
     private String keywords;
     private String style;
+    private boolean isLightMode = false;
     private Set<String> dominantColors;
     private long viewCount;
     private long downloadCount;

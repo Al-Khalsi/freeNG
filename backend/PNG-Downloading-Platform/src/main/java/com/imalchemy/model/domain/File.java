@@ -30,6 +30,7 @@ public class File extends BaseEntity<UUID> {
     private boolean isActive;
     private String keywords; // Comma-separated keywords for search
     private String style;
+    private boolean isLightMode = false;
     // Color palette for better search-ability
     @ElementCollection
     @CollectionTable(
