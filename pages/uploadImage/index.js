@@ -148,41 +148,41 @@ function UploadImage() {
 
   return (
     <div className='UploadImage w-full h-full flex justify-center items-center bg-bgDarkBlue'>
-      <div className="flex flex-col items-center justify-center bg-gray-100 p-6 rounded shadow-md w-96">
-        <h2 className="text-xl font-bold mb-4 text-black">Upload Image</h2>
+      <div className="flex flex-col items-center justify-center w-96 p-6 bg-bgDarkGray text-clWhite rounded shadow-md">
+        <h2 className="text-xl font-bold mb-4">Upload Image</h2>
 
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
         {!showCard ? (
           <form onSubmit={handleUploadSubmit}>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Image</label>
+              <label className="block mb-2">Image</label>
               <input
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="border rounded p-2 w-full text-black"
+                className="border rounded p-2 w-full bg-bgDarkGray2"
                 required
               />
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Image Name</label>
+              <label className="block mb-2">Image Name</label>
               <input
                 type="text"
                 value={imageName}
                 onChange={(e) => setImageName(e.target.value)}
-                className="border rounded p-2 w-full text-black"
+                className="border rounded p-2 w-full bg-bgDarkGray2"
                 required
               />
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Category</label>
+              <label className="block mb-2">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="border rounded p-2 w-full text-black"
+                className="border rounded p-2 w-full bg-bgDarkGray2"
                 required
               >
                 {cats && cats.length > 0 ? (
@@ -198,11 +198,11 @@ function UploadImage() {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Subcategory</label>
+              <label className="block mb-2">Subcategory</label>
               <select
                 value={subCategory}
                 onChange={(e) => setSubCategory(e.target.value)}
-                className="border rounded p-2 w-full text-black"
+                className="border rounded p-2 w-full bg-bgDarkGray2"
                 required
               >
                 {subCategories.length > 0 ? (
