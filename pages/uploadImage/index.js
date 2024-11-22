@@ -21,8 +21,8 @@ function UploadImage() {
   // --------------------------- Backend URLs ---------------------------
   const BACKEND_API_VERSION = "api/v1"
   const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`
-  const BACKEND_UPLOAD_URL= `${BACKEND_BASE_URL}/file`
-  const BACKEND_CATEGORY_URL= `${BACKEND_BASE_URL}/category`
+  const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/file`
+  const BACKEND_CATEGORY_URL = `${BACKEND_BASE_URL}/category`
 
   const BACKEND_UPLOAD_FILE_URL = `${BACKEND_UPLOAD_URL}/upload`;
   const BACKEND_LIST_PARENT_CATEGORIES_URL = `${BACKEND_CATEGORY_URL}/list/parent`;
@@ -180,19 +180,19 @@ function UploadImage() {
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Category</label>
               <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="border rounded p-2 w-full text-black"
-                  required
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="border rounded p-2 w-full text-black"
+                required
               >
                 {cats && cats.length > 0 ? (
-                    cats.map((cat) => (
-                        <option key={cat.name} value={cat.name}>
-                          {cat.name}
-                        </option>
-                    ))
+                  cats.map((cat) => (
+                    <option key={cat.name} value={cat.name}>
+                      {cat.name}
+                    </option>
+                  ))
                 ) : (
-                    <option value="">No categories available</option>
+                  <option value="">No categories available</option>
                 )}
               </select>
             </div>
@@ -200,39 +200,41 @@ function UploadImage() {
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Subcategory</label>
               <select
-                  value={subCategory}
-                  onChange={(e) => setSubCategory(e.target.value)}
-                  className="border rounded p-2 w-full text-black"
-                  required
+                value={subCategory}
+                onChange={(e) => setSubCategory(e.target.value)}
+                className="border rounded p-2 w-full text-black"
+                required
               >
                 {subCategories.length > 0 ? (
-                    subCategories.map((subCat) => (
-                        <option key={subCat.name} value={subCat.name}>
-                          {subCat.name}
-                        </option>
-                    ))
+                  subCategories.map((subCat) => (
+                    <option key={subCat.name} value={subCat.name}>
+                      {subCat.name}
+                    </option>
+                  ))
                 ) : (
-                    <option value="">No subcategories available</option>
+                  <option value="">No subcategories available</option>
                 )}
               </select>
             </div>
 
-            <button
-              type="submit"
-              className={`bg-blue-500 text-white rounded p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Uploading...' : 'Upload'}
-            </button>
+            <div className='flex justify-center items-center'>
+              <button
+                type="submit"
+                className={`bg-blue-500 text-white rounded mr-2 p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Uploading...' : 'Upload'}
+              </button>
 
-            {/* Add Button for Adding Category/Subcategory */}
-            <button
-              type="button"
-              onClick={handleOpenModal}
-              className="bg-yellow-500 text-white rounded p-2 mt-4 w-full hover:bg-yellow-600"
-            >
-              Add Category/Subcategory
-            </button>
+              {/* Add Button for Adding Category/Subcategory */}
+              <button
+                type="button"
+                onClick={handleOpenModal}
+                className="bg-yellow-500 text-white rounded ml-2 p-2 w-full hover:bg-yellow-600"
+              >
+                Add
+              </button>
+            </div>
           </form>
         ) : (
           <div className="w-full">

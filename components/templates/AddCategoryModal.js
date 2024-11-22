@@ -84,8 +84,8 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
         <div className="modal fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center bg-white/[.3]">
             <div className="modal-content relative w-80 p-5 rounded bg-bgDarkGray">
                 <span className="close absolute right-0 top-0 w-4 h-4 flex justify-center items-center p-3 bg-red-600 cursor-pointer " onClick={onClose}>&times;</span>
-                <div class="radio-input flex items-center gap-1 p-1 rounded-lg -z-10 bg-bgBlack">
-                    <label class="label relative flex flex-col justify-center items-center py-3 px-2 cursor-pointer">
+                <div class="radio-input flex items-center gap-1 mt-4 p-1 -z-10 bg-bgBlack rounded-lg">
+                    <label class="label relative flex flex-col justify-center items-center w-1/2 py-3 px-2 cursor-pointer">
                         <input className='hidden' 
                         value="value-1" 
                         checked={!isSubCategory} 
@@ -95,7 +95,7 @@ const AddCategoryModal = ({ isOpen, onClose, onCategoryAdded }) => {
                         type="radio" />
                         <span class="text">Category</span>
                     </label>
-                    <label class="label relative flex flex-col justify-center items-center py-3 px-2 cursor-pointer">
+                    <label class="label relative flex flex-col justify-center items-center w-1/2 py-3 px-2 cursor-pointer">
                         <input className='hidden' 
                         value="value-1" 
                         checked={isSubCategory} 
