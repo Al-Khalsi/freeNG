@@ -113,28 +113,12 @@ main aside {
   position: absolute;
 }
 
-/* .bg-img {
-  background:
-    radial-gradient(circle farthest-side at 0% 50%, var(--bg-darkGray2) 23.5%, #0000 0)21px 30px,
-    radial-gradient(circle farthest-side at 0% 50%, var(--bg-purple) 24%, #0000 0)19px 30px,
-    linear-gradient(var(--bg-darkGray2) 14%, #0000 0, #0000 85%, var(--bg-darkGray2) 0)0 0,
-    linear-gradient(150deg, var(--bg-darkGray2) 24%, var(--bg-purple) 0, var(--bg-purple) 26%, #0000 0, #0000 74%, var(--bg-purple) 0, var(--bg-purple) 76%, var(--bg-darkGray2) 0)0 0,
-    linear-gradient(30deg, var(--bg-darkGray2) 24%, var(--bg-purple) 0, var(--bg-purple) 26%, #0000 0, #0000 74%, var(--bg-purple) 0, var(--bg-purple) 76%, var(--bg-darkGray2) 0)0 0,
-    linear-gradient(90deg, var(--bg-purple) 2%, var(--bg-darkGray2) 0, var(--bg-darkGray2) 98%, var(--bg-purple) 0%)0 0 var(--bg-darkGray2);
-  background-size: 40px 60px;
-  background-color: #3d5275;
-} */
-
 .bg-img {
-  background: radial-gradient(circle, transparent 20%, #141b22 20%, #141b22 80%, transparent 80%, transparent) 0% 0% / 30px 30px, radial-gradient(circle, transparent 20%, #141b22 20%, #141b22 80%, transparent 80%, transparent) 15px 15px / 30px 30px, linear-gradient(#7a5af8 1px, transparent 1px) 0px -0.5px / 15px 15px, linear-gradient(90deg, #7a5af8 1px, #141b22 1px) -0.5px 0px / 15px 15px #141b22;
-background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
-background-color: #141b22;
+background-color: var(--bg-darkGray2);
 }
 
 .lightMod {
-  background: radial-gradient(circle, transparent 20%, #eeeeee 20%, #eeeeee 80%, transparent 80%, transparent) 0% 0% / 30px 30px, radial-gradient(circle, transparent 20%, #eeeeee 20%, #eeeeee 80%, transparent 80%, transparent) 15px 15px / 30px 30px, linear-gradient(#05071b 1px, transparent 1px) 0px -0.5px / 15px 15px, linear-gradient(90deg, #05071b 1px, #eeeeee 1px) -0.5px 0px / 15px 15px #eeeeee;
-  background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
-  background-color: #eeeeee;
+  background-color: var(--bg-gray);
 }
 
 .input {
@@ -978,8 +962,6 @@ background-color: #141b22;
   font-weight: 500;
   font-size: 17px;
   padding: 12px 20px;
-  color: white;
-  background: linear-gradient(144deg, #af40ff, #5b42f3 50%, #00ddeb);
   border: none;
   box-shadow: 0 0.7em 1.5em -0.5em rgba(59, 48, 78, 0.527);
   letter-spacing: 0.05em;
@@ -990,13 +972,8 @@ background-color: #141b22;
 }
 
 .Download-button:hover {
-  box-shadow: 0 0.5em 1.5em -0.5em #3b82f6;
   border-top-left-radius: 40px;
   border-bottom-right-radius: 40px;
-}
-
-.Download-button:active {
-  box-shadow: 0 0.3em 1em -0.5em #3b82f6;
 }
 
 .Download-button::before {

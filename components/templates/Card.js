@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MdFullscreen } from "react-icons/md";
+import { MdFullscreen, MdDelete, MdEdit } from "react-icons/md";
 import { FaImage } from "react-icons/fa";
 import { RxDimensions } from "react-icons/rx";
 import Link from 'next/link';
@@ -21,10 +21,18 @@ function Card({ image }) {
     return (
         <div className={`card w-full rounded-lg overflow-hidden bg-bgDarkGray`}>
             <div className='inside-card w-full px-3 pt-3'>
-            <div className={`bg-img relative w-full h-52 flex justify-center items-center p-2 rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
-                    <div className='absolute top-2 right-2 text-white p-1 rounded-md opacity-60 cursor-pointer'
+                <div className={`bg-img relative w-full h-52 flex justify-center items-center rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
+                    <div className='absolute top-2 right-2 left-2 flex justify-end text-white text-xl rounded-md opacity-60 cursor-pointer'>
+                        <button className='delet flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full'>
+                            <MdDelete/>
+                        </button>
+                        <button className='edit flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full'>
+                            <MdEdit />
+                        </button>
+                        <button className='fullScreen flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full' 
                         onClick={handleOpenModal}>
-                        <MdFullscreen className='text-xl' />
+                            <MdFullscreen />
+                        </button>
                     </div>
                     <img src={`../../img/${image.path}`} alt={image.fileTitle} className='w-full h-full object-contain' />
                 </div>
@@ -40,7 +48,7 @@ function Card({ image }) {
                             <span className='block ml-1'>{`${image.width} × ${image.height}`}</span>
                         </div>
                     </div>
-                    <Link href={downloadLink} className="Download-button w-full rounded mt-3 py-2">
+                    <Link href={downloadLink} className="Download-button w-full rounded mt-3 py-2 bg-gray-600 text-clWhite">
                         <span>Download</span>
                     </Link>
                 </div>
