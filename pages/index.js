@@ -92,6 +92,27 @@ function Index() {
         }
     };
 
+    const handleEditImage = async (imageId, updatedData) => {
+        try {
+            const response = await apiFetch(`http://localhost:8080/api/v1/file/${imageId}`, 'PUT', updatedData, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+            });
+
+            if (response) {
+                // Update the images state with the edited image
+                setImages((prevImages) => prevImages.map(image =>
+                    image.id === imageId ? { ...image, ...updatedData } : image
+                ));
+            } else {
+                console.error('Failed to edit image');
+            }
+        } catch (error) {
+            console.error('Error editing image:', error);
+        }
+    };
+
     // Pagination logic
     const indexOfLastImage = currentPage * itemsPerPage; // Index of the last image on the current page
     const indexOfFirstImage = indexOfLastImage - itemsPerPage; // Index of the first image on the current page
@@ -248,7 +269,7 @@ function Index() {
                             <div>Loading...</div>
                         ) : (
                             currentImages.map((image) => (
-                                <Card key={image.id} image={image} onDelete={handleDeleteImage} />
+                                <Card key={image.id} image={image} onDelete={handleDeleteImage} onEdit={handleEditImage} />
                             ))
                         )}
                     </section>
