@@ -5,7 +5,7 @@ import { RxDimensions } from "react-icons/rx";
 import Link from 'next/link';
 import FullScreenModal from '@/components/templates/FullScreenModal'; // Import the modal
 
-function Card({ image }) {
+function Card({ image, onDelete }) {
     const [isModalOpen, setModalOpen] = useState(false);
 
     const downloadLink = `/downloader/${image.id}?title=${encodeURIComponent(image.title)}&path=${encodeURIComponent(image.path)}`;
@@ -22,14 +22,15 @@ function Card({ image }) {
         <div className={`card w-full rounded-lg overflow-hidden bg-bgDarkGray`}>
             <div className='inside-card w-full px-3 pt-3'>
                 <div className={`bg-img relative w-full h-52 flex justify-center items-center rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
-                    <div className='absolute top-2 right-2 left-2 flex justify-end text-white text-xl rounded-md opacity-60 cursor-pointer'>
-                        <button className='delet flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full'>
+                    <div className='absolute top-2 right-2 left-2 flex justify-end text-white text-xl rounded-md opacity-60'>
+                        <button className='delet flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer' 
+                        onClick={() => onDelete(image.id)}>
                             <MdDelete/>
                         </button>
-                        <button className='edit flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full'>
+                        <button className='edit flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer'>
                             <MdEdit />
                         </button>
-                        <button className='fullScreen flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full' 
+                        <button className='fullScreen flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer' 
                         onClick={handleOpenModal}>
                             <MdFullscreen />
                         </button>

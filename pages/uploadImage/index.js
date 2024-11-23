@@ -22,7 +22,7 @@ function UploadImage() {
   // --------------------------- Backend URLs ---------------------------
   const BACKEND_API_VERSION = "api/v1";
   const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`;
-  const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/image`;
+  const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/file`;
   const BACKEND_CATEGORY_URL = `${BACKEND_BASE_URL}/category`;
 
   const BACKEND_UPLOAD_FILE_URL = `${BACKEND_UPLOAD_URL}/upload`;
@@ -49,7 +49,7 @@ function UploadImage() {
 
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('image', image);
+    formData.append('file', image);
     formData.append('fileName', imageName);
     formData.append('parentCategoryName', category);
     formData.append('subCategoryNames', subCategory);

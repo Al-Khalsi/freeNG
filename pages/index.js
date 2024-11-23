@@ -70,6 +70,28 @@ function Index() {
         fetchImages(); // Call the fetchImages function without a query
     }, [token]); // Only run when the token changes
 
+    const handleDeleteImage = async (imageId) => { // Change from id to imageId
+        const confirmed = window.confirm("Are you sure you want to delete this image?");
+        if (confirmed) {
+            try {
+                const response = await apiFetch(`http://localhost:8080/api/v1/file/${imageId}`, 'DELETE', null, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Add your token if needed
+                    }
+                });
+
+                if (response) {
+                    // Update the state to remove the deleted image
+                    setImages((prevImages) => prevImages.filter(image => image.id !== imageId));
+                } else {
+                    console.error('Failed to delete image');
+                }
+            } catch (error) {
+                console.error('Error deleting image:', error);
+            }
+        }
+    };
+
     // Pagination logic
     const indexOfLastImage = currentPage * itemsPerPage; // Index of the last image on the current page
     const indexOfFirstImage = indexOfLastImage - itemsPerPage; // Index of the first image on the current page
@@ -226,7 +248,7 @@ function Index() {
                             <div>Loading...</div>
                         ) : (
                             currentImages.map((image) => (
-                                <Card key={image.id} image={image} />
+                                <Card key={image.id} image={image} onDelete={handleDeleteImage} />
                             ))
                         )}
                     </section>
