@@ -166,7 +166,7 @@ public class FileController {
     })
     @GetMapping("/search")
     public ResponseEntity<Result> searchFiles(@RequestParam String query) {
-        List<FileDTO> searchedFiles = this.fileService.searchFiles(query);
+        List<ImageDTO> searchedFiles = this.fileService.searchFiles(query);
 
         if (searchedFiles.isEmpty()) {
             return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedFiles));
