@@ -24,11 +24,10 @@ import static com.imalchemy.util.constants.ApplicationConstants.JWT_SECRET_KEY;
 @RequiredArgsConstructor
 public class JWTTokenService implements TokenService {
 
-    private @Value("${spring.application.name}") String applicationName;
-    private @Value("${token.jwt.expires_in}") long expiresIn;
-
     private final Environment env;
     private final TokenClaimsBuilder claimsBuilder;
+    private @Value("${spring.application.name}") String applicationName;
+    private @Value("${token.jwt.expires_in}") long expiresIn;
 
     @Override
     public SecretKey getSecretKey() {

@@ -1,6 +1,5 @@
 package com.imalchemy.repository;
 
-import com.imalchemy.model.domain.File;
 import com.imalchemy.model.domain.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,13 +9,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface FileRepository extends JpaRepository<File, UUID> {
+public interface FileRepository extends JpaRepository<Image, UUID> {
 
     Optional<Image> findByFileTitle(String fileTitle);
 
     @Query(value = """
             SELECT f.*
-            FROM image f WHERE
+            FROM file f WHERE
             (:query IS NULL OR
             to_tsvector('english', f.file_title) @@ to_tsquery('english', :query) OR
             to_tsvector('english', f.keywords) @@ to_tsquery('english', :query))
@@ -25,7 +24,7 @@ public interface FileRepository extends JpaRepository<File, UUID> {
 
     @Query(value = """
             SELECT f.*
-            FROM image f WHERE
+            FROM file f WHERE
             f.file_title ILIKE CONCAT('%', :query, '%') OR
             f.keywords ILIKE CONCAT('%', :query, '%')
             """, nativeQuery = true)

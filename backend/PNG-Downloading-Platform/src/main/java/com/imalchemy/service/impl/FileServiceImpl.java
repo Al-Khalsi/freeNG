@@ -2,13 +2,11 @@ package com.imalchemy.service.impl;
 
 import com.imalchemy.model.domain.Image;
 import com.imalchemy.model.dto.ImageDTO;
-import com.imalchemy.model.dto.ImageDTO;
 import com.imalchemy.repository.FileRepository;
 import com.imalchemy.service.FileService;
 import com.imalchemy.service.FileStorageStrategy;
 import com.imalchemy.util.converter.ImageConverter;
 import lombok.extern.slf4j.Slf4j;
-import com.imalchemy.util.converter.ImageConverter;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,7 +45,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public ImageDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName,
                               List<String> subCategoryNames, List<String> dominantColors,
-                              String style) throws IOException {
+                              String style, boolean lightMode) throws IOException {
         try {
 
             this.fileValidationService.validateFileName(fileName);
@@ -55,7 +53,7 @@ public class FileServiceImpl implements FileService {
             String originalFileName = Objects.requireNonNull(multipartFile.getOriginalFilename());
             Path relativePath = this.fileStorageStrategy.store(multipartFile, originalFileName);
             Image image = this.fileMetadataService.createImageDomain(multipartFile, fileName, relativePath.toString(),
-                    dominantColors, style);
+                    dominantColors, style, lightMode);
 
             this.fileMetadataService.associateImageWithCategories(image, parentCategoryName, subCategoryNames);
 

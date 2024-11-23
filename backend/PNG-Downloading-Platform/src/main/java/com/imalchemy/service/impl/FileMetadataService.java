@@ -6,7 +6,6 @@ import com.imalchemy.model.domain.ImageVariant;
 import com.imalchemy.model.enums.ImageFormat;
 import com.imalchemy.model.enums.ImageUnits;
 import com.imalchemy.repository.CategoryRepository;
-import com.imalchemy.repository.ImageVariantRepository;
 import com.imalchemy.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

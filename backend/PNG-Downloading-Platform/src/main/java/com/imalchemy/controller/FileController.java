@@ -144,7 +144,7 @@ public class FileController {
     })
     @GetMapping("/list")
     public ResponseEntity<Result> fetchFiles() {
-        List<FileDTO> fileDTOs = this.fileService.listAllFiles();
+        List<ImageDTO> fileDTOs = this.fileService.listAllFiles();
 
         return ResponseEntity.ok(Result.success("List files.", fileDTOs));
     }
