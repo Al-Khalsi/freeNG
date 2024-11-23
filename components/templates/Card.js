@@ -21,7 +21,7 @@ function Card({ image }) {
     return (
         <div className={`card w-full rounded-lg overflow-hidden bg-bgDarkGray`}>
             <div className='inside-card w-full px-3 pt-3'>
-            <div className={`bg-img relative w-full h-52 flex justify-center items-center p-2 rounded-md ${image.isLightMode ? 'lightMod' : ''}`}>
+            <div className={`bg-img relative w-full h-52 flex justify-center items-center p-2 rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
                     <div className='absolute top-2 right-2 text-white p-1 rounded-md opacity-60 cursor-pointer'
                         onClick={handleOpenModal}>
                         <MdFullscreen className='text-xl' />

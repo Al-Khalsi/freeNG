@@ -17,7 +17,7 @@ function UploadImage() {
   const [cats, setCats] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLightMode, setIsLightMode] = useState(false); // State for light mode
+  const [lightMode, setLightMode] = useState(false); // State for light mode
 
   // --------------------------- Backend URLs ---------------------------
   const BACKEND_API_VERSION = "api/v1";
@@ -55,14 +55,14 @@ function UploadImage() {
     formData.append('subCategoryNames', subCategory);
     formData.append('dominantColors', null);
     formData.append('style', null);
-    formData.append('isLightMode', isLightMode); // Send the boolean value directly
+    formData.append('lightMode', lightMode); // This will send the current state of lightMode
 
     console.log('Uploading with formData:', {
       image: image,
       fileName: imageName,
       parentCategoryName: category,
       subCategoryNames: subCategory,
-      isLightMode
+      lightMode // Log the current lightMode state
     });
 
     try {
@@ -157,9 +157,9 @@ function UploadImage() {
     getParentCategories();
   };
 
-  // Add this function to toggle the isLightMode state
+  // Toggle function remains the same
   const toggleLightMode = () => {
-    setIsLightMode(prevMode => !prevMode);
+    setLightMode(prevMode => !prevMode);
   };
 
   return (
@@ -172,9 +172,9 @@ function UploadImage() {
           <button
             type="button"
             onClick={toggleLightMode}
-            className={`border rounded p-2 w-full ${isLightMode ? 'bg-yellow-500' : 'bg-gray-500'} text-white`}
+            className={`border rounded p-2 w-full ${lightMode ? 'bg-yellow-500' : 'bg-gray-500'} text-white`}
           >
-            {isLightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
+            {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
           </button>
         </div>
 

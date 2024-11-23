@@ -34,7 +34,7 @@ public class FileMetadataService {
 
     public Image createImageDomain(MultipartFile uploadedMultipartFile, String imageName,
                                    String relativePath, List<String> dominantColors,
-                                   String style) {
+                                   String style, boolean lightMode) {
         Image image = new Image();
         image.setFileTitle(imageName);
         image.setFilePath(relativePath);
@@ -47,6 +47,7 @@ public class FileMetadataService {
         // Calculate dimensions
         calculateDimension(uploadedMultipartFile, image, imageName);
         image.setStyle(style);
+        image.setLightMode(lightMode);
         image.getDominantColors().addAll(dominantColors);
         // Create variants (e.g., WebP)
         createImageVariants(image, uploadedMultipartFile, relativePath);
