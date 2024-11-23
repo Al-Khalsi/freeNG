@@ -1,5 +1,6 @@
 package com.imalchemy.model.dto;
 
+import com.imalchemy.model.domain.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,13 +13,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * DTO for {@link com.imalchemy.model.domain.File}
+ * DTO for {@link Image}
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileDTO implements Serializable {
+public class ImageDTO implements Serializable {
 
     private String id;
     private String fileTitle;

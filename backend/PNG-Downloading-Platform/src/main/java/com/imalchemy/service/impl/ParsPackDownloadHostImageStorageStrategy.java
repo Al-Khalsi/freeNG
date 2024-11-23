@@ -1,7 +1,7 @@
 package com.imalchemy.service.impl;
 
-import com.imalchemy.service.FileStorageStrategy;
-import lombok.RequiredArgsConstructor;
+import com.imalchemy.config.FileStorageProperties;
+import com.imalchemy.service.ImageStorageStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTPClient;
 import org.springframework.context.annotation.Profile;
@@ -19,11 +19,39 @@ import java.nio.file.Paths;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 @Profile("prod")
-public class ParsPackDownloadHostFileStorageStrategy implements FileStorageStrategy {
+public class ParsPackDownloadHostImageStorageStrategy implements ImageStorageStrategy {
 
     private final FTPClient ftpClient;
+    private final Path fileStorageLocation;
+
+    public ParsPackDownloadHostImageStorageStrategy(FTPClient ftpClient, FileStorageProperties fileStorageProperties) throws IOException {
+        String fileStoragePath = fileStorageProperties.getLocation();
+        if (fileStoragePath == null || fileStoragePath.trim().isEmpty()) {
+            log.error("-> FILE -> File location is null or empty");
+            throw new IllegalStateException("File storage location must be configured");
+        }
+        // Set up the directory where files will be stored
+        this.fileStorageLocation = Paths.get(fileStoragePath).toAbsolutePath().normalize();
+        initializeStorageLocation();
+
+        this.ftpClient = ftpClient;
+    }
+
+    private void initializeStorageLocation() throws IOException {
+        try {
+            // Create the directory if it doesn't exist
+            Files.createDirectories(this.fileStorageLocation);
+            // Ensure it's writable
+            if (!Files.isWritable(this.fileStorageLocation)) {
+                log.error("-> FILE -> File storage location is not writable: {}", this.fileStorageLocation);
+                throw new IOException("File storage location is not writable: " + this.fileStorageLocation);
+            }
+        } catch (IOException e) {
+            log.error("-> FILE -> Failed to create directory: {}. Cause=[{}]", this.fileStorageLocation, e.getMessage());
+            throw new IOException("Could not create the directory where the uploaded files will be stored", e);
+        }
+    }
 
     @Override
     public Path store(MultipartFile file, String originalFileName) throws IOException {
@@ -73,6 +101,11 @@ public class ParsPackDownloadHostFileStorageStrategy implements FileStorageStrat
             log.error("Error loading file from FTP: {}", e.getMessage());
             throw e;
         }
+    }
+
+    @Override
+    public Path getStorageLocation() {
+        return this.fileStorageLocation;
     }
 
 }

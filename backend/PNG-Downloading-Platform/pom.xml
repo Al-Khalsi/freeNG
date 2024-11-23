@@ -44,6 +44,8 @@
         <java.version>17</java.version>
         <jwt.version>0.12.5</jwt.version>
         <ftp.version>3.11.0</ftp.version>
+<!--        <imageio.webp.version>3.10.1</imageio.webp.version>-->
+        <imageio.webp.version>0.1.6</imageio.webp.version>
     </properties>
 
     <dependencies>
@@ -62,6 +64,24 @@
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
             <version>${ftp.version}</version>
+        </dependency>
+
+        <!-- ImageIO (WebP) -->
+        <!-- https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-core -->
+<!--        <dependency>-->
+<!--            <groupId>com.twelvemonkeys.imageio</groupId>-->
+<!--            <artifactId>imageio-webp</artifactId>-->
+<!--            <version>${imageio.webp.version}</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.sejda.imageio</groupId>
+            <artifactId>webp-imageio</artifactId>
+            <version>${imageio.webp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.gotson</groupId>
+            <artifactId>webp-imageio</artifactId>
+            <version>0.2.2</version>
         </dependency>
 
         <!-- JWT -->

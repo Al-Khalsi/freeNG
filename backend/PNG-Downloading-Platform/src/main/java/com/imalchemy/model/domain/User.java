@@ -40,7 +40,7 @@ public class User extends BaseEntity<UUID> {
     private Set<Roles> roles = new HashSet<>();
     @OneToMany(mappedBy = "uploadedBy", fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<File> files = new ArrayList<>();
+    private List<Image> images = new ArrayList<>();
 
     /**
      * Overrides the default method to provide a clearer name.

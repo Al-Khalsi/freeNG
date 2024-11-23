@@ -52,8 +52,8 @@ Authorization: Bearer {{auth_token}}
 GET http://localhost:8080/api/v1/category/sub/{{parentCategoryName}}
 Authorization: Bearer {{auth_token}}
 
-### assign category to file
+### assign category to image
 @fileName = imalchemy.png
 // @no-log
-POST http://localhost:8080/api/v1/category/assign/{{categoryName}}/file/{{fileName}}
+POST http://localhost:8080/api/v1/category/assign/{{categoryName}}/image/{{fileName}}
 Authorization: Bearer {{auth_token}}

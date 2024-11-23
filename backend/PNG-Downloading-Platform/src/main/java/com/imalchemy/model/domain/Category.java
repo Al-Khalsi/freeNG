@@ -45,7 +45,7 @@ public class Category extends BaseEntity<Long> {
     // Bidirectional many-to-many relationship with File
     @ManyToMany(mappedBy = "categories")
     @ToString.Exclude
-    private Set<File> files = new HashSet<>();
+    private Set<Image> images = new HashSet<>();
 
     // -------------------- Methods --------------------
 

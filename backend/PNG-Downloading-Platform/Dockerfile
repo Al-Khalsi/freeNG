@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-# Comments are provided throughout this file to help you get started.
+# Comments are provided throughout this image to help you get started.
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
@@ -71,7 +71,7 @@ FROM eclipse-temurin:17-jre-jammy AS final
 # Create uploads directory and set permissions (as root user)
 RUN mkdir -p /app/uploads && chmod 777 /app/uploads
 
-# Add a volume for file uploads
+# Add a volume for image uploads
 VOLUME /app/uploads
 
 # Create a non-privileged user that the app will run under.

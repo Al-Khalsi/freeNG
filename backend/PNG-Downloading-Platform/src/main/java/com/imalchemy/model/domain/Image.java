@@ -17,32 +17,37 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class File extends BaseEntity<UUID> {
+@Table(name = "images")
+public class Image extends BaseEntity<UUID> {
 
     @Id
     private UUID id;
+
     private String fileTitle;
-    private String filePath;
-    private String contentType;
-    private long size;
-    private int height;
-    private int width;
     private boolean isActive;
     private String keywords; // Comma-separated keywords for search
     private String style;
-    private boolean isLightMode = false;
-    // Color palette for better search-ability
-    @ElementCollection
-    @CollectionTable(
-            name = "file_colors",
-            joinColumns = @JoinColumn(name = "file_id")
-    )
-    private Set<String> dominantColors = new HashSet<>();
+    private boolean isLightMode;
+
+    private int width;
+    private int height;
+    private String contentType;
+    private long size;
+    private String filePath;
+
     // Statistics and metrics
     private long viewCount;
     private long downloadCount;
     private BigDecimal averageRating;
     private LocalDateTime lastDownloadedAt;
+
+    // Color palette for better search-ability
+    @ElementCollection
+    @CollectionTable(
+            name = "image_colors",
+            joinColumns = @JoinColumn(name = "image_id")
+    )
+    private Set<String> dominantColors = new HashSet<>();
 
     // -------------------- Relationships --------------------
     @ManyToOne
@@ -50,15 +55,18 @@ public class File extends BaseEntity<UUID> {
 
     @ManyToMany
     @JoinTable(
-            name = "files_categories",
-            joinColumns = @JoinColumn(name = "file_id"),
+            name = "images_categories",
+            joinColumns = @JoinColumn(name = "image_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     @ToString.Exclude
     private Set<Category> categories = new HashSet<>();
 
-    // -------------------- Methods --------------------
+    @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private Set<ImageVariant> variants = new HashSet<>();
 
+    // -------------------- Methods --------------------
     /**
      * Overrides the default method to provide a clearer name.
      *

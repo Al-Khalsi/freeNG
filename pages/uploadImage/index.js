@@ -22,19 +22,19 @@ function UploadImage() {
   // --------------------------- Backend URLs ---------------------------
   const BACKEND_API_VERSION = "api/v1";
   const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`;
-  const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/file`;
+  const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/image`;
   const BACKEND_CATEGORY_URL = `${BACKEND_BASE_URL}/category`;
 
   const BACKEND_UPLOAD_FILE_URL = `${BACKEND_UPLOAD_URL}/upload`;
   const BACKEND_LIST_PARENT_CATEGORIES_URL = `${BACKEND_CATEGORY_URL}/list/parent`;
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('image/')) {
-      setImage(file);
+    const image = e.target.files[0];
+    if (image && image.type.startsWith('image/')) {
+      setImage(image);
       setErrorMessage('');
     } else {
-      setErrorMessage('Please select a valid image file.');
+      setErrorMessage('Please select a valid image image.');
     }
   };
 
@@ -49,7 +49,7 @@ function UploadImage() {
 
     setIsLoading(true);
     const formData = new FormData();
-    formData.append('file', image);
+    formData.append('image', image);
     formData.append('fileName', imageName);
     formData.append('parentCategoryName', category);
     formData.append('subCategoryNames', subCategory);
@@ -58,7 +58,7 @@ function UploadImage() {
     formData.append('lightMode', lightMode); // This will send the current state of lightMode
 
     console.log('Uploading with formData:', {
-      file: image,
+      image: image,
       fileName: imageName,
       parentCategoryName: category,
       subCategoryNames: subCategory,
@@ -74,12 +74,12 @@ function UploadImage() {
       });
 
       console.log('Upload response:', response.data); // Log response data
-      const uploadedFileData = response.data.file; // Assuming response body is { "file": "string" }
+      const uploadedFileData = response.data.image; // Assuming response body is { "image": "string" }
       setUploadedFile(uploadedFileData);
       alert('Upload successful: ' + uploadedFileData);
     } catch (error) {
-      console.error('Error uploading file:', error);
-      setErrorMessage(error.response?.data?.message || 'Error uploading file.');
+      console.error('Error uploading image:', error);
+      setErrorMessage(error.response?.data?.message || 'Error uploading image.');
     } finally {
       setIsLoading(false);
     }
@@ -185,7 +185,7 @@ function UploadImage() {
             <div className="mb-4">
               <label className="block mb-2">Image</label>
               <input
-                type="file"
+                type="image"
                 accept="image/*"
                 onChange={handleImageChange}
                 className="border rounded p-2 w-full bg-bgDarkGray2"

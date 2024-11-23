@@ -1,11 +1,11 @@
 ### upload
 // @no-log
-POST http://localhost:8080/api/v1/file/upload
+POST http://localhost:8080/api/v1/image/upload
 Authorization: Bearer {{auth_token}}
 Content-Type: multipart/form-data; boundary=WebAppBoundary
 
 --WebAppBoundary
-Content-Disposition: form-data; name="file"; filename="imalchemy.png"
+Content-Disposition: form-data; name="image"; filename="imalchemy.png"
 Content-Type: image/png
 
 < ../documentation/imalchemy.png
@@ -17,5 +17,5 @@ roses
 
 ### download
 // @no-log
-GET http://localhost:8080/api/v1/file/download/249169f2-465c-4b38-bd25-6611f169bdff
+GET http://localhost:8080/api/v1/image/download/249169f2-465c-4b38-bd25-6611f169bdff
 Accept: application/octet-stream
