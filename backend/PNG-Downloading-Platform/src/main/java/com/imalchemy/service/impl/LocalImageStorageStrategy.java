@@ -1,7 +1,7 @@
 package com.imalchemy.service.impl;
 
 import com.imalchemy.config.FileStorageProperties;
-import com.imalchemy.service.FileStorageStrategy;
+import com.imalchemy.service.ImageStorageStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
@@ -18,11 +18,11 @@ import java.nio.file.StandardCopyOption;
 @Slf4j
 @Component
 @Primary
-public class LocalFileStorageStrategy implements FileStorageStrategy {
+public class LocalImageStorageStrategy implements ImageStorageStrategy {
 
     private final Path fileStorageLocation;
 
-    public LocalFileStorageStrategy(FileStorageProperties fileStorageProperties) throws IOException {
+    public LocalImageStorageStrategy(FileStorageProperties fileStorageProperties) throws IOException {
         String fileStoragePath = fileStorageProperties.getLocation();
         if (fileStoragePath == null || fileStoragePath.trim().isEmpty()) {
             log.error("-> FILE -> File location is null or empty");
@@ -75,6 +75,11 @@ public class LocalFileStorageStrategy implements FileStorageStrategy {
             throw new IOException("File not found: " + filePath);
         }
         return resource;
+    }
+
+    @Override
+    public Path getStorageLocation() {
+        return this.fileStorageLocation;
     }
 
 }

@@ -7,7 +7,7 @@ import com.imalchemy.model.dto.CategoryDTO;
 import com.imalchemy.model.dto.ImageDTO;
 import com.imalchemy.model.dto.RoleDTO;
 import com.imalchemy.model.dto.UserDTO;
-import com.imalchemy.service.impl.FileMetadataService;
+import com.imalchemy.service.impl.ImageMetadataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
 
     private final CategoryConverter categoryConverter;
     private final RoleConverter roleConverter;
-    private final FileMetadataService fileMetadataService;
+    private final ImageMetadataService imageMetadataService;
 
     @Override
     public Image toEntity(ImageDTO dto) {
@@ -71,7 +71,7 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
                 .fileTitle(entity.getFileTitle())
                 .filePath(entity.getFilePath())
                 .contentType(entity.getContentType())
-                .size(this.fileMetadataService.formatImageSize(entity.getSize()))
+                .size(this.imageMetadataService.formatImageSize(entity.getSize()))
                 .height(entity.getHeight())
                 .width(entity.getWidth())
                 .isActive(entity.isActive())

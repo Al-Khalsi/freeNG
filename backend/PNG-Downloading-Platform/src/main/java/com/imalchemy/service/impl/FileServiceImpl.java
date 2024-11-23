@@ -1,10 +1,12 @@
 package com.imalchemy.service.impl;
 
 import com.imalchemy.model.domain.Image;
+import com.imalchemy.model.domain.ImageVariant;
 import com.imalchemy.model.dto.ImageDTO;
-import com.imalchemy.repository.FileRepository;
+import com.imalchemy.repository.ImageRepository;
+import com.imalchemy.repository.ImageVariantRepository;
 import com.imalchemy.service.FileService;
-import com.imalchemy.service.FileStorageStrategy;
+import com.imalchemy.service.ImageStorageStrategy;
 import com.imalchemy.util.converter.ImageConverter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -24,40 +26,50 @@ import java.util.UUID;
 @Transactional
 public class FileServiceImpl implements FileService {
 
-    private final FileRepository fileRepository;
-    private final FileStorageStrategy fileStorageStrategy;
+    private final ImageRepository imageRepository;
+    private final ImageVariantRepository imageVariantRepository;
+    private final ImageStorageStrategy imageStorageStrategy;
     private final ImageConverter imageConverter;
-    private final FileValidationService fileValidationService;
-    private final FileMetadataService fileMetadataService;
+    private final ImageValidationService imageValidationService;
+    private final ImageMetadataService imageMetadataService;
 
-    public FileServiceImpl(FileRepository fileRepository,
-                           FileStorageStrategy fileStorageStrategy,
+    public FileServiceImpl(ImageRepository imageRepository, ImageVariantRepository imageVariantRepository,
+                           ImageStorageStrategy imageStorageStrategy,
                            ImageConverter imageConverter,
-                           FileValidationService fileValidationService,
-                           FileMetadataService fileMetadataService) {
-        this.fileRepository = fileRepository;
-        this.fileStorageStrategy = fileStorageStrategy;
+                           ImageValidationService imageValidationService,
+                           ImageMetadataService imageMetadataService) {
+        this.imageRepository = imageRepository;
+        this.imageVariantRepository = imageVariantRepository;
+        this.imageStorageStrategy = imageStorageStrategy;
         this.imageConverter = imageConverter;
-        this.fileValidationService = fileValidationService;
-        this.fileMetadataService = fileMetadataService;
+        this.imageValidationService = imageValidationService;
+        this.imageMetadataService = imageMetadataService;
     }
 
     @Override
-    public ImageDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName,
-                              List<String> subCategoryNames, List<String> dominantColors,
-                              String style, boolean lightMode) throws IOException {
+    public ImageDTO storeImage(MultipartFile uploadedMultipartFile, String fileName, String parentCategoryName,
+                               List<String> subCategoryNames, List<String> dominantColors,
+                               String style, boolean lightMode) throws IOException {
         try {
 
-            this.fileValidationService.validateFileName(fileName);
+            // Perform validations on filename and path
+            this.imageValidationService.validateImageName(fileName);
+            String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
+            Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, originalFileName);
 
-            String originalFileName = Objects.requireNonNull(multipartFile.getOriginalFilename());
-            Path relativePath = this.fileStorageStrategy.store(multipartFile, originalFileName);
-            Image image = this.fileMetadataService.createImageDomain(multipartFile, fileName, relativePath.toString(),
-                    dominantColors, style, lightMode);
+            // Create the entities
+            Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
+            ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
-            this.fileMetadataService.associateImageWithCategories(image, parentCategoryName, subCategoryNames);
+            // Associate relationships
+            this.imageMetadataService.associateImageWithCategories(image, parentCategoryName, subCategoryNames);
+            this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
 
-            return this.imageConverter.toDto(this.fileRepository.save(image));
+            // Save to db
+            Image savedImage = this.imageRepository.save(image);
+            this.imageVariantRepository.save(imageVariant);
+
+            return this.imageConverter.toDto(savedImage);
 
         } catch (IOException e) {
             log.error("-> FILE -> Failed to store file: {}", e.getMessage());
@@ -65,21 +77,21 @@ public class FileServiceImpl implements FileService {
         }
     }
 
-    public Resource loadFileAsResource(String fileId) throws IOException {
-        Image image = this.fileRepository.findById(UUID.fromString(fileId))
+    public Resource loadImageAsResource(String fileId) throws IOException {
+        Image image = this.imageRepository.findById(UUID.fromString(fileId))
                 .orElseThrow(() -> new IOException("File not found with id " + fileId));
-        return this.fileStorageStrategy.load(image.getFilePath());
+        return this.imageStorageStrategy.load(image.getFilePath());
     }
 
     @Override
-    public List<ImageDTO> listAllFiles() {
-        return this.fileRepository.findAll()
+    public List<ImageDTO> listAllImages() {
+        return this.imageRepository.findAll()
                 .stream().map(this.imageConverter::toDto)
                 .toList();
     }
 
     @Override // todo: needs modification!!! not working as expected
-    public List<ImageDTO> searchFiles(String query) {
+    public List<ImageDTO> searchImages(String query) {
         if (query == null || query.trim().isEmpty()) {
             return Collections.emptyList();
         }
@@ -88,7 +100,7 @@ public class FileServiceImpl implements FileService {
         String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
 
         // First attempt to find exact matches
-        List<Image> exactMatches = this.fileRepository.searchFiles(formattedQuery);
+        List<Image> exactMatches = this.imageRepository.searchFiles(formattedQuery);
         if (!exactMatches.isEmpty()) {
             return exactMatches.stream()
                     .filter(Image::isActive)
@@ -98,7 +110,7 @@ public class FileServiceImpl implements FileService {
         }
 
         // If no exact matches found, search for similar entries
-        List<Image> similarMatches = this.fileRepository.searchSimilarFiles(query);
+        List<Image> similarMatches = this.imageRepository.searchSimilarFiles(query);
         return similarMatches.stream()
                 .filter(Image::isActive)
 //                .limit(50) // Limit results

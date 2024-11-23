@@ -9,14 +9,14 @@ import java.util.List;
 
 public interface FileService {
 
-    ImageDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName,
-                       List<String> subCategoryNames, List<String> dominantColors,
-                       String style, boolean lightMode) throws IOException;
+    ImageDTO storeImage(MultipartFile multipartFile, String fileName, String parentCategoryName,
+                        List<String> subCategoryNames, List<String> dominantColors,
+                        String style, boolean lightMode) throws IOException;
 
-    Resource loadFileAsResource(String fileId) throws IOException;
+    Resource loadImageAsResource(String fileId) throws IOException;
 
-    List<ImageDTO> listAllFiles();
+    List<ImageDTO> listAllImages();
 
-    List<ImageDTO> searchFiles(String query);
+    List<ImageDTO> searchImages(String query);
 
 }

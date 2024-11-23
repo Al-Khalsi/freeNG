@@ -8,9 +8,9 @@ import java.io.IOException;
 
 @Slf4j
 @Service
-public class FileValidationService {
+public class ImageValidationService {
 
-    public void validateFileName(String fileName) throws IOException {
+    public void validateImageName(String fileName) throws IOException {
         if (fileName == null || fileName.trim().isEmpty()) {
             log.error("-> FILE -> File name is null or empty");
             throw new IOException("File name cannot be empty");

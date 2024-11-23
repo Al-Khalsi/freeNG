@@ -67,7 +67,6 @@ public class Image extends BaseEntity<UUID> {
     private Set<ImageVariant> variants = new HashSet<>();
 
     // -------------------- Methods --------------------
-
     /**
      * Overrides the default method to provide a clearer name.
      *

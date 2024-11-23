@@ -2,7 +2,7 @@ package com.imalchemy.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.imalchemy.model.enums.ImageFormat;
-import com.imalchemy.model.enums.PURPOSE;
+import com.imalchemy.model.enums.Purpose;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,11 +21,11 @@ public class ImageVariant extends BaseEntity<Long> {
     private ImageFormat format;
 
     private String filePath;
-    private String contentType;
+    private String originalImageContentType;
     private long size;
     private int width;
     private int height;
-    private PURPOSE purpose; // e.g., "download", "preview", "thumbnail"
+    private Purpose purpose; // e.g., "download", "preview", "thumbnail"
 
     // -------------------- Relationships --------------------
     @ManyToOne

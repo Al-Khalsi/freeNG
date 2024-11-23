@@ -1,5 +1,5 @@
-ALTER TABLE image
+ALTER TABLE file
     ADD is_light_mode BOOLEAN DEFAULT FALSE;
 
-ALTER TABLE image
+ALTER TABLE file
     ALTER COLUMN is_light_mode SET NOT NULL;

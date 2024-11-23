@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface FileRepository extends JpaRepository<Image, UUID> {
+public interface ImageRepository extends JpaRepository<Image, UUID> {
 
     Optional<Image> findByFileTitle(String fileTitle);
 

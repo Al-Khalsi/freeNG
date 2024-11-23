@@ -66,7 +66,7 @@ public class FileController {
                                              @RequestParam boolean lightMode) {
         try {
 
-            ImageDTO imageDTO = this.fileService.storeFile(multipartFile, fileName, parentCategoryName, subCategoryNames, dominantColors, style, lightMode);
+            ImageDTO imageDTO = this.fileService.storeImage(multipartFile, fileName, parentCategoryName, subCategoryNames, dominantColors, style, lightMode);
             return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
 
         } catch (IllegalArgumentException e) {
@@ -101,7 +101,7 @@ public class FileController {
     @GetMapping("/download/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
         try {
-            Resource resource = this.fileService.loadFileAsResource(fileId);
+            Resource resource = this.fileService.loadImageAsResource(fileId);
 
             // Get the file's MIME type
             String contentType;
@@ -144,7 +144,7 @@ public class FileController {
     })
     @GetMapping("/list")
     public ResponseEntity<Result> fetchFiles() {
-        List<ImageDTO> fileDTOs = this.fileService.listAllFiles();
+        List<ImageDTO> fileDTOs = this.fileService.listAllImages();
 
         return ResponseEntity.ok(Result.success("List files.", fileDTOs));
     }
@@ -166,7 +166,7 @@ public class FileController {
     })
     @GetMapping("/search")
     public ResponseEntity<Result> searchFiles(@RequestParam String query) {
-        List<ImageDTO> searchedFiles = this.fileService.searchFiles(query);
+        List<ImageDTO> searchedFiles = this.fileService.searchImages(query);
 
         if (searchedFiles.isEmpty()) {
             return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedFiles));

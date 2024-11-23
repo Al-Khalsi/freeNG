@@ -1,5 +1,5 @@
--- Create files table to store image details
-CREATE TABLE image
+-- Create files table to store file details
+CREATE TABLE file
 (
     id             UUID   NOT NULL,
     created_at     TIMESTAMP WITHOUT TIME ZONE,
@@ -20,7 +20,7 @@ CREATE TABLE image
     CONSTRAINT pk_file PRIMARY KEY (id)
 );
 
--- Foreign key constraint to reference the user who uploaded the image
-ALTER TABLE image
+-- Foreign key constraint to reference the user who uploaded the file
+ALTER TABLE file
     ADD CONSTRAINT FK_FILE_ON_UPLOADEDBY FOREIGN KEY (uploaded_by_id) REFERENCES users (id);
 -- TODO: add indexes!!!

@@ -1,6 +1,6 @@
 package com.imalchemy.model.enums;
 
-public enum PURPOSE {
+public enum Purpose {
 
     DOWNLOAD, PREVIEW, THUMBNAIL
 
