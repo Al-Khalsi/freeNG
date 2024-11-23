@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping("${base.url}/category")
 @Tag(name = "Category API", description = "Endpoints for category operations")
 @SecurityRequirement(name = "BearerToken")
+@PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_ADMIN')")
 public class CategoryController {
 
     private final CategoryService categoryService;
