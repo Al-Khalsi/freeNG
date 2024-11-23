@@ -1,6 +1,7 @@
 package com.imalchemy.controller;
 
 import com.imalchemy.model.dto.ImageDTO;
+import com.imalchemy.model.dto.UpdateImageDTO;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,7 +59,7 @@ public class FileController {
             )
     })
     @PostMapping("/upload")
-    @PreAuthorize("hasRole('ROLE_MASTER')")
+    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_ADMIN')")
     public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
                                              @RequestParam String fileName,
                                              @RequestParam String parentCategoryName,
@@ -175,6 +176,24 @@ public class FileController {
         }
 
         return ResponseEntity.ok(Result.success("Search files result.", searchedFiles));
+    }
+
+    // Endpoint for deleting files
+    @DeleteMapping("/{imageId}")
+    @PreAuthorize("hasRole('ROLE_MASTER')")
+    public ResponseEntity<Result> deleteImage(@PathVariable String imageId) {
+        this.fileService.deleteImageById(imageId);
+
+        return ResponseEntity.ok(Result.success("Deleted file successfully.", null));
+    }
+
+    // Endpoint for updating files
+    @PutMapping("/{imageId}")
+    @PreAuthorize("hasRole('ROLE_MASTER')")
+    public ResponseEntity<Result> updateImage(@PathVariable String imageId, @RequestBody UpdateImageDTO updateImageDTO) {
+        ImageDTO result = this.fileService.updateImage(imageId, updateImageDTO);
+
+        return ResponseEntity.ok(Result.success("Uploaded file successfully.", result));
     }
 
 }

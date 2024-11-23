@@ -1,6 +1,7 @@
 package com.imalchemy.service;
 
 import com.imalchemy.model.dto.ImageDTO;
+import com.imalchemy.model.dto.UpdateImageDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,5 +19,9 @@ public interface FileService {
     List<ImageDTO> listAllImages();
 
     List<ImageDTO> searchImages(String query);
+
+    void deleteImageById(String fileId);
+
+    ImageDTO updateImage(String imageId, UpdateImageDTO updateImageDTO);
 
 }

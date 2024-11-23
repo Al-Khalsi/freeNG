@@ -1,8 +1,10 @@
 package com.imalchemy.service.impl;
 
+import com.imalchemy.exception.NotFoundException;
 import com.imalchemy.model.domain.Image;
 import com.imalchemy.model.domain.ImageVariant;
 import com.imalchemy.model.dto.ImageDTO;
+import com.imalchemy.model.dto.UpdateImageDTO;
 import com.imalchemy.repository.ImageRepository;
 import com.imalchemy.repository.ImageVariantRepository;
 import com.imalchemy.service.FileService;
@@ -116,6 +118,29 @@ public class FileServiceImpl implements FileService {
 //                .limit(50) // Limit results
                 .map(this.imageConverter::toDto)
                 .toList();
+    }
+
+    @Override
+    public void deleteImageById(String imageId) {
+        Image image = this.imageRepository.findById(UUID.fromString(imageId))
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+        this.imageRepository.delete(image);
+    }
+
+    @Override
+    public ImageDTO updateImage(String imageId, UpdateImageDTO updateImageDTO) {
+        Image foundImage = this.imageRepository.findById(UUID.fromString(imageId))
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+
+        foundImage.setFileTitle(updateImageDTO.getFileTitle());
+        foundImage.setActive(updateImageDTO.isActive());
+        foundImage.setKeywords(updateImageDTO.getKeywords());
+        foundImage.setStyle(updateImageDTO.getStyle());
+        foundImage.setLightMode(updateImageDTO.isLightMode());
+        foundImage.setDominantColors(updateImageDTO.getDominantColors());
+        foundImage.setAverageRating(updateImageDTO.getAverageRating());
+
+        return this.imageConverter.toDto(this.imageRepository.save(foundImage));
     }
 
 }
