@@ -172,8 +172,7 @@ function UploadImage() {
           <button
             type="button"
             onClick={toggleLightMode}
-            className={`border rounded p-2 w-full ${lightMode ? 'bg-yellow-500' : 'bg-gray-500'} text-white`}
-          >
+            className={`border rounded p-2 w-full ${lightMode ? 'bg-yellow-500' : 'bg-gray-500'} text-white`}>
             {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
           </button>
         </div>
@@ -185,7 +184,7 @@ function UploadImage() {
             <div className="mb-4">
               <label className="block mb-2">Image</label>
               <input
-                type="image"
+                type="file"
                 accept="image/*"
                 onChange={handleImageChange}
                 className="border rounded p-2 w-full bg-bgDarkGray2"
