@@ -33,12 +33,12 @@ function Index() {
             const url = query
                 ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}`
                 : 'http://localhost:8080/api/v1/file/list';
-    
+
             console.log('Fetching images from URL:', url); // Log the URL being fetched
-    
+
             const response = await apiFetch(url, 'GET', null, {});
             console.log('Response received:', response); // Log the response received
-    
+
             if (response.flag && response.data) {
                 const fetchedImages = response.data.map((file) => ({
                     id: file.id,
@@ -50,9 +50,9 @@ function Index() {
                     height: file.height,
                     uploadedBy: file.uploadedBy.username,
                     categories: file.categories.map(category => category.name).join(', '),
-                    isLightMode: file.isLightMode // Ensure this property is included
+                    lightMode: file.lightMode // Ensure this property is included
                 }));
-    
+
                 console.log('Fetched images:', fetchedImages); // Log the fetched images
                 setImages(fetchedImages); // Update state with the fetched images
             } else {
@@ -238,13 +238,14 @@ function Index() {
 
                 <Footer />
 
-                <button
+                <Link
+                    href={'/uploadImage'}
                     className='fixed right-3 bottom-3
                         w-10 h-10 p-6 flex justify-center items-center
                         bg-blue-700 text-white text-2xl outline-none
                         rounded-full cursor-pointer'>
-                    <Link href={'/uploadImage'}>+</Link>
-                </button>
+                    +
+                </Link>
             </div>
         </>
     );
