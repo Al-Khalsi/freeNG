@@ -1,6 +1,6 @@
 package com.imalchemy.service;
 
-import com.imalchemy.model.dto.FileDTO;
+import com.imalchemy.model.dto.ImageDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface FileService {
 
-    FileDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName, List<String> sucCategoryNames, List<String> dominantColors, String style) throws IOException;
+    ImageDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName, List<String> sucCategoryNames, List<String> dominantColors, String style) throws IOException;
 
     Resource loadFileAsResource(String fileId) throws IOException;
 
-    List<FileDTO> listAllFiles();
+    List<ImageDTO> listAllFiles();
 
-    List<FileDTO> searchFiles(String query);
+    List<ImageDTO> searchFiles(String query);
 
 }

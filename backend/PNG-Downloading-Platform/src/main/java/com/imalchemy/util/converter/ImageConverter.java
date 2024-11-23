@@ -1,10 +1,10 @@
 package com.imalchemy.util.converter;
 
 import com.imalchemy.model.domain.Category;
-import com.imalchemy.model.domain.File;
+import com.imalchemy.model.domain.Image;
 import com.imalchemy.model.domain.User;
 import com.imalchemy.model.dto.CategoryDTO;
-import com.imalchemy.model.dto.FileDTO;
+import com.imalchemy.model.dto.ImageDTO;
 import com.imalchemy.model.dto.RoleDTO;
 import com.imalchemy.model.dto.UserDTO;
 import com.imalchemy.service.impl.FileMetadataService;
@@ -16,17 +16,17 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class FileConverter implements Converter<File, FileDTO> {
+public class ImageConverter implements Converter<Image, ImageDTO> {
 
     private final CategoryConverter categoryConverter;
     private final RoleConverter roleConverter;
     private final FileMetadataService fileMetadataService;
 
     @Override
-    public File toEntity(FileDTO dto) {
+    public Image toEntity(ImageDTO dto) {
         if (dto == null) return null;
 
-        File file = File.builder()
+        Image image = Image.builder()
                 .fileTitle(dto.getFileTitle())
                 .filePath(dto.getFilePath())
                 .contentType(dto.getContentType())
@@ -48,7 +48,7 @@ public class FileConverter implements Converter<File, FileDTO> {
         if (dto.getUploadedBy() != null) {
             User uploadedBy = new User(); // Assuming you have a User entity class
             uploadedBy.setId(dto.getUploadedBy().getId()); // Set the user ID from DTO
-            file.setUploadedBy(uploadedBy);
+            image.setUploadedBy(uploadedBy);
         }
 
         // Handle categories if present
@@ -56,22 +56,22 @@ public class FileConverter implements Converter<File, FileDTO> {
             Set<Category> categories = dto.getCategories().stream()
                     .map(this.categoryConverter::toEntity)
                     .collect(Collectors.toSet());
-            file.setCategories(categories);
+            image.setCategories(categories);
         }
 
-        return file;
+        return image;
     }
 
     @Override
-    public FileDTO toDto(File entity) {
+    public ImageDTO toDto(Image entity) {
         if (entity == null) return null;
 
-        FileDTO fileDTO = FileDTO.builder()
+        ImageDTO imageDTO = ImageDTO.builder()
                 .id(entity.getId().toString())
                 .fileTitle(entity.getFileTitle())
                 .filePath(entity.getFilePath())
                 .contentType(entity.getContentType())
-                .size(this.fileMetadataService.formatFileSize(entity.getSize()))
+                .size(this.fileMetadataService.formatImageSize(entity.getSize()))
                 .height(entity.getHeight())
                 .width(entity.getWidth())
                 .isActive(entity.isActive())
@@ -95,7 +95,7 @@ public class FileConverter implements Converter<File, FileDTO> {
             Set<RoleDTO> roleDTOS = uploadedBy.getRoles().stream().map(this.roleConverter::toDto).collect(Collectors.toSet());
             uploadedByDTO.setRoles(roleDTOS);
 
-            fileDTO.setUploadedBy(uploadedByDTO);
+            imageDTO.setUploadedBy(uploadedByDTO);
         }
 
         // Handle categories if present
@@ -103,10 +103,10 @@ public class FileConverter implements Converter<File, FileDTO> {
             Set<CategoryDTO> categoryDTOS = entity.getCategories().stream()
                     .map(this.categoryConverter::toDto)
                     .collect(Collectors.toSet());
-            fileDTO.setCategories(categoryDTOS);
+            imageDTO.setCategories(categoryDTOS);
         }
 
-        return fileDTO;
+        return imageDTO;
     }
 
 }

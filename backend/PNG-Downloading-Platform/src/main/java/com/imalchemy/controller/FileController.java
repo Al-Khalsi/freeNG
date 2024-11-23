@@ -1,6 +1,6 @@
 package com.imalchemy.controller;
 
-import com.imalchemy.model.dto.FileDTO;
+import com.imalchemy.model.dto.ImageDTO;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,8 +65,8 @@ public class FileController {
                                              @RequestParam String style) {
         try {
 
-            FileDTO fileDTO = this.fileService.storeFile(multipartFile, fileName, parentCategoryName, subCategoryNames, dominantColors, style);
-            return ResponseEntity.ok(Result.success("File uploaded successfully", fileDTO));
+            ImageDTO imageDTO = this.fileService.storeFile(multipartFile, fileName, parentCategoryName, subCategoryNames, dominantColors, style);
+            return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
 
         } catch (IllegalArgumentException e) {
             log.warn("Invalid input for file upload: {}", e.getMessage());
@@ -143,9 +143,9 @@ public class FileController {
     })
     @GetMapping("/list")
     public ResponseEntity<Result> fetchFiles() {
-        List<FileDTO> fileDTOs = this.fileService.listAllFiles();
+        List<ImageDTO> imageDTOS = this.fileService.listAllFiles();
 
-        return ResponseEntity.ok(Result.success("List files.", fileDTOs));
+        return ResponseEntity.ok(Result.success("List files.", imageDTOS));
     }
 
     // Endpoint for searching files
@@ -165,7 +165,7 @@ public class FileController {
     })
     @GetMapping("/search")
     public ResponseEntity<Result> searchFiles(@RequestParam String query) {
-        List<FileDTO> searchedFiles = this.fileService.searchFiles(query);
+        List<ImageDTO> searchedFiles = this.fileService.searchFiles(query);
 
         if (searchedFiles.isEmpty()) {
             return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedFiles));

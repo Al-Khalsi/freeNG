@@ -1,7 +1,7 @@
 package com.imalchemy.service.impl;
 
 import com.imalchemy.model.domain.Category;
-import com.imalchemy.model.domain.File;
+import com.imalchemy.model.domain.Image;
 import com.imalchemy.model.dto.CategoryDTO;
 import com.imalchemy.repository.CategoryRepository;
 import com.imalchemy.repository.FileRepository;
@@ -114,11 +114,11 @@ public class CategoryServiceImpl implements CategoryService {
             this.categoryRepository.flush();
             this.categoryRepository.deleteById(subCategory.getId());
         });
-        foundCategory.getFiles().forEach(file -> {
+        foundCategory.getImages().forEach(file -> {
             file.setCategories(null);
             this.fileRepository.save(file);
         });
-        foundCategory.setFiles(null);
+        foundCategory.setImages(null);
         foundCategory.setSubCategories(null);
         this.categoryRepository.save(foundCategory);
         this.categoryRepository.delete(foundCategory);
@@ -131,11 +131,11 @@ public class CategoryServiceImpl implements CategoryService {
         Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
         foundCategory.setParentCategory(null);
-        foundCategory.getFiles().forEach(file -> {
+        foundCategory.getImages().forEach(file -> {
             file.setCategories(null);
             this.fileRepository.save(file);
         });
-        foundCategory.setFiles(null);
+        foundCategory.setImages(null);
         this.categoryRepository.delete(foundCategory);
         return categoryName;
     }
@@ -171,16 +171,16 @@ public class CategoryServiceImpl implements CategoryService {
     public void assignCategoryToFile(String categoryName, String fileName) {
         Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-        File foundFile = this.fileRepository.findByFileTitle(fileName)
+        Image foundImage = this.fileRepository.findByFileTitle(fileName)
                 .orElseThrow(() -> new EntityNotFoundException("File not found"));
 
-        foundFile.getCategories().add(foundCategory);
-        foundCategory.getFiles().add(foundFile);
+        foundImage.getCategories().add(foundCategory);
+        foundCategory.getImages().add(foundImage);
         Integer maxFiles = this.categoryRepository.findMaxFiles();
         foundCategory.setTotalFiles(maxFiles + 1);
 
         this.categoryRepository.save(foundCategory);
-        this.fileRepository.save(foundFile);
+        this.fileRepository.save(foundImage);
     }
 
 }

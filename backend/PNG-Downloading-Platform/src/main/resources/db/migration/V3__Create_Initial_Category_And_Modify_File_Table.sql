@@ -29,13 +29,13 @@ CREATE TABLE files_categories
     CONSTRAINT pk_files_categories PRIMARY KEY (category_id, file_id)
 );
 
-ALTER TABLE file
+ALTER TABLE image
     ADD keywords VARCHAR(255);
 
-ALTER TABLE file
+ALTER TABLE image
     ADD last_downloaded_at TIMESTAMP WITHOUT TIME ZONE;
 
-ALTER TABLE file
+ALTER TABLE image
     ADD view_count BIGINT;
 
 ALTER TABLE category
@@ -45,22 +45,22 @@ ALTER TABLE files_categories
     ADD CONSTRAINT fk_filcat_on_category FOREIGN KEY (category_id) REFERENCES category (id);
 
 ALTER TABLE files_categories
-    ADD CONSTRAINT fk_filcat_on_file FOREIGN KEY (file_id) REFERENCES file (id);
+    ADD CONSTRAINT fk_filcat_on_file FOREIGN KEY (file_id) REFERENCES image (id);
 
 ALTER TABLE file_colors
-    ADD CONSTRAINT fk_file_colors_on_file FOREIGN KEY (file_id) REFERENCES file (id);
+    ADD CONSTRAINT fk_file_colors_on_file FOREIGN KEY (file_id) REFERENCES image (id);
 
-ALTER TABLE file
+ALTER TABLE image
     ALTER COLUMN average_rating TYPE DECIMAL USING (average_rating::DECIMAL);
 
-ALTER TABLE file
+ALTER TABLE image
     ALTER COLUMN download_count SET NOT NULL;
 
-ALTER TABLE file
+ALTER TABLE image
     ALTER COLUMN height SET NOT NULL;
 
-ALTER TABLE file
+ALTER TABLE image
     ALTER COLUMN is_active SET NOT NULL;
 
-ALTER TABLE file
+ALTER TABLE image
     ALTER COLUMN width SET NOT NULL;

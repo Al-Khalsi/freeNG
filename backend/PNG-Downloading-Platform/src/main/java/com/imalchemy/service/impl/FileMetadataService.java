@@ -1,9 +1,12 @@
 package com.imalchemy.service.impl;
 
 import com.imalchemy.model.domain.Category;
-import com.imalchemy.model.domain.File;
+import com.imalchemy.model.domain.Image;
+import com.imalchemy.model.domain.ImageVariant;
+import com.imalchemy.model.enums.ImageFormat;
 import com.imalchemy.model.enums.ImageUnits;
 import com.imalchemy.repository.CategoryRepository;
+import com.imalchemy.repository.ImageVariantRepository;
 import com.imalchemy.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,9 +14,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,48 +32,77 @@ public class FileMetadataService {
     private final CategoryRepository categoryRepository;
     private final SecurityUtil securityUtil;
 
-    public File createFileDomain(MultipartFile uploadedMultipartFile, String fileName,
-                                 String relativePath, List<String> dominantColors,
-                                 String style) {
-        File fileEntity = new File();
-        fileEntity.setFileTitle(fileName);
-        fileEntity.setFilePath(relativePath);
-        fileEntity.setContentType(uploadedMultipartFile.getContentType());
-        fileEntity.setSize(uploadedMultipartFile.getSize()); // size in bytes
-        fileEntity.setActive(true);
-        fileEntity.setAverageRating(BigDecimal.ZERO);
-        fileEntity.setDownloadCount(0);
-        fileEntity.setUploadedBy(this.securityUtil.getAuthenticatedUser());
-        // Calculate dimensions if the fileEntity is an image
-        calculateDimension(uploadedMultipartFile, fileEntity, fileName);
-        fileEntity.setStyle(style);
-        fileEntity.getDominantColors().addAll(dominantColors);
-        return fileEntity;
+    public Image createImageDomain(MultipartFile uploadedMultipartFile, String imageName,
+                                   String relativePath, List<String> dominantColors,
+                                   String style) {
+        Image image = new Image();
+        image.setFileTitle(imageName);
+        image.setFilePath(relativePath);
+        image.setContentType(uploadedMultipartFile.getContentType());
+        image.setSize(uploadedMultipartFile.getSize()); // size in bytes
+        image.setActive(true);
+        image.setAverageRating(BigDecimal.ZERO);
+        image.setDownloadCount(0);
+        image.setUploadedBy(this.securityUtil.getAuthenticatedUser());
+        // Calculate dimensions
+        calculateDimension(uploadedMultipartFile, image, imageName);
+        image.setStyle(style);
+        image.getDominantColors().addAll(dominantColors);
+        // Create variants (e.g., WebP)
+        createImageVariants(image, uploadedMultipartFile, relativePath);
+
+        return image;
     }
 
-    private void calculateDimension(MultipartFile uploadedMultipartFile, File fileEntity, String fileName) {
-        String contentType = uploadedMultipartFile.getContentType();
-        if (contentType != null && contentType.startsWith("image/")) {
-            BufferedImage image;
-            try {
+    private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) {
+        try {
 
-                image = ImageIO.read(uploadedMultipartFile.getInputStream());
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            BufferedImage image = ImageIO.read(uploadedMultipartFile.getInputStream());
             if (image != null) {
-                fileEntity.setWidth(image.getWidth());
-                fileEntity.setHeight(image.getHeight());
-            } else log.warn("Unable to read image dimensions for fileEntity: {}", fileName);
-        } else {
-            log.warn("Uploaded fileEntity is not an image: {}", fileName);
-            fileEntity.setHeight(0);
-            fileEntity.setWidth(0);
+                imageEntity.setWidth(image.getWidth());
+                imageEntity.setHeight(image.getHeight());
+            } else log.warn("Unable to read image dimensions for imageEntity: {}", imageName);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public String formatFileSize(long sizeInBytes) {
+    public void createImageVariants(Image image, MultipartFile uploadedMultipartFile, String relativePath) {
+        // Here you would convert the image to different formats and create ImageVariant objects
+        try {
+
+            BufferedImage originalImage = ImageIO.read(uploadedMultipartFile.getInputStream());
+
+            // webp variant
+            ImageVariant webpVariant = new ImageVariant();
+            webpVariant.setImage(image);
+            webpVariant.setFormat(ImageFormat.WEBP);
+            webpVariant.setFilePath(relativePath);
+            webpVariant.setWidth(originalImage.getWidth());
+            webpVariant.setHeight(originalImage.getHeight());
+
+            // Convert and save WebP
+            saveAsWebP(originalImage, webpVariant.getFilePath());
+
+            image.getVariants().add(webpVariant);
+
+        } catch (IOException e) {
+            log.error("Error creating image variants: {}", e.getMessage());
+        }
+    }
+
+    private void saveAsWebP(BufferedImage image, String filePath) throws IOException {
+        // Create output stream to save the WebP file
+        try (ImageOutputStream output = ImageIO.createImageOutputStream(Files.newOutputStream(Path.of(filePath)))) {
+            ImageWriter writer = ImageIO.getImageWritersByFormatName("webp").next();
+            writer.setOutput(output);
+            writer.write(image);
+            writer.dispose();
+        }
+    }
+
+    public String formatImageSize(long sizeInBytes) {
         if (sizeInBytes <= 0) {
             return "0 Bytes";
         }
@@ -103,19 +139,19 @@ public class FileMetadataService {
                 : String.format("%.2f %s", size, units[unitIndex]); // Two decimals for MB and GB
     }
 
-    public void associateFileWithCategories(File file, String parentCategoryName, List<String> subCategoryNames) {
+    public void associateImageWithCategories(Image image, String parentCategoryName, List<String> subCategoryNames) {
         Category parentCategory = this.categoryRepository.findByNameIgnoreCase(parentCategoryName)
                 .orElseGet(() -> this.categoryRepository.findByNameIgnoreCase("defaultCategory")
                         .orElseThrow(() -> new IllegalStateException("Default category not found")));
 
-        file.getCategories().add(parentCategory);
+        image.getCategories().add(parentCategory);
 
         subCategoryNames.stream()
                 .filter(name -> !name.isEmpty())
                 .map(this.categoryRepository::findByNameIgnoreCase)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(category -> file.getCategories().add(category));
+                .forEach(category -> image.getCategories().add(category));
     }
 
 }
