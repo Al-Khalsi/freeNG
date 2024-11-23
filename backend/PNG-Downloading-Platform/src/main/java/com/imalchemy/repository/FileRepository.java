@@ -14,10 +14,7 @@ public interface FileRepository extends JpaRepository<File, UUID> {
     Optional<File> findByFileTitle(String fileTitle);
 
     @Query(value = """
-            SELECT f.id, f.file_title, f.file_path, f.content_type, f.size, f.height, f.width,
-                   f.is_active, f.keywords, f.style, f.view_count, f.download_count,
-                   f.average_rating, f.last_downloaded_at,
-                   f.created_at, f.updated_at, f.uploaded_by_id
+            SELECT f.*
             FROM file f WHERE
             (:query IS NULL OR
             to_tsvector('english', f.file_title) @@ to_tsquery('english', :query) OR
@@ -26,10 +23,7 @@ public interface FileRepository extends JpaRepository<File, UUID> {
     List<File> searchFiles(@Param("query") String query);
 
     @Query(value = """
-            SELECT f.id, f.file_title, f.file_path, f.content_type, f.size, f.height, f.width,
-                   f.is_active, f.keywords, f.style, f.view_count, f.download_count,
-                   f.average_rating, f.last_downloaded_at,
-                   f.created_at, f.updated_at, f.uploaded_by_id
+            SELECT f.*
             FROM file f WHERE
             f.file_title ILIKE CONCAT('%', :query, '%') OR
             f.keywords ILIKE CONCAT('%', :query, '%')

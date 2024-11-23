@@ -62,10 +62,11 @@ public class FileController {
                                              @RequestParam String parentCategoryName,
                                              @RequestParam List<String> subCategoryNames,
                                              @RequestParam List<String> dominantColors,
-                                             @RequestParam String style) {
+                                             @RequestParam String style,
+                                             @RequestParam boolean lightMode) {
         try {
 
-            FileDTO fileDTO = this.fileService.storeFile(multipartFile, fileName, parentCategoryName, subCategoryNames, dominantColors, style);
+            FileDTO fileDTO = this.fileService.storeFile(multipartFile, fileName, parentCategoryName, subCategoryNames, dominantColors, style, lightMode);
             return ResponseEntity.ok(Result.success("File uploaded successfully", fileDTO));
 
         } catch (IllegalArgumentException e) {

@@ -7,7 +7,6 @@ import com.imalchemy.service.FileService;
 import com.imalchemy.service.FileStorageStrategy;
 import com.imalchemy.util.converter.FileConverter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,7 +45,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public FileDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName,
                              List<String> subCategoryNames, List<String> dominantColors,
-                             String style) throws IOException {
+                             String style, boolean lightMode) throws IOException {
         try {
 
             this.fileValidationService.validateFileName(fileName);
@@ -54,7 +53,7 @@ public class FileServiceImpl implements FileService {
             String originalFileName = Objects.requireNonNull(multipartFile.getOriginalFilename());
             Path relativePath = this.fileStorageStrategy.store(multipartFile, originalFileName);
             File file = this.fileMetadataService.createFileDomain(multipartFile, fileName, relativePath.toString(),
-                    dominantColors, style);
+                    dominantColors, style, lightMode);
 
             this.fileMetadataService.associateFileWithCategories(file, parentCategoryName, subCategoryNames);
 

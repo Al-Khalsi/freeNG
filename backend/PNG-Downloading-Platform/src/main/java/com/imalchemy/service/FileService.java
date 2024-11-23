@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface FileService {
 
-    FileDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName, List<String> sucCategoryNames, List<String> dominantColors, String style) throws IOException;
+    FileDTO storeFile(MultipartFile multipartFile, String fileName, String parentCategoryName,
+                      List<String> subCategoryNames, List<String> dominantColors,
+                      String style, boolean lightMode) throws IOException;
 
     Resource loadFileAsResource(String fileId) throws IOException;
 

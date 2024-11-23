@@ -27,7 +27,7 @@ public class FileMetadataService {
 
     public File createFileDomain(MultipartFile uploadedMultipartFile, String fileName,
                                  String relativePath, List<String> dominantColors,
-                                 String style) {
+                                 String style, boolean lightMode) {
         File fileEntity = new File();
         fileEntity.setFileTitle(fileName);
         fileEntity.setFilePath(relativePath);
@@ -40,6 +40,7 @@ public class FileMetadataService {
         // Calculate dimensions if the fileEntity is an image
         calculateDimension(uploadedMultipartFile, fileEntity, fileName);
         fileEntity.setStyle(style);
+        fileEntity.setLightMode(lightMode);
         fileEntity.getDominantColors().addAll(dominantColors);
         return fileEntity;
     }
