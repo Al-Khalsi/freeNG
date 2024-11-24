@@ -1,20 +1,17 @@
 package com.imalchemy.model.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
- * DTO for {@link com.imalchemy.model.domain.Category}
+ * DTO for {@link com.imalchemy.model.domain.SubCategory}
  */
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class CategoryDTO implements Serializable {
+public class SubCategoryDTO implements Serializable {
 
     private Long id;
 
@@ -24,8 +21,11 @@ public class CategoryDTO implements Serializable {
     private int displayOrder;
     private int level;
     private boolean isActive;
-    private boolean isParent = false;
+    private boolean isParent;
 
     private Long parentId;
+
+    private CategoryDTO parentCategory;
+    private Set<ImageDTO> images;
 
 }

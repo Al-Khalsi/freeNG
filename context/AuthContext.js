@@ -49,8 +49,8 @@ export const AuthProvider = ({ children }) => {
 
 export const useAuth = () => {
     return useContext(AuthContext);
-    // این برای تست نوشته شده مستر محمد حسن، بزار باشه من برای تست ازش استفاده میکنم.
-    // const context = useContext(AuthContext);
-    // const testToken = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJQTkctRG93bmxvYWRpbmctUGxhdGZvcm0iLCJzdWIiOiJzdHJpbmciLCJlbWFpbCI6InN0cmluZyIsImF1dGhvcml0aWVzIjoiUk9MRV9VU0VSIiwidXNlcm5hbWUiOiJzdHJpbmciLCJpYXQiOjE3MzIzNTgxOTEsImV4cCI6MTczMjQ0NDU5MX0.5s-RNFLKZ2NrwJV1fFJoY-bwm2zc4ByQ9h3ebyQ1938';
-    // return {...context, token: testToken}; // Override the token
+   // /* این برای تست نوشته شده مستر محمد حسن، بزار باشه من برای تست ازش استفاده میکنم. */
+   //  const context = useContext(AuthContext);
+   //  const testToken = 'eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJQTkctRG93bmxvYWRpbmctUGxhdGZvcm0iLCJzdWIiOiJzZXllZC5hbGkuZGV2bEBnbWFpbC5jb20iLCJlbWFpbCI6InNleWVkLmFsaS5kZXZsQGdtYWlsLmNvbSIsImF1dGhvcml0aWVzIjoiUk9MRV9NQVNURVIiLCJ1c2VybmFtZSI6IlNleWVkIEFsaSIsImlhdCI6MTczMjQzMjk4NSwiZXhwIjoxNzMyNTE5Mzg1fQ.FQtKVKkk3b9z1R0BqAa36MczNN9TS8DjKV4aQCnsU5E';
+   //  return {...context, token: testToken}; // Override the token
 };

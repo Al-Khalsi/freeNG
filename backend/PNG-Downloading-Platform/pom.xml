@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -44,7 +44,7 @@
         <java.version>17</java.version>
         <jwt.version>0.12.5</jwt.version>
         <ftp.version>3.11.0</ftp.version>
-<!--        <imageio.webp.version>3.10.1</imageio.webp.version>-->
+        <!--        <imageio.webp.version>3.10.1</imageio.webp.version>-->
         <imageio.webp.version>0.1.6</imageio.webp.version>
     </properties>
 
@@ -68,11 +68,11 @@
 
         <!-- ImageIO (WebP) -->
         <!-- https://mvnrepository.com/artifact/com.twelvemonkeys.imageio/imageio-core -->
-<!--        <dependency>-->
-<!--            <groupId>com.twelvemonkeys.imageio</groupId>-->
-<!--            <artifactId>imageio-webp</artifactId>-->
-<!--            <version>${imageio.webp.version}</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.twelvemonkeys.imageio</groupId>-->
+        <!--            <artifactId>imageio-webp</artifactId>-->
+        <!--            <version>${imageio.webp.version}</version>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.sejda.imageio</groupId>
             <artifactId>webp-imageio</artifactId>

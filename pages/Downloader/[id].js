@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
+import Header from '@/components/templates/Header';
 
 const Downloader = () => {
     const router = useRouter(); 
@@ -40,6 +41,7 @@ const Downloader = () => {
 
     return (
         <div className='imageSinglePage w-full min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
+            <Header />
             <div className='wrapper p-12'>
                 <div className='product-div w-full h-80 flex bg-bgDarkGray rounded-3xl m-5 overflow-hidden'>
                     <div className='product-div-left bg-img w-1/3'>

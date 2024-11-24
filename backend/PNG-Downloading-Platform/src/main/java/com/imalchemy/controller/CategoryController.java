@@ -1,6 +1,7 @@
 package com.imalchemy.controller;
 
 import com.imalchemy.model.dto.CategoryDTO;
+import com.imalchemy.model.dto.SubCategoryDTO;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -200,7 +201,7 @@ public class CategoryController {
     })
     @GetMapping("/sub/{parentName}")
     public ResponseEntity<Result> getSubcategories(@PathVariable String parentName) {
-        List<CategoryDTO> subcategories = this.categoryService.getSubcategories(parentName);
+        List<SubCategoryDTO> subcategories = this.categoryService.getSubcategories(parentName);
 
         return ResponseEntity.ok(Result.builder()
                 .flag(true)
