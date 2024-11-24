@@ -1,6 +1,5 @@
 package com.imalchemy.model.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -14,7 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Category extends BaseEntity<Long> {
+@Table(name = "sub_categories")
+public class SubCategory extends BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,22 +30,16 @@ public class Category extends BaseEntity<Long> {
     private int level; // Hierarchy level
     private boolean isParent;
 
-    // -------------------- Relationships --------------------
-    @OneToMany(mappedBy = "parentCategory", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private Set<SubCategory> subCategories = new HashSet<>();
+    // Reference to the parent category
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_category_id", nullable = false)
+    private Category parentCategory;
 
-    // Bidirectional many-to-many relationship with File
-    @ManyToMany(mappedBy = "categories")
+    // Bidirectional many-to-many relationship with Image
+    @ManyToMany(mappedBy = "subCategories")
     private Set<Image> images = new HashSet<>();
 
     // -------------------- Methods --------------------
-
-    /**
-     * Overrides the default method to provide a clearer name.
-     *
-     * @return the UUID of the user
-     */
     @Override
     @JsonProperty("id")
     public Long getId() {

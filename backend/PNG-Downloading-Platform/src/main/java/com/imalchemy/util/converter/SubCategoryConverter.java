@@ -1,19 +1,19 @@
 package com.imalchemy.util.converter;
 
-import com.imalchemy.model.domain.Category;
-import com.imalchemy.model.dto.CategoryDTO;
+import com.imalchemy.model.domain.SubCategory;
+import com.imalchemy.model.dto.SubCategoryDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class CategoryConverter implements Converter<Category, CategoryDTO> {
+public class SubCategoryConverter implements Converter<SubCategory, SubCategoryDTO> {
 
     @Override
-    public Category toEntity(CategoryDTO dto) {
+    public SubCategory toEntity(SubCategoryDTO dto) {
         if (dto == null) return null;
 
-        return Category.builder()
+        return SubCategory.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
@@ -26,10 +26,10 @@ public class CategoryConverter implements Converter<Category, CategoryDTO> {
     }
 
     @Override
-    public CategoryDTO toDto(Category entity) {
+    public SubCategoryDTO toDto(SubCategory entity) {
         if (entity == null) return null;
 
-        return CategoryDTO.builder()
+        return SubCategoryDTO.builder()
                 .id(entity.getId())
                 .name(entity.getName())
                 .description(entity.getDescription())

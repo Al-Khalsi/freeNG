@@ -16,14 +16,22 @@ CREATE TABLE users
 CREATE TYPE user_role AS ENUM ('USER', 'ADMIN');
 
 -- Comments on users columns
-COMMENT ON COLUMN users.username IS 'Username for login';
-COMMENT ON COLUMN users.email IS 'Email for notifications and recovery';
-COMMENT ON COLUMN users.password_hash IS 'Hashed password';
-COMMENT ON COLUMN users.role IS 'USER or ADMIN';
-COMMENT ON COLUMN users.created_at IS 'Account creation timestamp';
-COMMENT ON COLUMN users.last_login IS 'Last successful login';
-COMMENT ON COLUMN users.is_active IS 'Account status';
-COMMENT ON COLUMN users.login_attempts IS 'Failed login tracking';
+COMMENT
+ON COLUMN users.username IS 'Username for login';
+COMMENT
+ON COLUMN users.email IS 'Email for notifications and recovery';
+COMMENT
+ON COLUMN users.password_hash IS 'Hashed password';
+COMMENT
+ON COLUMN users.role IS 'USER or ADMIN';
+COMMENT
+ON COLUMN users.created_at IS 'Account creation timestamp';
+COMMENT
+ON COLUMN users.last_login IS 'Last successful login';
+COMMENT
+ON COLUMN users.is_active IS 'Account status';
+COMMENT
+ON COLUMN users.login_attempts IS 'Failed login tracking';
 
 -- Index for user authentication queries
 CREATE INDEX idx_users_email_password ON users (email, password_hash);
@@ -42,10 +50,14 @@ CREATE TABLE categories
 );
 
 -- Comments on categories columns
-COMMENT ON COLUMN categories.name IS 'Category name';
-COMMENT ON COLUMN categories.description IS 'Category description';
-COMMENT ON COLUMN categories.is_active IS 'Soft delete flag';
-COMMENT ON COLUMN categories.display_order IS 'Custom ordering';
+COMMENT
+ON COLUMN categories.name IS 'Category name';
+COMMENT
+ON COLUMN categories.description IS 'Category description';
+COMMENT
+ON COLUMN categories.is_active IS 'Soft delete flag';
+COMMENT
+ON COLUMN categories.display_order IS 'Custom ordering';
 
 -- Index for category listing and searching
 CREATE INDEX idx_categories_active_order ON categories (is_active, display_order);
@@ -73,13 +85,20 @@ CREATE TABLE images
 );
 
 -- Comments on images columns
-COMMENT ON COLUMN images.title IS 'Image title';
-COMMENT ON COLUMN images.description IS 'Image description';
-COMMENT ON COLUMN images.file_path IS 'Path in storage';
-COMMENT ON COLUMN images.file_size IS 'Size in bytes';
-COMMENT ON COLUMN images.format IS 'Image format (PNG)';
-COMMENT ON COLUMN images.download_count IS 'Total downloads';
-COMMENT ON COLUMN images.is_active IS 'Soft delete flag';
+COMMENT
+ON COLUMN images.title IS 'Image title';
+COMMENT
+ON COLUMN images.description IS 'Image description';
+COMMENT
+ON COLUMN images.file_path IS 'Path in storage';
+COMMENT
+ON COLUMN images.file_size IS 'Size in bytes';
+COMMENT
+ON COLUMN images.format IS 'Image format (PNG)';
+COMMENT
+ON COLUMN images.download_count IS 'Total downloads';
+COMMENT
+ON COLUMN images.is_active IS 'Soft delete flag';
 
 -- Composite index for search by title and category
 CREATE INDEX idx_images_title_category ON images (category_id, title);
@@ -101,8 +120,10 @@ CREATE TABLE tags
 );
 
 -- Comments on tags columns
-COMMENT ON COLUMN tags.name IS 'Tag name';
-COMMENT ON COLUMN tags.use_count IS 'Number of images using this tag';
+COMMENT
+ON COLUMN tags.name IS 'Tag name';
+COMMENT
+ON COLUMN tags.use_count IS 'Number of images using this tag';
 
 -- Index for tag search
 CREATE INDEX idx_tags_popularity ON tags (use_count DESC);
@@ -141,7 +162,8 @@ CREATE TABLE download_history
 CREATE TYPE download_status AS ENUM ('STARTED', 'COMPLETED', 'FAILED');
 
 -- Comments on download_history columns
-COMMENT ON COLUMN download_history.download_status IS 'STARTED, COMPLETED, FAILED';
+COMMENT
+ON COLUMN download_history.download_status IS 'STARTED, COMPLETED, FAILED';
 
 -- Index for user download history
 CREATE INDEX idx_downloads_user ON download_history (user_id, downloaded_at DESC);
@@ -150,8 +172,7 @@ CREATE INDEX idx_downloads_image ON download_history (image_id, downloaded_at DE
 -- Index for IP-based rate limiting
 CREATE INDEX idx_downloads_ip_recent ON download_history (ip_address, downloaded_at DESC);
 -- Partial index for failed downloads
-CREATE INDEX idx_downloads_failed ON download_history (downloaded_at)
-    WHERE download_status = 'FAILED';
+CREATE INDEX idx_downloads_failed ON download_history (downloaded_at) WHERE download_status = 'FAILED';
 
 -- Admin Activity Log
 CREATE TABLE admin_activity_log
@@ -170,8 +191,10 @@ CREATE TABLE admin_activity_log
 CREATE TYPE activity_type AS ENUM ('IMAGE_UPLOAD', 'IMAGE_DELETE', 'CATEGORY_CREATE', 'CATEGORY_UPDATE');
 
 -- Comments on admin_activity_log columns
-COMMENT ON COLUMN admin_activity_log.activity_type IS 'IMAGE_UPLOAD, IMAGE_DELETE, CATEGORY_CREATE, CATEGORY_UPDATE';
-COMMENT ON COLUMN admin_activity_log.details IS 'Additional activity details';
+COMMENT
+ON COLUMN admin_activity_log.activity_type IS 'IMAGE_UPLOAD, IMAGE_DELETE, CATEGORY_CREATE, CATEGORY_UPDATE';
+COMMENT
+ON COLUMN admin_activity_log.details IS 'Additional activity details';
 
 -- Index for admin activity monitoring
 CREATE INDEX idx_admin_activity_user ON admin_activity_log (admin_id, created_at DESC);

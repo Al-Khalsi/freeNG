@@ -51,7 +51,8 @@ ALTER TABLE file_colors
     ADD CONSTRAINT fk_file_colors_on_file FOREIGN KEY (file_id) REFERENCES file (id);
 
 ALTER TABLE file
-    ALTER COLUMN average_rating TYPE DECIMAL USING (average_rating::DECIMAL);
+ALTER
+COLUMN average_rating TYPE DECIMAL USING (average_rating::DECIMAL);
 
 ALTER TABLE file
     ALTER COLUMN download_count SET NOT NULL;
