@@ -15,9 +15,11 @@ POST http://localhost:8080/api/v1/auth/login
 Content-Type: application/json
 
 {
-"email": "mohammad.hassan.alkhalsi@gmail.com",
-"password": "1"
+  "email": "mohammad.hassan.alkhalsi@gmail.com",
+  "password": "1"
 }
 
 
-> {% client.global.set("auth_token", response.body.data.token); %}
+> {%
+    client.global.set("auth_token", response.body.data.token);
+%}

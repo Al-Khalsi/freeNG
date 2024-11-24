@@ -3,55 +3,64 @@
 [TOC]
 
 ## Core Idea
-A free PNG image downloading platform with ad-based monetization. Downloads are triggered after ad display and processed asynchronously in the background.
+
+A free PNG image downloading platform with ad-based monetization. Downloads are triggered after ad display and processed
+asynchronously in the background.
 
 ## Technical Requirements
 
 ### 1. Authentication & Authorization
+
 * User login/signup functionality
 * Role-based access control (User/Admin)
 * Token-based authentication
 
 ### 2. Image Management
+
 * Browse, search, and filter images
 * Category and tag-based classification
 * Related images recommendation system
 * Query optimization through proper indexing:
-  - Title-based search indexing
-  - Category-based filtering indexes
-  - Tag-based search indexes
-  - Composite indexes for complex queries
+    - Title-based search indexing
+    - Category-based filtering indexes
+    - Tag-based search indexes
+    - Composite indexes for complex queries
 
 ### 3. Download System
+
 * Asynchronous download processing using Spring WebFlux
 * Streaming large files efficiently
 * Background processing of download requests
 * Download history tracking
 * Rate limiting implementation:
-  - Per-user download limits
-  - IP-based rate limiting
-  - Configurable throttling parameters
-  - Different rate limits for authenticated vs anonymous users
+    - Per-user download limits
+    - IP-based rate limiting
+    - Configurable throttling parameters
+    - Different rate limits for authenticated vs anonymous users
 
 ### 4. Admin Features
+
 * Image upload and management
 * Activity tracking and analytics
 * Batch operations support
 * Performance monitoring
 
 ### 5. Database Design
+
 * Optimized schema with proper relationships
 * Implemented indexes for frequent queries
 * Audit trails for important operations
 * Cache implementation for frequently accessed data
 
 ### 6. Performance Considerations
+
 * Image caching strategy
 * Query optimization through indexes
 * Rate limiting for API endpoints
 * Async processing for heavy operations
 
 ### 7. Security
+
 * Input validation
 * XSS protection
 * CSRF protection
@@ -59,12 +68,14 @@ A free PNG image downloading platform with ad-based monetization. Downloads are 
 * File type validation
 
 ### 8. Monitoring
+
 * Download analytics
 * User activity tracking
 * Performance metrics
 * Error logging
 
 ## Database Schema Requirements
+
 * Users table with role management
 * Images table with metadata
 * Categories and tags management
@@ -372,8 +383,6 @@ Remember to:
 Would you like me to elaborate on any of these points or provide more specific implementation details for any particular aspect?
 ````
 
-
-
 ### Generated DBML Code
 
 ```sql
@@ -501,6 +510,7 @@ Table admin_activity_log {
 ![relationship_diagram](D:\Skill-Development\Spring-boot-Tutorial\source-code\Resume-Projects\ImAlchemy\freeNG\backend\PNG-Downloading-Platform\data\db\imalchemy.png)
 
 ## API Endpoints Required
+
 * Authentication endpoints
 * Image management endpoints
 * Download processing endpoints
@@ -508,13 +518,16 @@ Table admin_activity_log {
 * Analytics endpoints
 
 ## Integration Points
+
 * Cloud storage for images
 * Ad service integration
 * Analytics integration
 * Monitoring integration
 
 ## Frontend Delegation
+
 The frontend team will handle:
+
 * User interface implementation
 * Ad display integration
 * Download progress indication
@@ -523,6 +536,7 @@ The frontend team will handle:
 * Client-side caching
 
 ## Technical Stack
+
 * Backend: Spring Boot with WebFlux
 * Database: PostgreSQL
 * Cache: Redis/Caffeine
@@ -531,6 +545,7 @@ The frontend team will handle:
 * Documentation: OpenAPI/Swagger
 
 ## Performance Requirements
+
 * Download processing: Asynchronous
 * Search queries: < 500ms response time
 * Image metadata retrieval: < 200ms
@@ -538,6 +553,7 @@ The frontend team will handle:
 * Caching: Implementation required for frequent queries
 
 ## Monitoring Requirements
+
 * Download success/failure rates
 * API endpoint performance
 * Error rates and types
@@ -545,6 +561,7 @@ The frontend team will handle:
 * Resource utilization
 
 ## Development Notes
+
 * Start with monolithic architecture
 * Focus on core functionality first
 * Implement proper error handling

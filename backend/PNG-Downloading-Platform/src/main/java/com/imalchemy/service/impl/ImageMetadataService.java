@@ -7,9 +7,11 @@ import com.imalchemy.model.enums.ImageFormat;
 import com.imalchemy.model.enums.ImageUnits;
 import com.imalchemy.model.enums.Purpose;
 import com.imalchemy.repository.CategoryRepository;
+import com.imalchemy.repository.SubCategoryRepository;
 import com.imalchemy.service.ImageStorageStrategy;
 import com.imalchemy.util.SecurityUtil;
 import com.luciad.imageio.webp.WebPWriteParam;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,7 @@ import java.util.Optional;
 public class ImageMetadataService {
 
     private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
     private final SecurityUtil securityUtil;
     private final ImageStorageStrategy imageStorageStrategy;
 
@@ -216,19 +219,23 @@ public class ImageMetadataService {
                 : String.format("%.2f %s", size, units[unitIndex]); // Two decimals for MB and GB
     }
 
-    public void associateImageWithCategories(Image image, String parentCategoryName, List<String> subCategoryNames) {
-        Category parentCategory = this.categoryRepository.findByNameIgnoreCase(parentCategoryName)
-                .orElseGet(() -> this.categoryRepository.findByNameIgnoreCase("defaultCategory")
-                        .orElseThrow(() -> new IllegalStateException("Default category not found")));
+    public void associateImageWithCategories(Image image, String categoryName, List<String> subCategoryNames) {
+//        Category parentCategory = this.categoryRepository.findByNameIgnoreCase(parentCategoryName)
+//                .orElseGet(() -> this.categoryRepository.findByNameIgnoreCase("defaultCategory")
+//                        .orElseThrow(() -> new IllegalStateException("Default category not found")));
+//
+//        image.getCategories().add(parentCategory);
 
-        image.getCategories().add(parentCategory);
+        Category category = this.categoryRepository.findByNameIgnoreCase(categoryName)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        image.getCategories().add(category);
 
         subCategoryNames.stream()
                 .filter(name -> !name.isEmpty())
-                .map(this.categoryRepository::findByNameIgnoreCase)
+                .map(this.subCategoryRepository::findByNameIgnoreCase)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .forEach(category -> image.getCategories().add(category));
+                .forEach(subCategory -> image.getSubCategories().add(subCategory));
     }
 
     public void associateImageWithImageVariant(Image image, ImageVariant imageVariant) {
