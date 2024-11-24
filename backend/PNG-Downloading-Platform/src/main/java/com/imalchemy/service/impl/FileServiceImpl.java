@@ -88,8 +88,14 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<ImageDTO> listAllImages() {
         return this.imageRepository.findAll()
-                .stream().map(this.imageConverter::toDto)
-                .toList();
+                .stream().map(image -> {
+                    ImageDTO imageDTO = this.imageConverter.toDto(image);
+                    imageDTO.setFilePath(image.getVariants().stream()
+                            .findFirst().map(ImageVariant::getFilePath)
+                            .orElse(image.getFilePath())
+                    );
+                    return imageDTO;
+                }).toList();
     }
 
     @Override // todo: needs modification!!! not working as expected
