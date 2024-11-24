@@ -2,12 +2,16 @@ package com.imalchemy.service.impl;
 
 import com.imalchemy.model.domain.Category;
 import com.imalchemy.model.domain.Image;
+import com.imalchemy.model.domain.SubCategory;
 import com.imalchemy.model.dto.CategoryDTO;
+import com.imalchemy.model.dto.SubCategoryDTO;
 import com.imalchemy.repository.CategoryRepository;
 import com.imalchemy.repository.ImageRepository;
+import com.imalchemy.repository.SubCategoryRepository;
 import com.imalchemy.service.CategoryService;
 import com.imalchemy.util.SlugGenerator;
 import com.imalchemy.util.converter.CategoryConverter;
+import com.imalchemy.util.converter.SubCategoryConverter;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,36 +27,68 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private final CategoryConverter categoryConverter;
-    private final SlugGenerator slugGenerator;
+    private final SubCategoryRepository subCategoryRepository;
     private final ImageRepository imageRepository;
+    private final CategoryConverter categoryConverter;
+    private final SubCategoryConverter subCategoryConverter;
+    private final SlugGenerator slugGenerator;
 
     @Override
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+        // Capitalize the category name
         categoryDTO.setName(this.capitalizeCategoryName(categoryDTO.getName()));
-        Category category = this.categoryConverter.toEntity(categoryDTO);
-        // Fetch the next display order from the repository
-        int nextDisplayOrder = this.categoryRepository.findMaxDisplayOrder() + 1;
 
         // Determine parent category if provided
-        Category parentCategory = null;
         Long parentCategoryId = categoryDTO.getParentId();
+        Category parentCategory;
+        SubCategory subCategory;
+
         if (parentCategoryId != null && parentCategoryId > 0) {
+            // Fetch the parent category
             parentCategory = this.categoryRepository.findById(parentCategoryId)
                     .orElseThrow(() -> new EntityNotFoundException("Parent category not found"));
-        }
-        category.setSlug(this.slugGenerator.generateSlug(category.getName()));
-        category.setDisplayOrder(nextDisplayOrder);
-        category.setParentCategory(parentCategory);
-        category.setParent(true);
-        category.setLevel(parentCategory != null ? parentCategory.getLevel() + 1 : 0); // Set level based on parent
 
-        // If there's a parent, add this category to its subcategories
-        if (parentCategory != null) {
-            category.setParent(false);
-            parentCategory.getSubCategories().add(category);
+            // Create a new SubCategory only if a parent category is provided
+            subCategory = new SubCategory();
+            subCategory.setName(categoryDTO.getName()); // Set the name for the subcategory
+            subCategory.setDescription(categoryDTO.getDescription()); // Set description if needed
+            subCategory.setSlug(this.slugGenerator.generateSlug(categoryDTO.getName())); // Generate slug
+            subCategory.setParentCategory(parentCategory); // Set the parent category
+
+            // Fetch the next display order for the subcategory
+            int nextSubDisplayOrder = this.subCategoryRepository.findMaxDisplayOrder() + 1;
+            subCategory.setDisplayOrder(nextSubDisplayOrder);
+            subCategory.setParent(false); // This is not a parent category
+            subCategory.setLevel(parentCategory.getLevel() + 1); // Set level based on parent
+            subCategory.setActive(true);
+
+            // Save the subcategory
+            this.subCategoryRepository.save(subCategory);
+
+            // Return the DTO for the subcategory
+            return CategoryDTO.builder()
+                    .id(subCategory.getId())
+                    .name(subCategory.getName())
+                    .description(subCategory.getDescription())
+                    .iconUrl(subCategory.getIconUrl())
+                    .displayOrder(subCategory.getDisplayOrder())
+                    .level(subCategory.getLevel())
+                    .parentId(subCategory.getId())
+                    .isActive(subCategory.isActive())
+                    .isParent(subCategory.isParent())
+                    .build(); // Return the subcategory DTO directly
         }
 
+        // If no parentId is provided, create a new category
+        Category category = this.categoryConverter.toEntity(categoryDTO);
+        category.setSlug(this.slugGenerator.generateSlug(category.getName())); // Generate slug for the main category
+        int nextCategoryDisplayOrder = this.categoryRepository.findMaxDisplayOrder() + 1; // Fetch the next display order
+        category.setDisplayOrder(nextCategoryDisplayOrder);
+        category.setParent(true); // This is a parent category
+        category.setLevel(0); // Top-level category
+        category.setActive(true);
+
+        // Save the main category and return the DTO
         return this.categoryConverter.toDto(this.categoryRepository.save(category));
     }
 
@@ -75,43 +111,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDTO updateCategory(String categoryName, CategoryDTO categoryDTO) {
-        Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-
-        foundCategory.setName(categoryDTO.getName());
-        foundCategory.setDescription(categoryDTO.getDescription());
-        foundCategory.setIconUrl(categoryDTO.getIconUrl());
-        foundCategory.setActive(categoryDTO.isActive());
-        foundCategory.setDisplayOrder(categoryDTO.getDisplayOrder());
-        foundCategory.setLevel(categoryDTO.getLevel());
-        foundCategory.setSlug(this.slugGenerator.generateSlug(categoryDTO.getName()));
-
-        // Determine parent category if provided
-        Category parentCategory = null;
-        Long parentCategoryId = categoryDTO.getParentId();
-        if (parentCategoryId != null) {
-            parentCategory = this.categoryRepository.findById(parentCategoryId)
-                    .orElseThrow(() -> new EntityNotFoundException("Parent category not found"));
-        }
-        foundCategory.setParentCategory(parentCategory);
-
-        // If there's a parent, add this category to its subcategories
-        if (parentCategory != null) {
-            parentCategory.getSubCategories().add(foundCategory);
-        }
-
-        return this.categoryConverter.toDto(this.categoryRepository.save(foundCategory));
-    }
-
-    @Override
     public String deleteParentCategory(String categoryName) {
         Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
         foundCategory.getSubCategories().forEach(subCategory -> {
             subCategory.setParentCategory(null);
-            this.categoryRepository.save(subCategory);
-            this.categoryRepository.flush();
+            this.subCategoryRepository.save(subCategory);
+            this.subCategoryRepository.flush();
+
             this.categoryRepository.deleteById(subCategory.getId());
         });
         foundCategory.getImages().forEach(file -> {
@@ -130,7 +137,7 @@ public class CategoryServiceImpl implements CategoryService {
     public String deleteSubCategory(String categoryName) {
         Category foundCategory = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-        foundCategory.setParentCategory(null);
+        foundCategory.setSubCategories(null);
         foundCategory.getImages().forEach(file -> {
             file.setCategories(null);
             this.imageRepository.save(file);
@@ -148,13 +155,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<CategoryDTO> getSubcategories(String parentName) {
+    public List<SubCategoryDTO> getSubcategories(String parentName) {
         // Fetch the parent category using its name
         Category parentCategory = categoryRepository.findByNameIgnoreCase(parentName).get();
 
         // Fetch and return the subcategories for the found parent category
-        return categoryRepository.findByParentCategory(parentCategory)
-                .stream().map(this.categoryConverter::toDto)
+        return this.subCategoryRepository.findByParentCategory(parentCategory)
+                .stream().map(this.subCategoryConverter::toDto)
                 .toList();
     }
 

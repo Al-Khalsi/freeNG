@@ -13,7 +13,6 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -55,18 +54,27 @@ public class Image extends BaseEntity<UUID> {
 
     @ManyToMany
     @JoinTable(
-            name = "images_categories",
+            name = "image_categories",
             joinColumns = @JoinColumn(name = "image_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
-    @ToString.Exclude
     private Set<Category> categories = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "image_subcategories",
+            joinColumns = @JoinColumn(name = "image_id"),
+            inverseJoinColumns = @JoinColumn(name = "subcategory_id")
+    )
+    @ToString.Exclude
+    private Set<SubCategory> subCategories = new HashSet<>();
 
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private Set<ImageVariant> variants = new HashSet<>();
 
     // -------------------- Methods --------------------
+
     /**
      * Overrides the default method to provide a clearer name.
      *
