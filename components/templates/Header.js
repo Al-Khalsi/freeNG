@@ -19,7 +19,8 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     <i className="point"></i>
                 </div>
                 <div className='logo'>
-                    I<span className='burnt'>m</span>Alchem<span>y</span>
+                    <span className='burnt'></span>
+                    PixFreebies
                 </div>
             </div>
 
