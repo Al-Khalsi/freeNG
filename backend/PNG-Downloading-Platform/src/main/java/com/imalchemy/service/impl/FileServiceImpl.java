@@ -20,10 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -115,17 +113,21 @@ public class FileServiceImpl implements FileService {
 
         // First attempt to find exact matches
         List<Image> exactMatches = this.imageRepository.searchFiles(formattedQuery);
-        if (!exactMatches.isEmpty()) {
-            return exactMatches.stream()
-                    .filter(Image::isActive)
-//                    .limit(50) // Limit results
-                    .map(this.imageConverter::toDto)
-                    .toList();
-        }
-
         // If no exact matches found, search for similar entries
         List<Image> similarMatches = this.imageRepository.searchSimilarFiles(query);
-        return similarMatches.stream()
+
+        // Create a set of IDs to avoid duplicates
+        Set<UUID> exactMatchIds = exactMatches.stream()
+                .map(Image::getId)
+                .collect(Collectors.toSet());
+
+        // Add similar matches that are not in exact matches
+        List<Image> combinedResults = new ArrayList<>(exactMatches);
+        similarMatches.stream()
+                .filter(image -> !exactMatchIds.contains(image.getId()))
+                .forEach(combinedResults::add);
+
+        return combinedResults.stream()
                 .filter(Image::isActive)
 //                .limit(50) // Limit results
                 .map(this.imageConverter::toDto)
