@@ -1,11 +1,14 @@
 ALTER TABLE category
-    DROP CONSTRAINT fk_category_on_parent;
+DROP
+CONSTRAINT fk_category_on_parent;
 
 ALTER TABLE images_categories
-    DROP CONSTRAINT fk_imacat_on_category;
+DROP
+CONSTRAINT fk_imacat_on_category;
 
 ALTER TABLE images_categories
-    DROP CONSTRAINT fk_imacat_on_image;
+DROP
+CONSTRAINT fk_imacat_on_image;
 
 CREATE TABLE image_categories
 (
@@ -57,5 +60,5 @@ ALTER TABLE image_subcategories
 DROP TABLE images_categories CASCADE;
 
 ALTER TABLE category
-    DROP
-        COLUMN parent_id;
+DROP
+COLUMN parent_id;
