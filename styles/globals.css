@@ -1061,9 +1061,10 @@ background-color: var(--bg-darkGray2);
 }
 
 .draw-container .draw {
-  height: 600px;
-  width: 450px;
+  height: 24rem;
+  width: 100%;
   position: relative;
+  color: #8b00aa;
 }
 
 /* Rocket */
@@ -1071,15 +1072,15 @@ background-color: var(--bg-darkGray2);
   position: absolute;
   height: 180px;
   width: 80px;
-  top: 80px;
+  top: 50%  ;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   border-radius: 50% 50% 25% 25% / 50% 50% 40% 40%;
   background-color: #dadada;
   box-shadow: 0 -3px 0 #FFF;
   transform-style: preserve-3d;
   z-index: 2;
-  animation: animateRocket 1s linear alternate infinite;
+  /* animation: animateRocket 1s linear alternate infinite; */
 }
 .draw-container .rocket::before,
 .draw-container .rocket:after {
