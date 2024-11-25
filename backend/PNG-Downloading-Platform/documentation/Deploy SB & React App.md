@@ -188,8 +188,8 @@ react frontend and spring boot backend:
        >   :
        >
        >
-   - Docker: Minimal
-   >   - PostgreSQL: 1
+    - Docker: Minimal
+   > - PostgreSQL: 1
    >   - JDK: Minimal
    >   - Maven: Minimal
    >   - Node.js: 1
@@ -204,8 +204,8 @@ react frontend and spring boot backend:
        >   :
        >
        >
-   - Docker: 1 GB
-   >   - PostgreSQL: 2 GB
+    - Docker: 1 GB
+   > - PostgreSQL: 2 GB
    >   - JDK: 1 GB
    >   - Maven: 0.5 GB
    >   - Node.js: 2 GB
@@ -220,8 +220,8 @@ react frontend and spring boot backend:
        >   :
        >
        >
-   - PostgreSQL: 10 GB minimum
-   >   - Additional space for your application code, Docker images, and logs: 10-20 GB
+    - PostgreSQL: 10 GB minimum
+   > - Additional space for your application code, Docker images, and logs: 10-20 GB
    >
    > - **Estimated Total**: 30 GB (considering growth and additional files)
    >
