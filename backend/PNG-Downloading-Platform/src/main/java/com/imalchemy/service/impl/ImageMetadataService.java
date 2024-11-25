@@ -3,6 +3,7 @@ package com.imalchemy.service.impl;
 import com.imalchemy.model.domain.Category;
 import com.imalchemy.model.domain.Image;
 import com.imalchemy.model.domain.ImageVariant;
+import com.imalchemy.model.domain.MetaInfo;
 import com.imalchemy.model.enums.ImageFormat;
 import com.imalchemy.model.enums.ImageUnits;
 import com.imalchemy.model.enums.Purpose;
@@ -63,6 +64,15 @@ public class ImageMetadataService {
         image.getDominantColors().addAll(dominantColors);
 
         return image;
+    }
+
+    public MetaInfo createImageMetaInfoDomain(Image image) {
+        return MetaInfo.builder()
+                .metaTitle("mmd hassan hammal")
+                .description("mmd hassan motavvahem")
+                .nameLink(image.getFileTitle())
+                .image(image)
+                .build();
     }
 
     private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) {
@@ -220,12 +230,6 @@ public class ImageMetadataService {
     }
 
     public void associateImageWithCategories(Image image, String categoryName, List<String> subCategoryNames) {
-//        Category parentCategory = this.categoryRepository.findByNameIgnoreCase(parentCategoryName)
-//                .orElseGet(() -> this.categoryRepository.findByNameIgnoreCase("defaultCategory")
-//                        .orElseThrow(() -> new IllegalStateException("Default category not found")));
-//
-//        image.getCategories().add(parentCategory);
-
         Category category = this.categoryRepository.findByNameIgnoreCase(categoryName)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
         image.getCategories().add(category);

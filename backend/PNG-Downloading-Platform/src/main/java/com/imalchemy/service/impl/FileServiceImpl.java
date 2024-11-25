@@ -3,10 +3,12 @@ package com.imalchemy.service.impl;
 import com.imalchemy.exception.NotFoundException;
 import com.imalchemy.model.domain.Image;
 import com.imalchemy.model.domain.ImageVariant;
+import com.imalchemy.model.domain.MetaInfo;
 import com.imalchemy.model.dto.ImageDTO;
 import com.imalchemy.model.dto.UpdateImageDTO;
 import com.imalchemy.repository.ImageRepository;
 import com.imalchemy.repository.ImageVariantRepository;
+import com.imalchemy.repository.MetaInfoRepository;
 import com.imalchemy.service.FileService;
 import com.imalchemy.service.ImageStorageStrategy;
 import com.imalchemy.util.converter.ImageConverter;
@@ -30,18 +32,20 @@ public class FileServiceImpl implements FileService {
 
     private final ImageRepository imageRepository;
     private final ImageVariantRepository imageVariantRepository;
+    private final MetaInfoRepository metaInfoRepository;
     private final ImageStorageStrategy imageStorageStrategy;
     private final ImageConverter imageConverter;
     private final ImageValidationService imageValidationService;
     private final ImageMetadataService imageMetadataService;
 
-    public FileServiceImpl(ImageRepository imageRepository, ImageVariantRepository imageVariantRepository,
+    public FileServiceImpl(ImageRepository imageRepository, ImageVariantRepository imageVariantRepository, MetaInfoRepository metaInfoRepository,
                            ImageStorageStrategy imageStorageStrategy,
                            ImageConverter imageConverter,
                            ImageValidationService imageValidationService,
                            ImageMetadataService imageMetadataService) {
         this.imageRepository = imageRepository;
         this.imageVariantRepository = imageVariantRepository;
+        this.metaInfoRepository = metaInfoRepository;
         this.imageStorageStrategy = imageStorageStrategy;
         this.imageConverter = imageConverter;
         this.imageValidationService = imageValidationService;
@@ -61,6 +65,7 @@ public class FileServiceImpl implements FileService {
 
             // Create the entities
             Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
+            MetaInfo imageMetaInfo = this.imageMetadataService.createImageMetaInfoDomain(image);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Associate relationships
@@ -69,6 +74,7 @@ public class FileServiceImpl implements FileService {
 
             // Save to db
             Image savedImage = this.imageRepository.save(image);
+            this.metaInfoRepository.save(imageMetaInfo);
             this.imageVariantRepository.save(imageVariant);
 
             return this.imageConverter.toDto(savedImage);
