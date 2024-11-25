@@ -1049,3 +1049,76 @@ background-color: var(--bg-darkGray2);
 .z-50 {
   z-index: 50;
 }
+
+/*-------------------- footer --------------------*/
+/*-------------------- footer --------------------*/
+/*-------------------- footer --------------------*/
+
+.draw-container {
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--bg-darkGray);
+}
+
+.draw-container .draw {
+  height: 600px;
+  width: 450px;
+  position: relative;
+}
+
+/* Rocket */
+.draw-container .rocket {
+  position: absolute;
+  height: 180px;
+  width: 80px;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 25% 25% / 50% 50% 40% 40%;
+  background-color: #dadada;
+  box-shadow: 0 -3px 0 #FFF;
+  transform-style: preserve-3d;
+  z-index: 2;
+  animation: animateRocket 1s linear alternate infinite;
+}
+.draw-container .rocket::before,
+.draw-container .rocket:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.draw-container .rocket::before {
+  width: 55%;
+  height: 10px;
+  background-color: #d43e07;
+  bottom: -10px;
+  border-radius: 0% 0% 25% 25% / 50% 50% 40% 40%;
+}
+.draw-container .rocket:after {
+  height: 55px;
+  width: 155%;
+  background-color: #9e554f;
+  bottom: 0;
+  z-index: -10;
+  transform: translateX(-50%) translateZ(-1px);
+  border-radius: 50% 50% 10% 10% / 90% 90% 20% 20%;
+}
+.draw-container .rocket .window {
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background-color: #9e554f;
+  box-sizing: initial;
+  border: 5px solid #adadad;
+}
+
+@keyframes animateRocket {
+  to {
+    transform: translateX(-50%) translateY(3px);
+  }
+}

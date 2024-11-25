@@ -41,7 +41,6 @@ const Downloader = () => {
 
     return (
         <div className='imageSinglePage w-full min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
-            <Header />
             <div className='wrapper p-12'>
                 <div className='product-div w-full h-80 flex bg-bgDarkGray rounded-3xl m-5 overflow-hidden'>
                     <div className='product-div-left bg-img w-1/3'>
