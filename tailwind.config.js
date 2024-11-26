@@ -57,5 +57,12 @@ module.exports = {
   },
   plugins: [
     require('tailwind-scrollbar'),
+    function ({ addUtilities }) {
+      addUtilities({
+        '.text-shadow': {
+          textShadow: '0 0 120px var(--cl-lightPurple)',
+        },
+      });
+    },
   ],
 };
