@@ -4,30 +4,30 @@ import { TbPng } from "react-icons/tb";
 const Footer = () => {
     const [iconCount, setIconCount] = useState(0);
 
-    // تابعی برای محاسبه تعداد آیکون‌ها بر اساس عرض صفحه
     const calculateIconCount = () => {
-        const width = window.innerWidth; // استفاده از عرض کل صفحه
-        const iconWidth = 50; // عرض تقریبی هر آیکون (می‌توانید این مقدار را تغییر دهید)
-        const count = Math.floor(width / iconWidth); // محاسبه تعداد آیکون‌ها
+        const width = window.innerWidth;
+        const iconWidth = 45;
+        const count = Math.floor(width / iconWidth);
         setIconCount(count);
     };
 
     useEffect(() => {
-        calculateIconCount(); // محاسبه اولیه
-        window.addEventListener("resize", calculateIconCount); // اضافه کردن لیسنر برای تغییر اندازه
+        calculateIconCount();
+        window.addEventListener("resize", calculateIconCount);
         return () => {
-            window.removeEventListener("resize", calculateIconCount); // پاک کردن لیسنر
+            window.removeEventListener("resize", calculateIconCount);
         };
     }, []);
 
     return (
         <footer className="footer w-full h-48">
             <section className="relative flex flex-col w-full h-full bg-bgDarkGray">
-                <div className="flex flex-nowrap w-full text-4xl">
+                <div className="flex flex-nowrap w-full text-clDarkGray2">
                     {Array.from({ length: iconCount }, (_, index) => (
-                        <TbPng key={index} className="w-[50px] h-[50px] -my-2 flex-grow" /> // تنظیم اندازه آیکون
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" /> // تنظیم اندازه آیکون
                     ))}
                 </div>
+                
             </section>
         </footer>
     );
