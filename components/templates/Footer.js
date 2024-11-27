@@ -22,12 +22,42 @@ const Footer = () => {
     return (
         <footer className="footer w-full h-48">
             <section className="relative flex flex-col w-full h-full bg-bgDarkGray">
-                <div className="flex flex-nowrap w-full text-clDarkGray2">
+                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
+                text-5xl bg-bgDarkGray text-clDarkBlue flex justify-center items-center">PixelFreeBies</div>
+                <div className="flex flex-nowrap w-full text-clDarkBlue">
                     {Array.from({ length: iconCount }, (_, index) => (
-                        <TbPng key={index} className="text-5xl -my-3 flex-grow" /> // تنظیم اندازه آیکون
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" />
                     ))}
                 </div>
-                
+                <div className="flex flex-nowrap w-full text-clDarkBlue">
+                    {Array.from({ length: iconCount }, (_, index) => (
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" />
+                    ))}
+                </div><div className="flex flex-nowrap w-full text-clDarkBlue">
+                    {Array.from({ length: iconCount }, (_, index) => (
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" />
+                    ))}
+                </div><div className="flex flex-nowrap w-full text-clDarkBlue">
+                    {Array.from({ length: iconCount }, (_, index) => (
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" /> 
+                    ))}
+                </div><div className="flex flex-nowrap w-full text-clDarkBlue">
+                    {Array.from({ length: iconCount }, (_, index) => (
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" /> 
+                    ))}
+                </div><div className="flex flex-nowrap w-full text-clDarkBlue">
+                    {Array.from({ length: iconCount }, (_, index) => (
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" />
+                    ))}
+                </div><div className="flex flex-nowrap w-full text-clDarkBlue">
+                    {Array.from({ length: iconCount }, (_, index) => (
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" />
+                    ))}
+                </div><div className="flex flex-nowrap w-full text-clDarkBlue">
+                    {Array.from({ length: iconCount }, (_, index) => (
+                        <TbPng key={index} className="text-5xl -my-3 flex-grow" /> 
+                    ))}
+                </div>
             </section>
         </footer>
     );
