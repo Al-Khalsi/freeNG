@@ -263,6 +263,22 @@ function Index() {
                     handleSearch={handleSearch} // Pass the search handler
                 />
 
+                <div className='w-full py-12 px-8'>
+                    <div className=''>
+                        <div className='subject-text relative w-full text-center'>
+                            <h1 className='relative text-6xl text-clLightPurple'>Free download reference for all png images.</h1>
+                        </div>
+                        <svg>
+                            <filter id='fire'>
+                                <feTurbulence id='turbulence' baseFrequency='0.1 0.1' numOctaves='2' seed='3'>
+                                </feTurbulence>
+                                <feDisplacementMap in='SourceGraphic' scale='1'></feDisplacementMap>
+                            </filter> 
+                        </svg>
+                    </div>
+
+                </div>
+
                 <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
                     <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                         {loading ? ( // Show loading indicator while fetching images
