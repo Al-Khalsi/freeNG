@@ -1059,15 +1059,12 @@ background-color: var(--bg-darkGray2);
 /*-------------------- subject-text --------------------*/
 /*-------------------- subject-text --------------------*/
 
-.subject-text {
+/* .subject-text {
   filter: url(#fire);
-}
+} */
 
 .subject-text h1 {
   font-weight: 600;
   text-shadow: 0 0 10px var(--bg-lightPurple),
-  0 0 40px var(--bg-lightPurple),
-  0 0 80px var(--bg-lightPurple),
-  0 0 160px var(--bg-lightPurple),
-  0 0 240px var(--bg-lightPurple);
+  0 0 40px var(--bg-lightPurple);
 }

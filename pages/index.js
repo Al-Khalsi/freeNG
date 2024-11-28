@@ -264,21 +264,28 @@ function Index() {
                 />
 
                 <div className='w-full py-12 px-8'>
-                    <div className=''>
-                        <div className='subject-text relative w-full text-center'>
-                            <h1 className='relative text-6xl text-clLightPurple'>Free download reference for all png images.</h1>
+                    {searchQuery ? (
+                        <div className='filter-result flex justify-between items-center'>
+                            <div className='search-result'>
+                                Searched: {searchQuery}
+                            </div>
+                            <button
+                                onClick={() => {
+                                    setSearchQuery('');
+                                    fetchImages();
+                                    router.push('/');
+                                }}
+                                className='ml-4 bg-red-500 text-white px-4 py-2 rounded-lg'>
+                                X
+                            </button>
                         </div>
-                        <svg>
-                            <filter id='fire'>
-                                <feTurbulence id='turbulence' baseFrequency='0.1 0.1' numOctaves='2' seed='3'>
-                                    <animate attributeName='baseFrequency' dur='10s' values='0.1 0.1;0.12 0.2'
-                                    repeatCount='indefinite'></animate>
-                                </feTurbulence>
-                                <feDisplacementMap in='SourceGraphic' scale='1'></feDisplacementMap>
-                            </filter> 
-                        </svg>
-                    </div>
-
+                    ) :
+                        <div className='subject-text relative w-full text-center'>
+                            <h1 className='relative text-6xl text-clLightPurple'>
+                                Free download reference for all png images
+                            </h1>
+                        </div>
+                    }
                 </div>
 
                 <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
