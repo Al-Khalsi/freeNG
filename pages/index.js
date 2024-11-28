@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Header from '@/components/templates/Header';
 import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
+import { MdImageNotSupported } from "react-icons/md";
 import { apiFetch } from '@/utils/api'; // Import apiFetch from utils/api
 
 function Index() {
@@ -310,6 +311,11 @@ function Index() {
                                 <div className="thumb"></div>
                             </div>
                         </section>
+                    ) : currentImages.length === 0 ? ( // Check if there are no images
+                        <section className='flex flex-col items-center w-full my-6'>
+                            <MdImageNotSupported className='text-6xl text-gray-500' />
+                            <h3 className='text-xl text-gray-500'>No images available</h3>
+                        </section>
                     ) : (
                         <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                             {currentImages.map((image) => (
@@ -318,6 +324,7 @@ function Index() {
                         </section>
                     )}
                 </main>
+
                 <div className="pagination flex justify-center py-4">
                     {renderPagination()} {/* Render pagination buttons */}
                 </div>
