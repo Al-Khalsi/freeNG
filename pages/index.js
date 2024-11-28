@@ -16,6 +16,7 @@ function Index() {
     const [loading, setLoading] = useState(false); // State to manage loading status
     const itemsPerPage = 20; // Number of items to display per page
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
+    const [isSearching, setIsSearching] = useState(false); // New state for search
 
     const handleSelectToggle = (selectId) => {
         // Toggle the select dropdown
@@ -243,10 +244,10 @@ function Index() {
         clearToken(); // Clear the token on logout
     };
 
-    // Function to handle search action
     const handleSearch = () => {
-        fetchImages(searchQuery); // Fetch images based on the search query
-        router.push(`/?search=${encodeURIComponent(searchQuery)}`); // Update the router to include the search query
+        fetchImages(searchQuery); // Search based on the query
+        setIsSearching(true); // Set the search state to true
+        router.push(`/?search=${encodeURIComponent(searchQuery)}`); // Navigate to the new URL
     };
 
     return (
@@ -264,28 +265,29 @@ function Index() {
                 />
 
                 <div className='w-full py-12 px-8'>
-                    {searchQuery ? (
+                    {isSearching ? ( // Use isSearching instead of searchQuery
                         <div className='filter-result flex justify-between items-center'>
                             <div className='search-result'>
                                 Searched: {searchQuery}
                             </div>
                             <button
                                 onClick={() => {
-                                    setSearchQuery('');
-                                    fetchImages();
-                                    router.push('/');
+                                    setSearchQuery(''); // Clear the search query
+                                    setIsSearching(false); // Set the search state to false
+                                    fetchImages(); // Reload all images
+                                    router.push('/'); // Navigate back to the home page
                                 }}
                                 className='ml-4 bg-red-500 text-white px-4 py-2 rounded-lg'>
                                 X
                             </button>
                         </div>
-                    ) :
+                    ) : (
                         <div className='subject-text relative w-full text-center'>
                             <h1 className='relative text-6xl text-clLightPurple'>
                                 Free download reference for all png images
                             </h1>
                         </div>
-                    }
+                    )}
                 </div>
 
                 <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
