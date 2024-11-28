@@ -291,32 +291,32 @@ function Index() {
                 </div>
 
                 <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
-                    {loading ? ( // Show loading indicator while fetching images
+                    {/* {loading ? ( // Show loading indicator while fetching images */}
                         <section className='loading flex justify-center w-full'>
-                            <div className="🤚">
-                                <div className="👉"></div>
-                                <div className="👉"></div>
-                                <div className="👉"></div>
-                                <div className="👉"></div>
-                                <div className="🌴"></div>
-                                <div className="👍"></div>
+                            <div className="hand">
+                                <div className="finger"></div>
+                                <div className="finger"></div>
+                                <div className="finger"></div>
+                                <div className="finger"></div>
+                                <div className="palm"></div>
+                                <div className="thumb"></div>
                             </div>
-                            <div className="🤚">
-                                <div className="👉"></div>
-                                <div className="👉"></div>
-                                <div className="👉"></div>
-                                <div className="👉"></div>
-                                <div className="🌴"></div>
-                                <div className="👍"></div>
+                            <div className="hand">
+                                <div className="finger"></div>
+                                <div className="finger"></div>
+                                <div className="finger"></div>
+                                <div className="finger"></div>
+                                <div className="palm"></div>
+                                <div className="thumb"></div>
                             </div>
                         </section>
-                    ) : (
+                    {/* ) : (
                         <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                             {currentImages.map((image) => (
                                 <Card key={image.id} image={image} onDelete={handleDeleteImage} onEdit={handleEditImage} />
                             ))}
                         </section>
-                    )}
+                    )} */}
                 </main>
                 <div className="pagination flex justify-center py-4">
                     {renderPagination()} {/* Render pagination buttons */}
