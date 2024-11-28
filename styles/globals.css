@@ -1066,7 +1066,7 @@ background-color: var(--bg-darkGray2);
 
 /* From Uiverse.io by Pradeepsaranbishnoi */ 
 .hand {
-  --skin-color: #fff5d4;
+  --skin-color: #ffe99f;
   --tap-speed: 0.6s;
   --tap-stagger: 0.1s;
   position: relative;
@@ -1126,7 +1126,7 @@ background-color: var(--bg-darkGray2);
   content: '';
   background-color: rgba(255, 255, 255, 0.8);
   position: absolute;
-  bottom: 2%;
+  bottom: 5%;
   left: 5px;
   border-radius: 60% 10% 10% 30%;
   border-right: 2px solid rgba(0, 0, 0, 0.05);

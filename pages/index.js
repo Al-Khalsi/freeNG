@@ -292,24 +292,24 @@ function Index() {
 
                 <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
                     {/* {loading ? ( // Show loading indicator while fetching images */}
-                        <section className='loading flex justify-center w-full'>
-                            <div className="hand">
-                                <div className="finger"></div>
-                                <div className="finger"></div>
-                                <div className="finger"></div>
-                                <div className="finger"></div>
-                                <div className="palm"></div>
-                                <div className="thumb"></div>
-                            </div>
-                            <div className="hand">
-                                <div className="finger"></div>
-                                <div className="finger"></div>
-                                <div className="finger"></div>
-                                <div className="finger"></div>
-                                <div className="palm"></div>
-                                <div className="thumb"></div>
-                            </div>
-                        </section>
+                    <section className='loading flex justify-center w-full'>
+                        <div className="hand">
+                            <div className="finger"></div>
+                            <div className="finger"></div>
+                            <div className="finger"></div>
+                            <div className="finger"></div>
+                            <div className="palm"></div>
+                            <div className="thumb"></div>
+                        </div>
+                        <div className="hand">
+                            <div className="finger"></div>
+                            <div className="finger"></div>
+                            <div className="finger"></div>
+                            <div className="finger"></div>
+                            <div className="palm"></div>
+                            <div className="thumb"></div>
+                        </div>
+                    </section>
                     {/* ) : (
                         <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                             {currentImages.map((image) => (
