@@ -20,8 +20,8 @@ const Footer = () => {
     }, []);
 
     return (
-        <footer className="footer w-full h-48 mt-8">
-            <section className="relative flex flex-col w-full h-full bg-bgDarkGray">
+        <footer className="footer w-full h-48 mt-8 absolute bottom-0">
+            <section className="relative flex flex-col w-full h-full overflow-hidden bg-bgDarkGray">
                 <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2
                 text-5xl bg-bgDarkGray text-clDarkBlue flex justify-center items-center">PixelFreebies</div>
                 {Array.from({ length: 8 }, (_, indexRow) => (
