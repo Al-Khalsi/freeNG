@@ -11,7 +11,7 @@
   --bg-black: #000;
   --bg-darkPurple: #25003e;
   --bg-purple: #7a5af8;
-  --bg-lightPurple: #DF71FFCC;
+  --bg-lightPurple: hsla(286, 100%, 72%, 0.8);
   --bg-darkBlue: #05071b;
   --bg-navyBlue: #040b11;
   --bg-lightBlue: #798DA3;
@@ -698,178 +698,6 @@ background-color: var(--bg-darkGray2);
 /*-------------------- LOGO css --------------------*/
 /*-------------------- LOGO css --------------------*/
 
-.bg-logo {
-  position: relative;
-  color: var(--cl-lightPurple);
-  cursor: pointer;
-  height: 56px;
-  padding: 0.25rem 1.25rem;
-  border: 0.15rem solid var(--cl-lightPurple);
-  border-radius: 0.45rem;
-  background: none;
-  perspective: 2rem;
-  font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: 0.25rem;
-  box-shadow: inset 0 0 0.5em 0 var(--cl-lightPurple),
-  0 0 1rem 0 var(--cl-lightPurple);
-  animation: bg-logo 2s linear infinite;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.logo {
-  float: left;
-  margin-right: -0.8rem;
-  text-shadow: 0 0 0.125rem hsl(0 0% 100% / 0.3), 
-  0 0 0.45rem var(--cl-lightPurple);
-  animation: lamp-logo 3s linear infinite;
-}
-
-.logo span {
-  opacity: 0.5;
-  animation: letter-lamp 2s linear infinite;
-}
-
-.bg-logo::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  opacity: 0;
-  z-index: -1;
-  background: radial-gradient(
-        65.28% 65.28% at 50% 100%,
-        rgba(223, 113, 255, 0.8) 0%,
-        rgba(223, 113, 255, 0) 100%
-      ),
-      linear-gradient(0deg, #7a5af8, #7a5af8);
-  box-shadow: 0 0 2rem 0.2rem #7a5af8;
-  transition: opacity 100ms linear;
-  border-radius: 0.45rem;
-}
-
-.bg-logo:hover {
-  color: rgba(0, 0, 0, 0.8);
-  text-shadow: none;
-  animation: none;
-  border-color: #7a5af8;
-}
-
-.bg-logo:hover .logo {
-  animation: none;
-  text-shadow: none;
-  opacity: 1;
-}
-
-.bg-logo:hover:after {
-  opacity: 1;
-}
-
-@keyframes letter-lamp {
-  0% {
-    opacity: 0.1;
-  }
-  2% {
-    opacity: 0.1;
-  }
-  4% {
-    opacity: 0.5;
-  }
-  19% {
-    opacity: 0.5;
-  }
-  21% {
-    opacity: 0.1;
-  }
-  23% {
-    opacity: 1;
-  }
-  80% {
-    opacity: 0.5;
-  }
-  83% {
-    opacity: 0.4;
-  }
-  87% {
-    opacity: 1;
-  }
-}
-
-/* @keyframes lamp-logo {
-  0% {
-    opacity: 0.1;
-  }
-  2% {
-    opacity: 1;
-  }
-  8% {
-    opacity: 0.1;
-  }
-  9% {
-    opacity: 1;
-  }
-  12% {
-    opacity: 0.1;
-  }
-  20% {
-    opacity: 1;
-  }
-  25% {
-    opacity: 0.3;
-  }
-  30% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 0.7;
-  }
-  72% {
-    opacity: 0.2;
-  }
-  77% {
-    opacity: 0.9;
-  }
-  100% {
-    opacity: 0.9;
-  }
-} */
-
-@keyframes bg-logo {
-  0% {
-    opacity: 0.1;
-  }
-  2% {
-    opacity: 1;
-  }
-  4% {
-    opacity: 0.1;
-  }
-  8% {
-    opacity: 1;
-  }
-  70% {
-    opacity: 0.7;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.bg-logo:hover .logo span {
-  animation: none;
-  text-shadow: none;
-  opacity: 1;
-}
-
-.logo span.burnt {
-  opacity: 0.3;
-  animation: none;
-}
-
 
 
 
@@ -1064,161 +892,101 @@ background-color: var(--bg-darkGray2);
 /*-------------------- loding --------------------*/
 /*-------------------- loding --------------------*/
 
-/* From Uiverse.io by Pradeepsaranbishnoi */ 
-.hand {
-  --skin-color: #ffe99f;
-  --tap-speed: 0.6s;
-  --tap-stagger: 0.1s;
+.loader {
+  --size: 250px;
+  --duration: 2s;
+  --logo-color: grey;
+  --background: linear-gradient(
+    0deg,
+    rgba(50, 50, 50, 0.2) 0%,
+    rgba(100, 100, 100, 0.2) 100%
+  );
+  height: var(--size);
+  aspect-ratio: 1;
   position: relative;
-  width: 80px;
-  height: 60px;
-  margin-left: 80px;
-}
-.hand:nth-child(1) {
-    transform: rotateY(180deg);
-    margin: 0 6rem;
-}
-.hand:nth-child(2) {
-  margin: 0 6rem;
-}
-.hand:before {
-  content: '';
-  display: block;
-  width: 180%;
-  height: 75%;
-  position: absolute;
-  top: 70%;
-  right: 20%;
-  background-color: black;
-  border-radius: 40px 10px;
-  filter: blur(10px);
-  opacity: 0.3;
 }
 
-.palm {
-  display: block;
+.loader .box {
+  position: absolute;
+  background: rgba(100, 100, 100, 0.15);
+  background: var(--background);
+  border-radius: 50%;
+  border-top: 1px solid rgba(100, 100, 100, 1);
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px -0px;
+  backdrop-filter: blur(5px);
+  animation: ripple var(--duration) infinite ease-in-out;
+}
+
+.loader .box:nth-child(1) {
+  inset: 40%;
+  z-index: 99;
+}
+
+.loader .box:nth-child(2) {
+  inset: 30%;
+  z-index: 98;
+  border-color: rgba(100, 100, 100, 0.8);
+  animation-delay: 0.2s;
+}
+
+.loader .box:nth-child(3) {
+  inset: 20%;
+  z-index: 97;
+  border-color: rgba(100, 100, 100, 0.6);
+  animation-delay: 0.4s;
+}
+
+.loader .box:nth-child(4) {
+  inset: 10%;
+  z-index: 96;
+  border-color: rgba(100, 100, 100, 0.4);
+  animation-delay: 0.6s;
+}
+
+.loader .box:nth-child(5) {
+  inset: 0%;
+  z-index: 95;
+  border-color: rgba(100, 100, 100, 0.2);
+  animation-delay: 0.8s;
+}
+
+.loader .logo {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  padding: 30%;
+}
+
+.loader .logo img {
+  fill: var(--logo-color);
   width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: var(--skin-color);
-  border-radius: 10px 40px;
+  animation: color-change var(--duration) infinite ease-in-out;
 }
 
-.thumb {
-  position: absolute;
-  width: 120%;
-  height: 38px;
-  background-color: var(--skin-color);
-  bottom: -18%;
-  right: 1%;
-  transform-origin: calc(100% - 20px) 20px;
-  transform: rotate(-20deg);
-  border-radius: 30px 20px 20px 10px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-  border-left: 2px solid rgba(0, 0, 0, 0.1);
-}
-
-.thumb:after {
-  width: 20%;
-  height: 60%;
-  content: '';
-  background-color: rgba(255, 255, 255, 0.8);
-  position: absolute;
-  bottom: 5%;
-  left: 5px;
-  border-radius: 60% 10% 10% 30%;
-  border-right: 2px solid rgba(0, 0, 0, 0.05);
-}
-
-.finger {
-  position: absolute;
-  width: 80%;
-  height: 35px;
-  background-color: var(--skin-color);
-  bottom: 32%;
-  right: 64%;
-  transform-origin: 100% 20px;
-  animation-duration: calc(var(--tap-speed) * 2);
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  transform: rotate(10deg);
-}
-
-.finger:before {
-  content: '';
-  position: absolute;
-  width: 140%;
-  height: 30px;
-  background-color: var(--skin-color);
-  bottom: 8%;
-  right: 65%;
-  transform-origin: calc(100% - 20px) 20px;
-  transform: rotate(-60deg);
-  border-radius: 20px;
-}
-
-.finger:nth-child(1) {
-  animation-delay: 0;
-  filter: brightness(70%);
-  animation-name: tap-upper-1;
-}
-
-.finger:nth-child(2) {
-  animation-delay: var(--tap-stagger);
-  filter: brightness(80%);
-  animation-name: tap-upper-2;
-}
-
-.finger:nth-child(3) {
-  animation-delay: calc(var(--tap-stagger) * 2);
-  filter: brightness(90%);
-  animation-name: tap-upper-3;
-}
-
-.finger:nth-child(4) {
-  animation-delay: calc(var(--tap-stagger) * 3);
-  filter: brightness(100%);
-  animation-name: tap-upper-4;
-}
-
-@keyframes tap-upper-1 {
-  0%, 50%, 100% {
-    transform: rotate(10deg) scale(0.4);
+@keyframes ripple {
+  0% {
+    transform: scale(1);
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px -0px;
   }
-
-  40% {
-    transform: rotate(50deg) scale(0.4);
+  50% {
+    transform: scale(1.3);
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 30px 20px -0px;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 10px 10px -0px;
   }
 }
 
-@keyframes tap-upper-2 {
-  0%, 50%, 100% {
-    transform: rotate(10deg) scale(0.6);
+@keyframes color-change {
+  0% {
+    fill: var(--logo-color);
   }
-
-  40% {
-    transform: rotate(50deg) scale(0.6);
+  50% {
+    fill: white;
   }
-}
-
-@keyframes tap-upper-3 {
-  0%, 50%, 100% {
-    transform: rotate(10deg) scale(0.8);
-  }
-
-  40% {
-    transform: rotate(50deg) scale(0.8);
-  }
-}
-
-@keyframes tap-upper-4 {
-  0%, 50%, 100% {
-    transform: rotate(10deg) scale(1);
-  }
-
-  40% {
-    transform: rotate(50deg) scale(1);
+  100% {
+    fill: var(--logo-color);
   }
 }
