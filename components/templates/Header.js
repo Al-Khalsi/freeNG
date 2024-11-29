@@ -5,23 +5,8 @@ import { IoLogOut } from "react-icons/io5";
 function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
     return (
         <header className='header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white'>
-            <div className='bg-logo'>
-                <div className="points_wrapper">
-                    <i className="point"></i>
-                    <i className="point"></i>
-                    <i className="point"></i>
-                    <i className="point"></i>
-                    <i className="point"></i>
-                    <i className="point"></i>
-                    <i className="point"></i>
-                    <i className="point"></i>
-                    <i className="point"></i>
-                    <i className="point"></i>
-                </div>
-                <div className='logo'>
-                    <span className='burnt'></span>
-                    PixFreebies
-                </div>
+            <div className='w-32 h-32'>
+                <img src="../../img/LOGO.png" className='w-full object-contain' alt="Logo" />
             </div>
 
             <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
