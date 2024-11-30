@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import Header from '@/components/templates/Header';
 import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
-import { MdImageNotSupported } from "react-icons/md";
+import { MdImageNotSupported, MdDelete } from "react-icons/md";
 import { apiFetch } from '@/utils/api'; // Import apiFetch from utils/api
 
 function Index() {
@@ -278,8 +278,8 @@ function Index() {
                                     fetchImages(); // Reload all images
                                     router.push('/'); // Navigate back to the home page
                                 }}
-                                className='ml-4 bg-red-500 text-white px-4 py-2 rounded-lg'>
-                                X
+                                className='ml-4 text-2xl text-red-600 rounded-lg'>
+                                <MdDelete />
                             </button>
                         </div>
                     ) : (
