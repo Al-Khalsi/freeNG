@@ -292,21 +292,11 @@ function Index() {
                 </div>
 
                 <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
-                    {/* {loading ? ( // Show loading indicator while fetching images */}
-                        <section className='loading flex justify-center w-full my-8 py-2'>
-                            <div class="loader">
-                                <div class="box">
-                                    <div class="logo">
-                                        <img src="../../img/LOGO.png" className='w-full object-contain' alt="Logo" />
-                                    </div>
-                                </div>
-                                <div class="box"></div>
-                                <div class="box"></div>
-                                <div class="box"></div>
-                                <div class="box"></div>
-                            </div>
-                        </section>
-                    {/* ) : currentImages.length === 0 ? ( // Check if there are no images
+                    {loading ? ( // Show loading indicator while fetching images
+                    <section className='loading flex justify-center w-full my-8 py-2'>
+                        <div class="loader relative w-16 h-16 rounded overflow-hidden bg-white"></div>
+                    </section>
+                    ) : currentImages.length === 0 ? ( // Check if there are no images
                         <section className='flex flex-col items-center w-full my-6'>
                             <MdImageNotSupported className='text-6xl text-gray-500' />
                             <h3 className='text-xl text-gray-500'>No images available</h3>
@@ -317,7 +307,7 @@ function Index() {
                                 <Card key={image.id} image={image} onDelete={handleDeleteImage} onEdit={handleEditImage} />
                             ))}
                         </section>
-                    )} */}
+                    )}
                 </main>
 
                 <div className="pagination flex justify-center py-4">
