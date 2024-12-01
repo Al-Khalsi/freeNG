@@ -308,8 +308,7 @@ function Index() {
                     ) : (
                         <div className='subject-text relative w-full text-center'>
                             <h1 className='relative text-6xl text-clLightPurple'>
-                                {/* Free Download Reference For All PNG Images */}
-                                Your Go-To Source for Free PNG Image Downloads!
+                                Free Download Reference For All PNG Images
                             </h1>
                         </div>
                     )}

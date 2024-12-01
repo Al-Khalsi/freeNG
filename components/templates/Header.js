@@ -29,6 +29,12 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                             placeholder="Search..."
                             value={searchQuery} // Bind the input value to the searchQuery state
                             onChange={(e) => setSearchQuery(e.target.value)} // Update the search query
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') { // Check if the pressed key is Enter
+                                    e.preventDefault(); // Prevent the default form submission
+                                    handleSearch(); // Call the handleSearch function
+                                }
+                            }}
                         />
                         <div id="cosmic-glow"></div>
                         <div className="wormhole-border"></div>

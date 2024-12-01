@@ -123,7 +123,7 @@ background-color: var(--bg-darkGray2);
 
 .input {
   background-color: #05071b;
-  width: 391px;
+  width: 591px;
   height: 56px;
   color: var(--cl-purple);
   padding-inline: 59px;
@@ -155,7 +155,7 @@ background-color: var(--bg-darkGray2);
 }
 
 .stardust {
-  max-width: 400px;
+  max-width: 600px;
   border-radius: 10px;
   filter: blur(2px);
 }
@@ -168,7 +168,7 @@ background-color: var(--bg-darkGray2);
   left: 50%;
   transform: translate(-50%, -50%) rotate(83deg);
   position: absolute;
-  width: 600px;
+  width: 800px;
   height: 600px;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -184,7 +184,7 @@ background-color: var(--bg-darkGray2);
 
 .cosmic-ring {
   max-height: 59px;
-  max-width: 395px;
+  max-width: 595px;
   border-radius: 11px;
   filter: blur(0.5px);
 }
@@ -197,7 +197,7 @@ background-color: var(--bg-darkGray2);
   left: 50%;
   transform: translate(-50%, -50%) rotate(70deg);
   position: absolute;
-  width: 600px;
+  width: 800px;
   height: 600px;
   filter: brightness(1.3);
   background-repeat: no-repeat;
@@ -213,7 +213,7 @@ background-color: var(--bg-darkGray2);
 
 .starfield {
   max-height: 65px;
-  max-width: 405px;
+  max-width: 605px;
 }
 
 .starfield::before {
@@ -224,7 +224,7 @@ background-color: var(--bg-darkGray2);
   left: 50%;
   transform: translate(-50%, -50%) rotate(82deg);
   position: absolute;
-  width: 600px;
+  width: 800px;
   height: 600px;
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -278,7 +278,7 @@ background-color: var(--bg-darkGray2);
   filter: blur(30px);
   opacity: 0.4;
   max-height: 130px;
-  max-width: 500px;
+  max-width: 700px;
 }
 
 .nebula:before {
@@ -324,33 +324,12 @@ background-color: var(--bg-darkGray2);
 
 .wormhole-border {
   height: 42px;
-  width: 40px;
+  width: 42px;
   position: absolute;
   overflow: hidden;
   top: 7px;
   right: 7px;
   border-radius: 10px;
-}
-
-.wormhole-border::before {
-  content: "";
-  text-align: center;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(90deg);
-  position: absolute;
-  width: 600px;
-  height: 600px;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  filter: brightness(1.35);
-  background-image: conic-gradient(rgba(0, 0, 0, 0),
-      var(--bg-darkGray),
-      rgba(0, 0, 0, 0) 50%,
-      rgba(0, 0, 0, 0) 50%,
-      var(--bg-darkGray),
-      rgba(0, 0, 0, 0) 100%);
-  animation: rotate 4s linear infinite;
 }
 
 #main {
