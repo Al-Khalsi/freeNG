@@ -1,3 +1,4 @@
+import Head from 'next/head'; // Import Head from next/head
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useEffect, useState } from "react";
@@ -253,6 +254,10 @@ function Index() {
 
     return (
         <>
+            <Head>
+                <title>PixelFreebies</title> 
+                <link rel="icon" href="/PixelFreebiesFavicon.png" /> {/* Link favicon */}
+            </Head>
             <div className="app relative">
                 <Header
                     token={token}
