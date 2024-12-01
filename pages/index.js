@@ -305,7 +305,7 @@ function Index() {
                     ) : (
                         <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                             {currentImages.map((image) => (
-                                <Card key={image.id} image={image} onDelete={handleDeleteImage} onEdit={handleEditImage} />
+                                <Card key={image.id} image={image} role={role} onDelete={handleDeleteImage} onEdit={handleEditImage} />
                             ))}
                         </section>
                     )}

@@ -5,7 +5,7 @@ import { RxDimensions } from "react-icons/rx";
 import Link from 'next/link';
 import FullScreenModal from '@/components/templates/FullScreenModal'; // Import the modal
 
-function Card({ image, onDelete, onEdit }) {
+function Card({ image, role, onDelete, onEdit }) {
     const [isModalOpen, setModalOpen] = useState(false);
     const [editedTitle, setEditedTitle] = useState(image.title);
     const [isEditing, setIsEditing] = useState(false); // Added state for editing mode
@@ -32,16 +32,22 @@ function Card({ image, onDelete, onEdit }) {
             <div className='inside-card w-full px-3 pt-3'>
                 <div className={`bg-img relative w-full h-52 flex justify-center items-center rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
                     <div className='absolute top-2 right-2 left-2 flex justify-end text-white text-xl rounded-md opacity-60'>
-                        <button className='delet flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer' 
-                        onClick={() => onDelete(image.id)}>
-                            <MdDelete/>
-                        </button>
-                        <button className='edit flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer'
-                        onClick={() => setIsEditing(true)}>
-                            <MdEdit />
-                        </button>
-                        <button className='fullScreen flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer' 
-                        onClick={handleOpenModal}>
+                        {
+                            role === 'ROLE_MASTER' && (
+                                <div className='flex'>
+                                    <button className='delet flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer'
+                                        onClick={() => onDelete(image.id)}>
+                                        <MdDelete />
+                                    </button>
+                                    <button className='edit flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer'
+                                        onClick={() => setIsEditing(true)}>
+                                        <MdEdit />
+                                    </button>
+                                </div>
+                            )
+                        }
+                        <button className='fullScreen flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer'
+                            onClick={handleOpenModal}>
                             <MdFullscreen />
                         </button>
                     </div>
