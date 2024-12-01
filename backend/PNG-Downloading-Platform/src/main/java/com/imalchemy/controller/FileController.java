@@ -7,6 +7,7 @@ import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -158,19 +159,60 @@ public class FileController {
 
     // Endpoint for fetching files
     @Operation(
-            summary = "List all files",
-            description = "Fetches all the files from the database with pagination."
-    )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "List all files.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = PaginatedResult.class)
+            summary = "Fetch paginated list of files.",
+            description = "Retrieves a paginated list of image files along with metadata.",
+            responses = {
+                    @ApiResponse(
+                            responseCode = "200",
+                            description = "Paginated list of image files.",
+                            content = @Content(
+                                    mediaType = "application/json",
+                                    examples = @ExampleObject(
+                                            name = "Example Response",
+                                            value = """
+                                                    {
+                                                      "message": "List files.",
+                                                      "data": [
+                                                        {
+                                                          "id": "a1dc1968-5ddc-4f4b-80dc-40dec61b7e22",
+                                                          "fileTitle": "AI Brain",
+                                                          "filePath": "artificial-intelligence-png-11.webp",
+                                                          "contentType": "image/png",
+                                                          "size": "42 KB",
+                                                          "height": 320,
+                                                          "width": 320,
+                                                          "isActive": true,
+                                                          "keywords": "technology, AI",
+                                                          "style": "minimalistic",
+                                                          "isLightMode": false,
+                                                          "dominantColors": ["#FFFFFF", "#000000"],
+                                                          "viewCount": 1000,
+                                                          "downloadCount": 500,
+                                                          "averageRating": 4.5,
+                                                          "lastDownloadedAt": "2024-01-01T12:00:00",
+                                                          "uploadedBy": {
+                                                            "id": "e9c5609d-1f3e-450a-89d4-279763b34e0b",
+                                                            "username": "Seyed Ali"
+                                                          },
+                                                          "categories": [
+                                                            {
+                                                              "id": 1,
+                                                              "name": "Test",
+                                                              "active": true
+                                                            }
+                                                          ]
+                                                        }
+                                                      ],
+                                                      "currentPage": 0,
+                                                      "totalPages": 16,
+                                                      "totalElements": 16,
+                                                      "last": false
+                                                    }"""
+                                    )
+                            )
                     )
-            )
-    })
+            }
+    )
     @GetMapping("/list/paginated")
     public ResponseEntity<PaginatedResult<ImageDTO>> fetchFiles(@RequestParam(defaultValue = "0") int page,
                                                                 @RequestParam(defaultValue = "50") int size) {
