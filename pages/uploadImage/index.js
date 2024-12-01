@@ -10,6 +10,8 @@ function UploadImage() {
   const [imageName, setImageName] = useState('');
   const [category, setCategory] = useState('');
   const [subCategory, setSubCategory] = useState('');
+  const [dominantColor, setDominantColor] = useState('');
+  const [style, setStyle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [showCard, setShowCard] = useState(false);
@@ -17,7 +19,17 @@ function UploadImage() {
   const [cats, setCats] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [lightMode, setLightMode] = useState(false); // State for light mode
+  const [lightMode, setLightMode] = useState(false);
+
+  // Static options for colors and styles
+  const colors = [
+    'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple', 
+    'Pink', 'Brown', 'Gray', 'Black', 'White', 'Cyan'
+  ];
+
+  const styles = [
+    '3D', 'Pixel', 'Anime', 'Cartoon', 'Realistic', 'Abstract'
+  ];
 
   // --------------------------- Backend URLs ---------------------------
   const BACKEND_API_VERSION = "api/v1";
@@ -53,16 +65,18 @@ function UploadImage() {
     formData.append('fileName', imageName);
     formData.append('parentCategoryName', category);
     formData.append('subCategoryNames', subCategory);
-    formData.append('dominantColors', null);
-    formData.append('style', null);
-    formData.append('lightMode', lightMode); // This will send the current state of lightMode
+    formData.append('dominantColors', dominantColor); // Use the selected color
+    formData.append('style', style); // Use the selected style
+    formData.append('lightMode', lightMode);
 
     console.log('Uploading with formData:', {
       image: image,
       fileName: imageName,
       parentCategoryName: category,
       subCategoryNames: subCategory,
-      lightMode // Log the current lightMode state
+      dominantColors: dominantColor,
+      style: style,
+      lightMode
     });
 
     try {
@@ -73,7 +87,7 @@ function UploadImage() {
         },
       });
 
-      console.log('Upload response:', response.data); // Log response data
+      console.log('Upload response:', response.data);
       const uploadedFileData = response.data.image; // Assuming response body is { "image": "string" }
       setUploadedFile(uploadedFileData);
       alert('Upload successful: ' + uploadedFileData);
@@ -157,7 +171,6 @@ function UploadImage() {
     getParentCategories();
   };
 
-  // Toggle function remains the same
   const toggleLightMode = () => {
     setLightMode(prevMode => !prevMode);
   };
@@ -243,6 +256,40 @@ function UploadImage() {
               </select>
             </div>
 
+            <div className="mb-4">
+              <label className="block mb-2">Dominant Color</label>
+              <select
+                value={dominantColor}
+                onChange={(e) => setDominantColor(e.target.value)}
+                className="border rounded p-2 w-full bg-bgDarkGray2"
+                required
+              >
+                <option value="">Select a color</option>
+                {colors.map((color) => (
+                  <option key={color} value={color}>
+                    {color}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Style</label>
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className="border rounded p-2 w-full bg-bgDarkGray2"
+                required
+              >
+                <option value="">Select a style</option>
+                {styles.map((styleOption) => (
+                  <option key={styleOption} value={styleOption}>
+                    {styleOption}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className='flex justify-center items-center'>
               <button
                 type="submit"
@@ -252,7 +299,6 @@ function UploadImage() {
                 {isLoading ? 'Uploading...' : 'Upload'}
               </button>
 
-              {/* Button to open modal for adding category */}
               <button
                 type="button"
                 onClick={handleOpenModal}
@@ -295,7 +341,6 @@ function UploadImage() {
         )}
       </div>
 
-      {/* Add the modal here */}
       <AddCategoryModal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
