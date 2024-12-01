@@ -40,16 +40,15 @@ const Downloader = () => {
 
     return (
         <div className='downloaderPage w-full'>
-            <div className='py-8 mx-8'>
-                <div className='singleCard bg-bgDarkGray2'>
-                    <div className='bg-img'>
-                        <img src={`../../img/${path}`} alt="" />
-                    </div>
-                    <div className='info-img'>
-
-                    </div>
+            <main className='w-full h-auto flex-auto'>
+                <div className=''>
+                    <article>
+                        <div className=''></div>
+                    </article>
+                    {/* <div>Show Ad</div> */}
                 </div>
-            </div>
+
+            </main>
         </div>
     );
 };
