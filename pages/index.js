@@ -9,7 +9,7 @@ import { MdImageNotSupported, MdDelete } from "react-icons/md";
 import { apiFetch } from '@/utils/api'; // Import apiFetch from utils/api
 
 function Index() {
-    const { token, username, email, clearToken, userId } = useAuth(); // Get user authentication details
+    const { token, username, email, clearToken, userId, role } = useAuth(); // Get user authentication details
     const router = useRouter(); // Initialize router for navigation
     const [openSelect, setOpenSelect] = useState(null); // State to manage select dropdown
     const [images, setImages] = useState([]); // State to store images from the backend
@@ -285,7 +285,8 @@ function Index() {
                     ) : (
                         <div className='subject-text relative w-full text-center'>
                             <h1 className='relative text-6xl text-clLightPurple'>
-                                Free download reference for all png images
+                                {/* Free Download Reference For All PNG Images */}
+                                Your Go-To Source for Free PNG Image Downloads!
                             </h1>
                         </div>
                     )}
@@ -293,9 +294,9 @@ function Index() {
 
                 <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
                     {loading ? ( // Show loading indicator while fetching images
-                    <section className='loading flex justify-center w-full my-8 py-1'>
-                        <div class="loader relative w-20 h-20 rounded-lg overflow-hidden bg-white"></div>
-                    </section>
+                        <section className='loading flex justify-center w-full my-8 py-1'>
+                            <div class="loader relative w-20 h-20 rounded-lg overflow-hidden bg-white"></div>
+                        </section>
                     ) : currentImages.length === 0 ? ( // Check if there are no images
                         <section className='flex flex-col items-center w-full my-8'>
                             <MdImageNotSupported className='text-6xl text-gray-500' />
@@ -316,14 +317,17 @@ function Index() {
 
                 <Footer />
 
-                <Link
-                    href={'/uploadImage'}
-                    className='fixed right-3 bottom-3
-                        w-10 h-10 p-6 flex justify-center items-center
-                        bg-blue-700 text-white text-2xl outline-none
-                        rounded-full cursor-pointer'>
-                    +
-                </Link>
+                {/* Conditionally render the upload link based on the user's role */}
+                {role === 'ROLE_MASTER' && (
+                    <Link
+                        href={'/uploadImage'}
+                        className='fixed right-3 bottom-3
+                            w-10 h-10 p-6 flex justify-center items-center
+                            bg-blue-700 text-white text-2xl outline-none
+                            rounded-full cursor-pointer'>
+                        +
+                    </Link>
+                )}
             </div>
         </>
     );

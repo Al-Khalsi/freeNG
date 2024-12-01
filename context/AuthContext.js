@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         const decodedToken = JSON.parse(atob(newToken.split('.')[1]));
         setUsername(decodedToken.username); // Store username from token
         setEmail(decodedToken.email); // Store email from token
-        setRole(decodedToken.role); // Store role from token
+        setRole(decodedToken.authorities); // Store role from token authorities
         Cookies.set('token', newToken); // Store token in cookies
     };
 
