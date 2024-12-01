@@ -40,12 +40,16 @@ const Downloader = () => {
 
     return (
         <div className='downloaderPage w-full'>
-            <main className='w-full h-auto flex-auto'>
-                <div className=''>
-                    <article>
-                        <div className=''></div>
-                    </article>
-                    {/* <div>Show Ad</div> */}
+            <main className='w-full h-auto flex-auto py-12'>
+                <div className='flex justify-between w-full px-8'>
+                    {/* w-5/6 */}
+                    <div className='flex justify-between w-full h-custom-136 p-4 bg-bgDarkGray rounded'> 
+                        <div className='bg-img w-1/2 h-full'>
+                            <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
+                        </div>
+                        <div className='info-img w-1/2'></div>
+                    </div>
+                    {/* <div className='w-1/6 p-4'>Show Ad</div> */}
                 </div>
 
             </main>
