@@ -12,8 +12,11 @@ import com.imalchemy.repository.MetaInfoRepository;
 import com.imalchemy.service.FileService;
 import com.imalchemy.service.ImageStorageStrategy;
 import com.imalchemy.util.converter.ImageConverter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
     private final ImageRepository imageRepository;
@@ -35,20 +39,6 @@ public class FileServiceImpl implements FileService {
     private final ImageConverter imageConverter;
     private final ImageValidationService imageValidationService;
     private final ImageMetadataService imageMetadataService;
-
-    public FileServiceImpl(ImageRepository imageRepository, ImageVariantRepository imageVariantRepository, MetaInfoRepository metaInfoRepository,
-                           ImageStorageStrategy imageStorageStrategy,
-                           ImageConverter imageConverter,
-                           ImageValidationService imageValidationService,
-                           ImageMetadataService imageMetadataService) {
-        this.imageRepository = imageRepository;
-        this.imageVariantRepository = imageVariantRepository;
-        this.metaInfoRepository = metaInfoRepository;
-        this.imageStorageStrategy = imageStorageStrategy;
-        this.imageConverter = imageConverter;
-        this.imageValidationService = imageValidationService;
-        this.imageMetadataService = imageMetadataService;
-    }
 
     @Override
     public ImageDTO storeImage(MultipartFile uploadedMultipartFile, String fileName, String parentCategoryName,
@@ -100,6 +90,19 @@ public class FileServiceImpl implements FileService {
                     );
                     return imageDTO;
                 }).toList();
+    }
+
+    @Override
+    public Page<ImageDTO> listAllImages(Pageable pageable) {
+        return this.imageRepository.findAll(pageable)
+                .map(image -> {
+                    ImageDTO imageDTO = this.imageConverter.toDto(image);
+                    imageDTO.setFilePath(image.getVariants().stream()
+                            .findFirst().map(ImageVariant::getFilePath)
+                            .orElse(image.getFilePath())
+                    );
+                    return imageDTO;
+                });
     }
 
     @Override // todo: needs modification!!! not working as expected

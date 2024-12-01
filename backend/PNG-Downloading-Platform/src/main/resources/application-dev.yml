@@ -17,6 +17,8 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: ${SPRING_PROPERTIES_HIBERNATE_SHOW_SQL:false}
+        format_sql: ${SPRING_PROPERTIES_HIBERNATE_FORMAT_SQL:false}
     hibernate:
       ddl-auto: validate
 

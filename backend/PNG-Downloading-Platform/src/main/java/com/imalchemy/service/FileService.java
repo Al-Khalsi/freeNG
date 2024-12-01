@@ -3,6 +3,8 @@ package com.imalchemy.service;
 import com.imalchemy.model.dto.ImageDTO;
 import com.imalchemy.model.dto.UpdateImageDTO;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -17,6 +19,8 @@ public interface FileService {
     Resource loadImageAsResource(String fileId) throws IOException;
 
     List<ImageDTO> listAllImages();
+
+    Page<ImageDTO> listAllImages(Pageable pageable);
 
     List<ImageDTO> searchImages(String query);
 
