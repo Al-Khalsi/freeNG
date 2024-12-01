@@ -2,6 +2,7 @@ package com.imalchemy.controller;
 
 import com.imalchemy.model.dto.ImageDTO;
 import com.imalchemy.model.dto.UpdateImageDTO;
+import com.imalchemy.model.payload.response.PaginatedResult;
 import com.imalchemy.model.payload.response.Result;
 import com.imalchemy.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -150,6 +154,30 @@ public class FileController {
         List<ImageDTO> fileDTOs = this.fileService.listAllImages();
 
         return ResponseEntity.ok(Result.success("List files.", fileDTOs));
+    }
+
+    // Endpoint for fetching files
+    @Operation(
+            summary = "List all files",
+            description = "Fetches all the files from the database with pagination."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "List all files.",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = PaginatedResult.class)
+                    )
+            )
+    })
+    @GetMapping("/list/paginated")
+    public ResponseEntity<PaginatedResult<ImageDTO>> fetchFiles(@RequestParam(defaultValue = "0") int page,
+                                                                @RequestParam(defaultValue = "50") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ImageDTO> imageDTOs = this.fileService.listAllImages(pageable);
+
+        return ResponseEntity.ok(PaginatedResult.success("List files.", imageDTOs));
     }
 
     // Endpoint for searching files
