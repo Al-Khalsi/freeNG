@@ -1,11 +1,13 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { FaImage } from "react-icons/fa";
+import { RxDimensions } from "react-icons/rx";
 import axios from 'axios';
 import Card from '@/components/templates/Card';
 
 const Downloader = () => {
     const router = useRouter();
-    const { id: fileId, title, path } = router.query;
+    const { id: fileId, title, path, size, width, height } = router.query;
 
     const handleDownload = async () => {
         if (!fileId) {
@@ -43,11 +45,25 @@ const Downloader = () => {
             <main className='w-full h-auto flex-auto py-12'>
                 <div className='flex justify-between w-full px-8'>
                     {/* w-5/6 */}
-                    <div className='flex justify-between w-full h-custom-136 p-4 bg-bgDarkGray rounded'> 
+                    <div className='flex justify-between w-full h-custom-136 p-4 bg-bgDarkGray rounded'>
                         <div className='bg-img w-1/2 h-full'>
                             <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
                         </div>
-                        <div className='info-img w-1/2'></div>
+                        <div className='info-img flex flex-col ms-8 w-1/2'>
+                            <h1 className='block text-3xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>
+                                {title}
+                            </h1>
+                            <div className='flex mt-4 ms-1'>
+                                <div className='flex justify-between items-center bg-gray-600 px-2 py-1 rounded text-xs text-lightBlue'>
+                                    <FaImage />
+                                    <span className='block ml-1'>{size}</span>
+                                </div>
+                                <div className='flex justify-between items-center bg-gray-600 ml-2 px-2 py-1 rounded text-xs text-lightBlue'>
+                                    <RxDimensions />
+                                    <span className='block ml-1'>{`${width} × ${height}`}</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     {/* <div className='w-1/6 p-4'>Show Ad</div> */}
                 </div>

@@ -7,10 +7,11 @@ import FullScreenModal from '@/components/templates/FullScreenModal'; // Import 
 
 function Card({ image, onDelete, onEdit }) {
     const [isModalOpen, setModalOpen] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(image.title);
+    const [isEditing, setIsEditing] = useState(false); // Added state for editing mode
 
-    const downloadLink = `/downloader/${image.id}?title=${encodeURIComponent(image.title)}&path=${encodeURIComponent(image.path)}`;
+    // Update the download link to include additional properties
+    const downloadLink = `/downloader/${image.id}?title=${encodeURIComponent(image.title)}&path=${encodeURIComponent(image.path)}&size=${encodeURIComponent(image.size)}&width=${image.width}&height=${image.height}`;
 
     const handleOpenModal = () => {
         setModalOpen(true); // Open the modal
@@ -28,8 +29,8 @@ function Card({ image, onDelete, onEdit }) {
 
     return (
         <div className={`card w-full rounded-lg overflow-hidden bg-bgDarkGray`}>
-           <div className='inside-card w-full px-3 pt-3'>
-                 <div className={`bg-img relative w-full h-52 flex justify-center items-center rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
+            <div className='inside-card w-full px-3 pt-3'>
+                <div className={`bg-img relative w-full h-52 flex justify-center items-center rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
                     <div className='absolute top-2 right-2 left-2 flex justify-end text-white text-xl rounded-md opacity-60'>
                         <button className='delet flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer' 
                         onClick={() => onDelete(image.id)}>
@@ -66,19 +67,6 @@ function Card({ image, onDelete, onEdit }) {
 
             {/* Render the FullScreenModal if it is open */}
             {isModalOpen && <FullScreenModal image={image} onClose={handleCloseModal} />}
-
-            {isEditing && (
-                <div className="edit-modal">
-                    <input 
-                        type="text" 
-                        value={editedTitle} 
-                        onChange={(e) => setEditedTitle(e.target.value)} 
-                        placeholder="Edit title" 
-                    />
-                    <button onClick={handleEdit}>Save</button>
-                    <button onClick={() => setIsEditing(false)}>Cancel</button>
-                </div>
-            )}
         </div>
     );
 }
