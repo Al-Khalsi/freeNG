@@ -9,7 +9,7 @@ const NotFoundPage = () => {
       const top = Math.random() * window.innerHeight;
       const star = document.createElement('div');
 
-      // اضافه کردن کلاس‌ها به صورت جداگانه
+      // Add classes individually
       star.classList.add('absolute', 'w-1', 'h-1', 'bg-white', 'rounded-full', 'star');
       body.appendChild(star);
       star.style.top = `${top}px`;
@@ -100,11 +100,11 @@ const NotFoundPage = () => {
       <style jsx global>{`
         body {
           margin: 0;
-          overflow: hidden; /* جلوگیری از اسکرول */
-          height: 100vh; /* اطمینان از اینکه ارتفاع به درستی تنظیم شده است */
+          overflow: hidden; /* Prevent scrolling */
+          height: 100vh; /* Make sure the height is set correctly */
         }
         *, *::before, *::after {
-          box-sizing: border-box; /* اطمینان از محاسبه درست اندازه‌ها */
+          box-sizing: border-box; /* Ensuring correct measurement calculations */
         }
       `}</style>
     </div>
