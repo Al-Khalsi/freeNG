@@ -1,12 +1,11 @@
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
 import axios from 'axios';
-import Header from '@/components/templates/Header';
+import Card from '@/components/templates/Card';
 
 const Downloader = () => {
-    const router = useRouter(); 
-    const { id: fileId, title, path } = router.query; 
+    const router = useRouter();
+    const { id: fileId, title, path } = router.query;
 
     const handleDownload = async () => {
         if (!fileId) {
@@ -40,22 +39,14 @@ const Downloader = () => {
     };
 
     return (
-        <div className='imageSinglePage w-full min-h-screen bg-gradient-to-r from-lightGray to-lightBlue'>
-            <div className='wrapper p-12'>
-                <div className='product-div w-full h-80 flex bg-bgDarkGray rounded-3xl m-5 overflow-hidden'>
-                    <div className='product-div-left bg-img w-1/3'>
-                        <div className="img-container w-full h-full">
-                            <img src={`../../img/${path}`} className='w-full h-full object-cover' alt={title} />
-                        </div>
+        <div className='downloaderPage w-full'>
+            <div className='py-8 mx-8'>
+                <div className='singleCard bg-bgDarkGray2'>
+                    <div className='bg-img'>
+                        <img src={`../../img/${path}`} alt="" />
                     </div>
-                    <div className='product-div-right w-2/3 bg-darkBlue text-white'>
-                        <h1 className='image-title'>{title}</h1>
-                        <button
-                            onClick={handleDownload}
-                            className='mt-4 bg-blue-500 text-white py-2 px-4 rounded'
-                        >
-                            Download
-                        </button>
+                    <div className='info-img'>
+
                     </div>
                 </div>
             </div>
