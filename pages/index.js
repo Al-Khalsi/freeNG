@@ -273,8 +273,8 @@ function Index() {
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-192x192.png" sizes="192x192" />
 
                  {/* Microsoft Tiles for Windows */}
-                {/* <meta name="msapplication-TileColor" content="#ffffff" />
-                <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" /> */}
+                <meta name="msapplication-TileColor" content="#ffffff" />
+                <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
             <div className="app relative">
                 <Header
