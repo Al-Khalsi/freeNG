@@ -86,6 +86,11 @@ img {
   display: block;
 }
 
+header.sticky {
+  transition: 0.6s;
+  transform: translateY(96px);
+}
+
 main aside {
   flex-shrink: 0.25;
 }
@@ -98,19 +103,6 @@ main aside {
   height: 100%;
   border-top-right-radius: 1rem;
   border-bottom-right-radius: 1rem;
-}
-
-.change-background {
-  font-size: 1.25rem;
-  background-color: rgb(44, 0, 80);
-  color: yellow;
-}
-
-#particles canvas {
-  z-index: -1;
-  height: 100%;
-  width: 100%;
-  position: absolute;
 }
 
 .bg-img {
