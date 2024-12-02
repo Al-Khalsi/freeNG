@@ -45,7 +45,7 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
                 jwt = jwt.substring("Bearer ".length());
                 Map<String, Object> claimsMap = this.tokenService.validateTokenAndExtractClaims(jwt);
                 String email = String.valueOf(claimsMap.get("email"));
-                String authorities = String.valueOf(claimsMap.get("authorities"));
+                String authorities = String.valueOf(claimsMap.get("role"));
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                         email,

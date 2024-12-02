@@ -1,16 +1,34 @@
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { FaSearch, FaMicrophone } from 'react-icons/fa';
+import { FaSearch } from 'react-icons/fa';
 import { IoLogOut } from "react-icons/io5";
 
 function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
+    const [isFixedHeader, setIsFixedHeader] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.scrollY > 100) {
+                setIsFixedHeader(true);
+            } else {
+                setIsFixedHeader(false);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     return (
-        <header className='header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white'>
+        <header className={`header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'sticky -top-24 left-0 z-50 bg-black' : ''}`}>
             <div className='w-20 h-20'>
                 <img src="../../img/LOGO.png" className='w-full h-full object-cover' alt="Logo" title='Logo' />
             </div>
 
             <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
-                <div id="search-container" className="flex justify-center items-center">
+                <div id="search-container" className="flex justify-center items-center relative">
                     <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
                     <div className="starfield w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
                     <div className="cosmic-dust"></div>
@@ -27,12 +45,12 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                             name="text"
                             type="text"
                             placeholder="Search..."
-                            value={searchQuery} // Bind the input value to the searchQuery state
-                            onChange={(e) => setSearchQuery(e.target.value)} // Update the search query
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter') { // Check if the pressed key is Enter
-                                    e.preventDefault(); // Prevent the default form submission
-                                    handleSearch(); // Call the handleSearch function
+                                if (e.key === 'Enter') {
+                                    e.preventDefault();
+                                    handleSearch();
                                 }
                             }}
                         />

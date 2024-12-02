@@ -33,7 +33,7 @@ public class DefaultTokenClaimsBuilder implements TokenClaimsBuilder {
         return Map.of(
                 "email", email,
                 "username", user.getUsername(),
-                "authorities", authentication.getAuthorities()
+                "role", authentication.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.joining(","))

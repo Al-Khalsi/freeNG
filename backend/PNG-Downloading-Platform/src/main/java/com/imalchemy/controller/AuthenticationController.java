@@ -113,7 +113,7 @@ public class AuthenticationController {
                                             "userDetails": {
                                                 "email":"string",
                                                 "username":"string",
-                                                "authorities":"ROLE_USER"
+                                                "role":"ROLE_USER"
                                             }
                                         }
                                     }
