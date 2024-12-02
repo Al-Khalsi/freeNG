@@ -59,7 +59,7 @@ public class JWTTokenService implements TokenService {
         return Map.of(
                 "email", claims.get("email", String.class),
                 "username", claims.get("username", String.class),
-                "authorities", claims.get("authorities", String.class)
+                "role", claims.get("role", String.class)
         );
     }
 
