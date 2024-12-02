@@ -22,13 +22,13 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
     }, []);
 
     return (
-        <header className={`header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'sticky -top-24 left-0 z-50 bg-black' : ''}`}>
+        <header className={`header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'sticky -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
             <div className='w-20 h-20'>
                 <img src="../../img/LOGO.png" className='w-full h-full object-cover' alt="Logo" title='Logo' />
             </div>
 
             <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
-                <div id="search-container" className="flex justify-center items-center relative">
+                <div id="search-container" className="flex justify-center items-center ">
                     <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
                     <div className="starfield w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
                     <div className="cosmic-dust"></div>
