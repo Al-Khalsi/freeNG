@@ -75,7 +75,9 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
             {token ? (
                 <div className='flex items-center border-2 border-bgLightPurple rounded-md py-1 px-2'>
                     <div>
-                        <span className='text-white'>{username}</span>
+                        <span className='text-white cursor-pointer' title={username}>
+                            {username.length > 8 ? `${username.slice(0, 8)}...` : username}
+                        </span>
                     </div>
                     <IoLogOut onClick={handleLogout} className='ml-4 text-red-600 cursor-pointer' />
                 </div>
