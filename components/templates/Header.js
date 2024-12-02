@@ -5,8 +5,8 @@ import { IoLogOut } from "react-icons/io5";
 function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
     return (
         <header className='header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white'>
-            <div className='w-32 h-32'>
-                <img src="../../img/LOGO.png" className='w-full object-contain' alt="Logo" />
+            <div className='w-20 h-20'>
+                <img src="../../img/LOGO.png" className='w-full h-full object-cover' alt="Logo" title='Logo' />
             </div>
 
             <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
