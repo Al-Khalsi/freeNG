@@ -120,7 +120,7 @@ public class FileController {
         Pageable pageable = PageRequest.of(page, size);
         Page<ImageDTO> imageDTOs = this.fileService.listAllImages(pageable);
 
-        return ResponseEntity.ok(PaginatedResult.success("List files.", imageDTOs));
+        return ResponseEntity.ok(PaginatedResult.success("List files.", true, imageDTOs));
     }
 
     // Endpoint for searching files

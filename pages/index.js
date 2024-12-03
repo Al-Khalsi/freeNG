@@ -16,9 +16,10 @@ function Index() {
     const [images, setImages] = useState([]); // State to store images from the backend
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [loading, setLoading] = useState(false); // State to manage loading status
-    const itemsPerPage = 20; // Number of items to display per page
+    const itemsPerPage = 50; // Number of items to display per page
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
     const [isSearching, setIsSearching] = useState(false); // New state for search
+    const [totalPages, setTotalPages] = useState(0); // State to store total pages
 
     const handleSelectToggle = (selectId) => {
         // Toggle the select dropdown
@@ -30,12 +31,12 @@ function Index() {
     };
 
     // Fetch images from the backend
-    const fetchImages = async (query = '') => {
+    const fetchImages = async (query = '', page = currentPage, size = itemsPerPage) => {
         setLoading(true); // Set loading state to true before starting the fetch
         try {
             const url = query
-                ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}`
-                : 'http://localhost:8080/api/v1/file/list';
+                ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`
+                : `http://localhost:8080/api/v1/file/list/paginated?page=${(page-1)}&size=${size}`;
 
             console.log('Fetching images from URL:', url); // Log the URL being fetched
 
@@ -57,6 +58,7 @@ function Index() {
 
                 console.log('Fetched images:', fetchedImages); // Log the fetched images
                 setImages(fetchedImages); // Update state with the fetched images
+                setTotalPages(response.totalPages); // Set total pages from the response
             } else {
                 console.error('Failed to fetch images: ', response.message); // Log an error if the response is not valid
             }
@@ -67,12 +69,12 @@ function Index() {
         }
     };
 
-    // Fetch images when the component mounts or when the token changes
+    // Fetch images when the component mounts or when the token or currentPage changes
     useEffect(() => {
-        fetchImages(); // Call the fetchImages function without a query
-    }, [token]); // Only run when the token changes
+        fetchImages('', currentPage); // Call the fetchImages function with the current page
+    }, [token, currentPage]); // Only run when the token or currentPage changes
 
-    const handleDeleteImage = async (imageId) => { // Change from id to imageId
+    const handleDeleteImage = async (imageId) => {
         const confirmed = window.confirm("Are you sure you want to delete this image?");
         if (confirmed) {
             try {
@@ -116,13 +118,9 @@ function Index() {
     };
 
     // Pagination logic
-    const indexOfLastImage = currentPage * itemsPerPage; // Index of the last image on the current page
-    const indexOfFirstImage = indexOfLastImage - itemsPerPage; // Index of the first image on the current page
-    const currentImages = images.slice(indexOfFirstImage, indexOfLastImage); // Get the images for the current page
-    const totalPages = Math.ceil(images.length / itemsPerPage); // Calculate total pages
-
     const handlePageChange = (page) => {
         router.push(`/?page=${page}`); // Change the page in the URL
+        fetchImages(searchQuery, page); // Fetch images for the new page
     };
 
     const renderPagination = () => {
@@ -130,114 +128,17 @@ function Index() {
         const maxVisiblePages = 5; // Maximum number of visible pagination buttons
 
         // Render pagination buttons based on total pages
-        if (totalPages <= maxVisiblePages + 2) {
-            for (let i = 1; i <= totalPages; i++) {
-                pagination.push(
-                    <button
-                        key={i}
-                        onClick={() => handlePageChange(i)}
-                        className={`mx-2 px-4 py-2 rounded-lg 
-                        ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                        {i}
-                    </button>
-                );
-            }
-        } else {
-            if (currentPage > 2 && currentPage < totalPages - 2) {
-                pagination.push(
-                    <button
-                        key={1}
-                        onClick={() => handlePageChange(1)}
-                        className={`mx-2 px-4 py-2 rounded-lg 
-                        ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                        {1}
-                    </button>
-                );
-                pagination.push(<span key="dots1" className="mx-2">...</span>);
-                pagination.push(
-                    <button
-                        key={currentPage - 1}
-                        onClick={() => handlePageChange(currentPage - 1)}
-                        className={`mx-2 px-4 py-2 rounded-lg 
-                          ${currentPage === currentPage - 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                        {currentPage - 1}
-                    </button>
-                );
-                pagination.push(
-                    <button
-                        key={currentPage}
-                        onClick={() => handlePageChange(currentPage)}
-                        className={`mx-2 px-4 py-2 rounded-lg 
-                          ${currentPage === currentPage ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                        {currentPage}
-                    </button>
-                );
-                pagination.push(
-                    <button
-                        key={currentPage + 1}
-                        onClick={() => handlePageChange(currentPage + 1)}
-                        className={`mx-2 px-4 py-2 rounded-lg 
-                          ${currentPage === currentPage + 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                        {currentPage + 1}
-                    </button>
-                );
-                pagination.push(<span key="dots2" className="mx-2">...</span>);
-                pagination.push(
-                    <button
-                        key={totalPages}
-                        onClick={() => handlePageChange(totalPages)}
-                        className={`mx-2 px-4 py-2 rounded-lg 
-                          ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                        {totalPages}
-                    </button>
-                );
-            } else if (currentPage <= 3) {
-                for (let i = 1; i <= 3; i++) {
-                    pagination.push(
-                        <button
-                            key={i}
-                            onClick={() => handlePageChange(i)}
-                            className={`mx-2 px-4 py-2 rounded-lg 
-                                ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                            {i}
-                        </button>
-                    );
-                }
-                pagination.push(<span key="dots" className="mx-2">...</span>);
-                pagination.push(
-                    <button
-                        key={totalPages}
-                        onClick={() => handlePageChange(totalPages)}
-                        className={`mx-2 px-4 py-2 rounded-lg 
-                          ${currentPage === totalPages ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                        {totalPages}
-                    </button>
-                );
-            } else {
-                pagination.push(
-                    <button
-                        key={1}
-                        onClick={() => handlePageChange(1)}
-                        className={`mx-2 px-4 py-2 rounded-lg 
-                          ${currentPage === 1 ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                        {1}
-                    </button>
-                );
-                pagination.push(<span key="dots" className="mx-2">...</span>);
-                for (let i = totalPages - 4; i <= totalPages; i++) {
-                    pagination.push(
-                        <button
-                            key={i}
-                            onClick={() => handlePageChange(i)}
-                            className={`mx-2 px-4 py-2 rounded-lg 
-                              ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
-                            {i}
-                        </button>
-                    );
-                }
-            }
+        for (let i = 1; i <= totalPages; i++) {
+            pagination.push(
+                <button
+                    key={i}
+                    onClick={() => handlePageChange(i)}
+                    className={`mx-2 px-4 py-2 rounded-lg 
+                    ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
+                    {i}
+                </button>
+            );
         }
-
         return pagination; // Return the array of pagination buttons
     };
 
@@ -246,7 +147,7 @@ function Index() {
     };
 
     const handleSearch = () => {
-        fetchImages(searchQuery); // Search based on the query
+        fetchImages(searchQuery, 1); // Search based on the query and reset to page 1
         setIsSearching(true); // Set the search state to true
         router.push(`/?search=${encodeURIComponent(searchQuery)}`); // Navigate to the new URL
     };
@@ -316,16 +217,16 @@ function Index() {
                 <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
                     {loading ? ( // Show loading indicator while fetching images
                         <section className='loading flex justify-center w-full my-8 py-1'>
-                            <div class="loader relative w-20 h-20 rounded-lg overflow-hidden bg-white"></div>
+                            <div className="loader relative w-20 h-20 rounded-lg overflow-hidden bg-white"></div>
                         </section>
-                    ) : currentImages.length === 0 ? ( // Check if there are no images
+                    ) : images.length === 0 ? ( // Check if there are no images
                         <section className='flex flex-col items-center w-full my-8'>
                             <MdImageNotSupported className='text-6xl text-gray-500' />
                             <h3 className='text-xl text-gray-500'>No images available</h3>
                         </section>
                     ) : (
                         <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
-                            {currentImages.map((image) => (
+                            {images.map((image) => (
                                 <Card key={image.id} image={image} role={role} onDelete={handleDeleteImage} onEdit={handleEditImage} />
                             ))}
                         </section>
