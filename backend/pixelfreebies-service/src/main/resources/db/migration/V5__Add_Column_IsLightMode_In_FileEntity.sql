@@ -1,0 +1,5 @@
+ALTER TABLE file
+    ADD is_light_mode BOOLEAN DEFAULT FALSE;
+
+ALTER TABLE file
+    ALTER COLUMN is_light_mode SET NOT NULL;
