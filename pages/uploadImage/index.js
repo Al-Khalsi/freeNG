@@ -218,14 +218,17 @@ function UploadImage() {
                   className="border rounded p-2 w-full bg-bgDarkGray2"
                   required
                 >
-                  {cats && cats.length > 0 ? (
-                    cats.map((cat) => (
-                      <option key={cat.name} value={cat.name}>
-                        {cat.name}
-                      </option>
-                    ))
+                  {cats.length === 0 ? (
+                    <option value="">No categories available</option> // Show when no categories are available
                   ) : (
-                    <option value="">No categories available</option>
+                    <>
+                      <option value="">Select a category</option> // Default option when categories are available
+                      {cats.map((cat) => (
+                        <option key={cat.name} value={cat.name}>
+                          {cat.name}
+                        </option>
+                      ))}
+                    </>
                   )}
                 </select>
               </div>
@@ -238,14 +241,17 @@ function UploadImage() {
                   className="border rounded p-2 w-full bg-bgDarkGray2"
                   required
                 >
-                  {subCategories.length > 0 ? (
-                    subCategories.map((subCat) => (
-                      <option key={subCat.name} value={subCat.name}>
-                        {subCat.name}
-                      </option>
-                    ))
+                  {subCategories.length === 0 ? (
+                    <option value="">No subcategories available</option> // Show when no subcategories are available
                   ) : (
-                    <option value="">No subcategories available</option>
+                    <>
+                      <option value="">Select a subcategory</option> // Default option when subcategories are available
+                      {subCategories.map((subCat) => (
+                        <option key={subCat.name} value={subCat.name}>
+                          {subCat.name}
+                        </option>
+                      ))}
+                    </>
                   )}
                 </select>
               </div>
