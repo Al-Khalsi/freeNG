@@ -6,11 +6,6 @@ import com.pixelfreebies.model.payload.response.PaginatedResult;
 import com.pixelfreebies.model.payload.response.Result;
 import com.pixelfreebies.service.FileService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -49,32 +44,17 @@ public class FileController {
             summary = "Upload a file",
             description = "Upload a file to the server"
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "File successfully uploaded",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = Result.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "400",
-                    description = "Failed to upload file"
-            )
-    })
     @PostMapping("/upload")
     @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_ADMIN')")
     public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
                                              @RequestParam String fileName,
-                                             @RequestParam String parentCategoryName,
-                                             @RequestParam List<String> subCategoryNames,
+                                             @RequestParam List<String> keywords,
                                              @RequestParam List<String> dominantColors,
                                              @RequestParam String style,
                                              @RequestParam boolean lightMode) {
         try {
 
-            ImageDTO imageDTO = this.fileService.storeImage(multipartFile, fileName, parentCategoryName, subCategoryNames, dominantColors, style, lightMode);
+            ImageDTO imageDTO = this.fileService.storeImage(multipartFile, fileName, keywords, dominantColors, style, lightMode);
             return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
 
         } catch (IllegalArgumentException e) {
@@ -92,20 +72,6 @@ public class FileController {
             summary = "Download a file",
             description = "Download a file from the server using its ID"
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "File successfully downloaded",
-                    content = @Content(
-                            mediaType = MediaType.APPLICATION_OCTET_STREAM_VALUE,
-                            schema = @Schema(type = "string", format = "binary") // Indicating binary data
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "File not found"
-            )
-    })
     @GetMapping("/download/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
         try {
@@ -136,20 +102,6 @@ public class FileController {
             summary = "List all files",
             description = "Fetches all the files from the database."
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "List all files.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = Result.class)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "404",
-                    description = "File not found"
-            )
-    })
     @GetMapping("/list")
     public ResponseEntity<Result> fetchFiles() {
         List<ImageDTO> fileDTOs = this.fileService.listAllImages();
@@ -160,58 +112,7 @@ public class FileController {
     // Endpoint for fetching files
     @Operation(
             summary = "Fetch paginated list of files.",
-            description = "Retrieves a paginated list of image files along with metadata.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "Paginated list of image files.",
-                            content = @Content(
-                                    mediaType = "application/json",
-                                    examples = @ExampleObject(
-                                            name = "Example Response",
-                                            value = """
-                                                    {
-                                                      "message": "List files.",
-                                                      "data": [
-                                                        {
-                                                          "id": "a1dc1968-5ddc-4f4b-80dc-40dec61b7e22",
-                                                          "fileTitle": "AI Brain",
-                                                          "filePath": "artificial-intelligence-png-11.webp",
-                                                          "contentType": "image/png",
-                                                          "size": "42 KB",
-                                                          "height": 320,
-                                                          "width": 320,
-                                                          "isActive": true,
-                                                          "keywords": "technology, AI",
-                                                          "style": "minimalistic",
-                                                          "isLightMode": false,
-                                                          "dominantColors": ["#FFFFFF", "#000000"],
-                                                          "viewCount": 1000,
-                                                          "downloadCount": 500,
-                                                          "averageRating": 4.5,
-                                                          "lastDownloadedAt": "2024-01-01T12:00:00",
-                                                          "uploadedBy": {
-                                                            "id": "e9c5609d-1f3e-450a-89d4-279763b34e0b",
-                                                            "username": "Seyed Ali"
-                                                          },
-                                                          "categories": [
-                                                            {
-                                                              "id": 1,
-                                                              "name": "Test",
-                                                              "active": true
-                                                            }
-                                                          ]
-                                                        }
-                                                      ],
-                                                      "currentPage": 0,
-                                                      "totalPages": 16,
-                                                      "totalElements": 16,
-                                                      "last": false
-                                                    }"""
-                                    )
-                            )
-                    )
-            }
+            description = "Retrieves a paginated list of image files along with metadata."
     )
     @GetMapping("/list/paginated")
     public ResponseEntity<PaginatedResult<ImageDTO>> fetchFiles(@RequestParam(defaultValue = "0") int page,
@@ -227,16 +128,6 @@ public class FileController {
             summary = "Search files",
             description = "Searches the files from the database."
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Search files.",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(implementation = Result.class)
-                    )
-            )
-    })
     @GetMapping("/search")
     public ResponseEntity<Result> searchFiles(@RequestParam String query) {
         List<ImageDTO> searchedFiles = this.fileService.searchImages(query);

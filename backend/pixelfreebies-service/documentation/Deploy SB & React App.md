@@ -190,7 +190,8 @@ react frontend and spring boot backend:
        >
     - Docker: Minimal
    > - PostgreSQL: 1
-   >   - JDK: Minimal
+       >
+   - JDK: Minimal
    >   - Maven: Minimal
    >   - Node.js: 1
    >   - Nginx/Caddy: 1
@@ -206,7 +207,8 @@ react frontend and spring boot backend:
        >
     - Docker: 1 GB
    > - PostgreSQL: 2 GB
-   >   - JDK: 1 GB
+       >
+   - JDK: 1 GB
    >   - Maven: 0.5 GB
    >   - Node.js: 2 GB
    >   - Nginx/Caddy: 0.5 GB

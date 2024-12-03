@@ -1,9 +1,7 @@
 package com.pixelfreebies.util.converter;
 
-import com.pixelfreebies.model.domain.Category;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.User;
-import com.pixelfreebies.model.dto.CategoryDTO;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.RoleDTO;
 import com.pixelfreebies.model.dto.UserDTO;
@@ -18,7 +16,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ImageConverter implements Converter<Image, ImageDTO> {
 
-    private final CategoryConverter categoryConverter;
     private final RoleConverter roleConverter;
     private final ImageMetadataService imageMetadataService;
 
@@ -49,14 +46,6 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
             User uploadedBy = new User(); // Assuming you have a User entity class
             uploadedBy.setId(dto.getUploadedBy().getId()); // Set the user ID from DTO
             image.setUploadedBy(uploadedBy);
-        }
-
-        // Handle categories if present
-        if (dto.getCategories() != null) {
-            Set<Category> categories = dto.getCategories().stream()
-                    .map(this.categoryConverter::toEntity)
-                    .collect(Collectors.toSet());
-            image.setCategories(categories);
         }
 
         return image;
@@ -96,14 +85,6 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
             uploadedByDTO.setRoles(roleDTOS);
 
             imageDTO.setUploadedBy(uploadedByDTO);
-        }
-
-        // Handle categories if present
-        if (entity.getCategories() != null) {
-            Set<CategoryDTO> categoryDTOS = entity.getCategories().stream()
-                    .map(this.categoryConverter::toDto)
-                    .collect(Collectors.toSet());
-            imageDTO.setCategories(categoryDTOS);
         }
 
         return imageDTO;

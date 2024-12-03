@@ -17,6 +17,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Entity
 @Table(name = "images")
+// TODO: show filters based on most searched keywords
 public class Image extends BaseEntity<UUID> {
 
     @Id
@@ -24,7 +25,6 @@ public class Image extends BaseEntity<UUID> {
 
     private String fileTitle;
     private boolean isActive;
-    private String keywords; // Comma-separated keywords for search
     private String style;
     private boolean isLightMode;
 
@@ -46,31 +46,23 @@ public class Image extends BaseEntity<UUID> {
             name = "image_colors",
             joinColumns = @JoinColumn(name = "image_id")
     )
+    @Builder.Default
     private Set<String> dominantColors = new HashSet<>();
+
+    @ElementCollection
+    @CollectionTable(
+            name = "image_keywords",
+            joinColumns = @JoinColumn(name = "image_id")
+    )
+    @Builder.Default
+    private Set<String> keywords = new HashSet<>();
 
     // -------------------- Relationships --------------------
     @ManyToOne
     private User uploadedBy;
 
-    @ManyToMany
-    @JoinTable(
-            name = "image_categories",
-            joinColumns = @JoinColumn(name = "image_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private Set<Category> categories = new HashSet<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "image_subcategories",
-            joinColumns = @JoinColumn(name = "image_id"),
-            inverseJoinColumns = @JoinColumn(name = "subcategory_id")
-    )
-    @ToString.Exclude
-    private Set<SubCategory> subCategories = new HashSet<>();
-
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
+    @Builder.Default
     private Set<ImageVariant> variants = new HashSet<>();
 
     // -------------------- Methods --------------------

@@ -33,4 +33,6 @@ CREATE INDEX idx_image_variant_image_id ON image_variants (image_id);
 CREATE INDEX idx_image_variant_format ON image_variants (format);
 CREATE INDEX idx_image_variant_purpose ON image_variants (purpose);
 
-select i.* from images i where i.file_title ilike '%a%';
+select i.*
+from images i
+where i.file_title ilike '%a%';
