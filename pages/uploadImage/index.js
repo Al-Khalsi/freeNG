@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import Card from '@/components/templates/Card';
 import { useAuth } from '@/context/AuthContext';
@@ -11,11 +11,7 @@ function UploadImage() {
   const [style, setStyle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showCard, setShowCard] = useState(false);
   const [uploadedFile, setUploadedFile] = useState('');
-  const [cats, setCats] = useState([]);
-  const [subCategories, setSubCategories] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [lightMode, setLightMode] = useState(false);
 
   const colors = [
@@ -31,10 +27,7 @@ function UploadImage() {
   const BACKEND_API_VERSION = "api/v1";
   const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`;
   const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/file`;
-  const BACKEND_CATEGORY_URL = `${BACKEND_BASE_URL}/category`;
-
   const BACKEND_UPLOAD_FILE_URL = `${BACKEND_UPLOAD_URL}/upload`;
-  const BACKEND_LIST_PARENT_CATEGORIES_URL = `${BACKEND_CATEGORY_URL}/list/parent`;
 
   const handleImageChange = (e) => {
     const image = e.target.files[0];
@@ -42,7 +35,7 @@ function UploadImage() {
       setImage(image);
       setErrorMessage('');
     } else {
-      setErrorMessage('Please select a valid image image.');
+      setErrorMessage('Please select a valid image.');
     }
   };
 
@@ -59,18 +52,10 @@ function UploadImage() {
     const formData = new FormData();
     formData.append('file', image);
     formData.append('fileName', imageName);
-    formData.append('dominantColors', dominantColor); // Use the selected color
-    formData.append('style', style); // Use the selected style
+    formData.append('dominantColors', dominantColor);
+    formData.append('style', style);
     formData.append('lightMode', lightMode);
     formData.append('keywords', 'null');
-
-    console.log('Uploading with formData:', {
-      image: image,
-      fileName: imageName,
-      dominantColors: dominantColor,
-      style: style,
-      lightMode
-    });
 
     try {
       const response = await axios.post(BACKEND_UPLOAD_FILE_URL, formData, {
@@ -80,36 +65,14 @@ function UploadImage() {
         },
       });
 
-      console.log('Upload response:', response.data);
-      const uploadedFileData = response.data.image; // Assuming response body is { "image": "string" }
+      const uploadedFileData = response.data.image;
       setUploadedFile(uploadedFileData);
       alert('Upload successful: ' + uploadedFileData);
     } catch (error) {
-      console.error('Error uploading image:', error);
       setErrorMessage(error.response?.data?.message || 'Error uploading image.');
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleShowDemo = () => {
-    if (image && imageName) {
-      setShowCard(true);
-    } else {
-      setErrorMessage('Please complete the image name and upload an image to show the demo.');
-    }
-  };
-
-  const handleCloseCard = () => {
-    setShowCard(false);
-  };
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
   };
 
   const toggleLightMode = () => {
@@ -123,19 +86,30 @@ function UploadImage() {
 
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
-        {/* {!showCard ? ( */}
         <form onSubmit={handleUploadSubmit} className='w-full'>
 
           <div className='flex items-center'>
             <div className="mb-4 mx-2 w-1/2">
               <label className="block mb-2">Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              />
+              <div
+                className="border-dashed border-2 border-gray-400 
+                rounded p-2 w-full bg-bgDarkGray2 cursor-pointer 
+                flex items-center justify-center hover:bg-bgDarkGray"
+                onClick={() => document.getElementById('file-input').click()}
+              >
+                {image ? (
+                  <p>{image.name}</p>
+                ) : (
+                  <p>Click to select image</p>
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="file-input"
+                />
+              </div>
             </div>
 
             <div className="mb-4 mx-2 w-1/2">
@@ -186,53 +160,24 @@ function UploadImage() {
             </div>
           </div>
 
-          {!showCard && (
-            <div className='flex justify-center items-center'>
-
-              <button
-                type="button"
-                onClick={toggleLightMode}
-                className={`rounded p-2 mt-4 mx-2 w-full hover:border ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
-              </button>
-
-
-              <button
-                // onClick={handleShowDemo}
-                className="bg-bgDarkGray2 text-white rounded p-2 mt-4 mx-2 w-full hover:border"
-              >
-                Show Demo
-              </button>
-            </div>
-          )}
-
-          <div className='flex justify-center items-center mt-3'>
+          <div className='flex justify-center items-center mt-4'>
             <button
               type="submit"
-              className={`bg-bgDarkBlue text-white rounded mx-2 p-2 w-full hover:border ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isLoading}
-            >
+              className={`bg-bgDarkBlue text-white rounded mx-2 p-2 w-full hover:border
+              ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading}>
               {isLoading ? 'Uploading...' : 'Upload'}
             </button>
-
+            <button
+              type="button"
+              onClick={toggleLightMode}
+              className={`rounded p-2 mx-2 w-full hover:border 
+              ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+              {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
+            </button>
           </div>
+
         </form>
-        {/* ) : ( */}
-        {/* <div className="w-full">
-          <Card
-            image={{
-              Src: URL.createObjectURL(image),
-              Title: imageName
-            }}
-          />
-          <button
-            onClick={handleCloseCard}
-            className="bg-red-500 text-white rounded p-2 mt-4 w-full hover:bg-red-600"
-          >
-            Close
-          </button>
-        </div> */}
-        {/* )} */}
 
         {uploadedFile && (
           <div className="mt-4 text-black">
@@ -240,7 +185,6 @@ function UploadImage() {
           </div>
         )}
       </div>
-
     </div>
   );
 }
