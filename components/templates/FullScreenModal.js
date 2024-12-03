@@ -7,7 +7,7 @@ const FullScreenModal = ({ image, onClose }) => {
             onClick={onClose}
         >
             <button onClick={onClose} className="absolute top-8 right-8 text-white text-2xl">✖</button>
-            <div className='relative max-w-full min-h-1 m-auto z-10 overflow-hidden'>
+            <div className='relative max-w-full h-full m-auto py-8 z-10 overflow-hidden'>
                     <img
                         src={`../../img/${image.path}`}
                         alt={image.fileTitle}
