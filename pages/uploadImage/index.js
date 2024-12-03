@@ -62,6 +62,7 @@ function UploadImage() {
     formData.append('dominantColors', dominantColor); // Use the selected color
     formData.append('style', style); // Use the selected style
     formData.append('lightMode', lightMode);
+    formData.append('keywords', 'null');
 
     console.log('Uploading with formData:', {
       image: image,

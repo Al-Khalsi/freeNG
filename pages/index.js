@@ -52,7 +52,6 @@ function Index() {
                     width: file.width,
                     height: file.height,
                     uploadedBy: file.uploadedBy.username,
-                    categories: file.categories.map(category => category.name).join(', '),
                     lightMode: file.lightMode // Ensure this property is included
                 }));
 
