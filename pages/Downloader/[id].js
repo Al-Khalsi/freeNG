@@ -46,7 +46,7 @@ const Downloader = () => {
                 <div className='flex justify-between w-full px-8'>
                     {/* w-5/6 */}
                     <div className='flex justify-between w-full h-custom-136 p-4 bg-bgDarkGray rounded'>
-                        <div className='bg-img w-1/2 h-full'>
+                        <div className='bg-img w-1/2 h-full p-4'>
                             <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
                         </div>
                         <div className='info-img flex flex-col ms-8 w-1/2'>
