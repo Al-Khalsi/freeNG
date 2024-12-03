@@ -30,7 +30,7 @@ function Card({ image, role, onDelete, onEdit }) {
     return (
         <div className={`card w-full rounded-lg overflow-hidden bg-bgDarkGray`}>
             <div className='inside-card w-full px-3 pt-3'>
-                <div className={`bg-img relative w-full h-52 flex justify-center items-center rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
+                <div className={`bg-img relative w-full h-52 p-4 flex justify-center items-center rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
                     <div className='absolute top-2 right-2 left-2 flex justify-end text-white text-xl rounded-md opacity-60'>
                         {
                             role === 'ROLE_MASTER' && (
