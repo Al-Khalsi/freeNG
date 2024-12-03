@@ -35,7 +35,7 @@ function Index() {
         setLoading(true); // Set loading state to true before starting the fetch
         try {
             const url = query
-                ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}`
+                ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}`
                 : `http://localhost:8080/api/v1/file/list/paginated?page=${(page-1)}&size=${size}`;
 
             console.log('Fetching images from URL:', url); // Log the URL being fetched
