@@ -272,7 +272,7 @@ function Index() {
                 {/* Android Chrome Icon */}
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-192x192.png" sizes="192x192" />
 
-                 {/* Microsoft Tiles for Windows */}
+                {/* Microsoft Tiles for Windows */}
                 <meta name="msapplication-TileColor" content="#ffffff" />
                 <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
@@ -308,7 +308,7 @@ function Index() {
                     ) : (
                         <div className='subject-text relative w-full text-center'>
                             <h1 className='relative text-6xl text-clLightPurple'>
-                                Free Download Reference For All PNG Images
+                                Free Reference for Downloading All PNG Images
                             </h1>
                         </div>
                     )}

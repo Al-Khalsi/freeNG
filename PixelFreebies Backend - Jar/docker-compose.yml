@@ -1,0 +1,46 @@
+services:
+  server:
+    image: eclipse-temurin:17-jre-jammy
+    container_name: backend-server
+    volumes:
+      - ./imalchemy-0.1-BETA.jar:/app.jar
+    command: java -jar /app.jar
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=imalchemy
+      - DATABASE_USERNAME=user
+      - DATABASE_PASSWORD_FILE=/run/secrets/db-password
+      - FILE_UPLOAD_LOCATION=/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    secrets:
+      - db-password
+
+  db:
+    image: postgres:17-alpine
+    container_name: database
+    restart: on-failure
+    environment:
+      - POSTGRES_DB=imalchemy
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    ports:
+      - 5432:5432
+    secrets:
+      - db-password
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./data/db/postgres:/var/lib/postgresql/data
+
+secrets:
+  db-password:
+    file: ./data/db/password.txt
