@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: PixelFreebies-Service
+
+  config:
+    import: application-prod.yml,application-dev.yml
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+base:
+  url: /api/v1
