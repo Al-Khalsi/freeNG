@@ -23,7 +23,7 @@ function UploadImage() {
 
   // Static options for colors and styles
   const colors = [
-    'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple', 
+    'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple',
     'Pink', 'Brown', 'Gray', 'Black', 'White', 'Cyan'
   ];
 
@@ -176,124 +176,122 @@ function UploadImage() {
   };
 
   return (
-    <div className={`UploadImage w-full h-full flex justify-center items-center bg-bgDarkBlue`}>
-      <div className="flex flex-col items-center justify-center w-96 p-6 bg-bgDarkGray text-clWhite rounded shadow-md">
+    <div className={`UploadImage w-full min-h-dvh py-12 flex justify-center items-center bg-bgDarkBlue`}>
+      <div className="w-custom-212 p-6 bg-bgDarkGray text-clWhite rounded shadow-md">
         <h2 className="text-xl font-bold mb-4">Upload Image</h2>
-
-        <div className="mb-4">
-          <label className="block mb-2">Light Mode</label>
-          <button
-            type="button"
-            onClick={toggleLightMode}
-            className={`border rounded p-2 w-full ${lightMode ? 'bg-yellow-500' : 'bg-gray-500'} text-white`}>
-            {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
-          </button>
-        </div>
 
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
         {!showCard ? (
-          <form onSubmit={handleUploadSubmit}>
-            <div className="mb-4">
-              <label className="block mb-2">Image</label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              />
+          <form onSubmit={handleUploadSubmit} className='w-full'>
+
+            <div className='flex items-center'>
+              <div className="mb-4 mx-2 w-1/2">
+                <label className="block mb-2">Image Name</label>
+                <input
+                  type="text"
+                  value={imageName}
+                  onChange={(e) => setImageName(e.target.value)}
+                  className="border rounded p-2 w-full bg-bgDarkGray2"
+                  required
+                />
+              </div>
+
+              <div className="mb-4 mx-2 w-1/2">
+                <label className="block mb-2">Image</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="border rounded p-2 w-full bg-bgDarkGray2"
+                  required
+                />
+              </div>
             </div>
 
-            <div className="mb-4">
-              <label className="block mb-2">Image Name</label>
-              <input
-                type="text"
-                value={imageName}
-                onChange={(e) => setImageName(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              />
+            <div className='flex items-center'>
+              <div className="mb-4 mx-2 w-1/2">
+                <label className="block mb-2">Category</label>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                  className="border rounded p-2 w-full bg-bgDarkGray2"
+                  required
+                >
+                  {cats && cats.length > 0 ? (
+                    cats.map((cat) => (
+                      <option key={cat.name} value={cat.name}>
+                        {cat.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">No categories available</option>
+                  )}
+                </select>
+              </div>
+
+              <div className="mb-4 mx-2 w-1/2">
+                <label className="block mb-2">Subcategory</label>
+                <select
+                  value={subCategory}
+                  onChange={(e) => setSubCategory(e.target.value)}
+                  className="border rounded p-2 w-full bg-bgDarkGray2"
+                  required
+                >
+                  {subCategories.length > 0 ? (
+                    subCategories.map((subCat) => (
+                      <option key={subCat.name} value={subCat.name}>
+                        {subCat.name}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">No subcategories available</option>
+                  )}
+                </select>
+              </div>
             </div>
 
-            <div className="mb-4">
-              <label className="block mb-2">Category</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              >
-                {cats && cats.length > 0 ? (
-                  cats.map((cat) => (
-                    <option key={cat.name} value={cat.name}>
-                      {cat.name}
+            <div className='flex items-center'>
+              <div className="mb-4 mx-2 w-1/2">
+                <label className="block mb-2">Dominant Color</label>
+                <select
+                  value={dominantColor}
+                  onChange={(e) => setDominantColor(e.target.value)}
+                  className="border rounded p-2 w-full bg-bgDarkGray2"
+                  required
+                >
+                  <option value="">Select a color</option>
+                  {colors.map((color) => (
+                    <option key={color} value={color}>
+                      {color}
                     </option>
-                  ))
-                ) : (
-                  <option value="">No categories available</option>
-                )}
-              </select>
-            </div>
+                  ))}
+                </select>
+              </div>
 
-            <div className="mb-4">
-              <label className="block mb-2">Subcategory</label>
-              <select
-                value={subCategory}
-                onChange={(e) => setSubCategory(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              >
-                {subCategories.length > 0 ? (
-                  subCategories.map((subCat) => (
-                    <option key={subCat.name} value={subCat.name}>
-                      {subCat.name}
+              <div className="mb-4 mx-2 w-1/2">
+                <label className="block mb-2">Style</label>
+                <select
+                  value={style}
+                  onChange={(e) => setStyle(e.target.value)}
+                  className="border rounded p-2 w-full bg-bgDarkGray2"
+                  required
+                >
+                  <option value="">Select a style</option>
+                  {styles.map((styleOption) => (
+                    <option key={styleOption} value={styleOption}>
+                      {styleOption}
                     </option>
-                  ))
-                ) : (
-                  <option value="">No subcategories available</option>
-                )}
-              </select>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            <div className="mb-4">
-              <label className="block mb-2">Dominant Color</label>
-              <select
-                value={dominantColor}
-                onChange={(e) => setDominantColor(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              >
-                <option value="">Select a color</option>
-                {colors.map((color) => (
-                  <option key={color} value={color}>
-                    {color}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="mb-4">
-              <label className="block mb-2">Style</label>
-              <select
-                value={style}
-                onChange={(e) => setStyle(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              >
-                <option value="">Select a style</option>
-                {styles.map((styleOption) => (
-                  <option key={styleOption} value={styleOption}>
-                    {styleOption}
-                  </option>
-                ))}
-              </select>
-            </div>
 
             <div className='flex justify-center items-center'>
               <button
                 type="submit"
-                className={`bg-blue-500 text-white rounded mr-2 p-2 w-full hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`bg-bgDarkBlue text-white rounded mx-2 p-2 w-full hover:border ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={isLoading}
               >
                 {isLoading ? 'Uploading...' : 'Upload'}
@@ -302,7 +300,7 @@ function UploadImage() {
               <button
                 type="button"
                 onClick={handleOpenModal}
-                className="bg-yellow-500 text-white rounded ml-2 p-2 w-full hover:bg-yellow-600"
+                className="bg-bgDarkGray2 text-white rounded mx-2 p-2 w-full hover:border"
               >
                 Add
               </button>
@@ -326,12 +324,23 @@ function UploadImage() {
         )}
 
         {!showCard && (
-          <button
-            onClick={handleShowDemo}
-            className="bg-green-500 text-white rounded p-2 mt-4 w-full hover:bg-green-600"
-          >
-            Show Demo
-          </button>
+          <div className='flex justify-center items-center'>
+
+            <button
+              type="button"
+              onClick={toggleLightMode}
+              className={`rounded p-2 mt-4 mx-2 w-full ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+              {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
+            </button>
+
+
+            <button
+              onClick={handleShowDemo}
+              className="bg-bgDarkGray2 text-white rounded p-2 mt-4 mx-2 w-full hover:border"
+            >
+              Show Demo
+            </button>
+          </div>
         )}
 
         {uploadedFile && (
