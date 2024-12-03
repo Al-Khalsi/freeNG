@@ -341,12 +341,10 @@ background-color: var(--bg-darkGray2);
 }
 
 
-
-
-
-
-
-
+.blur-background {
+  filter: blur(5px); /* مقدار بلور را بر اساس نیاز خود تنظیم کنید */
+  transition: filter 0.3s ease; /* انیمیشن برای انتقال بلور */
+}
 
 
 /*-------------------- Validation css --------------------*/
