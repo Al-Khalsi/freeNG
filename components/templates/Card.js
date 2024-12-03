@@ -3,50 +3,59 @@ import { MdFullscreen, MdDelete, MdEdit } from "react-icons/md";
 import { FaImage } from "react-icons/fa";
 import { RxDimensions } from "react-icons/rx";
 import Link from 'next/link';
-import FullScreenModal from '@/components/templates/FullScreenModal'; // Import the modal
+import FullScreenModal from '@/components/templates/FullScreenModal';
 
 function Card({ image, role, onDelete, onEdit }) {
     const [isModalOpen, setModalOpen] = useState(false);
     const [editedTitle, setEditedTitle] = useState(image.title);
-    const [isEditing, setIsEditing] = useState(false); // Added state for editing mode
+    const [isEditing, setIsEditing] = useState(false);
 
-    // Update the download link to include additional properties
-    const downloadLink = `/downloader/${image.id}?title=${encodeURIComponent(image.title)}&path=${encodeURIComponent(image.path)}&size=${encodeURIComponent(image.size)}&width=${image.width}&height=${image.height}`;
+    const downloadLink = `/downloader/${image.id}
+    ?title=${encodeURIComponent(image.title)}
+    &path=${encodeURIComponent(image.path)}
+    &size=${encodeURIComponent(image.size)}
+    &width=${image.width}
+    &height=${image.height}
+    &lightMode=${image.lightMode ? 'true' : 'false'}`;
 
     const handleOpenModal = () => {
-        setModalOpen(true); // Open the modal
+        setModalOpen(true);
     };
 
     const handleCloseModal = () => {
-        setModalOpen(false); // Close the modal
+        setModalOpen(false);
     };
 
     const handleEdit = () => {
-        const updatedData = { fileTitle: editedTitle }; // Prepare the updated data
-        onEdit(image.id, updatedData); // Call the onEdit prop
-        setIsEditing(false); // Close the editing mode
+        const updatedData = { fileTitle: editedTitle };
+        onEdit(image.id, updatedData);
+        setIsEditing(false);
     };
 
     return (
         <div className={`card w-full rounded-lg overflow-hidden bg-bgDarkGray`}>
             <div className='inside-card w-full px-3 pt-3'>
                 <div className={`bg-img relative w-full h-52 p-4 flex justify-center items-center rounded-md ${image.lightMode ? 'lightMod' : ''}`}>
-                    <div className='absolute top-2 right-2 left-2 flex justify-end text-white text-xl rounded-md opacity-60'>
-                        {
-                            role === 'ROLE_MASTER' && (
-                                <div className='flex'>
-                                    <button className='delet flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer'
-                                        onClick={() => onDelete(image.id)}>
-                                        <MdDelete />
-                                    </button>
-                                    <button className='edit flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer'
-                                        onClick={() => setIsEditing(true)}>
-                                        <MdEdit />
-                                    </button>
-                                </div>
-                            )
-                        }
-                        <button className='fullScreen flex justify-center items-center w-7 h-7 ml-1 hover:bg-gray-600 rounded-full cursor-pointer'
+                    <div className='absolute top-2 right-2 left-2 flex justify-end text-white text-xl rounded-md'>
+                        {role === 'ROLE_MASTER' && (
+                            <div className='flex'>
+                                <button className={`delet flex justify-center items-center 
+                                w-7 h-7 ml-1 hover:bg-gray-600 rounded-md cursor-pointer 
+                                ${image.lightMode ? 'text-clDarkBlue hover:text-clGray hover:bg-bgDarkBlue' : ''}`}
+                                    onClick={() => onDelete(image.id)}>
+                                    <MdDelete />
+                                </button>
+                                <button className={`edit flex justify-center items-center 
+                                w-7 h-7 ml-1 hover:bg-gray-600 rounded-md cursor-pointer 
+                                ${image.lightMode ? 'text-clDarkBlue hover:text-clGray hover:bg-bgDarkBlue' : ''}`}
+                                    onClick={() => setIsEditing(true)}>
+                                    <MdEdit />
+                                </button>
+                            </div>
+                        )}
+                        <button className={`fullScreen flex justify-center items-center 
+                        w-7 h-7 ml-1 hover:bg-gray-600 rounded-md cursor-pointer 
+                        ${image.lightMode ? 'text-clDarkBlue hover:text-clGray hover:bg-bgDarkBlue' : ''}`}
                             onClick={handleOpenModal}>
                             <MdFullscreen />
                         </button>
@@ -71,8 +80,8 @@ function Card({ image, role, onDelete, onEdit }) {
                 </div>
             </div>
 
-            {/* Render the FullScreenModal if it is open */}
-            {isModalOpen && <FullScreenModal image={image} onClose={handleCloseModal} />}
+            {/* Pass lightMode to FullScreenModal */}
+            {isModalOpen && <FullScreenModal image={image} onClose={handleCloseModal} lightMode={image.lightMode} />}
         </div>
     );
 }

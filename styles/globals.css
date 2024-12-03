@@ -111,6 +111,15 @@ background-color: var(--bg-darkGray2);
 
 .lightMod {
   background-color: var(--bg-gray);
+  color: var(--bg-darkBlue);
+}
+
+.downloaderPage.lightMod .bg-bgDarkGray {
+  background-color: #f0f0f0; 
+}
+
+.downloaderPage.lightMod .text-white {
+  color: black; 
 }
 
 .input {

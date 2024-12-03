@@ -1,12 +1,8 @@
 import React, { useEffect } from 'react';
 
-const FullScreenModal = ({ image, onClose }) => {
-    // Effect to handle body overflow
+const FullScreenModal = ({ image, onClose, lightMode }) => {
     useEffect(() => {
-        // Disable scrolling on body when modal is open
         document.body.style.overflow = 'hidden';
-
-        // Cleanup function to reset the overflow when modal is closed
         return () => {
             document.body.style.overflow = 'unset';
         };
@@ -14,8 +10,8 @@ const FullScreenModal = ({ image, onClose }) => {
 
     return (
         <div
-            className="fullScreenModal fixed inset-0 bg-black/[.7] 
-            flex justify-center items-center z-50 backdrop-blur-md overflow-hidden"
+            className={`fullScreenModal fixed inset-0 bg-black/[0.7] 
+            flex justify-center items-center z-50 backdrop-blur-md overflow-hidden ${lightMode ? 'bg-white/[0.5]' : ''}`}
             onClick={onClose}>
             <button onClick={onClose} className="absolute top-8 right-8 text-2xl">✖</button>
             <div className='relative max-w-full h-full m-auto p-8 z-10 overflow-hidden'>
