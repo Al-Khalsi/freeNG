@@ -2,14 +2,11 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Card from '@/components/templates/Card';
 import { useAuth } from '@/context/AuthContext';
-import AddCategoryModal from '@/components/templates/AddCategoryModal';
 
 function UploadImage() {
   const { token } = useAuth();
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
-  const [category, setCategory] = useState('');
-  const [subCategory, setSubCategory] = useState('');
   const [dominantColor, setDominantColor] = useState('');
   const [style, setStyle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,10 +18,9 @@ function UploadImage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [lightMode, setLightMode] = useState(false);
 
-  // Static options for colors and styles
   const colors = [
     'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple',
-    'Pink', 'Brown', 'Gray', 'Black', 'White', 'Cyan'
+    'Pink', 'Brown', 'Gray', 'Black', 'White',
   ];
 
   const styles = [
@@ -63,8 +59,6 @@ function UploadImage() {
     const formData = new FormData();
     formData.append('file', image);
     formData.append('fileName', imageName);
-    formData.append('parentCategoryName', category);
-    formData.append('subCategoryNames', subCategory);
     formData.append('dominantColors', dominantColor); // Use the selected color
     formData.append('style', style); // Use the selected style
     formData.append('lightMode', lightMode);
@@ -72,8 +66,6 @@ function UploadImage() {
     console.log('Uploading with formData:', {
       image: image,
       fileName: imageName,
-      parentCategoryName: category,
-      subCategoryNames: subCategory,
       dominantColors: dominantColor,
       style: style,
       lightMode
@@ -99,42 +91,6 @@ function UploadImage() {
     }
   };
 
-  const getParentCategories = async () => {
-    try {
-      const response = await axios.get(BACKEND_LIST_PARENT_CATEGORIES_URL, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      });
-
-      const fetchedCats = response.data.data;
-      setCats(fetchedCats);
-    } catch (error) {
-      console.error('Error fetching parent categories:', error);
-      setErrorMessage(error.response?.data?.message || 'Error fetching parent categories.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const getSubCategories = async (parentCategoryName) => {
-    try {
-      const response = await axios.get(`${BACKEND_CATEGORY_URL}/sub/${parentCategoryName}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-      });
-
-      const fetchedSubCats = response.data.data;
-      setSubCategories(fetchedSubCats);
-    } catch (error) {
-      console.error('Error fetching subcategories:', error);
-      setErrorMessage(error.response?.data?.message || 'Error fetching subcategories.');
-    }
-  };
-
   const handleShowDemo = () => {
     if (image && imageName) {
       setShowCard(true);
@@ -142,18 +98,6 @@ function UploadImage() {
       setErrorMessage('Please complete the image name and upload an image to show the demo.');
     }
   };
-
-  useEffect(() => {
-    getParentCategories();
-  }, []);
-
-  useEffect(() => {
-    if (category) {
-      getSubCategories(category);
-    } else {
-      setSubCategories([]);
-    }
-  }, [category]);
 
   const handleCloseCard = () => {
     setShowCard(false);
@@ -165,10 +109,6 @@ function UploadImage() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleCategoryAdded = () => {
-    getParentCategories();
   };
 
   const toggleLightMode = () => {
@@ -206,54 +146,6 @@ function UploadImage() {
                 className="border rounded p-2 w-full bg-bgDarkGray2"
                 required
               />
-            </div>
-          </div>
-
-          <div className='flex items-center'>
-            <div className="mb-4 mx-2 w-1/2">
-              <label className="block mb-2">Category</label>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              >
-                {cats.length === 0 ? (
-                  <option value="">No categories available</option> // Show when no categories are available
-                ) : (
-                  <>
-                    <option value="">Select a category</option> // Default option when categories are available
-                    {cats.map((cat) => (
-                      <option key={cat.name} value={cat.name}>
-                        {cat.name}
-                      </option>
-                    ))}
-                  </>
-                )}
-              </select>
-            </div>
-
-            <div className="mb-4 mx-2 w-1/2">
-              <label className="block mb-2">Subcategory</label>
-              <select
-                value={subCategory}
-                onChange={(e) => setSubCategory(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              >
-                {subCategories.length === 0 ? (
-                  <option value="">No subcategories available</option> // Show when no subcategories are available
-                ) : (
-                  <>
-                    <option value="">Select a subcategory</option> // Default option when subcategories are available
-                    {subCategories.map((subCat) => (
-                      <option key={subCat.name} value={subCat.name}>
-                        {subCat.name}
-                      </option>
-                    ))}
-                  </>
-                )}
-              </select>
             </div>
           </div>
 
@@ -299,7 +191,7 @@ function UploadImage() {
               <button
                 type="button"
                 onClick={toggleLightMode}
-                className={`rounded p-2 mt-4 mx-2 w-full ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                className={`rounded p-2 mt-4 mx-2 w-full hover:border ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
                 {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
               </button>
 
@@ -322,13 +214,6 @@ function UploadImage() {
               {isLoading ? 'Uploading...' : 'Upload'}
             </button>
 
-            <button
-              type="button"
-              onClick={handleOpenModal}
-              className="bg-bgDarkGray2 text-white rounded mx-2 p-2 w-full hover:border"
-            >
-              Add
-            </button>
           </div>
         </form>
         {/* ) : ( */}
@@ -348,8 +233,6 @@ function UploadImage() {
         </div> */}
         {/* )} */}
 
-
-
         {uploadedFile && (
           <div className="mt-4 text-black">
             <p>Uploaded File: {uploadedFile}</p>
@@ -357,11 +240,6 @@ function UploadImage() {
         )}
       </div>
 
-      <AddCategoryModal
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onCategoryAdded={handleCategoryAdded}
-      />
     </div>
   );
 }
