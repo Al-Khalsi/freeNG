@@ -1,0 +1,69 @@
+# Comments are provided throughout this file to help you get started.
+# If you need more help, visit the Docker Compose reference guide at
+# https://docs.docker.com/go/compose-spec-reference/
+
+# Here the instructions define your application as a service called "server".
+# This service is built from the Dockerfile in the current directory.
+# You can add other services your application may depend on here, such as a
+# database or a cache. For examples, see the Awesome Compose repository:
+# https://github.com/docker/awesome-compose
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: backend_server
+    image: dukeofjava/pixelfreebies_service:0.1-BETA
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_NAME=pixelfreebies_service
+      - DATABASE_USERNAME=user
+      - DATABASE_PASSWORD_FILE=/run/secrets/db-password
+      - FILE_UPLOAD_LOCATION=/app/uploads
+    volumes:
+      - file-uploads:/app/uploads  # Use a named volume for persistent file storage
+      - ./data/db/password.txt:/run/secrets/db-password
+    depends_on:
+      db:
+        condition: service_healthy
+    secrets:
+      - db-password
+
+  # The commented out section below is an example of how to define a PostgreSQL
+  # database that your application can use. `depends_on` tells Docker Compose to
+  # start the database before your application. The `db-data` volume persists the
+  # database data between container restarts. The `db-password` secret is used
+  # to set the database password. You must create `db/password.txt` and add
+  # a password of your choosing to it before running `docker-compose up`.
+  db:
+    image: postgres:17-alpine
+    container_name: database
+    restart: on-failure
+    environment:
+      - POSTGRES_DB=pixelfreebies_service
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db-password
+    ports:
+      - 5432:5432
+    secrets:
+      - db-password
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./data/db/postgres:/var/lib/postgresql/data
+
+# Define the named volume for file uploads
+volumes:
+  file-uploads:
+    driver: local
+
+secrets:
+  db-password:
+    file: ./data/db/password.txt
