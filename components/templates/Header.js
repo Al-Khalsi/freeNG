@@ -53,6 +53,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                                     handleSearch();
                                 }
                             }}
+                            autoComplete="off"
                         />
                         <div id="cosmic-glow"></div>
                         <div className="wormhole-border"></div>
