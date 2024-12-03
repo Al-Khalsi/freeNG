@@ -1,18 +1,14 @@
 package com.pixelfreebies.service.impl;
 
-import com.pixelfreebies.model.domain.Category;
+import com.luciad.imageio.webp.WebPWriteParam;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.MetaInfo;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.enums.ImageUnits;
 import com.pixelfreebies.model.enums.Purpose;
-import com.pixelfreebies.repository.CategoryRepository;
-import com.pixelfreebies.repository.SubCategoryRepository;
 import com.pixelfreebies.service.ImageStorageStrategy;
 import com.pixelfreebies.util.SecurityUtil;
-import com.luciad.imageio.webp.WebPWriteParam;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,20 +29,17 @@ import java.nio.file.Path;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Optional;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImageMetadataService {
 
-    private final CategoryRepository categoryRepository;
-    private final SubCategoryRepository subCategoryRepository;
     private final SecurityUtil securityUtil;
     private final ImageStorageStrategy imageStorageStrategy;
 
     public Image createImageDomain(MultipartFile uploadedMultipartFile, String imageName,
-                                   String relativePath, List<String> dominantColors,
+                                   String relativePath, List<String> keywords, List<String> dominantColors,
                                    String style, boolean lightMode) {
         Image image = new Image();
         image.setFileTitle(imageName);
@@ -61,6 +54,7 @@ public class ImageMetadataService {
         calculateDimension(uploadedMultipartFile, image, imageName);
         image.setStyle(style);
         image.setLightMode(lightMode);
+        image.getKeywords().addAll(keywords);
         image.getDominantColors().addAll(dominantColors);
 
         return image;
@@ -227,19 +221,6 @@ public class ImageMetadataService {
         return (unitIndex == kbIndexPositionInArray)
                 ? String.format("%d %s", (int) size, units[unitIndex]) // No decimal for KB
                 : String.format("%.2f %s", size, units[unitIndex]); // Two decimals for MB and GB
-    }
-
-    public void associateImageWithCategories(Image image, String categoryName, List<String> subCategoryNames) {
-        Category category = this.categoryRepository.findByNameIgnoreCase(categoryName)
-                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
-        image.getCategories().add(category);
-
-        subCategoryNames.stream()
-                .filter(name -> !name.isEmpty())
-                .map(this.subCategoryRepository::findByNameIgnoreCase)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .forEach(subCategory -> image.getSubCategories().add(subCategory));
     }
 
     public void associateImageWithImageVariant(Image image, ImageVariant imageVariant) {

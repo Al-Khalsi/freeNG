@@ -41,8 +41,8 @@ public class FileServiceImpl implements FileService {
     private final ImageMetadataService imageMetadataService;
 
     @Override
-    public ImageDTO storeImage(MultipartFile uploadedMultipartFile, String fileName, String parentCategoryName,
-                               List<String> subCategoryNames, List<String> dominantColors,
+    public ImageDTO storeImage(MultipartFile uploadedMultipartFile, String fileName,
+                               List<String> keywords, List<String> dominantColors,
                                String style, boolean lightMode) throws IOException {
         try {
 
@@ -52,12 +52,11 @@ public class FileServiceImpl implements FileService {
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, originalFileName);
 
             // Create the entities
-            Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
+            Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), keywords, dominantColors, style, lightMode);
             MetaInfo imageMetaInfo = this.imageMetadataService.createImageMetaInfoDomain(image);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Associate relationships
-            this.imageMetadataService.associateImageWithCategories(image, parentCategoryName, subCategoryNames);
             this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
 
             // Save to db

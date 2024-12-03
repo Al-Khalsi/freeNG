@@ -12,8 +12,8 @@ import java.util.List;
 
 public interface FileService {
 
-    ImageDTO storeImage(MultipartFile multipartFile, String fileName, String parentCategoryName,
-                        List<String> subCategoryNames, List<String> dominantColors,
+    ImageDTO storeImage(MultipartFile multipartFile, String fileName,
+                        List<String> keywords, List<String> dominantColors,
                         String style, boolean lightMode) throws IOException;
 
     Resource loadImageAsResource(String fileId) throws IOException;
