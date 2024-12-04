@@ -14,6 +14,7 @@ function UploadImage() {
   const [uploadedFile, setUploadedFile] = useState('');
   const [lightMode, setLightMode] = useState(false);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
+  const [isAddingKeywords, setIsAddingKeywords] = useState(false); // New state for toggling keyword sections
 
   const colors = [
     'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple',
@@ -82,6 +83,14 @@ function UploadImage() {
 
   const toggleLightMode = () => {
     setLightMode(prevMode => !prevMode);
+  };
+
+  const handleAddKeywords = () => {
+    setIsAddingKeywords(true); // Show keywordsAdd section
+  };
+
+  const handleCancelKeywords = () => {
+    setIsAddingKeywords(false); // Hide keywordsAdd section
   };
 
   return (
@@ -166,31 +175,37 @@ function UploadImage() {
             </div>
           </div>
 
+          {/* Keyword Selection Section */}
           <div className='flex mb-4'>
-            <div className='keywordSelect flex justify-between w-full mt-2'>
-              <div className='relative w-1/2 mx-2'>
-                <input type='text'
-                className='p-2 w-full bg-bgDarkGray2 border rounded'
-                placeholder='Select Keywords' autoComplete='off'/> 
+            {isAddingKeywords ? (
+              <div className='keywordsAdd flex justify-between w-full mt-2'>
+                <input type='text' className='w-1/2 mx-2 p-2 bg-bgDarkGray2 border rounded'
+                  placeholder='Add Keywords' autoComplete='off' />
+                <div className='w-1/2 flex justify-between mx-2'>
+                  <button
+                    type='button'
+                    className='w-1/2 mx-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save</button>
+                  <button
+                    type='button'
+                    onClick={handleCancelKeywords} // Cancel button
+                    className='w-1/2 mx-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cancel</button>
+                </div>
+              </div>
+            ) : (
+              <div className='keywordSelect flex justify-between w-full mt-2'>
+                <div className='relative w-1/2 mx-2'>
+                  <input type='text'
+                    className='p-2 w-full bg-bgDarkGray2 border rounded'
+                    placeholder='Select Keywords' autoComplete='off' />
+                  <button type='button'
+                    className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2 
+                    text-black bg-white rounded-r'>Search</button>
+                </div>
                 <button type='button'
-                className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2 
-                text-black bg-white rounded-r'>Search</button>
+                  onClick={handleAddKeywords} // Add button
+                  className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded hover:border'>Add</button>
               </div>
-              <button type='button'
-              className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded hover:border'>Add</button>
-            </div>
-            <div className='keywordsAdd hidden justify-between w-full mt-2'>
-              <input type='text' className='w-1/2 mx-2 p-2 bg-bgDarkGray2 border rounded'
-                placeholder='Add Keywords' autoComplete='off' />
-              <div className='w-1/2 flex justify-between mx-2'>
-                <button
-                  type='button'
-                  className='w-1/2 mx-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save</button>
-                <button
-                  type='button'
-                  className='w-1/2 mx-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cansel</button>
-              </div>
-            </div>
+            )}
           </div>
 
           <div className='flex justify-center items-center mt-4'>
