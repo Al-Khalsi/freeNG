@@ -61,15 +61,6 @@ public class ImageMetadataService {
         return image;
     }
 
-    public Set<Keywords> createKeywordsDomain(List<String> keywords, Set<Keywords> keywordsSet) {
-        for (String keyword : keywords) {
-            Optional<Keywords> optionalKeywords = this.keywordsRepository.findByKeyword(keyword);
-            if (optionalKeywords.isEmpty())
-                keywordsSet.add(Keywords.builder().keyword(keyword).build());
-        }
-        return keywordsSet;
-    }
-
     public Set<Keywords> validateAndFetchKeywords(List<String> keywords) {
         Set<Keywords> keywordsSet = new HashSet<>();
         List<String> missingKeywords = new ArrayList<>();
