@@ -28,4 +28,6 @@ public interface FileService {
 
     ImageDTO updateImage(String imageId, UpdateImageDTO updateImageDTO);
 
+    List<String> searchKeywords(String query);
+
 }

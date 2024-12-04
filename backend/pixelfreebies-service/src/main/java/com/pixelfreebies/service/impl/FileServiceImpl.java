@@ -104,7 +104,7 @@ public class FileServiceImpl implements FileService {
                 });
     }
 
-    @Override // todo: needs modification!!! not working as expected
+    @Override
     public List<ImageDTO> searchImages(String query) {
         if (query == null || query.trim().isEmpty()) {
             return Collections.emptyList();
@@ -157,6 +157,34 @@ public class FileServiceImpl implements FileService {
         foundImage.setAverageRating(updateImageDTO.getAverageRating());
 
         return this.imageConverter.toDto(this.imageRepository.save(foundImage));
+    }
+
+    @Override
+    public List<String> searchKeywords(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Format the query for PostgreSQL full-text search
+        String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
+
+        // First attempt to find exact matches
+        List<String> exactMatches = this.imageRepository.searchKeywords(formattedQuery);
+        // If no exact matches found, search for similar entries
+        List<String> similarMatches = this.imageRepository.searchSimilarKeywords(query);
+
+        // Create a set of IDs to avoid duplicates
+        Set<String> exactMatchIds = new HashSet<>(exactMatches);
+
+        // Add similar matches that are not in exact matches
+        List<String> combinedResults = new ArrayList<>(exactMatches);
+        similarMatches.stream()
+                .filter(keyword -> !exactMatchIds.contains(keyword))
+                .forEach(combinedResults::add);
+
+        return combinedResults.stream()
+//                .limit(50) // Limit results
+                .toList();
     }
 
 }

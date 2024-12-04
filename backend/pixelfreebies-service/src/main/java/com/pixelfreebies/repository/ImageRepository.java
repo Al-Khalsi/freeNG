@@ -31,4 +31,21 @@ public interface ImageRepository extends JpaRepository<Image, UUID> {
             """, nativeQuery = true)
     List<Image> searchSimilarFiles(@Param("query") String query);
 
+    @Query(value = """
+            SELECT ik.keywords
+            FROM image_keywords ik
+            WHERE
+            (:query IS NULL OR
+            to_tsvector('english', ik.keywords) @@ to_tsquery('english', :query))
+            """, nativeQuery = true)
+    List<String> searchKeywords(String query);
+
+    @Query(value = """
+            SELECT ik.keywords
+            FROM image_keywords ik
+            WHERE
+            ik.keywords ILIKE CONCAT('%', :query, '%')
+            """, nativeQuery = true)
+    List<String> searchSimilarKeywords(String query);
+
 }
