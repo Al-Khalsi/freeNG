@@ -15,10 +15,10 @@ import org.springframework.http.HttpStatus;
 @Schema(description = "Paginated result of a query.")
 public class PaginatedResult<T> {
 
-    private String message;
-    private T data;
     private boolean flag;
     private HttpStatus code;
+    private String message;
+    private T data;
     private int currentPage;
     private int totalPages;
     private long totalElements;
@@ -28,6 +28,7 @@ public class PaginatedResult<T> {
         PaginatedResult<T> result = new PaginatedResult<>();
         result.message = message;
         result.flag = flag;
+        result.code = HttpStatus.OK;
         result.data = (T) page.getContent();
         result.currentPage = page.getNumber();
         result.totalPages = page.getTotalPages();
