@@ -3,11 +3,13 @@ package com.pixelfreebies.service.impl;
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
+import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.domain.MetaInfo;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
+import com.pixelfreebies.repository.KeywordsRepository;
 import com.pixelfreebies.repository.MetaInfoRepository;
 import com.pixelfreebies.service.FileService;
 import com.pixelfreebies.service.ImageStorageStrategy;
@@ -45,27 +47,29 @@ public class FileServiceImpl implements FileService {
                                List<String> keywords, List<String> dominantColors,
                                String style, boolean lightMode) throws IOException {
         try {
-
-            // Perform validations on filename and path
+            // Validate image name
             this.imageValidationService.validateImageName(fileName);
             String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, originalFileName);
 
-            // Create the entities
-            Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), keywords, dominantColors, style, lightMode);
+            // Validate keywords and retrieve their entities
+            Set<Keywords> keywordsSet = this.imageMetadataService.validateAndFetchKeywords(keywords);
+
+            // Create the domains
+            Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
             MetaInfo imageMetaInfo = this.imageMetadataService.createImageMetaInfoDomain(image);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Associate relationships
             this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
+            this.imageMetadataService.associateImageWithKeywords(image, keywordsSet);
 
-            // Save to db
+            // Save the image (cascades save to associated entities)
             Image savedImage = this.imageRepository.save(image);
             this.metaInfoRepository.save(imageMetaInfo);
             this.imageVariantRepository.save(imageVariant);
 
             return this.imageConverter.toDto(savedImage);
-
         } catch (IOException e) {
             log.error("-> FILE -> Failed to store file: {}", e.getMessage());
             throw e;
@@ -150,7 +154,6 @@ public class FileServiceImpl implements FileService {
 
         foundImage.setFileTitle(updateImageDTO.getFileTitle());
         foundImage.setActive(updateImageDTO.isActive());
-        foundImage.setKeywords(updateImageDTO.getKeywords());
         foundImage.setStyle(updateImageDTO.getStyle());
         foundImage.setLightMode(updateImageDTO.isLightMode());
         foundImage.setDominantColors(updateImageDTO.getDominantColors());

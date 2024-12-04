@@ -3,10 +3,12 @@ package com.pixelfreebies.service.impl;
 import com.luciad.imageio.webp.WebPWriteParam;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
+import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.domain.MetaInfo;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.enums.ImageUnits;
 import com.pixelfreebies.model.enums.Purpose;
+import com.pixelfreebies.repository.KeywordsRepository;
 import com.pixelfreebies.service.ImageStorageStrategy;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,20 +28,20 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImageMetadataService {
 
+    private final KeywordsRepository keywordsRepository;
     private final SecurityUtil securityUtil;
     private final ImageStorageStrategy imageStorageStrategy;
 
     public Image createImageDomain(MultipartFile uploadedMultipartFile, String imageName,
-                                   String relativePath, List<String> keywords, List<String> dominantColors,
+                                   String relativePath, List<String> dominantColors,
                                    String style, boolean lightMode) {
         Image image = new Image();
         image.setFileTitle(imageName);
@@ -54,10 +56,38 @@ public class ImageMetadataService {
         calculateDimension(uploadedMultipartFile, image, imageName);
         image.setStyle(style);
         image.setLightMode(lightMode);
-        image.getKeywords().addAll(keywords);
         image.getDominantColors().addAll(dominantColors);
 
         return image;
+    }
+
+    public Set<Keywords> createKeywordsDomain(List<String> keywords, Set<Keywords> keywordsSet) {
+        for (String keyword : keywords) {
+            Optional<Keywords> optionalKeywords = this.keywordsRepository.findByKeyword(keyword);
+            if (optionalKeywords.isEmpty())
+                keywordsSet.add(Keywords.builder().keyword(keyword).build());
+        }
+        return keywordsSet;
+    }
+
+    public Set<Keywords> validateAndFetchKeywords(List<String> keywords) {
+        Set<Keywords> keywordsSet = new HashSet<>();
+        List<String> missingKeywords = new ArrayList<>();
+
+        for (String keyword : keywords) {
+            Optional<Keywords> optionalKeyword = this.keywordsRepository.findByKeyword(keyword);
+            if (optionalKeyword.isPresent()) {
+                Keywords kWord = optionalKeyword.get();
+                keywordsSet.add(kWord);
+            }
+            else missingKeywords.add(keyword);
+        }
+
+        if (!missingKeywords.isEmpty()) {
+            throw new IllegalArgumentException("The following keywords do not exist: " + String.join(", ", missingKeywords));
+        }
+
+        return keywordsSet;
     }
 
     public MetaInfo createImageMetaInfoDomain(Image image) {
@@ -226,6 +256,10 @@ public class ImageMetadataService {
     public void associateImageWithImageVariant(Image image, ImageVariant imageVariant) {
         image.getVariants().add(imageVariant);
         imageVariant.setImage(image);
+    }
+
+    public void associateImageWithKeywords(Image image, Set<Keywords> keywordsSet) {
+        image.getKeywords().addAll(keywordsSet);
     }
 
 }
