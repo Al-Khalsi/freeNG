@@ -125,6 +125,7 @@ function UploadImage() {
                 onChange={(e) => setImageName(e.target.value)}
                 className="border rounded p-2 w-full bg-bgDarkGray2"
                 required
+                autoComplete="off"
               />
             </div>
           </div>
@@ -166,17 +167,28 @@ function UploadImage() {
           </div>
 
           <div className='flex mb-4'>
-            <div className='keywordSelect hidden'></div>
-            <div className='keywordsAdd flex justify-between w-full'>
-              <input type="text" className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded'
-              placeholder='Add Keywords' />
+            <div className='keywordSelect flex justify-between w-full mt-2'>
+              <div className='relative w-1/2 mx-2'>
+                <input type='text'
+                className='p-2 w-full bg-bgDarkGray2 border rounded'
+                placeholder='Select Keywords' autoComplete='off'/> 
+                <button type='button'
+                className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2 
+                text-black bg-white rounded-r'>Search</button>
+              </div>
+              <button type='button'
+              className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded hover:border'>Add</button>
+            </div>
+            <div className='keywordsAdd hidden justify-between w-full mt-2'>
+              <input type='text' className='w-1/2 mx-2 p-2 bg-bgDarkGray2 border rounded'
+                placeholder='Add Keywords' autoComplete='off' />
               <div className='w-1/2 flex justify-between mx-2'>
-                <button 
-                type='button'
-                className='w-1/2 mx-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save</button>
-                <button 
-                type='button'
-                className='w-1/2 mx-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cansel</button>
+                <button
+                  type='button'
+                  className='w-1/2 mx-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save</button>
+                <button
+                  type='button'
+                  className='w-1/2 mx-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cansel</button>
               </div>
             </div>
           </div>
