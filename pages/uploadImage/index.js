@@ -14,7 +14,7 @@ function UploadImage() {
   const [uploadedFile, setUploadedFile] = useState('');
   const [lightMode, setLightMode] = useState(false);
   const [selectedKeywords, setSelectedKeywords] = useState([]);
-  const [isAddingKeywords, setIsAddingKeywords] = useState(false); // New state for toggling keyword sections
+  const [isAddingKeywords, setIsAddingKeywords] = useState(false);
 
   const colors = [
     'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple',

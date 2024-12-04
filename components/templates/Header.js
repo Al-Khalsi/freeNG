@@ -58,7 +58,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                         <div id="cosmic-glow"></div>
                         <div className="wormhole-border"></div>
                         <div id="wormhole-icon">
-                            <button type='button' className='text-blue-300' onClick={handleSearch}>
+                            <button type='button' className='text-white' onClick={handleSearch}>
                                 Enter
                             </button>
                         </div>

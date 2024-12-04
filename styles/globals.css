@@ -307,6 +307,7 @@ background-color: var(--bg-darkGray2);
   position: absolute;
   top: 8px;
   right: 8px;
+  padding: 0 1.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -318,7 +319,7 @@ background-color: var(--bg-darkGray2);
   isolation: isolate;
   overflow: hidden;
   border-radius: 10px;
-  background: linear-gradient(180deg, var(--bg-darkBlue), var(--bg-darkGray), var(--bg-darkBlue));
+  background: linear-gradient(var(--bg-purple), var(--bg-lightPurple));
   border: 1px solid transparent;
   cursor: pointer;
 }
