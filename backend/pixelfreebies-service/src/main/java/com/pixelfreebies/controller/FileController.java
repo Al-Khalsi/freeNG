@@ -122,6 +122,7 @@ public class FileController {
 
         return ResponseEntity.ok(PaginatedResult.success("List files.", true, imageDTOs));
     }
+
     // Endpoint for deleting files
     @DeleteMapping("/{imageId}")
     @PreAuthorize("hasRole('ROLE_MASTER')")

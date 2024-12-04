@@ -9,7 +9,6 @@ import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
-import com.pixelfreebies.repository.KeywordsRepository;
 import com.pixelfreebies.repository.MetaInfoRepository;
 import com.pixelfreebies.service.FileService;
 import com.pixelfreebies.service.ImageStorageStrategy;

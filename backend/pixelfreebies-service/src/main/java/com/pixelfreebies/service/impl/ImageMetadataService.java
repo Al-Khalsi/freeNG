@@ -79,8 +79,7 @@ public class ImageMetadataService {
             if (optionalKeyword.isPresent()) {
                 Keywords kWord = optionalKeyword.get();
                 keywordsSet.add(kWord);
-            }
-            else missingKeywords.add(keyword);
+            } else missingKeywords.add(keyword);
         }
 
         if (!missingKeywords.isEmpty()) {
