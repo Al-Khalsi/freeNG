@@ -32,7 +32,7 @@ public class ImageDTO implements Serializable {
     private int width;
     private boolean isActive;
     @Builder.Default
-    private Set<String> keywords = new HashSet<>();
+    private Set<KeywordsDTO> keywords = new HashSet<>();
     private String style;
     private boolean isLightMode;
     @Builder.Default

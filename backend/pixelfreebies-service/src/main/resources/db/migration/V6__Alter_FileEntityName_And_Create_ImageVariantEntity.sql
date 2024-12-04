@@ -1,18 +1,14 @@
 ALTER TABLE files_categories
-DROP
-CONSTRAINT fk_filcat_on_category;
+    DROP CONSTRAINT fk_filcat_on_category;
 
 ALTER TABLE files_categories
-DROP
-CONSTRAINT fk_filcat_on_file;
+    DROP CONSTRAINT fk_filcat_on_file;
 
 ALTER TABLE file_colors
-DROP
-CONSTRAINT fk_file_colors_on_file;
+    DROP CONSTRAINT fk_file_colors_on_file;
 
 ALTER TABLE file
-DROP
-CONSTRAINT fk_file_on_uploadedby;
+    DROP CONSTRAINT fk_file_on_uploadedby;
 
 CREATE TABLE image_colors
 (

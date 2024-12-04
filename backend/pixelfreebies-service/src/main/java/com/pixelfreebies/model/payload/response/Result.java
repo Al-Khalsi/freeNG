@@ -46,6 +46,15 @@ public class Result {
                 .build();
     }
 
+    public static Result success(String message, HttpStatus code, Object data) {
+        return Result.builder()
+                .flag(true)
+                .code(code)
+                .message(message)
+                .data(data)
+                .build();
+    }
+
     public static Result error(HttpStatus status, String message) {
         return Result.builder()
                 .flag(false)

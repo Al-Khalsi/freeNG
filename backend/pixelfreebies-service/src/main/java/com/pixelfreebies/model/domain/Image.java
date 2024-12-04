@@ -49,14 +49,6 @@ public class Image extends BaseEntity<UUID> {
     @Builder.Default
     private Set<String> dominantColors = new HashSet<>();
 
-    @ElementCollection
-    @CollectionTable(
-            name = "image_keywords",
-            joinColumns = @JoinColumn(name = "image_id")
-    )
-    @Builder.Default
-    private Set<String> keywords = new HashSet<>();
-
     // -------------------- Relationships --------------------
     @ManyToOne
     private User uploadedBy;
@@ -64,6 +56,15 @@ public class Image extends BaseEntity<UUID> {
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private Set<ImageVariant> variants = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "images_keywords",
+            joinColumns = @JoinColumn(name = "image_id"),
+            inverseJoinColumns = @JoinColumn(name = "keyword_id")
+    )
+    @Builder.Default
+    private Set<Keywords> keywords = new HashSet<>();
 
     // -------------------- Methods --------------------
 

@@ -1,17 +1,22 @@
 ALTER TABLE image_categories
-    DROP CONSTRAINT fk_imacat_on_category;
+DROP
+CONSTRAINT fk_imacat_on_category;
 
 ALTER TABLE image_categories
-    DROP CONSTRAINT fk_imacat_on_image;
+DROP
+CONSTRAINT fk_imacat_on_image;
 
 ALTER TABLE image_subcategories
-    DROP CONSTRAINT fk_imasub_on_image;
+DROP
+CONSTRAINT fk_imasub_on_image;
 
 ALTER TABLE image_subcategories
-    DROP CONSTRAINT fk_imasub_on_sub_category;
+DROP
+CONSTRAINT fk_imasub_on_sub_category;
 
 ALTER TABLE sub_categories
-    DROP CONSTRAINT fk_sub_categories_on_parent_category;
+DROP
+CONSTRAINT fk_sub_categories_on_parent_category;
 
 CREATE TABLE image_keywords
 (
@@ -31,5 +36,5 @@ DROP TABLE image_subcategories CASCADE;
 DROP TABLE sub_categories CASCADE;
 
 ALTER TABLE images
-    DROP
-        COLUMN keywords;
+DROP
+COLUMN keywords;

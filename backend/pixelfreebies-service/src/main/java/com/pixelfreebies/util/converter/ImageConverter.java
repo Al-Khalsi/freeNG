@@ -1,14 +1,17 @@
 package com.pixelfreebies.util.converter;
 
 import com.pixelfreebies.model.domain.Image;
+import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.domain.User;
 import com.pixelfreebies.model.dto.ImageDTO;
+import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.dto.RoleDTO;
 import com.pixelfreebies.model.dto.UserDTO;
 import com.pixelfreebies.service.impl.ImageMetadataService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -23,6 +26,12 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
     public Image toEntity(ImageDTO dto) {
         if (dto == null) return null;
 
+        Set<Keywords> keywordsSet = new HashSet<>();
+        for (KeywordsDTO keywordDTO : dto.getKeywords()) {
+            Keywords newKeyword = Keywords.builder().keyword(keywordDTO.getKeyword()).build();
+            keywordsSet.add(newKeyword);
+        }
+
         Image image = Image.builder()
                 .fileTitle(dto.getFileTitle())
                 .filePath(dto.getFilePath())
@@ -31,7 +40,7 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
                 .height(dto.getHeight())
                 .width(dto.getWidth())
                 .isActive(dto.isActive())
-                .keywords(dto.getKeywords())
+                .keywords(keywordsSet)
                 .style(dto.getStyle())
                 .isLightMode(dto.isLightMode())
                 .dominantColors(dto.getDominantColors())
@@ -64,7 +73,6 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
                 .height(entity.getHeight())
                 .width(entity.getWidth())
                 .isActive(entity.isActive())
-                .keywords(entity.getKeywords())
                 .style(entity.getStyle())
                 .isLightMode(entity.isLightMode())
                 .dominantColors(entity.getDominantColors())
@@ -73,6 +81,20 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
                 .averageRating(entity.getAverageRating())
                 .lastDownloadedAt(entity.getLastDownloadedAt())
                 .build();
+
+        // Handle keywords if present
+        Set<Keywords> keywords = entity.getKeywords();
+        if (!keywords.isEmpty()) {
+            Set<KeywordsDTO> keywordsDTOSet = new HashSet<>();
+            for (Keywords keyword : keywords) {
+                KeywordsDTO keywordsDTO = new KeywordsDTO();
+                keywordsDTO.setId(keyword.getId());
+                keywordsDTO.setKeyword(keyword.getKeyword());
+
+                keywordsDTOSet.add(keywordsDTO);
+            }
+            imageDTO.setKeywords(keywordsDTOSet);
+        }
 
         // Handle uploadedBy user if present
         User uploadedBy = entity.getUploadedBy();

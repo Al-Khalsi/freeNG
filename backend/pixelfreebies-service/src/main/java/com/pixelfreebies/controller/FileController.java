@@ -123,22 +123,6 @@ public class FileController {
         return ResponseEntity.ok(PaginatedResult.success("List files.", true, imageDTOs));
     }
 
-    // Endpoint for searching files
-    @Operation(
-            summary = "Search files",
-            description = "Searches the files from the database."
-    )
-    @GetMapping("/search")
-    public ResponseEntity<Result> searchFiles(@RequestParam String query) {
-        List<ImageDTO> searchedFiles = this.fileService.searchImages(query);
-
-        if (searchedFiles.isEmpty()) {
-            return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedFiles));
-        }
-
-        return ResponseEntity.ok(Result.success("Search files result.", searchedFiles));
-    }
-
     // Endpoint for deleting files
     @DeleteMapping("/{imageId}")
     @PreAuthorize("hasRole('ROLE_MASTER')")

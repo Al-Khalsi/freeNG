@@ -3,6 +3,7 @@ package com.pixelfreebies.service.impl;
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
+import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.domain.MetaInfo;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
@@ -45,27 +46,29 @@ public class FileServiceImpl implements FileService {
                                List<String> keywords, List<String> dominantColors,
                                String style, boolean lightMode) throws IOException {
         try {
-
-            // Perform validations on filename and path
+            // Validate image name
             this.imageValidationService.validateImageName(fileName);
             String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, originalFileName);
 
-            // Create the entities
-            Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), keywords, dominantColors, style, lightMode);
+            // Validate keywords and retrieve their entities
+            Set<Keywords> keywordsSet = this.imageMetadataService.validateAndFetchKeywords(keywords);
+
+            // Create the domains
+            Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
             MetaInfo imageMetaInfo = this.imageMetadataService.createImageMetaInfoDomain(image);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Associate relationships
             this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
+            this.imageMetadataService.associateImageWithKeywords(image, keywordsSet);
 
-            // Save to db
+            // Save the image (cascades save to associated entities)
             Image savedImage = this.imageRepository.save(image);
             this.metaInfoRepository.save(imageMetaInfo);
             this.imageVariantRepository.save(imageVariant);
 
             return this.imageConverter.toDto(savedImage);
-
         } catch (IOException e) {
             log.error("-> FILE -> Failed to store file: {}", e.getMessage());
             throw e;
@@ -104,7 +107,7 @@ public class FileServiceImpl implements FileService {
                 });
     }
 
-    @Override // todo: needs modification!!! not working as expected
+    @Override
     public List<ImageDTO> searchImages(String query) {
         if (query == null || query.trim().isEmpty()) {
             return Collections.emptyList();
@@ -150,13 +153,40 @@ public class FileServiceImpl implements FileService {
 
         foundImage.setFileTitle(updateImageDTO.getFileTitle());
         foundImage.setActive(updateImageDTO.isActive());
-        foundImage.setKeywords(updateImageDTO.getKeywords());
         foundImage.setStyle(updateImageDTO.getStyle());
         foundImage.setLightMode(updateImageDTO.isLightMode());
         foundImage.setDominantColors(updateImageDTO.getDominantColors());
         foundImage.setAverageRating(updateImageDTO.getAverageRating());
 
         return this.imageConverter.toDto(this.imageRepository.save(foundImage));
+    }
+
+    @Override
+    public List<String> searchKeywords(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // Format the query for PostgreSQL full-text search
+        String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
+
+        // First attempt to find exact matches
+        List<String> exactMatches = this.imageRepository.searchKeywords(formattedQuery);
+        // If no exact matches found, search for similar entries
+        List<String> similarMatches = this.imageRepository.searchSimilarKeywords(query);
+
+        // Create a set of IDs to avoid duplicates
+        Set<String> exactMatchIds = new HashSet<>(exactMatches);
+
+        // Add similar matches that are not in exact matches
+        List<String> combinedResults = new ArrayList<>(exactMatches);
+        similarMatches.stream()
+                .filter(keyword -> !exactMatchIds.contains(keyword))
+                .forEach(combinedResults::add);
+
+        return combinedResults.stream()
+//                .limit(50) // Limit results
+                .toList();
     }
 
 }
