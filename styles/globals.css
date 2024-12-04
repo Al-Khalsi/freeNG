@@ -320,7 +320,6 @@ background-color: var(--bg-darkGray2);
   overflow: hidden;
   border-radius: 10px;
   background: linear-gradient(var(--bg-purple), var(--bg-lightPurple));
-  border: 1px solid transparent;
   cursor: pointer;
 }
 
@@ -464,14 +463,10 @@ background-color: var(--bg-darkGray2);
   }
 }
 
-
-
-
 /*-------------------- button login css --------------------*/
 /*-------------------- button login css --------------------*/
 /*-------------------- button login css --------------------*/
 
-/* From Uiverse.io by ilkhoeri */ 
 .button {
     --round: 0.75rem;
     cursor: pointer;
@@ -665,87 +660,9 @@ background-color: var(--bg-darkGray2);
 }
 
 
-
 /*-------------------- LOGO css --------------------*/
 /*-------------------- LOGO css --------------------*/
 /*-------------------- LOGO css --------------------*/
-
-
-
-
-
-/*-------------------- Modal css --------------------*/
-/*-------------------- Modal css --------------------*/
-/*-------------------- Modal css --------------------*/
-
-
-.radio-input .label {
-  background: linear-gradient(to bottom, #333333, rgb(36, 35, 35));
-  transition: all 0.1s linear;
-  border-top: 1px solid #4e4d4d;
-  background-color: #333333;
-}
-
-.label:has(input[type="radio"]:checked) {
-  box-shadow: 0px 17px 5px 1px rgba(0, 0, 0, 0);
-  background: linear-gradient(to bottom, #1d1d1d, #1d1d1d);
-  border-top: none;
-}
-
-.label:first-child {
-  border-top-left-radius: 6px;
-  border-bottom-left-radius: 6px;
-}
-
-.label:last-child {
-  border-top-right-radius: 6px;
-  border-bottom-right-radius: 6px;
-}
-
-.label::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 103%;
-  height: 100%;
-  border-radius: 10px;
-  background: linear-gradient(
-    to bottom,
-    transparent 10%,
-    transparent,
-    transparent 90%
-  );
-  transition: all 0.1s linear;
-  z-index: -1;
-}
-
-.label:has(input[type="radio"]:checked)::before {
-  background: linear-gradient(
-    to bottom,
-    transparent 10%,
-    #cae2fd63,
-    transparent 90%
-  );
-}
-
-.label .text {
-  color: black;
-  font-size: 15px;
-  line-height: 12px;
-  padding: 0px;
-  font-weight: 800;
-  transition: all 0.1s linear;
-  text-shadow:
-    -1px -1px 1px rgb(224, 224, 224, 0.1),
-    0px 2px 3px rgb(0, 0, 0, 0.3);
-}
-
-.label input[type="radio"]:checked + .text {
-  color: rgb(202, 226, 253);
-  text-shadow: 0px 0px 12px #cae2fd;
-}
 
 
 
@@ -753,7 +670,6 @@ background-color: var(--bg-darkGray2);
 /*-------------------- btn download link --------------------*/
 /*-------------------- btn download link --------------------*/
 
-/* From Uiverse.io by jamik-dev */ 
 .Download-button {
   display: flex;
   align-items: center;
@@ -821,37 +737,6 @@ background-color: var(--bg-darkGray2);
   transform: translate(-5px, 15px) rotate(45deg);
 }
 
-
-
-/* styles/globals.css or your specific CSS module */
-/* styles/globals.css or your specific CSS module */
-/* styles/globals.css or your specific CSS module */
-
-.fixed {
-  position: fixed;
-}
-
-.inset-0 {
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.bg-black {
-  background-color: black;
-}
-
-.bg-opacity-75 {
-  opacity: 0.75;
-}
-
-.z-50 {
-  z-index: 50;
-}
-
-/*-------------------- subject-text --------------------*/
-/*-------------------- subject-text --------------------*/
 /*-------------------- subject-text --------------------*/
 
 .subject-text h1 {
@@ -920,38 +805,7 @@ background-color: var(--bg-darkGray2);
 }
   
 
-
 /*-------------------- error 500 --------------------*/
 /*-------------------- error 500 --------------------*/
 /*-------------------- error 500 --------------------*/
 
-
-/* components/BillSVG.module.css */
-
-@keyframes blink-fancy {
-  0%, 25%, 28.33%, 45%, 48.33%, 51.67%, 93.33%, 96.67% { transform: scaleY(1); }
-  26.67%, 46.67%, 50%, 95% { transform: scaleY(0.1); }
-}
-
-@keyframes flame-flicker-1 {
-  25% { transform: scale3d(1, 1.1, 1); }
-  40% { transform: scale3d(1, 0.8, 1); }
-  50% { transform: scale3d(1, 1.05, 1); }
-  65% { transform: scale3d(1, 0.75, 1); }
-  75% { transform: scale3d(1, 1, 1); }
-  90% { transform: scale3d(1, 1.15, 1); }
-  100% { transform: scale3d(1, 1, 1); }
-}
-
-/* Add other keyframes and styles as needed */
-
-.glow {
-  transform-origin: center center;
-  animation: opacity-pulse 4s ease-in-out infinite 0.1s, scale-pulse 4s ease-in-out alternate infinite;
-}
-
-#eyes-left, #eyes-right {
-  animation: blink-fancy 6s linear infinite;
-}
-
-/* Continue adding other CSS classes as needed */

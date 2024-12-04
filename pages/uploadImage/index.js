@@ -175,7 +175,6 @@ function UploadImage() {
             </div>
           </div>
 
-          {/* Keyword Selection Section */}
           <div className='flex mb-4'>
             {isAddingKeywords ? (
               <div className='keywordsAdd flex justify-between w-full mt-2'>
