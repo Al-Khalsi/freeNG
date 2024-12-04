@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -187,6 +188,27 @@ public class FileServiceImpl implements FileService {
         return combinedResults.stream()
 //                .limit(50) // Limit results
                 .toList();
+    }
+
+    @Override
+    public Page<ImageDTO> searchImages(String query, PageRequest pageRequest) {
+        if (query == null || query.trim().isEmpty()) {
+            return Page.empty();
+        }
+
+        // Format the query for PostgreSQL full-text search
+        String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
+
+        // First attempt to find exact matches with pagination
+        Page<Image> exactMatches = this.imageRepository.searchFiles(formattedQuery, pageRequest);
+
+        // If exact matches are less than the requested page size, find similar matches
+        if (exactMatches.getContent().isEmpty()) {
+            return this.imageRepository.searchSimilarFiles(query, pageRequest)
+                    .map(this.imageConverter::toDto);
+        }
+
+        return exactMatches.map(this.imageConverter::toDto);
     }
 
 }

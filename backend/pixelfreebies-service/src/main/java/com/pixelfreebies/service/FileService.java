@@ -4,6 +4,7 @@ import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,5 +30,7 @@ public interface FileService {
     ImageDTO updateImage(String imageId, UpdateImageDTO updateImageDTO);
 
     List<String> searchKeywords(String query);
+
+    Page<ImageDTO> searchImages(String query, PageRequest pageRequest);
 
 }

@@ -26,14 +26,17 @@ public class PaginatedResult<T> {
 
     public static <T> PaginatedResult<T> success(String message, boolean flag, Page<T> page) {
         PaginatedResult<T> result = new PaginatedResult<>();
+
         result.message = message;
         result.flag = flag;
         result.code = HttpStatus.OK;
+
         result.data = (T) page.getContent();
         result.currentPage = page.getNumber();
         result.totalPages = page.getTotalPages();
         result.totalElements = page.getTotalElements();
         result.last = page.isLast();
+
         return result;
     }
 
