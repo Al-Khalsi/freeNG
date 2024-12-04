@@ -1,8 +1,6 @@
 package com.pixelfreebies.service.impl;
 
 import com.pixelfreebies.model.domain.Image;
-import com.pixelfreebies.repository.KeywordsRepository;
-import com.pixelfreebies.service.ImageStorageStrategy;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

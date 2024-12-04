@@ -4,13 +4,10 @@ import com.luciad.imageio.webp.WebPWriteParam;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
-import com.pixelfreebies.model.domain.MetaInfo;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.enums.ImageUnits;
 import com.pixelfreebies.model.enums.Purpose;
-import com.pixelfreebies.repository.KeywordsRepository;
 import com.pixelfreebies.service.ImageStorageStrategy;
-import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,10 +23,10 @@ import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Set;
 
 @Slf4j
 @Service

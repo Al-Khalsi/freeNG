@@ -65,15 +65,15 @@ public interface ImageRepository extends JpaRepository<Image, UUID> {
             to_tsvector('english', k.keyword) @@ to_tsquery('english', :query))
             """,
             countQuery = """
-            SELECT COUNT(i.*)
-            FROM images i
-            LEFT JOIN images_keywords ik ON i.id = ik.image_id
-            LEFT JOIN keywords k ON ik.keyword_id = k.id
-            WHERE
-            (:query IS NULL OR
-            to_tsvector('english', i.file_title) @@ to_tsquery('english', :query) OR
-            to_tsvector('english', k.keyword) @@ to_tsquery('english', :query))
-            """,
+                    SELECT COUNT(i.*)
+                    FROM images i
+                    LEFT JOIN images_keywords ik ON i.id = ik.image_id
+                    LEFT JOIN keywords k ON ik.keyword_id = k.id
+                    WHERE
+                    (:query IS NULL OR
+                    to_tsvector('english', i.file_title) @@ to_tsquery('english', :query) OR
+                    to_tsvector('english', k.keyword) @@ to_tsquery('english', :query))
+                    """,
             nativeQuery = true)
     Page<Image> searchFiles(@Param("query") String query, Pageable pageable);
 
@@ -87,14 +87,14 @@ public interface ImageRepository extends JpaRepository<Image, UUID> {
             k.keyword ILIKE CONCAT('%', :query, '%')
             """,
             countQuery = """
-            SELECT COUNT(i.*)
-            FROM images i
-            LEFT JOIN images_keywords ik ON i.id = ik.image_id
-            LEFT JOIN keywords k ON ik.keyword_id = k.id
-            WHERE
-            i.file_title ILIKE CONCAT('%', :query, '%') OR
-            k.keyword ILIKE CONCAT('%', :query, '%')
-            """,
+                    SELECT COUNT(i.*)
+                    FROM images i
+                    LEFT JOIN images_keywords ik ON i.id = ik.image_id
+                    LEFT JOIN keywords k ON ik.keyword_id = k.id
+                    WHERE
+                    i.file_title ILIKE CONCAT('%', :query, '%') OR
+                    k.keyword ILIKE CONCAT('%', :query, '%')
+                    """,
             nativeQuery = true)
     Page<Image> searchSimilarFiles(@Param("query") String query, Pageable pageable);
 
