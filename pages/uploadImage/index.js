@@ -200,7 +200,7 @@ function UploadImage() {
                     className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2 
                     text-black bg-white rounded-r'>Search</button>
                     <div className='result-keywordSelect absolute w-5/6 h-32 
-                    flex flex-col rounded-b bg-bgDarkGray2'>
+                    hidden flex-col rounded-b bg-bgDarkGray2'>
                       <label htmlFor='test' className='flex justify-between items-center w-full p-2 border-b border-gray-400
                       cursor-pointer '>
                         <p>polic</p>

@@ -86,7 +86,7 @@ img {
   display: block;
 }
 
-header.sticky {
+header.fixed {
   transition: 0.6s;
   transform: translateY(96px);
 }
@@ -128,6 +128,7 @@ background-color: var(--bg-darkGray2);
   height: 56px;
   color: var(--cl-purple);
   padding-inline: 59px;
+  transition: 0.4s;
 }
 
 .input::placeholder {
@@ -159,6 +160,7 @@ background-color: var(--bg-darkGray2);
   max-width: 600px;
   border-radius: 10px;
   filter: blur(2px);
+  transition: 0.4s;
 }
 
 .stardust::before {
@@ -188,6 +190,7 @@ background-color: var(--bg-darkGray2);
   max-width: 595px;
   border-radius: 11px;
   filter: blur(0.5px);
+  transition: 0.4s;
 }
 
 .cosmic-ring::before {
@@ -215,6 +218,7 @@ background-color: var(--bg-darkGray2);
 .starfield {
   max-height: 65px;
   max-width: 605px;
+  transition: 0.4s;
 }
 
 .starfield::before {
@@ -803,9 +807,49 @@ background-color: var(--bg-darkGray2);
     transform: rotate(25deg)
   }
 }
+
+/* @media (min-width: 425px) {
+  #search {
+    
+  }
+} */
   
+@media (min-width: 768px) {
+  #search {
+    display: block;
+  }
+  
+  #main .input {
+    width: 391px;
+  }
+  .cosmic-ring {
+    max-width: 395px;
+  }
+  .stardust {
+    max-width: 400px;
+  }
+  .starfield {
+    max-width: 405px;
+  }
+  .nebula {
+    max-width: 500px;
+  }
+}
 
-/*-------------------- error 500 --------------------*/
-/*-------------------- error 500 --------------------*/
-/*-------------------- error 500 --------------------*/
-
+@media (min-width: 1024px) {
+  #main .input {
+    width: 591px;
+  }
+  .cosmic-ring {
+    max-width: 595px;
+  }
+  .stardust {
+    max-width: 600px;
+  }
+  .starfield {
+    max-width: 605px;
+  }
+  .nebula {
+    max-width: 700px;
+  }
+}

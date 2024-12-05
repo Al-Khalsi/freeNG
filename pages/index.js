@@ -207,14 +207,14 @@ function Index() {
                         </div>
                     ) : (
                         <div className='subject-text relative w-full text-center'>
-                            <h1 className='relative text-6xl text-clLightPurple'>
+                            <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
                                 Free Reference for Downloading All PNG Images
                             </h1>
                         </div>
                     )}
                 </div>
 
-                <main className='main flex justify-between w-full py-8 px-2 lg:px-8'>
+                <main className='main flex justify-between w-full py-8 px-4 lg:px-8'>
                     {loading ? ( // Show loading indicator while fetching images
                         <section className='loading flex justify-center w-full my-8 py-1'>
                             <div className="loader relative w-20 h-20 rounded-lg overflow-hidden bg-white"></div>

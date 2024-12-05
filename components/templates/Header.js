@@ -22,12 +22,12 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
     }, []);
 
     return (
-        <header className={`header w-full h-24 px-2 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'sticky -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
-            <div className='w-20 h-20'>
-                <img src="../../img/LOGO.png" className='w-full h-full object-cover' alt="Logo" title='Logo' />
+        <header className={`header w-full h-24 px-4 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'fixed -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
+            <div className='w-20 h-20 flex justify-start items-center'>
+                <img src="../../img/LOGO.png" className='w-12 h-12 object-cover bg-gradient-to-t from-bgPurple to-bgLightPurple rounded-md' alt="Logo" title='Logo' />
             </div>
 
-            <div id='search' className='search-box z-0 w-2/5 hidden sm:block'>
+            <div id='search' className='search-box z-0 w-2/5 hidden md:block'>
                 <div id="search-container" className="flex justify-center items-center ">
                     <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
                     <div className="starfield w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
@@ -87,7 +87,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                 </div>
             </div>
 
-            <button className='sm:hidden flex justify-center items-center w-10 h-10 mr-4 rounded-full text-xl bg-black text-white'>
+            <button className='sm:hidden flex justify-center items-center w-12 h-12 mr-1 rounded-md text-xl text-white bg-gradient-to-t from-bgPurple to-bgLightPurple'>
                 <FaSearch />
             </button>
 
@@ -101,7 +101,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     <IoLogOut onClick={handleLogout} className='ml-4 text-red-600 cursor-pointer' />
                 </div>
             ) : (
-                <Link href="/validation" className="button rounded-xl">
+                <Link href="/validation" className="button rounded-md">
                     <span className="fold"></span>
                     <div className="points_wrapper">
                         <i className="point"></i>
