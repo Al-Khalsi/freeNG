@@ -53,8 +53,12 @@ function Index() {
                     size: file.size,
                     width: file.width,
                     height: file.height,
+                    style: file.style,
+                    dominantColors: file.dominantColors,
                     uploadedBy: file.uploadedBy.username,
-                    lightMode: file.lightMode
+                    lightMode: file.lightMode,
+                    // Convert keywords to a comma-separated string
+                    keywords: JSON.stringify(file.keywords)
                 }));
 
                 console.log('Fetched images:', fetchedImages); // Log the fetched images

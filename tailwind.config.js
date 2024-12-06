@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       width: {
-        "custom-212": "53rem", // اضافه کردن عرض کاستوم با نام w-212
+        "custom-212": "53rem",
       },
       height: {
         "custom-136": "34rem",

@@ -12,10 +12,13 @@ function Card({ image, role, onDelete, onEdit }) {
 
     const downloadLink = `/downloader/${image.id}
     ?title=${encodeURIComponent(image.title)}
-    &path=${encodeURIComponent(image.path)}
-    &size=${encodeURIComponent(image.size)}
+    &path=${image.path}
+    &size=${image.size}
     &width=${image.width}
     &height=${image.height}
+    &style=${image.style}
+    &dominantColors=${image.dominantColors}
+    &keywords=${encodeURIComponent(image.keywords)}
     &lightMode=${image.lightMode ? 'true' : 'false'}`;
 
     const handleOpenModal = () => {
