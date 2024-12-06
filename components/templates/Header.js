@@ -7,6 +7,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
     const [isFixedHeader, setIsFixedHeader] = useState(false);
     const [isSearchBarVisible, setIsSearchBarVisible] = useState(false); // State for mobile search bar visibility
     const searchBarRef = useRef(null); // Ref for the search bar
+    const searchInputRef = useRef(null); // Ref for the search input
 
     useEffect(() => {
         const handleScroll = () => {
@@ -55,6 +56,13 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
+
+    // Effect to focus the search input when the search bar is visible
+    useEffect(() => {
+        if (isSearchBarVisible && searchInputRef.current) {
+            searchInputRef.current.focus(); // Focus the search input when the search bar is visible
+        }
+    }, [isSearchBarVisible]);
 
     return (
         <header className={`header relative w-full h-24 px-4 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'fixed -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
@@ -178,6 +186,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     <div ref={searchBarRef} className="absolute top-0 left-0 w-full border-b border-bgLightPurple bg-bgDarkBlue p-2 z-50">
                         <div className="relative flex justify-between items-center">
                             <input
+                                ref={searchInputRef}
                                 className="input border-none rounded-xl text-lg w-full"
                                 name="text"
                                 type="text"
