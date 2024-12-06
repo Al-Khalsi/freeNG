@@ -8,6 +8,7 @@ import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
 import { MdImageNotSupported, MdDelete } from "react-icons/md";
 import { apiFetch } from '@/utils/api'; // Import apiFetch from utils/api
+import MouseEffect from '@/components/modules/MouseEffect';
 
 function Index() {
     const { token, username, email, clearToken, userId, role } = useAuth(); // Get user authentication details
@@ -36,7 +37,7 @@ function Index() {
         try {
             const url = query
                 ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}`
-                : `http://localhost:8080/api/v1/file/list/paginated?page=${(page-1)}&size=${size}`;
+                : `http://localhost:8080/api/v1/file/list/paginated?page=${(page - 1)}&size=${size}`;
 
             console.log('Fetching images from URL:', url); // Log the URL being fetched
 
@@ -157,6 +158,24 @@ function Index() {
             <Head>
                 <title>PixelFreebies</title>
 
+                <meta name="description"
+                    content="PixelFreebies offers a vast collection of free PNG images for download. 
+                Explore and find the perfect image for your project." />
+
+                <meta name="keywords" content="free images, PNG images, download images, PixelFreebies, stock photos" />
+
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+                <meta property="og:title" content="PixelFreebies - Free PNG Images" />
+                <meta property="og:description" content="Explore our extensive collection of free PNG images for your creative projects." />
+                <meta property="og:image" content="URL_to_a_representative_image.jpg" />
+                <meta property="og:url" content="https://pixelfreebies.com" />
+                <meta property="og:type" content="website" />
+
+                <meta name="robots" content="index, follow" />
+                
+                <link rel="canonical" href="https://pixelfreebies.com" />
+
                 {/* Favicon for standard browsers */}
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-16x16.png" sizes="16x16" />
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-32x32.png" sizes="32x32" />
@@ -250,6 +269,8 @@ function Index() {
                         +
                     </Link>
                 )}
+
+                {/* <MouseEffect /> */}
             </div>
         </>
     );

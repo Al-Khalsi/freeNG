@@ -74,6 +74,7 @@ body {
   height: 100%;
   background-color: var(--bg-darkBlue);
   color: var(--bg-white);
+  /* cursor: none; */
 }
 
 .app {
@@ -802,11 +803,33 @@ background-color: var(--bg-darkGray2);
   }
 }
 
-/* @media (min-width: 425px) {
-  #search {
-    
-  }
-} */
+#pixelCursor {
+  position: fixed;
+  width: 25px;
+  height: 25px;
+  border-top: 5px solid var(--bg-purple);
+  border-left: 5px solid var(--bg-purple);
+  transform-origin: top;
+  transform: translate(-1px, 5px) rotate(15deg) scale(0);
+  transition: transform 0.4s;
+  pointer-events: none;
+}
+
+#pixelCursor::before {
+  content: '';
+  position: absolute;
+  left: -2.5px;
+  width: 5px;
+  height: 40px;
+  background-color: var(--cl-lightPurple);
+  transform-origin: top;
+  transform: rotate(315deg);
+}
+
+body:hover #pixelCursor {
+  transform: translate(-1px, 5px) rotate(15deg) scale(1);
+  transition: transform 0.4s;
+}
 
 @media (max-width: 425px) {
   a.button .fold, .points_wrapper, .inner {
