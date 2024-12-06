@@ -472,20 +472,14 @@ background-color: var(--bg-darkGray2);
 /*-------------------- button login css --------------------*/
 
 .button {
-    --round: 0.75rem;
     cursor: pointer;
     position: relative;
+    display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     transition: all 0.25s ease;
-    background: radial-gradient(
-        65.28% 65.28% at 50% 100%,
-        rgba(223, 113, 255, 0.8) 0%,
-        rgba(223, 113, 255, 0) 100%
-      ),
-      linear-gradient(0deg, #7a5af8, #7a5af8);
-    border-radius: var(--round);
+    background: linear-gradient(var(--bg-purple), var(--cl-lightPurple));
     border: none;
     outline: none;
     padding: 12px 18px;
@@ -813,6 +807,15 @@ background-color: var(--bg-darkGray2);
     
   }
 } */
+
+@media (max-width: 425px) {
+  a.button .fold, .points_wrapper, .inner {
+    display: none;
+  }
+  a.button {
+    padding: 12px 12px;
+  }
+}
   
 @media (min-width: 768px) {
   #search {

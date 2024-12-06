@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { FaSearch } from 'react-icons/fa';
-import { IoLogOut } from "react-icons/io5";
+import { IoLogInSharp, IoLogOut } from "react-icons/io5";
 
 function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
     const [isFixedHeader, setIsFixedHeader] = useState(false);
@@ -87,38 +87,44 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                 </div>
             </div>
 
-            <button className='sm:hidden flex justify-center items-center w-12 h-12 mr-1 rounded-md text-xl text-white bg-gradient-to-t from-bgPurple to-bgLightPurple'>
-                <FaSearch />
-            </button>
 
-            {token ? (
-                <div className='flex items-center border-2 border-bgLightPurple rounded-md py-1 px-2'>
-                    <div>
-                        <span className='text-white cursor-pointer' title={username}>
-                            {username.length > 8 ? `${username.slice(0, 8)}...` : username}
-                        </span>
+            <div className='flex'>
+                <button className='md:hidden flex justify-center items-center w-12 h-12 mr-2 rounded-md text-xl text-white bg-gradient-to-t from-bgLightPurple to-bgPurple'>
+                    <FaSearch />
+                </button>
+
+                {token ? (
+                    <div className='flex items-center border-2 border-bgLightPurple rounded-md py-1 px-2'>
+                        <div>
+                            <span className='text-white cursor-pointer' title={username}>
+                                {username.length > 8 ? `${username.slice(0, 8)}...` : username}
+                            </span>
+                        </div>
+                        <IoLogOut onClick={handleLogout} className='ml-4 text-red-600 cursor-pointer' />
                     </div>
-                    <IoLogOut onClick={handleLogout} className='ml-4 text-red-600 cursor-pointer' />
-                </div>
-            ) : (
-                <Link href="/validation" className="button rounded-md">
-                    <span className="fold"></span>
-                    <div className="points_wrapper">
-                        <i className="point"></i>
-                        <i className="point"></i>
-                        <i className="point"></i>
-                        <i className="point"></i>
-                        <i className="point"></i>
-                        <i className="point"></i>
-                        <i className="point"></i>
-                        <i className="point"></i>
-                        <i className="point"></i>
+                ) : (
+                    <div className='flex'>
+                        <Link href="/validation" className="button rounded-md ">
+                            <IoLogInSharp className='sm:hidden text-2xl'/>
+                            <span className="fold"></span>
+                            <div className="points_wrapper">
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                                <i className="point"></i>
+                            </div>
+                            <span className="inner">
+                                Login / Register
+                            </span>
+                        </Link>
                     </div>
-                    <span className="inner">
-                        Login / Register
-                    </span>
-                </Link>
-            )}
+                )}
+            </div>
         </header>
     );
 }
