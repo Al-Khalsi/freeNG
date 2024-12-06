@@ -7,8 +7,7 @@ import Header from '@/components/templates/Header';
 import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
 import { MdImageNotSupported, MdDelete } from "react-icons/md";
-import { apiFetch } from '@/utils/api'; // Import apiFetch from utils/api
-import MouseEffect from '@/components/modules/MouseEffect';
+import { apiFetch } from '@/utils/api';
 
 function Index() {
     const { token, username, email, clearToken, userId, role } = useAuth(); // Get user authentication details
@@ -16,6 +15,7 @@ function Index() {
     const [openSelect, setOpenSelect] = useState(null); // State to manage select dropdown
     const [images, setImages] = useState([]); // State to store images from the backend
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
+    const [submittedSearchQuery, setSubmittedSearchQuery] = useState(''); // New state for submitted search query
     const [loading, setLoading] = useState(false); // State to manage loading status
     const itemsPerPage = 50; // Number of items to display per page
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
@@ -131,7 +131,7 @@ function Index() {
     const renderPagination = () => {
         const pagination = []; // Array to hold pagination buttons
         const maxVisiblePages = 5; // Maximum number of visible pagination buttons
-    
+
         // Calculate the start and end page numbers
         let startPage, endPage;
         if (totalPages <= maxVisiblePages) {
@@ -152,7 +152,7 @@ function Index() {
                 endPage = currentPage + middlePage - 1;
             }
         }
-    
+
         // Add "First" button
         if (startPage > 1) {
             pagination.push(
@@ -164,7 +164,7 @@ function Index() {
                 pagination.push(<span key="ellipsis-start">...</span>);
             }
         }
-    
+
         // Render pagination buttons
         for (let i = startPage; i <= endPage; i++) {
             pagination.push(
@@ -177,31 +177,32 @@ function Index() {
                 </button>
             );
         }
-    
+
         // Add "Last" button
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) {
                 pagination.push(<span key="ellipsis-end">...</span>);
             }
             pagination.push(
-                <button key="last" onClick={() => handlePageChange(totalPages)} 
-                className="mx-2 px-4 py-2 rounded-lg bg-bgDarkGray hover:bg-bgDarkGray2">
+                <button key="last" onClick={() => handlePageChange(totalPages)}
+                    className="mx-2 px-4 py-2 rounded-lg bg-bgDarkGray hover:bg-bgDarkGray2">
                     Last
                 </button>
             );
         }
-    
-        return pagination; 
+
+        return pagination;
     };
 
     const handleLogout = () => {
-        clearToken(); 
+        clearToken();
     };
 
     const handleSearch = () => {
         if (!searchQuery.trim()) {
-            return; 
+            return;
         }
+        setSubmittedSearchQuery(searchQuery);
         fetchImages(searchQuery, 1);
         setIsSearching(true);
         router.push(`/?search=${encodeURIComponent(searchQuery)}`);
@@ -257,23 +258,23 @@ function Index() {
                     userId={userId}
                     handleLogout={handleLogout}
                     searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery} 
-                    handleSearch={handleSearch} 
+                    setSearchQuery={setSearchQuery}
+                    handleSearch={handleSearch}
                 />
 
                 <div className='w-full py-12 px-8'>
-                    {isSearching ? ( 
+                    {isSearching ? (
                         <div className='filter-result flex justify-center items-center'>
                             <div className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
                                 Result for:
                                 <span className='ml-2'>
-                                    {searchQuery}
+                                    {submittedSearchQuery}
                                 </span>
                                 <button
                                     onClick={() => {
-                                        setSearchQuery(''); 
-                                        setIsSearching(false); 
-                                        fetchImages(); 
+                                        setSearchQuery('');
+                                        setIsSearching(false);
+                                        fetchImages();
                                         router.push('/');
                                     }}
                                     className='ml-2 text-xl text-white hover:text-red-600 rounded-lg'>
@@ -310,7 +311,7 @@ function Index() {
                 </main>
 
                 <div className="pagination flex justify-center py-4">
-                    {renderPagination()} {/* Render pagination buttons */}
+                    {renderPagination()}
                 </div>
 
                 <Footer />

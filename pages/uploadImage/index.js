@@ -6,7 +6,7 @@ function UploadImage() {
   const { token } = useAuth();
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
-  const [dominantColor, setDominantColor] = useState('');
+  const [dominantColors, setDominantColors] = useState([]); // Change to array
   const [style, setStyle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,6 +20,7 @@ function UploadImage() {
   const [searchQuery, setSearchQuery] = useState(''); // State for search input
   const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
   const [totalPages, setTotalPages] = useState(0); // Total pages for pagination
+  const [showColorDropdown, setShowColorDropdown] = useState(false);
 
   const colors = [
     'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple',
@@ -61,11 +62,13 @@ function UploadImage() {
     const formData = new FormData();
     formData.append('file', image);
     formData.append('fileName', imageName);
-    formData.append('dominantColors', dominantColor);
+    dominantColors.forEach(color => {
+      formData.append('dominantColors', color);
+    });
     formData.append('style', style);
     formData.append('lightMode', lightMode);
     selectedKeywords.forEach(keyword => {
-      formData.append('keywords', keyword); // Append each keyword individually
+      formData.append('keywords', keyword);
     });
 
     try {
@@ -111,6 +114,17 @@ function UploadImage() {
     }
   };
 
+  const handleColorChange = (color) => {
+    setDominantColors(prevColors => {
+      if (prevColors.includes(color)) {
+        return prevColors.filter(c => c !== color); // Remove color if already selected
+      } else if (prevColors.length < 3) {
+        return [...prevColors, color]; // Add color if not selected and limit not reached
+      }
+      return prevColors; // Return current state if limit reached
+    });
+  };
+
   const handleSearch = () => {
     if (searchQuery.trim()) {
       fetchKeywords(searchQuery, currentPage); // Fetch keywords based on search query
@@ -142,7 +156,7 @@ function UploadImage() {
       setErrorMessage(error.response?.data?.message || 'Error creating keyword.');
     }
 
-    
+
   };
 
   const handleCheckboxChange = (keyword) => {
@@ -213,21 +227,34 @@ function UploadImage() {
           </div>
 
           <div className='flex items-center'>
-            <div className="mb-4 mx-2 w-1/2">
+
+            <div className='mb-4 mx-2 w-1/2'>
               <label className="block mb-2">Dominant Color</label>
-              <select
-                value={dominantColor}
-                onChange={(e) => setDominantColor(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
-              >
-                <option value="">Select a color</option>
-                {colors.map((color) => (
-                  <option key={color} value={color}>
-                    {color}
-                  </option>
-                ))}
-              </select>
+              <div className="relative">
+                <button
+                  type="button"
+                  className="border rounded p-2 w-full bg-bgDarkGray2"
+                  onClick={() => setShowColorDropdown(prev => !prev)}
+                >
+                  {dominantColors.length > 0 ? dominantColors.join(', ') : 'Select Colors'}
+                </button>
+                {showColorDropdown && (
+                  <div className="absolute bg-bgDarkGray2 border rounded mt-1 w-full z-10">
+                    {colors.map((color) => (
+                      <label key={color} className="flex items-center p-2">
+                        <input
+                          type="checkbox"
+                          value={color}
+                          checked={dominantColors.includes(color)}
+                          onChange={() => handleColorChange(color)}
+                          className="mr-2"
+                        />
+                        {color}
+                      </label>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="mb-4 mx-2 w-1/2">

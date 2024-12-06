@@ -66,9 +66,9 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
 
     return (
         <header className={`header relative w-full h-24 px-4 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'fixed -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
-            <div className='w-20 h-20 flex justify-start items-center'>
+            <Link href='/' className='w-20 h-20 flex justify-start items-center'>
                 <img src="../../img/LOGO.png" className='w-12 h-12 object-cover bg-gradient-to-t from-bgPurple to-bgLightPurple rounded-md' alt="Logo" title='Logo' />
-            </div>
+            </Link>
 
             <div id='search' className='search-box z-0 w-2/5 hidden md:block'>
                 <div id="search-container" className="flex justify-center items-center ">

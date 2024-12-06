@@ -8,7 +8,6 @@ import { IoColorPaletteOutline } from "react-icons/io5";
 import { FiDownload } from "react-icons/fi";
 import { FaTags } from "react-icons/fa6";
 import axios from 'axios';
-import Link from 'next/link';
 
 const colorHexMap = {
     'Red': '#FF0000',
