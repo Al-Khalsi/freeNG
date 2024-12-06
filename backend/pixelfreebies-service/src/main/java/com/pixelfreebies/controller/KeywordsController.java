@@ -73,7 +73,7 @@ public class KeywordsController {
     @Operation(
             summary = "fetch a keyword."
     )
-    @GetMapping("/{keywordId}")
+    @GetMapping("/fetch/{keywordId}")
     public ResponseEntity<Result> findKeywordById(@PathVariable long keywordId) {
         KeywordsDTO keywordsDTO = this.keywordsService.findKeywordById(keywordId);
 

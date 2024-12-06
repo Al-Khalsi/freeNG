@@ -150,9 +150,6 @@ function AuthForm() {
                                 placeholder='Password' required />
                             <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
-                        <div className='forgot-link -mt-3.5 mb-3.5'>
-                            <p className='text-base no-underline'>Forgot password?</p>
-                        </div>
                         <button type='submit' className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-base font-semibold cursor-pointer'>Login</button>
                         
                     </form>

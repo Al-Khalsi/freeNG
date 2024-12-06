@@ -213,23 +213,26 @@ function Index() {
 
                 <div className='w-full py-12 px-8'>
                     {isSearching ? ( // Use isSearching instead of searchQuery
-                        <div className='filter-result flex justify-between items-center'>
-                            <div className='search-result'>
-                                Searched: {searchQuery}
+                        <div className='filter-result flex justify-center items-center'>
+                            <div className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
+                                Result for:
+                                <span className='ml-2'>
+                                    {searchQuery}
+                                </span>
+                                <button
+                                    onClick={() => {
+                                        setSearchQuery(''); // Clear the search query
+                                        setIsSearching(false); // Set the search state to false
+                                        fetchImages(); // Reload all images
+                                        router.push('/'); // Navigate back to the home page
+                                    }}
+                                    className='ml-2 text-xl text-white hover:text-red-600 rounded-lg'>
+                                    <MdDelete />
+                                </button>
                             </div>
-                            <button
-                                onClick={() => {
-                                    setSearchQuery(''); // Clear the search query
-                                    setIsSearching(false); // Set the search state to false
-                                    fetchImages(); // Reload all images
-                                    router.push('/'); // Navigate back to the home page
-                                }}
-                                className='ml-4 text-2xl text-red-600 rounded-lg'>
-                                <MdDelete />
-                            </button>
                         </div>
                     ) : (
-                        <div className='subject-text relative w-full text-center'>
+                        <div className='subject-text relative flex justify-center w-full'>
                             <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
                                 Free Reference for Downloading All PNG Images
                             </h1>

@@ -7,6 +7,8 @@ import com.pixelfreebies.repository.KeywordsRepository;
 import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.KeywordsConverter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KeywordsServiceImpl implements KeywordsService {
 
+    private static final Logger log = LoggerFactory.getLogger(KeywordsServiceImpl.class);
     private final KeywordsRepository keywordsRepository;
     private final KeywordsConverter keywordsConverter;
 
@@ -48,8 +51,11 @@ public class KeywordsServiceImpl implements KeywordsService {
     @Override
     public KeywordsDTO findKeywordById(long keywordId) {
         return this.keywordsRepository.findById(keywordId)
-                .map(this.keywordsConverter::toDto)
-                .orElseThrow(()-> new NotFoundException("Keyword not found by id: " + keywordId));
+//                .map(this.keywordsConverter::toDto)
+                .map(keyword -> {
+                    log.info("Keyword found: {}", keyword.getKeyword());
+                    return this.keywordsConverter.toDto(keyword);
+                }).orElseThrow(()-> new NotFoundException("Keyword not found by id: " + keywordId));
     }
 
 }
