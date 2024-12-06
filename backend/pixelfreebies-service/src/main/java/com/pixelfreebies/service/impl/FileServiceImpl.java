@@ -4,12 +4,10 @@ import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
-import com.pixelfreebies.model.domain.MetaInfo;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
-import com.pixelfreebies.repository.MetaInfoRepository;
 import com.pixelfreebies.service.FileService;
 import com.pixelfreebies.service.ImageStorageStrategy;
 import com.pixelfreebies.util.converter.ImageConverter;
@@ -36,14 +34,12 @@ public class FileServiceImpl implements FileService {
 
     private final ImageRepository imageRepository;
     private final ImageVariantRepository imageVariantRepository;
-    private final MetaInfoRepository metaInfoRepository;
     private final ImageStorageStrategy imageStorageStrategy;
     private final ImageConverter imageConverter;
     private final ImageValidationService imageValidationService;
     private final ImageMetadataService imageMetadataService;
     private final KeywordValidationService keywordValidationService;
     private final ImageCreationService imageCreationService;
-    private final MetaInfoService metaInfoService;
 
     @Override
     public ImageDTO storeImage(MultipartFile uploadedMultipartFile, String fileName,
@@ -60,7 +56,6 @@ public class FileServiceImpl implements FileService {
 
             // Create the domains
             Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
-            MetaInfo imageMetaInfo = this.metaInfoService.createImageMetaInfoDomain(image);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Associate relationships
@@ -69,7 +64,6 @@ public class FileServiceImpl implements FileService {
 
             // Save the image (cascades save to associated entities)
             Image savedImage = this.imageRepository.save(image);
-            this.metaInfoRepository.save(imageMetaInfo);
             this.imageVariantRepository.save(imageVariant);
 
             return this.imageConverter.toDto(savedImage);
