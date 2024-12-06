@@ -1,7 +1,7 @@
 package com.pixelfreebies.service.impl;
 
 import com.pixelfreebies.config.FileStorageProperties;
-import com.pixelfreebies.service.ImageStorageStrategy;
+import com.pixelfreebies.service.AbstractBaseImageStorageStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
@@ -12,41 +12,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Slf4j
 @Component
 @Primary
-public class LocalImageStorageStrategy implements ImageStorageStrategy {
+public class LocalImageStorageStrategy extends AbstractBaseImageStorageStrategy {
 
-    private final Path fileStorageLocation;
-
-    public LocalImageStorageStrategy(FileStorageProperties fileStorageProperties) throws IOException {
-        String fileStoragePath = fileStorageProperties.getLocation();
-        if (fileStoragePath == null || fileStoragePath.trim().isEmpty()) {
-            log.error("-> FILE -> File location is null or empty");
-            throw new IllegalStateException("File storage location must be configured");
-        }
-
-        // Set up the directory where files will be stored
-        this.fileStorageLocation = Paths.get(fileStoragePath).toAbsolutePath().normalize();
-        initializeStorageLocation();
-    }
-
-    private void initializeStorageLocation() throws IOException {
-        try {
-            // Create the directory if it doesn't exist
-            Files.createDirectories(this.fileStorageLocation);
-            // Ensure it's writable
-            if (!Files.isWritable(this.fileStorageLocation)) {
-                log.error("-> FILE -> File storage location is not writable: {}", this.fileStorageLocation);
-                throw new IOException("File storage location is not writable: " + this.fileStorageLocation);
-            }
-        } catch (IOException e) {
-            log.error("-> FILE -> Failed to create directory: {}. Cause=[{}]", this.fileStorageLocation, e.getMessage());
-            throw new IOException("Could not create the directory where the uploaded files will be stored", e);
-        }
+    public LocalImageStorageStrategy(final FileStorageProperties fileStorageProperties) throws IOException {
+        super(fileStorageProperties);
     }
 
     @Override

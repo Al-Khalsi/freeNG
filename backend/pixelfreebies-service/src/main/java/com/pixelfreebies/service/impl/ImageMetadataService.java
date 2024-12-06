@@ -4,13 +4,10 @@ import com.luciad.imageio.webp.WebPWriteParam;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
-import com.pixelfreebies.model.domain.MetaInfo;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.enums.ImageUnits;
 import com.pixelfreebies.model.enums.Purpose;
-import com.pixelfreebies.repository.KeywordsRepository;
 import com.pixelfreebies.service.ImageStorageStrategy;
-import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,82 +23,17 @@ import java.awt.image.BufferedImage;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Set;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ImageMetadataService {
 
-    private final KeywordsRepository keywordsRepository;
-    private final SecurityUtil securityUtil;
     private final ImageStorageStrategy imageStorageStrategy;
-
-    public Image createImageDomain(MultipartFile uploadedMultipartFile, String imageName,
-                                   String relativePath, List<String> dominantColors,
-                                   String style, boolean lightMode) {
-        Image image = new Image();
-        image.setFileTitle(imageName);
-        image.setFilePath(relativePath);
-        image.setContentType(uploadedMultipartFile.getContentType());
-        image.setSize(uploadedMultipartFile.getSize()); // size in bytes
-        image.setActive(true);
-        image.setAverageRating(BigDecimal.ZERO);
-        image.setDownloadCount(0);
-        image.setUploadedBy(this.securityUtil.getAuthenticatedUser());
-        // Calculate dimensions
-        calculateDimension(uploadedMultipartFile, image, imageName);
-        image.setStyle(style);
-        image.setLightMode(lightMode);
-        image.getDominantColors().addAll(dominantColors);
-
-        return image;
-    }
-
-    public Set<Keywords> validateAndFetchKeywords(List<String> keywords) {
-        Set<Keywords> keywordsSet = new HashSet<>();
-        List<String> missingKeywords = new ArrayList<>();
-
-        for (String keyword : keywords) {
-            Optional<Keywords> optionalKeyword = this.keywordsRepository.findByKeyword(keyword);
-            if (optionalKeyword.isPresent()) {
-                Keywords kWord = optionalKeyword.get();
-                keywordsSet.add(kWord);
-            } else missingKeywords.add(keyword);
-        }
-
-        if (!missingKeywords.isEmpty()) {
-            throw new IllegalArgumentException("The following keywords do not exist: " + String.join(", ", missingKeywords));
-        }
-
-        return keywordsSet;
-    }
-
-    public MetaInfo createImageMetaInfoDomain(Image image) {
-        return MetaInfo.builder()
-                .metaTitle("mmd hassan hammal")
-                .description("mmd hassan motavvahem")
-                .nameLink(image.getFileTitle())
-                .image(image)
-                .build();
-    }
-
-    private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) {
-        try {
-
-            BufferedImage image = ImageIO.read(uploadedMultipartFile.getInputStream());
-            if (image != null) {
-                imageEntity.setWidth(image.getWidth());
-                imageEntity.setHeight(image.getHeight());
-            } else log.warn("Unable to read image dimensions for imageEntity: {}", imageName);
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public ImageVariant createImageVariants(MultipartFile uploadedMultipartFile, String relativePath) {
         try {

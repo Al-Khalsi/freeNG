@@ -41,6 +41,9 @@ public class FileServiceImpl implements FileService {
     private final ImageConverter imageConverter;
     private final ImageValidationService imageValidationService;
     private final ImageMetadataService imageMetadataService;
+    private final KeywordValidationService keywordValidationService;
+    private final ImageCreationService imageCreationService;
+    private final MetaInfoService metaInfoService;
 
     @Override
     public ImageDTO storeImage(MultipartFile uploadedMultipartFile, String fileName,
@@ -53,11 +56,11 @@ public class FileServiceImpl implements FileService {
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, originalFileName);
 
             // Validate keywords and retrieve their entities
-            Set<Keywords> keywordsSet = this.imageMetadataService.validateAndFetchKeywords(keywords);
+            Set<Keywords> keywordsSet = this.keywordValidationService.validateAndFetchKeywords(keywords);
 
             // Create the domains
-            Image image = this.imageMetadataService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
-            MetaInfo imageMetaInfo = this.imageMetadataService.createImageMetaInfoDomain(image);
+            Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
+            MetaInfo imageMetaInfo = this.metaInfoService.createImageMetaInfoDomain(image);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Associate relationships
@@ -85,27 +88,23 @@ public class FileServiceImpl implements FileService {
     @Override
     public List<ImageDTO> listAllImages() {
         return this.imageRepository.findAll()
-                .stream().map(image -> {
-                    ImageDTO imageDTO = this.imageConverter.toDto(image);
-                    imageDTO.setFilePath(image.getVariants().stream()
-                            .findFirst().map(ImageVariant::getFilePath)
-                            .orElse(image.getFilePath())
-                    );
-                    return imageDTO;
-                }).toList();
+                .stream()
+                .map(this::convertToDto)
+                .toList();
     }
 
     @Override
     public Page<ImageDTO> listAllImages(Pageable pageable) {
         return this.imageRepository.findAll(pageable)
-                .map(image -> {
-                    ImageDTO imageDTO = this.imageConverter.toDto(image);
-                    imageDTO.setFilePath(image.getVariants().stream()
-                            .findFirst().map(ImageVariant::getFilePath)
-                            .orElse(image.getFilePath())
-                    );
-                    return imageDTO;
-                });
+                .map(this::convertToDto);
+    }
+
+    private ImageDTO convertToDto(Image image) {
+        ImageDTO imageDTO = this.imageConverter.toDto(image);
+        imageDTO.setFilePath(image.getVariants().stream()
+                .findFirst().map(ImageVariant::getFilePath)
+                .orElse(image.getFilePath()));
+        return imageDTO;
     }
 
     @Override

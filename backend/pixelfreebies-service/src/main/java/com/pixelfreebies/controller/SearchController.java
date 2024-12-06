@@ -52,16 +52,16 @@ public class SearchController {
     )
     @GetMapping("/paginated")
     public ResponseEntity<PaginatedResult<ImageDTO>> searchFilesPaginated(@RequestParam String query,
-                                                       @RequestParam(defaultValue = "0") int page,
-                                                       @RequestParam(defaultValue = "50") int size) {
+                                                                          @RequestParam(defaultValue = "0") int page,
+                                                                          @RequestParam(defaultValue = "50") int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         Page<ImageDTO> searchedFiles = this.fileService.searchImages(query, pageRequest);
 
         if (searchedFiles.isEmpty()) {
-            return ResponseEntity.ok(PaginatedResult.success("No exact matches found. Here are similar results paginated:", true,searchedFiles));
+            return ResponseEntity.ok(PaginatedResult.success("No exact matches found. Here are similar results paginated:", true, searchedFiles));
         }
 
-        return ResponseEntity.ok(PaginatedResult.success("Search files result paginated.", true,searchedFiles));
+        return ResponseEntity.ok(PaginatedResult.success("Search files result paginated.", true, searchedFiles));
     }
 
 
