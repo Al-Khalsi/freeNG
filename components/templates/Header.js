@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { FaSearch } from 'react-icons/fa';
 import { IoLogInSharp, IoLogOut } from "react-icons/io5";
 
 function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
     const [isFixedHeader, setIsFixedHeader] = useState(false);
+    const [isSearchBarVisible, setIsSearchBarVisible] = useState(false); // State for mobile search bar visibility
+    const searchBarRef = useRef(null); // Ref for the search bar
 
     useEffect(() => {
         const handleScroll = () => {
@@ -21,8 +23,41 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
         };
     }, []);
 
+    const toggleSearchBar = () => {
+        setIsSearchBarVisible(!isSearchBarVisible);
+    };
+
+    // Effect to close the search bar when window resizes above 768px
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 768) {
+                setIsSearchBarVisible(false); // Hide search bar on wider screens
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    // Effect to handle clicks outside the search bar
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchBarRef.current && !searchBarRef.current.contains(event.target)) {
+                setIsSearchBarVisible(false); // Close the search bar if clicked outside
+            }
+        };
+
+        // Bind the event listener
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
-        <header className={`header w-full h-24 px-4 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'fixed -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
+        <header className={`header relative w-full h-24 px-4 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'fixed -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
             <div className='w-20 h-20 flex justify-start items-center'>
                 <img src="../../img/LOGO.png" className='w-12 h-12 object-cover bg-gradient-to-t from-bgPurple to-bgLightPurple rounded-md' alt="Logo" title='Logo' />
             </div>
@@ -34,9 +69,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     <div className="cosmic-dust"></div>
                     <div className="cosmic-dust"></div>
                     <div className="cosmic-dust"></div>
-
                     <div className="stardust w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm max-h-16"></div>
-
                     <div className="cosmic-ring w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
 
                     <div id="main">
@@ -95,12 +128,16 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
             </div>
 
 
+
+
             <div className='flex'>
-    
-                    <button className='md:hidden flex justify-center items-center w-12 h-12 mr-2 rounded-md text-xl text-white bg-gradient-to-t from-bgLightPurple to-bgPurple'>
-                        <FaSearch />
-                    </button>
-     
+                {/* Mobile Search Button */}
+                <button
+                    className='md:hidden flex justify-center items-center w-12 h-12 mr-2 rounded-md text-xl text-white bg-gradient-to-t from-bgLightPurple to-bgPurple'
+                    onClick={toggleSearchBar}
+                >
+                    <FaSearch />
+                </button>
 
                 {token ? (
                     <div className='flex items-center border-2 border-bgLightPurple rounded-md py-1 px-2'>
@@ -134,7 +171,43 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     </div>
                 )}
             </div>
-        </header>
+
+            {/* Mobile Search Bar */}
+            {
+                isSearchBarVisible && (
+                    <div ref={searchBarRef} className="absolute top-0 left-0 w-full border-b border-bgLightPurple bg-bgDarkBlue p-2 z-50">
+                        <div className="relative flex justify-between items-center">
+                            <input
+                                className="input border-none rounded-xl text-lg w-full"
+                                name="text"
+                                type="text"
+                                placeholder="Search..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        if (searchQuery.trim()) {
+                                            handleSearch();
+                                        }
+                                    }
+                                }}
+                                autoComplete="off"
+                            />
+                        </div>
+                        <button
+                            type='button'
+                            className={`absolute right-5 top-1/2 -translate-y-1/2 text-white bg-gradient-to-t from-bgLightPurple to-bgPurple
+                        rounded p-3 ${!searchQuery.trim() ? 'cursor-not-allowed' : ''}`}
+                            onClick={handleSearch}
+                            disabled={!searchQuery.trim()}
+                        >
+                            Search
+                        </button>
+                    </div>
+                )
+            }
+        </header >
     );
 }
 

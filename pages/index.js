@@ -17,7 +17,7 @@ function Index() {
     const [images, setImages] = useState([]); // State to store images from the backend
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [loading, setLoading] = useState(false); // State to manage loading status
-    const itemsPerPage = 1; // Number of items to display per page
+    const itemsPerPage = 50; // Number of items to display per page
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
     const [isSearching, setIsSearching] = useState(false); // New state for search
     const [totalPages, setTotalPages] = useState(0); // State to store total pages
