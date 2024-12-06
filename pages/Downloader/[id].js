@@ -106,67 +106,68 @@ const Downloader = () => {
                             <div className={`bg-img w-1/2 h-full rounded p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
                                 <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
                             </div>
-                            <div className='info-img flex flex-col ms-8 w-1/2'>
-                                <h1 className='block text-3xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>
-                                    {title}
-                                </h1>
-                                <div className='flex mt-4 ms-1'>
-                                    <div className='flex justify-between items-center bg-gray-600 px-3 py-2 rounded text-lg text-lightBlue'>
-                                        <FaImage />
-                                        <span className='block ml-1'>{size}</span>
+                            <div className='info-img flex flex-col justify-between ms-8 w-1/2'>
+                                <div className='flex flex-col'>
+                                    <h1 className='block text-3xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>
+                                        {title}
+                                    </h1>
+                                    <div className='flex mt-4 ms-1'>
+                                        <div className='flex justify-between items-center bg-gray-600 px-3 py-2 rounded text-lg text-lightBlue'>
+                                            <FaImage />
+                                            <span className='block ml-1'>{size}</span>
+                                        </div>
+                                        <div className='flex justify-between items-center bg-gray-600 ml-2 px-3 py-2 rounded text-lg text-lightBlue'>
+                                            <RxDimensions />
+                                            <span className='block ml-1'>{`${width} × ${height}`}</span>
+                                        </div>
                                     </div>
-                                    <div className='flex justify-between items-center bg-gray-600 ml-2 px-3 py-2 rounded text-lg text-lightBlue'>
-                                        <RxDimensions />
-                                        <span className='block ml-1'>{`${width} × ${height}`}</span>
-                                    </div>
-                                </div>
-                                <div className='flex items-center mt-4 ms-1 w-full'>
-                                    <div className='showStyle text-lg'>
-                                        <div className='flex items-center bg-gray-600 rounded px-3 py-2'>
-                                            <SiInstructure />
-                                            <span className='ml-2'>Style
-                                                <strong> {style}</strong>
+                                    <div className='flex items-center mt-4 ms-1 w-full'>
+                                        <div className='showStyle text-lg'>
+                                            <div className='flex items-center bg-gray-600 rounded px-3 py-2'>
+                                                <SiInstructure />
+                                                <span className='ml-2'>Style
+                                                    <strong> {style}</strong>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div className='dominantColors flex items-center ml-2 py-2 px-3 text-lg bg-gray-600 rounded'>
+                                            <IoColorPaletteOutline />
+                                            <span className='ml-2 flex items-center'>
+                                                Colors
+                                                <div className='flex ml-2'>
+                                                    {dominantColors && dominantColors.split(',').map((color) => (
+                                                        <div key={color} className='flex items-center ml-2'>
+                                                            <span
+                                                                className='w-6 h-6 rounded-full border-black border'
+                                                                style={{ backgroundColor: colorHexMap[color.trim()] || '#000' }}
+                                                                title={color}>
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
                                             </span>
                                         </div>
                                     </div>
-                                    <div className='dominantColors flex items-center ml-2 py-2 px-3 text-lg bg-gray-600 rounded'>
-                                        <IoColorPaletteOutline />
-                                        <span className='ml-2 flex items-center'>
-                                            Colors
-                                            <div className='flex ml-6'>
-                                                {dominantColors && dominantColors.split(',').map((color) => (
-                                                    <div key={color} className='flex items-center ml-2'>
-                                                        <strong className='text-white'>{color}</strong>
-                                                        <span
-                                                            className='w-8 h-5 rounded-full mx-2 border-black border-2'
-                                                            style={{ backgroundColor: colorHexMap[color.trim()] || '#000' }} // Default to black if color not found
-                                                        ></span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='showKeywords flex items-center mt-4 mx-1 py-3 px-2 text-lg bg-gray-600 rounded'>
-                                    <FaTags className='ml-1' />
-                                    <span className='mx-2'>Tag</span>
-                                    <div className='flex flex-wrap'>
-                                        {keywords && JSON.parse(keywords).map((kw) => (
-                                            <button
-                                                key={kw.id}
-                                                onClick={() => handleKeywordClick(kw.id)}
-                                                className='text-white bg-gray-700 rounded px-2 py-1 mx-1'
-                                            >
-                                                {kw.keyword}
-                                            </button>
-                                        ))}
+                                    <div className='showKeywords flex items-center mt-4 mx-1 py-3 px-2 text-lg bg-gray-600 rounded'>
+                                        <FaTags className='ml-1' />
+                                        <span className='mx-2'>Tag</span>
+                                        <div className='flex flex-wrap'>
+                                            {keywords && JSON.parse(keywords).map((kw) => (
+                                                <button
+                                                    key={kw.id}
+                                                    onClick={() => handleKeywordClick(kw.id)}
+                                                    className='text-white bg-bgDarkGray2 rounded px-2 py-1 mx-1'>
+                                                    {kw.keyword}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className='flex justify-center w-full'>
                                     <button className="buttonDl mt-4" type="button">
-                                        <span className="button__text">Download</span>
+                                        <span className="button__text text-xl">Download</span>
                                         <span className="button__icon">
-                                            <FiDownload className='text-black text-lg' />
+                                            <FiDownload className='text-black text-3xl' />
                                         </span>
                                     </button>
                                 </div>

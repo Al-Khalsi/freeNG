@@ -5,7 +5,6 @@ import { IoLogInSharp, IoLogOut } from "react-icons/io5";
 
 function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
     const [isFixedHeader, setIsFixedHeader] = useState(false);
-    const [isSearchVisible, setIsSearchVisible] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -21,10 +20,6 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
-
-    const toggleSearchVisibility = () => {
-        setIsSearchVisible(!isSearchVisible);
-    };
 
     return (
         <header className={`header w-full h-24 px-4 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'fixed -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
@@ -101,12 +96,11 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
 
 
             <div className='flex'>
-                {/* Search Button for Mobile */}
-                {!isSearchVisible && (
-                    <button className='md:hidden flex justify-center items-center w-12 h-12 mr-2 rounded-md text-xl text-white bg-gradient-to-t from-bgLightPurple to-bgPurple' onClick={toggleSearchVisibility}>
+    
+                    <button className='md:hidden flex justify-center items-center w-12 h-12 mr-2 rounded-md text-xl text-white bg-gradient-to-t from-bgLightPurple to-bgPurple'>
                         <FaSearch />
                     </button>
-                )}
+     
 
                 {token ? (
                     <div className='flex items-center border-2 border-bgLightPurple rounded-md py-1 px-2'>

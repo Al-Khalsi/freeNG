@@ -17,7 +17,7 @@ function Index() {
     const [images, setImages] = useState([]); // State to store images from the backend
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [loading, setLoading] = useState(false); // State to manage loading status
-    const itemsPerPage = 50; // Number of items to display per page
+    const itemsPerPage = 1; // Number of items to display per page
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
     const [isSearching, setIsSearching] = useState(false); // New state for search
     const [totalPages, setTotalPages] = useState(0); // State to store total pages
@@ -131,19 +131,66 @@ function Index() {
     const renderPagination = () => {
         const pagination = []; // Array to hold pagination buttons
         const maxVisiblePages = 5; // Maximum number of visible pagination buttons
-
-        // Render pagination buttons based on total pages
-        for (let i = 1; i <= totalPages; i++) {
+    
+        // Calculate the start and end page numbers
+        let startPage, endPage;
+        if (totalPages <= maxVisiblePages) {
+            // If total pages are less than or equal to maxVisiblePages, show all pages
+            startPage = 1;
+            endPage = totalPages;
+        } else {
+            // Calculate start and end page based on current page
+            const middlePage = Math.ceil(maxVisiblePages / 2);
+            if (currentPage <= middlePage) {
+                startPage = 1;
+                endPage = maxVisiblePages;
+            } else if (currentPage + middlePage - 1 >= totalPages) {
+                startPage = totalPages - maxVisiblePages + 1;
+                endPage = totalPages;
+            } else {
+                startPage = currentPage - middlePage + 1;
+                endPage = currentPage + middlePage - 1;
+            }
+        }
+    
+        // Add "First" button
+        if (startPage > 1) {
+            pagination.push(
+                <button key="first" onClick={() => handlePageChange(1)} className="mx-2 px-4 py-2 rounded-lg bg-bgDarkGray hover:bg-bgDarkGray2">
+                    First
+                </button>
+            );
+            if (startPage > 2) {
+                pagination.push(<span key="ellipsis-start">...</span>);
+            }
+        }
+    
+        // Render pagination buttons
+        for (let i = startPage; i <= endPage; i++) {
             pagination.push(
                 <button
                     key={i}
                     onClick={() => handlePageChange(i)}
                     className={`mx-2 px-4 py-2 rounded-lg 
-                    ${currentPage === i ? 'bg-blue-500 text-white' : 'bg-gray-300'}`}>
+                    ${currentPage === i ? 'bg-gradient-to-t from-bgLightPurple to-bgPurple text-white' : 'bg-bgDarkGray hover:bg-bgDarkGray2'}`}>
                     {i}
                 </button>
             );
         }
+    
+        // Add "Last" button
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                pagination.push(<span key="ellipsis-end">...</span>);
+            }
+            pagination.push(
+                <button key="last" onClick={() => handlePageChange(totalPages)} 
+                className="mx-2 px-4 py-2 rounded-lg bg-bgDarkGray hover:bg-bgDarkGray2">
+                    Last
+                </button>
+            );
+        }
+    
         return pagination; 
     };
 
@@ -210,12 +257,12 @@ function Index() {
                     userId={userId}
                     handleLogout={handleLogout}
                     searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery} // Pass the state setter
-                    handleSearch={handleSearch} // Pass the search handler
+                    setSearchQuery={setSearchQuery} 
+                    handleSearch={handleSearch} 
                 />
 
                 <div className='w-full py-12 px-8'>
-                    {isSearching ? ( // Use isSearching instead of searchQuery
+                    {isSearching ? ( 
                         <div className='filter-result flex justify-center items-center'>
                             <div className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
                                 Result for:
@@ -224,10 +271,10 @@ function Index() {
                                 </span>
                                 <button
                                     onClick={() => {
-                                        setSearchQuery(''); // Clear the search query
-                                        setIsSearching(false); // Set the search state to false
-                                        fetchImages(); // Reload all images
-                                        router.push('/'); // Navigate back to the home page
+                                        setSearchQuery(''); 
+                                        setIsSearching(false); 
+                                        fetchImages(); 
+                                        router.push('/');
                                     }}
                                     className='ml-2 text-xl text-white hover:text-red-600 rounded-lg'>
                                     <MdDelete />
@@ -280,7 +327,6 @@ function Index() {
                     </Link>
                 )}
 
-                {/* <MouseEffect /> */}
             </div>
         </>
     );
