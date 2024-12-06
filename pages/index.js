@@ -232,7 +232,7 @@ function Index() {
                             </div>
                         </div>
                     ) : (
-                        <div className='subject-text relative flex justify-center w-full'>
+                        <div className='subject-text relative w-full text-center'>
                             <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
                                 Free Reference for Downloading All PNG Images
                             </h1>
