@@ -23,8 +23,17 @@ function UploadImage() {
   const [showColorDropdown, setShowColorDropdown] = useState(false);
 
   const colors = [
-    'Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple',
-    'Pink', 'Brown', 'Gray', 'Black', 'White',
+    { name: 'Red', hex: '#FF0000' },
+    { name: 'Green', hex: '#008000' },
+    { name: 'Blue', hex: '#0000FF' },
+    { name: 'Yellow', hex: '#FFFF00' },
+    { name: 'Orange', hex: '#FFA500' },
+    { name: 'Purple', hex: '#800080' },
+    { name: 'Pink', hex: '#FFC0CB' },
+    { name: 'Brown', hex: '#A52A2A' },
+    { name: 'Gray', hex: '#808080' },
+    { name: 'Black', hex: '#000000' },
+    { name: 'White', hex: '#FFFFFF' },
   ];
 
   const styles = [
@@ -233,25 +242,33 @@ function UploadImage() {
               <div className="relative">
                 <button
                   type="button"
-                  className="border rounded p-2 w-full bg-bgDarkGray2"
+                  className="flex border rounded px-3 py-2 w-full bg-bgDarkGray2"
                   onClick={() => setShowColorDropdown(prev => !prev)}
                 >
                   {dominantColors.length > 0 ? dominantColors.join(', ') : 'Select Colors'}
                 </button>
                 {showColorDropdown && (
                   <div className="absolute bg-bgDarkGray2 border rounded mt-1 w-full z-10">
+                    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                     {colors.map((color) => (
-                      <label key={color} className="flex items-center p-2">
-                        <input
-                          type="checkbox"
-                          value={color}
-                          checked={dominantColors.includes(color)}
-                          onChange={() => handleColorChange(color)}
-                          className="mr-2"
-                        />
-                        {color}
-                      </label>
-                    ))}
+                        <label key={color.name} className="flex justify-between items-center p-2 border-b cursor-pointer hover:bg-bgDarkGray">
+                          <span className="flex items-center">
+                            <span
+                              className="block w-4 h-4 rounded-full mr-2"
+                              style={{ backgroundColor: color.hex }} 
+                            ></span>
+                            {color.name}
+                          </span>
+                          <input
+                            type="checkbox"
+                            value={color.name} // Keep the value as the color name
+                            checked={dominantColors.includes(color.name)} // Check if the color is selected
+                            onChange={() => handleColorChange(color.name)} // Pass the color name to the handler
+                            className="mr-2"
+                          />
+                        </label>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
