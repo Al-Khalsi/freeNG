@@ -63,6 +63,7 @@ public class SecurityConfig {
                                 "/api/v1/file/list/**",
                                 "/api/v1/file/search/**",
                                 "/api/v1/keywords/fetch/**",
+                                "/api/v1/file/keyword/**",
                                 "/v2/api-docs",
                                 "/v3/api-docs",
                                 "/v3/api-docs/**",
