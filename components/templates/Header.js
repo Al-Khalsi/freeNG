@@ -55,7 +55,9 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                     e.preventDefault();
-                                    handleSearch();
+                                    if (searchQuery.trim()) {
+                                        handleSearch();
+                                    }
                                 }
                             }}
                             autoComplete="off"
@@ -63,7 +65,12 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                         <div id="cosmic-glow"></div>
                         <div className="wormhole-border"></div>
                         <div id="wormhole-icon">
-                            <button type='button' className='text-white' onClick={handleSearch}>
+                            <button
+                                type='button'
+                                className={`text-white ${!searchQuery.trim() ? 'cursor-not-allowed' : ''}`}
+                                onClick={handleSearch}
+                                disabled={!searchQuery.trim()}
+                            >
                                 Enter
                             </button>
                         </div>

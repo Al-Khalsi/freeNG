@@ -144,17 +144,20 @@ function Index() {
                 </button>
             );
         }
-        return pagination; // Return the array of pagination buttons
+        return pagination; 
     };
 
     const handleLogout = () => {
-        clearToken(); // Clear the token on logout
+        clearToken(); 
     };
 
     const handleSearch = () => {
-        fetchImages(searchQuery, 1); // Search based on the query and reset to page 1
-        setIsSearching(true); // Set the search state to true
-        router.push(`/?search=${encodeURIComponent(searchQuery)}`); // Navigate to the new URL
+        if (!searchQuery.trim()) {
+            return; 
+        }
+        fetchImages(searchQuery, 1);
+        setIsSearching(true);
+        router.push(`/?search=${encodeURIComponent(searchQuery)}`);
     };
 
     return (
