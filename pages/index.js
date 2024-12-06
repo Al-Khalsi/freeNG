@@ -54,7 +54,7 @@ function Index() {
                     width: file.width,
                     height: file.height,
                     uploadedBy: file.uploadedBy.username,
-                    lightMode: file.lightMode // Ensure this property is included
+                    lightMode: file.lightMode
                 }));
 
                 console.log('Fetched images:', fetchedImages); // Log the fetched images

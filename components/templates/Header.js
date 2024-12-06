@@ -5,6 +5,7 @@ import { IoLogInSharp, IoLogOut } from "react-icons/io5";
 
 function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
     const [isFixedHeader, setIsFixedHeader] = useState(false);
+    const [isSearchVisible, setIsSearchVisible] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -20,6 +21,10 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
+
+    const toggleSearchVisibility = () => {
+        setIsSearchVisible(!isSearchVisible);
+    };
 
     return (
         <header className={`header w-full h-24 px-4 md:px-8 flex justify-between items-center text-white ${isFixedHeader ? 'fixed -top-24 left-0 z-50 bg-bgDarkBlue' : ''}`}>
@@ -87,11 +92,78 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                 </div>
             </div>
 
+            {/* Search Box */}
+            {/* {isSearchVisible && (
+                <div id='search' className='search-box absolute top-5 left-0 w-full z-50'>
+                    <div id="search-container" className="relative flex justify-center items-center ">
+                        <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
+                        <div className="starfield w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
+                        <div className="cosmic-dust"></div>
+                        <div className="cosmic-dust"></div>
+                        <div className="cosmic-dust"></div>
+
+                        <div className="stardust w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm max-h-16"></div>
+
+                        <div className="cosmic-ring w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
+
+                        <div id="main">
+                            <input
+                                className="input border-none rounded-xl text-lg"
+                                name="text"
+                                type="text"
+                                placeholder="Search..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleSearch();
+                                    }
+                                }}
+                                autoComplete="off"
+                            />
+                            <div id="cosmic-glow"></div>
+                            <div className="wormhole-border"></div>
+                            <div id="wormhole-icon">
+                                <button type='button' className='text-white' onClick={handleSearch}>
+                                    Enter
+                                </button>
+                            </div>
+                            <div id="search-icon">
+                                <svg
+                                    strokeLinejoin="round"
+                                    strokeLinecap="round"
+                                    strokeWidth="2"
+                                    stroke="url(#cosmic-search)"
+                                    fill="none"
+                                    height="24"
+                                    width="24"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <circle r="8" cy="11" cx="11"></circle>
+                                    <line y2="16.65" x2="16.65" y1="21" x1="21"></line>
+                                    <defs>
+                                        <linearGradient gradientTransform="rotate(45)" id="cosmic-search">
+                                            <stop stopColor="#a9c7ff" offset="0%"></stop>
+                                            <stop stopColor="#6e8cff" offset="100%"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                        </div>
+                        <button onClick={toggleSearchVisibility} className="absolute -bottom-10 close-butto text-white bg-red-600">Close</button>
+                    </div>
+                </div>
+            )} */}
+
 
             <div className='flex'>
-                <button className='md:hidden flex justify-center items-center w-12 h-12 mr-2 rounded-md text-xl text-white bg-gradient-to-t from-bgLightPurple to-bgPurple'>
-                    <FaSearch />
-                </button>
+                {/* Search Button for Mobile */}
+                {!isSearchVisible && (
+                    <button className='md:hidden flex justify-center items-center w-12 h-12 mr-2 rounded-md text-xl text-white bg-gradient-to-t from-bgLightPurple to-bgPurple' onClick={toggleSearchVisibility}>
+                        <FaSearch />
+                    </button>
+                )}
 
                 {token ? (
                     <div className='flex items-center border-2 border-bgLightPurple rounded-md py-1 px-2'>
@@ -105,7 +177,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                 ) : (
                     <div className='flex'>
                         <Link href="/validation" className="button rounded-md ">
-                            <IoLogInSharp className='sm:hidden text-2xl'/>
+                            <IoLogInSharp className='sm:hidden text-2xl' />
                             <span className="fold"></span>
                             <div className="points_wrapper">
                                 <i className="point"></i>

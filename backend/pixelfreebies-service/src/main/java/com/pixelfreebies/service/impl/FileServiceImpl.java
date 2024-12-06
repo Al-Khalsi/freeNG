@@ -156,7 +156,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<String> searchKeywords(String query) {
+    public List<String> searchKeywords(String query, int page, int size) {
         if (query == null || query.trim().isEmpty()) {
             return Collections.emptyList();
         }

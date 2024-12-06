@@ -71,8 +71,10 @@ public class SearchController {
             description = "Retrieves a paginated list of keywords."
     )
     @GetMapping("/keywords/paginated")
-    public ResponseEntity<Result> searchKeywords(@RequestParam String query) {
-        List<String> searchedKeywords = this.fileService.searchKeywords(query);
+    public ResponseEntity<Result> searchKeywords(@RequestParam String query,
+                                                 @RequestParam(defaultValue = "0") int page,
+                                                 @RequestParam(defaultValue = "10") int size) {
+        List<String> searchedKeywords = this.fileService.searchKeywords(query, page, size);
 
         if (searchedKeywords.isEmpty()) {
             return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedKeywords));

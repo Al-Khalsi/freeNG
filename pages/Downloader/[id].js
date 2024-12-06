@@ -7,7 +7,7 @@ import axios from 'axios';
 
 const Downloader = () => {
     const router = useRouter();
-    const { id: fileId, title, path, size, width, height, lightMode } = router.query; // Extract lightMode
+    const { id: fileId, title, path, size, width, height, lightMode } = router.query;
 
     const handleDownload = async () => {
         if (!fileId) {
@@ -43,11 +43,11 @@ const Downloader = () => {
     return (
         <>
             <Head>
-                <title>PixelFreebies</title>
+                <title>{title}</title>
 
                 <meta name="description"
-                    content="PixelFreebies offers a vast collection of free PNG images for download. 
-                Explore and find the perfect image for your project." />
+                    content={`${title} is a free png image with
+                    dimensions ${width}x${height} and size ${size} in this ${style} available for free.`} />
 
                 <meta name="keywords" content="free images, PNG images, download images, PixelFreebies, stock photos" />
 

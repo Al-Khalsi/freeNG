@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { useAuth } from '../../context/AuthContext'; // Adjust the path as necessary
-import withAuthRedirect from '../../utils/withAuthRedirect'; // Adjust the path as necessary
+import { useAuth } from '@/context/AuthContext'; // Adjust the path as necessary
+import withAuthRedirect from '@/utils/withAuthRedirect'; // Adjust the path as necessary
 import jwt_decode from 'jwt-decode';
 import axios from 'axios'; // Import Axios
 
