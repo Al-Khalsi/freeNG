@@ -45,4 +45,11 @@ public class KeywordsServiceImpl implements KeywordsService {
         this.keywordsRepository.deleteById(keywordId);
     }
 
+    @Override
+    public KeywordsDTO findKeywordById(long keywordId) {
+        return this.keywordsRepository.findById(keywordId)
+                .map(this.keywordsConverter::toDto)
+                .orElseThrow(()-> new NotFoundException("Keyword not found by id: " + keywordId));
+    }
+
 }

@@ -70,4 +70,14 @@ public class KeywordsController {
         return ResponseEntity.status(OK).body(Result.success("Keyword deleted successfully.", null));
     }
 
+    @Operation(
+            summary = "fetch a keyword."
+    )
+    @GetMapping("/{keywordId}")
+    public ResponseEntity<Result> findKeywordById(@PathVariable long keywordId) {
+        KeywordsDTO keywordsDTO = this.keywordsService.findKeywordById(keywordId);
+
+        return ResponseEntity.status(OK).body(Result.success("Keyword fetched successfully.", keywordsDTO));
+    }
+
 }

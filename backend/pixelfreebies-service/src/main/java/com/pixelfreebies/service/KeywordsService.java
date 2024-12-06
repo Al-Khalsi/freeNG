@@ -14,4 +14,6 @@ public interface KeywordsService {
 
     void deleteKeyword(long keywordId);
 
+    KeywordsDTO findKeywordById(long keywordId);
+
 }
