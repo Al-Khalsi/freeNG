@@ -64,7 +64,9 @@ function UploadImage() {
     formData.append('dominantColors', dominantColor);
     formData.append('style', style);
     formData.append('lightMode', lightMode);
-    formData.append('keywords', JSON.stringify(selectedKeywords)); // Send selected keywords as a JSON string
+    selectedKeywords.forEach(keyword => {
+      formData.append('keywords', keyword); // Append each keyword individually
+    });
 
     try {
       const response = await axios.post(BACKEND_UPLOAD_FILE_URL, formData, {
@@ -98,8 +100,9 @@ function UploadImage() {
           'Authorization': `Bearer ${token}`
         },
       });
-      console.log(`keyword response: ${response.data.data}`);
-      setFetchedKeywords(response.data.data); // Store fetched keywords
+      const keywordsName = response.data.data;
+      console.log(`keyword response: ${keywordsName}`);
+      setFetchedKeywords(keywordsName); // Store fetched keywords
       setTotalPages(response.data.totalPages); // Set total pages from response
       setShowResults(true); // Show the results after fetching keywords
     } catch (error) {
@@ -138,8 +141,19 @@ function UploadImage() {
     } catch (error) {
       setErrorMessage(error.response?.data?.message || 'Error creating keyword.');
     }
+
+    
   };
 
+  const handleCheckboxChange = (keyword) => {
+    setSelectedKeywords(prevSelected => {
+      if (prevSelected.includes(keyword)) {
+        return prevSelected.filter(k => k !== keyword); // Remove keyword if already selected
+      } else {
+        return [...prevSelected, keyword]; // Add keyword if not selected
+      }
+    });
+  }
   const toggleLightMode = () => {
     setLightMode(prevMode => !prevMode);
   };
@@ -153,179 +167,182 @@ function UploadImage() {
   };
 
   return (
-      <div className={`UploadImage w-full min-h-dvh py-12 flex justify-center items-center bg-bgDarkBlue`}>
-        <div className="w-custom-212 p-6 bg-bgDarkGray text-clWhite rounded shadow-md">
-          <h2 className="text-xl font-bold mb-4">Upload Image</h2>
+    <div className={`UploadImage w-full min-h-dvh py-12 flex justify-center items-center bg-bgDarkBlue`}>
+      <div className="w-custom-212 p-6 bg-bgDarkGray text-clWhite rounded shadow-md">
+        <h2 className="text-xl font-bold mb-4">Upload Image</h2>
 
-          {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
+        {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
-          <form onSubmit={handleUploadSubmit} className='w-full'>
+        <form onSubmit={handleUploadSubmit} className='w-full'>
 
-            <div className='flex items-center'>
-              <div className="mb-4 mx-2 w-1/2">
-                <label className="block mb-2">Image</label>
-                <div
-                    className="border-dashed border-2 border-gray-400
+          <div className='flex items-center'>
+            <div className="mb-4 mx-2 w-1/2">
+              <label className="block mb-2">Image</label>
+              <div
+                className="border-dashed border-2 border-gray-400
                 rounded p-2 w-full bg-bgDarkGray2 cursor-pointer
                 flex items-center justify-center hover:bg-bgDarkGray"
-                    onClick={() => document.getElementById('file-input').click()}
-                >
-                  {image ? (
-                      <p>{image.name}</p>
-                  ) : (
-                      <p>Click to select image</p>
-                  )}
-                  <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                      id="file-input"
-                  />
-                </div>
-              </div>
-
-              <div className="mb-4 mx-2 w-1/2">
-                <label className="block mb-2">Image Name</label>
+                onClick={() => document.getElementById('file-input').click()}
+              >
+                {image ? (
+                  <p>{image.name}</p>
+                ) : (
+                  <p>Click to select image</p>
+                )}
                 <input
-                    type="text"
-                    value={imageName}
-                    onChange={(e) => setImageName(e.target.value)}
-                    className="border rounded p-2 w-full bg-bgDarkGray2"
-                    required
-                    autoComplete="off"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  className="hidden"
+                  id="file-input"
                 />
               </div>
             </div>
 
-            <div className='flex items-center'>
-              <div className="mb-4 mx-2 w-1/2">
-                <label className="block mb-2">Dominant Color</label>
-                <select
-                    value={dominantColor}
-                    onChange={(e) => setDominantColor(e.target.value)}
-                    className="border rounded p-2 w-full bg-bgDarkGray2"
-                    required
-                >
-                  <option value="">Select a color</option>
-                  {colors.map((color) => (
-                      <option key={color} value={color}>
-                        {color}
-                      </option>
-                  ))}
-                </select>
-              </div>
+            <div className="mb-4 mx-2 w-1/2">
+              <label className="block mb-2">Image Name</label>
+              <input
+                type="text"
+                value={imageName}
+                onChange={(e) => setImageName(e.target.value)}
+                className="border rounded p-2 w-full bg-bgDarkGray2"
+                required
+                autoComplete="off"
+              />
+            </div>
+          </div>
 
-              <div className="mb-4 mx-2 w-1/2">
-                <label className="block mb-2">Style</label>
-                <select
-                    value={style}
-                    onChange={(e) => setStyle(e.target.value)}
-                    className="border rounded p-2 w-full bg-bgDarkGray2"
-                    required
-                >
-                  <option value="">Select a style</option>
-                  {styles.map((styleOption) => (
-                      <option key={styleOption} value={styleOption}>
-                        {styleOption}
-                      </option>
-                  ))}
-                </select>
-              </div>
+          <div className='flex items-center'>
+            <div className="mb-4 mx-2 w-1/2">
+              <label className="block mb-2">Dominant Color</label>
+              <select
+                value={dominantColor}
+                onChange={(e) => setDominantColor(e.target.value)}
+                className="border rounded p-2 w-full bg-bgDarkGray2"
+                required
+              >
+                <option value="">Select a color</option>
+                {colors.map((color) => (
+                  <option key={color} value={color}>
+                    {color}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            <div className='flex mb-4'>
-              {isAddingKeywords ? (
-                  <div className='keywordsAdd flex justify-between w-full mt-2'>
-                    <input
-                        type='text'
-                        className='w-1/2 mx-2 p-2 bg-bgDarkGray2 border rounded'
-                        placeholder='Add Keywords'
-                        autoComplete='off'
-                        value={addKeyword}
-                        onChange={(e) => setAddKeyword(e.target.value)} // Update addKeyword state
-                    />
-                    <div className='w-1/2 flex justify-between mx-2'>
-                      <button
-                          type='button'
-                          onClick={addKeywords} // Save button triggers keyword creation
-                          className='w-1/2 mx-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save
-                      </button>
-                      <button
-                          type='button'
-                          onClick={handleCancelKeywords} // Cancel button
-                          className='w-1/2 mx-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cancel
-                      </button>
-                    </div>
-                  </div>
-              ) : (
-                  <div className='keywordSelect flex justify-between w-full mt-2'>
-                    <div className='relative w-1/2 mx-2'>
-                      <input
-                          type='text'
-                          className='p-2 w-full bg-bgDarkGray2 border rounded'
-                          placeholder='Search Keywords'
-                          value={searchQuery}
-                          onChange={(e) => setSearchQuery(e.target.value)} // Update search query
-                          autoComplete='off'
-                      />
-                      <button
-                          type='button'
-                          className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2
+            <div className="mb-4 mx-2 w-1/2">
+              <label className="block mb-2">Style</label>
+              <select
+                value={style}
+                onChange={(e) => setStyle(e.target.value)}
+                className="border rounded p-2 w-full bg-bgDarkGray2"
+                required
+              >
+                <option value="">Select a style</option>
+                {styles.map((styleOption) => (
+                  <option key={styleOption} value={styleOption}>
+                    {styleOption}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          <div className='flex mb-4'>
+            {isAddingKeywords ? (
+              <div className='keywordsAdd flex justify-between w-full mt-2'>
+                <input
+                  type='text'
+                  className='w-1/2 mx-2 p-2 bg-bgDarkGray2 border rounded'
+                  placeholder='Add Keywords'
+                  autoComplete='off'
+                  value={addKeyword}
+                  onChange={(e) => setAddKeyword(e.target.value)} // Update addKeyword state
+                />
+                <div className='w-1/2 flex justify-between mx-2'>
+                  <button
+                    type='button'
+                    onClick={addKeywords} // Save button triggers keyword creation
+                    className='w-1/2 mx-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save
+                  </button>
+                  <button
+                    type='button'
+                    onClick={handleCancelKeywords} // Cancel button
+                    className='w-1/2 mx-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className='keywordSelect flex justify-between w-full mt-2'>
+                <div className='relative w-1/2 mx-2'>
+                  <input
+                    type='text'
+                    className='p-2 w-full bg-bgDarkGray2 border rounded'
+                    placeholder='Search Keywords'
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                    autoComplete='off'
+                  />
+                  <button
+                    type='button'
+                    className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2
                     text-black bg-white rounded-r'
-                          onClick={handleSearch} // Fetch keywords on click
-                      >Search
-                      </button>
-                      <div className={`result-keywordSelect absolute w-5/6 h-32
+                    onClick={handleSearch} // Fetch keywords on click
+                  >Search
+                  </button>
+                  <div className={`result-keywordSelect absolute w-5/6 h-32
                     ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2`}>
-                        {fetchedKeywords.map((keyword) => (
-                            <label htmlFor={`keyword-${keyword.id}`} key={keyword.id} className='flex justify-between items-center w-full p-2 border-b border-gray-400
+                    {fetchedKeywords.map((keyword, index) => (
+                      <label htmlFor={`keyword-${index}`} key={index} className='flex justify-between items-center w-full p-2 border-b border-gray-400
                         cursor-pointer '>
-                              <p className={'text-white'}>{keyword.name}</p>
-                              <input type="checkbox" id={`keyword-${keyword.id}`} />
-                            </label>
-                        ))}
-                      </div>
-                    </div>
-                    <button
-                        type='button'
-                        onClick={handleAddKeywords} // Add button
-                        className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded hover:border'>Add
-                    </button>
+                        <p className={'text-white'}>{keyword}</p>
+                        <input type="checkbox" id={`keyword-${index}`}
+                          checked={selectedKeywords.includes(keyword)} // Check if the keyword is selected
+                          onChange={() => handleCheckboxChange(keyword)} // Update selected keywords on checkbox change
+                        />
+                      </label>
+                    ))}
                   </div>
-              )}
-            </div>
-
-            <div className='flex mb-4 mx-2 px-2 bg-bgDarkGray2'>
-
-            </div>
-
-            <div className='flex justify-center items-center mt-4'>
-              <button
-                  type="submit"
-                  className={`bg-bgDarkBlue text-white rounded mx-2 p-2 w-full hover:border
-              ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  disabled={isLoading}>
-                {isLoading ? 'Uploading...' : 'Upload'}
-              </button>
-              <button
-                  type="button"
-                  onClick={toggleLightMode}
-                  className={`rounded p-2 mx-2 w-full hover:border 
-              ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
-                {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
-              </button>
-            </div>
-
-          </form>
-
-          {uploadedFile && (
-              <div className="mt-4 text-black">
-                <p>Uploaded File: {uploadedFile}</p>
+                </div>
+                <button
+                  type='button'
+                  onClick={handleAddKeywords} // Add button
+                  className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded hover:border'>Add
+                </button>
               </div>
-          )}
-        </div>
+            )}
+          </div>
+
+          <div className='flex mb-4 mx-2 px-2 bg-bgDarkGray2'>
+
+          </div>
+
+          <div className='flex justify-center items-center mt-4'>
+            <button
+              type="submit"
+              className={`bg-bgDarkBlue text-white rounded mx-2 p-2 w-full hover:border
+              ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading}>
+              {isLoading ? 'Uploading...' : 'Upload'}
+            </button>
+            <button
+              type="button"
+              onClick={toggleLightMode}
+              className={`rounded p-2 mx-2 w-full hover:border 
+              ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+              {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
+            </button>
+          </div>
+
+        </form>
+
+        {uploadedFile && (
+          <div className="mt-4 text-black">
+            <p>Uploaded File: {uploadedFile}</p>
+          </div>
+        )}
       </div>
+    </div>
   );
 }
 
