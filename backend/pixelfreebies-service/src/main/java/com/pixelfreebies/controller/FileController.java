@@ -141,4 +141,19 @@ public class FileController {
         return ResponseEntity.ok(Result.success("Uploaded file successfully.", result));
     }
 
+    // Endpoint for fetching images based on keyword
+    @Operation(
+            summary = "Fetch paginated list of images based on provided keyword.",
+            description = "Retrieves a paginated list of image files along with metadata based on the keywordId provided."
+    )
+    @GetMapping("/keyword/{keywordId}")
+    public ResponseEntity<PaginatedResult<ImageDTO>> fetchImagesByKeywordId(@PathVariable long keywordId,
+                                                                            @RequestParam(defaultValue = "0") int page,
+                                                                            @RequestParam(defaultValue = "50") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<ImageDTO> imageDTOs = this.fileService.listAllImagesByKeywordId(keywordId, pageable);
+
+        return ResponseEntity.ok(PaginatedResult.success("List found images by keywordId.", true, imageDTOs));
+    }
+
 }

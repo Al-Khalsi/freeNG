@@ -33,4 +33,6 @@ public interface FileService {
 
     Page<ImageDTO> searchImages(String query, PageRequest pageRequest);
 
+    Page<ImageDTO> listAllImagesByKeywordId(long keywordId, Pageable pageable);
+
 }

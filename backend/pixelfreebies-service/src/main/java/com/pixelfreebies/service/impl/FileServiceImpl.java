@@ -5,11 +5,13 @@ import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.dto.ImageDTO;
+import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
 import com.pixelfreebies.service.FileService;
 import com.pixelfreebies.service.ImageStorageStrategy;
+import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,7 @@ public class FileServiceImpl implements FileService {
     private final ImageMetadataService imageMetadataService;
     private final KeywordValidationService keywordValidationService;
     private final ImageCreationService imageCreationService;
+    private final KeywordsService keywordsService;
 
     @Override
     public ImageDTO storeImage(MultipartFile uploadedMultipartFile, String fileName,
@@ -202,6 +205,13 @@ public class FileServiceImpl implements FileService {
         }
 
         return exactMatches.map(this.imageConverter::toDto);
+    }
+
+    @Override
+    public Page<ImageDTO> listAllImagesByKeywordId(long keywordId, Pageable pageable) {
+        KeywordsDTO foundKeyword = this.keywordsService.findKeywordById(keywordId);
+        return this.imageRepository.findByKeywords_Id(foundKeyword.getId(), pageable)
+                .map(this.imageConverter::toDto);
     }
 
 }

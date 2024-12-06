@@ -98,4 +98,5 @@ public interface ImageRepository extends JpaRepository<Image, UUID> {
             nativeQuery = true)
     Page<Image> searchSimilarFiles(@Param("query") String query, Pageable pageable);
 
+    Page<Image> findByKeywords_Id(Long id, Pageable pageable);
 }
