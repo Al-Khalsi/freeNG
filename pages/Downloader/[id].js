@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { FaImage } from "react-icons/fa";
@@ -40,32 +41,45 @@ const Downloader = () => {
     };
 
     return (
-        <div className={`downloaderPage w-full`}>
-            <main className='w-full h-auto flex-auto py-12'>
-                <div className='flex justify-between w-full px-8'>
-                    <div className='flex justify-between w-full h-custom-136 p-4 bg-bgDarkGray rounded'>
-                        <div className={`bg-img w-1/2 h-full p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
-                            <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
-                        </div>
-                        <div className='info-img flex flex-col ms-8 w-1/2'>
-                            <h1 className='block text-3xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>
-                                {title}
-                            </h1>
-                            <div className='flex mt-4 ms-1'>
-                                <div className='flex justify-between items-center bg-gray-600 px-2 py-1 rounded text-xs text-lightBlue'>
-                                    <FaImage />
-                                    <span className='block ml-1'>{size}</span>
-                                </div>
-                                <div className='flex justify-between items-center bg-gray-600 ml-2 px-2 py-1 rounded text-xs text-lightBlue'>
-                                    <RxDimensions />
-                                    <span className='block ml-1'>{`${width} × ${height}`}</span>
+        <>
+            <Head>
+                <title>PixelFreebies</title>
+
+                <meta name="description"
+                    content="PixelFreebies offers a vast collection of free PNG images for download. 
+                Explore and find the perfect image for your project." />
+
+                <meta name="keywords" content="free images, PNG images, download images, PixelFreebies, stock photos" />
+
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            </Head>
+            <div className={`downloaderPage w-full`}>
+                <main className='w-full h-auto flex-auto py-12'>
+                    <div className='flex justify-between w-full px-8'>
+                        <div className='flex justify-between w-full h-custom-136 p-4 bg-bgDarkGray rounded'>
+                            <div className={`bg-img w-1/2 h-full p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
+                                <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
+                            </div>
+                            <div className='info-img flex flex-col ms-8 w-1/2'>
+                                <h1 className='block text-3xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>
+                                    {title}
+                                </h1>
+                                <div className='flex mt-4 ms-1'>
+                                    <div className='flex justify-between items-center bg-gray-600 px-2 py-1 rounded text-xs text-lightBlue'>
+                                        <FaImage />
+                                        <span className='block ml-1'>{size}</span>
+                                    </div>
+                                    <div className='flex justify-between items-center bg-gray-600 ml-2 px-2 py-1 rounded text-xs text-lightBlue'>
+                                        <RxDimensions />
+                                        <span className='block ml-1'>{`${width} × ${height}`}</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </main>
-        </div>
+                </main>
+            </div>
+        </>
     );
 };
 

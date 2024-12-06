@@ -1,4 +1,4 @@
-import Head from 'next/head'; // Import Head from next/head
+import Head from 'next/head';
 import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useEffect, useState } from "react";
@@ -173,7 +173,7 @@ function Index() {
                 <meta property="og:type" content="website" />
 
                 <meta name="robots" content="index, follow" />
-                
+
                 <link rel="canonical" href="https://pixelfreebies.com" />
 
                 {/* Favicon for standard browsers */}
