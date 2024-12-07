@@ -7,7 +7,8 @@ import Header from '@/components/templates/Header';
 import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
 import { MdImageNotSupported, MdDelete } from "react-icons/md";
-import { apiFetch } from '@/utils/api';
+import { apiFetch } from '@/utils/api'; // Import apiFetch from utils/api
+import MouseEffect from '@/components/modules/MouseEffect';
 
 function Index() {
     const { token, username, email, clearToken, userId, role } = useAuth(); // Get user authentication details
@@ -327,7 +328,6 @@ function Index() {
                         +
                     </Link>
                 )}
-
             </div>
         </>
     );
