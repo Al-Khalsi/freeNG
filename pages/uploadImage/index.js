@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
+import { MdDelete } from "react-icons/md";
 
 function UploadImage() {
   const { token } = useAuth();
@@ -183,7 +184,12 @@ function UploadImage() {
         return [...prevSelected, keyword]; // Add keyword if not selected
       }
     });
-  }
+  };
+
+  const handleRemoveKeyword = (keywordToRemove) => {
+    setSelectedKeywords(prevKeywords => prevKeywords.filter(keyword => keyword !== keywordToRemove));
+  };
+
   const toggleLightMode = () => {
     setLightMode(prevMode => !prevMode);
   };
@@ -198,14 +204,13 @@ function UploadImage() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // چک کردن اگر کلیک در خارج از dropdown و input باشد
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target) &&
         inputRef.current &&
         !inputRef.current.contains(event.target)
       ) {
-        setShowResults(false); // مخفی کردن dropdown
+        setShowResults(false);
       }
     };
 
@@ -386,9 +391,20 @@ function UploadImage() {
             )}
           </div>
 
-          <div className='flex mb-4 mx-2 px-2 bg-bgDarkGray2'>
-
-          </div>
+            <div className='showCheckedKeywords flex mb-4 mx-2 py-2 px-2 rounded bg-bgDarkGray2'>
+              {selectedKeywords.map((keyword, index) => (
+                <span key={index} className="flex items-center bg-gray-600 rounded px-2 py-1 mr-2">
+                  {keyword}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveKeyword(keyword)}
+                    className="ml-2 text-white hover:text-red-600"
+                  >
+                    <MdDelete />
+                  </button>
+                </span>
+              ))}
+            </div>
 
           <div className='flex justify-center items-center mt-4'>
             <button

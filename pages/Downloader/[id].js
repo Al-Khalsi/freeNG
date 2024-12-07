@@ -189,7 +189,7 @@ const Downloader = () => {
                                             <strong className='ms-1'>Tag</strong>
                                         </span>
                                         <div className='flex items-center flex-wrap ms-2'>
-                                            {parsedKeywords.length > 2 ? ( // Check if more than 10 keywords
+                                            {parsedKeywords.length > 30 ? ( // Check if more than 10 keywords
                                                 <>
                                                     {parsedKeywords.slice(0, 2).map((kw) => ( // Show first 10 keywords
                                                         <button
