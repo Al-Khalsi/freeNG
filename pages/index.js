@@ -18,7 +18,7 @@ function Index() {
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [submittedSearchQuery, setSubmittedSearchQuery] = useState(''); // New state for submitted search query
     const [loading, setLoading] = useState(false); // State to manage loading status
-    const itemsPerPage = 50; // Number of items to display per page
+    const itemsPerPage = 2; // Number of items to display per page
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
     const [isSearching, setIsSearching] = useState(false); // New state for search
     const [totalPages, setTotalPages] = useState(0); // State to store total pages
@@ -37,7 +37,7 @@ function Index() {
         setLoading(true); // Set loading state to true before starting the fetch
         try {
             const url = query
-                ? `http://localhost:8080/api/v1/file/search?query=${encodeURIComponent(query)}`
+                ? `http://localhost:8080/api/v1/file/search/paginated?page=${(page - 1)}&size=${size}&query=${encodeURIComponent(query)}`
                 : `http://localhost:8080/api/v1/file/list/paginated?page=${(page - 1)}&size=${size}`;
 
             console.log('Fetching images from URL:', url); // Log the URL being fetched

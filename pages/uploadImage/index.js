@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 
@@ -21,6 +21,8 @@ function UploadImage() {
   const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
   const [totalPages, setTotalPages] = useState(0); // Total pages for pagination
   const [showColorDropdown, setShowColorDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  const inputRef = useRef(null);
 
   const colors = [
     { name: 'Red', hex: '#FF0000' },
@@ -79,6 +81,10 @@ function UploadImage() {
     selectedKeywords.forEach(keyword => {
       formData.append('keywords', keyword);
     });
+    console.log(`handleUploadSubmit - form data`);
+    Array.from(formData).forEach((value, index) => {
+      console.log(`${index}: ${value}`);
+    });
 
     try {
       const response = await axios.post(BACKEND_UPLOAD_FILE_URL, formData, {
@@ -88,7 +94,8 @@ function UploadImage() {
         },
       });
 
-      const uploadedFileData = response.data.image;
+      const uploadedFileData = response.data.data;
+      console.log(`handleUploadSubmit - upload response: ${uploadedFileData}`)
       setUploadedFile(uploadedFileData);
       alert('Upload successful: ' + uploadedFileData);
     } catch (error) {
@@ -158,7 +165,7 @@ function UploadImage() {
         },
       });
       console.log(`keyword response: ${response.data}`);
-      setSelectedKeywords(prev => [...prev, response.data.data]); // Add the newly created keyword to selected keywords
+      setSelectedKeywords(prev => [...prev, response]); // Add the newly created keyword to selected keywords
       setAddKeyword(''); // Clear the input
       setIsAddingKeywords(false); // Hide the input field
     } catch (error) {
@@ -188,6 +195,25 @@ function UploadImage() {
   const handleCancelKeywords = () => {
     setIsAddingKeywords(false); // Hide keywordsAdd section
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target)
+      ) {
+        setShowResults(false); // Hide the dropdown
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div className={`UploadImage w-full min-h-dvh py-12 flex justify-center items-center bg-bgDarkBlue`}>
@@ -250,12 +276,12 @@ function UploadImage() {
                 {showColorDropdown && (
                   <div className="absolute bg-bgDarkGray2 border rounded mt-1 w-full z-10">
                     <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                    {colors.map((color) => (
+                      {colors.map((color) => (
                         <label key={color.name} className="flex justify-between items-center p-2 border-b cursor-pointer hover:bg-bgDarkGray">
                           <span className="flex items-center">
                             <span
                               className="block w-4 h-4 rounded-full mr-2"
-                              style={{ backgroundColor: color.hex }} 
+                              style={{ backgroundColor: color.hex }}
                             ></span>
                             {color.name}
                           </span>
@@ -321,17 +347,19 @@ function UploadImage() {
                 <div className='relative w-1/2 mx-2'>
                   <input
                     type='text'
+                    ref={inputRef}
                     className='p-2 w-full bg-bgDarkGray2 border rounded'
                     placeholder='Search Keywords'
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)} // Update search query
+                    onChange={(e) => setSearchQuery(e.target.value)}
                     autoComplete='off'
                   />
                   <button
                     type='button'
                     className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2
                     text-black bg-white rounded-r'
-                    onClick={handleSearch} // Fetch keywords on click
+                    onClick={handleSearch}
+                    ref={dropdownRef}
                   >Search
                   </button>
                   <div className={`result-keywordSelect absolute w-5/6 h-32
