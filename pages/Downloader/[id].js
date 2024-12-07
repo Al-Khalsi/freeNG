@@ -26,22 +26,10 @@ const colorHexMap = {
 
 const Downloader = () => {
     const router = useRouter();
-    const { id: fileId,
-        title,
-        path,
-        size,
-        width,
-        height,
-        lightMode,
-        style,
-        dominantColors,
-        keywords
-    } = router.query;
+    const { id: fileId, title, path, size, width, height, lightMode, style, dominantColors, keywords } = router.query;
 
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
     const [parsedKeywords, setParsedKeywords] = useState([]); // State to hold parsed keywords
-
-
 
     useEffect(() => {
         if (keywords) {
@@ -89,18 +77,15 @@ const Downloader = () => {
     // Function to handle keyword click
     const handleKeywordClick = async (keywordId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/keywords/fetch/${keywordId}`); // Fetch keyword details based on ID
+            const response = await axios.get(`http://localhost:8080/api/v1/file/keyword/${keywordId}?page=0&size=50`); // Fetch keyword details based on ID
             const keywordData = response.data.data; // Assuming your backend returns the keyword data
 
-            console.log(`handleKeywordClick: ${keywordData}`);
-
-            // You can now redirect to the search page with the keyword
-            router.push(`/?search=${encodeURIComponent(keywordData.keyword)}`); // Redirect to search with the keyword
+            // Redirect to the search page with the keyword ID
+            router.push(`/?keywordId=${keywordId}`); // Pass the keyword ID instead of the keyword
         } catch (error) {
             console.error('Error fetching keyword:', error);
         }
     };
-
 
     const openModal = () => {
         setIsModalOpen(true); // Open the modal
@@ -186,32 +171,31 @@ const Downloader = () => {
                                     <div className='showKeywords flex flex-col sm:flex-row items-start sm:items-center mt-4 py-3 px-2 text-sm sm:text-lg bg-gray-600 rounded'>
                                         <span className='flex items-center'>
                                             <FaTags className='ml-1' />
-                                            <strong className='ms-1'>Tag</strong>
+                                            <p className='ms-1'>Tag</p>
                                         </span>
                                         <div className='flex items-center flex-wrap ms-2'>
-                                            {parsedKeywords.length > 30 ? ( // Check if more than 10 keywords
+                                            {parsedKeywords.length > 4 ? ( // Check if more than 4 keywords
                                                 <>
-                                                    {parsedKeywords.slice(0, 30).map((kw) => ( // Show first 10 keywords
+                                                    {parsedKeywords.slice(0, 4).map((kw) => ( // Show first 4 keywords
                                                         <button
                                                             key={kw.id}
                                                             onClick={() => handleKeywordClick(kw.id)}
-                                                            className='text-white bg-bgDarkGray2 rounded mt-2 sm:mt-0 mb-1 sm:mb-0 px-2 py-1 mx-1'>
+                                                            className='text-white bg-bgDarkGray2 rounded my-1 md:my-1 px-2 py-1 mx-1'>
                                                             {kw.keyword}
                                                         </button>
                                                     ))}
                                                     <button
                                                         onClick={openModal}
-                                                        className='text-white hover:text-clDarkGray2 rounded mt-2 sm:mt-0 mb-1 sm:mb-0 px-2 py-1 mx-1'>
-                                                        ...
-                                                        Show More
+                                                        className='text-white hover:text-clDarkGray2 rounded my-1 md:my-1 px-2 py-1 mx-1'>
+                                                        Show more
                                                     </button>
                                                 </>
                                             ) : (
-                                                parsedKeywords.map((kw) => ( // Show all keywords if 10 or fewer
+                                                parsedKeywords.map((kw) => ( // Show all keywords if 4 or fewer
                                                     <button
                                                         key={kw.id}
                                                         onClick={() => handleKeywordClick(kw.id)}
-                                                        className='text-white bg-bgDarkGray2 rounded mt-2 sm:mt-0 mb-1 sm:mb-0 px-2 py-1 mx-1'>
+                                                        className='text-white bg-bgDarkGray2 rounded my-1 md:my-1 px-2 py-1 mx-1'>
                                                         {kw.keyword}
                                                     </button>
                                                 ))
@@ -220,7 +204,7 @@ const Downloader = () => {
                                     </div>
                                 </div>
                                 <div className='flex justify-center w-full mb-2 md:mb-4'>
-                                    <button className="buttonDl mt-4" type="button">
+                                    <button className="buttonDl mt-4" type="button" onClick={handleDownload}>
                                         <span className="button__text text-xl">Download</span>
                                         <span className="button__icon">
                                             <FiDownload className='text-black text-3xl' />

@@ -33,12 +33,17 @@ function Index() {
     };
 
     // Fetch images from the backend
-    const fetchImages = async (query = '', page = currentPage, size = itemsPerPage) => {
+    const fetchImages = async (keywordId = null, page = currentPage, size = itemsPerPage) => {
         setLoading(true); // Set loading state to true before starting the fetch
         try {
-            const url = query
-                ? `http://localhost:8080/api/v1/file/search/paginated?page=${(page - 1)}&size=${size}&query=${encodeURIComponent(query)}`
-                : `http://localhost:8080/api/v1/file/list/paginated?page=${(page - 1)}&size=${size}`;
+            let url;
+            if (keywordId) {
+                // Fetch images based on keyword ID
+                url = `http://localhost:8080/api/v1/file/keyword/${keywordId}?page=${(page - 1)}&size=${size}`;
+            } else {
+                // Fetch images normally
+                url = `http://localhost:8080/api/v1/file/list/paginated?page=${(page - 1)}&size=${size}`;
+            }
 
             console.log('Fetching images from URL:', url); // Log the URL being fetched
 
@@ -75,10 +80,11 @@ function Index() {
         }
     };
 
-    // Fetch images when the component mounts or when the token or currentPage changes
+    // Fetch images when the component mounts or when the token, currentPage, or keywordId changes
     useEffect(() => {
-        fetchImages('', currentPage); // Call the fetchImages function with the current page
-    }, [token, currentPage]); // Only run when the token or currentPage changes
+        const keywordId = router.query.keywordId; // Get keywordId from the URL
+        fetchImages(keywordId ? keywordId : '', currentPage); // Call the fetchImages function with the keywordId if present
+    }, [token, currentPage, router.query.keywordId]); // Only run when the token, currentPage, or keywordId changes
 
     const handleDeleteImage = async (imageId) => {
         const confirmed = window.confirm("Are you sure you want to delete this image?");
