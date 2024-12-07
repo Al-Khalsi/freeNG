@@ -1,8 +1,24 @@
-// KeywordsModal.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 
 const KeywordsModal = ({ keywords, onClose }) => {
+    useEffect(() => {
+        // Function to handle keydown events
+        const handleKeyDown = (event) => {
+            if (event.key === 'Escape') {
+                onClose();
+            }
+        };
+
+        // Add event listener for keydown
+        window.addEventListener('keydown', handleKeyDown);
+
+        // Cleanup function to remove the event listener
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [onClose]); // Dependency array ensures effect runs when onClose changes
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50">
             <div className="bg-white rounded-lg p-6 w-11/12 md:w-1/2">
