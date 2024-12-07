@@ -205,8 +205,9 @@ public class FileServiceImpl implements FileService {
 
         // If exact matches are less than the requested page size, find similar matches
         if (exactMatches.getContent().isEmpty()) {
-            return this.imageRepository.searchSimilarFiles(query, pageRequest)
+            Page<ImageDTO> map = this.imageRepository.searchSimilarFiles(query, pageRequest)
                     .map(this::convertToDto);
+            return map;
         }
 
         return exactMatches.map(this::convertToDto);
