@@ -84,7 +84,7 @@ function UploadImage() {
 
     console.log(`handleUploadSubmit - form data`);
     Array.from(formData).forEach((value, index) => {
-      console.log(`${index}: ${value}`);
+      console.log(`formDataValue[${index}] = ${value}`);
     });
 
     try {
@@ -121,7 +121,8 @@ function UploadImage() {
         },
       });
       const keywordsName = response.data.data;
-      console.log(`keyword response: ${keywordsName}`);
+      console.log(`fetching keywords - response: ${keywordsName}`);
+
       setFetchedKeywords(keywordsName); // Store fetched keywords
       setTotalPages(response.data.totalPages); // Set total pages from response
       setShowResults(true); // Show the results after fetching keywords
@@ -165,8 +166,10 @@ function UploadImage() {
           'Authorization': `Bearer ${token}`
         },
       });
-      console.log(`keyword response: ${response.data}`);
-      setSelectedKeywords(prev => [...prev, response]); // Add the newly created keyword to selected keywords
+      const newKeyword = response.data.data.keyword;
+      console.log(`adding keyword - response: ${newKeyword}`);
+    
+      //setSelectedKeywords(prev => [...prev, newKeyword]); // Add the newly created keyword to selected keywords
       setAddKeyword(''); // Clear the input
       setIsAddingKeywords(false); // Hide the input field
     } catch (error) {
@@ -184,6 +187,7 @@ function UploadImage() {
         return [...prevSelected, keyword]; // Add keyword if not selected
       }
     });
+    console.log(`selectedKeywords: ${selectedKeywords}`); 
   }
   const toggleLightMode = () => {
     setLightMode(prevMode => !prevMode);
@@ -408,12 +412,6 @@ function UploadImage() {
           </div>
 
         </form>
-
-        {uploadedFile && (
-          <div className="mt-4 text-black">
-            <p>Uploaded File: {uploadedFile}</p>
-          </div>
-        )}
       </div>
     </div>
   );
