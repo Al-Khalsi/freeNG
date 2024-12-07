@@ -198,13 +198,14 @@ function UploadImage() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // چک کردن اگر کلیک در خارج از dropdown و input باشد
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target) &&
         inputRef.current &&
         !inputRef.current.contains(event.target)
       ) {
-        setShowResults(false); // Hide the dropdown
+        setShowResults(false); // مخفی کردن dropdown
       }
     };
 
@@ -359,11 +360,11 @@ function UploadImage() {
                     className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2
                     text-black bg-white rounded-r'
                     onClick={handleSearch}
-                    ref={dropdownRef}
                   >Search
                   </button>
                   <div className={`result-keywordSelect absolute w-5/6 h-32
-                    ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2`}>
+                    ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2`}
+                    ref={dropdownRef}>
                     {fetchedKeywords.map((keyword, index) => (
                       <label htmlFor={`keyword-${index}`} key={index} className='flex justify-between items-center w-full p-2 border-b border-gray-400
                         cursor-pointer '>

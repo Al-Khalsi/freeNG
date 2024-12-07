@@ -18,7 +18,7 @@ function Index() {
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [submittedSearchQuery, setSubmittedSearchQuery] = useState(''); // New state for submitted search query
     const [loading, setLoading] = useState(false); // State to manage loading status
-    const itemsPerPage = 2; // Number of items to display per page
+    const itemsPerPage = 50; // Number of items to display per page
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
     const [isSearching, setIsSearching] = useState(false); // New state for search
     const [totalPages, setTotalPages] = useState(0); // State to store total pages
@@ -233,7 +233,7 @@ function Index() {
                 <link rel="canonical" href="https://pixelfreebies.com" />
 
                 {/* Favicon for standard browsers */}
-                <link rel="icon" type="image/png" href="/img/LOGO-icon-16x16.png" sizes="16x16" />
+                <link rel="icon" type="image/png" href="/img/LOGO.png" sizes="16x16" />
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-32x32.png" sizes="32x32" />
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-48x48.png" sizes="48x48" />
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-192x192.png" sizes="192x192" />

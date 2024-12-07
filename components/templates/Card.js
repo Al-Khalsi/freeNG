@@ -11,15 +11,15 @@ function Card({ image, role, onDelete, onEdit }) {
     const [isEditing, setIsEditing] = useState(false);
 
     const downloadLink = `/downloader/${image.id}
-    ?title=${encodeURIComponent(image.title)}
-    &path=${image.path}
+    ?title=${image.title}
     &size=${image.size}
     &width=${image.width}
     &height=${image.height}
     &style=${image.style}
     &dominantColors=${image.dominantColors}
-    &keywords=${encodeURIComponent(image.keywords)}
-    &lightMode=${image.lightMode ? 'true' : 'false'}`;
+    &keywords=${image.keywords}
+    &lightMode=${image.lightMode ? 'true' : 'false'}
+    &path=${image.path}`;
 
     const handleOpenModal = () => {
         setModalOpen(true);
