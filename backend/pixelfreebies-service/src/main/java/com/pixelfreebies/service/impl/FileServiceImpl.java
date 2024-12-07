@@ -8,6 +8,7 @@ import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
 import com.pixelfreebies.model.enums.ImageFormat;
+import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
 import com.pixelfreebies.service.FileService;
@@ -46,20 +47,18 @@ public class FileServiceImpl implements FileService {
     private final KeywordsService keywordsService;
 
     @Override
-    public ImageDTO storeImage(MultipartFile uploadedMultipartFile, String fileName,
-                               List<String> keywords, List<String> dominantColors,
-                               String style, boolean lightMode) throws IOException {
+    public ImageDTO storeImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
         try {
             // Validate image name
-            this.imageValidationService.validateImageName(fileName);
+            this.imageValidationService.validateImageName(imageUploadRequest.getFileName());
             String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, originalFileName);
 
             // Validate keywords and retrieve their entities
-            Set<Keywords> keywordsSet = this.keywordValidationService.validateAndFetchKeywords(keywords);
+            Set<Keywords> keywordsSet = this.keywordValidationService.validateAndFetchKeywords(imageUploadRequest.getKeywords());
 
             // Create the domains
-            Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, fileName, relativePath.toString(), dominantColors, style, lightMode);
+            Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, imageUploadRequest.getFileName(), relativePath.toString(), imageUploadRequest.getDominantColors(), imageUploadRequest.getStyle(), imageUploadRequest.isLightMode());
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Associate relationships

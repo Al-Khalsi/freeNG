@@ -2,6 +2,7 @@ package com.pixelfreebies.controller;
 
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
+import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
 import com.pixelfreebies.model.payload.response.Result;
 import com.pixelfreebies.service.FileService;
@@ -47,14 +48,10 @@ public class FileController {
     @PostMapping("/upload")
     @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_ADMIN')")
     public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
-                                             @RequestParam String fileName,
-                                             @RequestParam List<String> keywords,
-                                             @RequestParam List<String> dominantColors,
-                                             @RequestParam String style,
-                                             @RequestParam boolean lightMode) {
+                                             @ModelAttribute ImageUploadRequest imageUploadRequest) {
         try {
 
-            ImageDTO imageDTO = this.fileService.storeImage(multipartFile, fileName, keywords, dominantColors, style, lightMode);
+            ImageDTO imageDTO = this.fileService.storeImage(multipartFile, imageUploadRequest);
             return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
 
         } catch (IllegalArgumentException e) {

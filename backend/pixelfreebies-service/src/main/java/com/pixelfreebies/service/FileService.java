@@ -2,6 +2,7 @@ package com.pixelfreebies.service;
 
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
+import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,9 +14,7 @@ import java.util.List;
 
 public interface FileService {
 
-    ImageDTO storeImage(MultipartFile multipartFile, String fileName,
-                        List<String> keywords, List<String> dominantColors,
-                        String style, boolean lightMode) throws IOException;
+    ImageDTO storeImage(MultipartFile multipartFile, ImageUploadRequest imageUploadRequest) throws IOException;
 
     Resource loadImageAsResource(String fileId) throws IOException;
 
