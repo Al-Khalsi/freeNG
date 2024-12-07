@@ -6,7 +6,7 @@ function UploadImage() {
   const { token } = useAuth();
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
-  const [dominantColors, setDominantColors] = useState([]); // Change to array
+  const [dominantColors, setDominantColors] = useState([]);
   const [style, setStyle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -15,15 +15,16 @@ function UploadImage() {
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [isAddingKeywords, setIsAddingKeywords] = useState(false);
   const [addKeyword, setAddKeyword] = useState('');
-  const [fetchedKeywords, setFetchedKeywords] = useState([]); // State to hold fetched keywords
-  const [showResults, setShowResults] = useState(false); // State to control visibility of keyword results
-  const [searchQuery, setSearchQuery] = useState(''); // State for search input
-  const [currentPage, setCurrentPage] = useState(0); // Current page for pagination
-  const [totalPages, setTotalPages] = useState(0); // Total pages for pagination
-  const [showColorDropdown, setShowColorDropdown] = useState(false);
+  const [fetchedKeywords, setFetchedKeywords] = useState([]);
+  const [showResults, setShowResults] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+  const [showColorDropdown, setShowColorDropdown] = useState(false); // State for color dropdown
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
-  const addKeywordInputRef = useRef(null); // Reference for the add keyword input
+  const addKeywordInputRef = useRef(null); 
+  const dropdownColorRef = useRef(null); // Reference for the color dropdown
 
   const colors = [
     { name: 'Red', hex: '#FF0000' },
@@ -43,7 +44,6 @@ function UploadImage() {
     '3D', 'Pixel', 'Anime', 'Cartoon', 'Realistic', 'Abstract'
   ];
 
-  // --------------------------- Backend URLs ---------------------------
   const BACKEND_API_VERSION = "api/v1";
   const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`;
   const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/file`;
@@ -83,11 +83,6 @@ function UploadImage() {
       formData.append('keywords', keyword);
     });
 
-    console.log(`handleUploadSubmit - form data`);
-    Array.from(formData).forEach((value, index) => {
-      console.log(`formDataValue[${index}] = ${value}`);
-    });
-
     try {
       const response = await axios.post(BACKEND_UPLOAD_FILE_URL, formData, {
         headers: {
@@ -97,11 +92,9 @@ function UploadImage() {
       });
 
       const uploadedFileData = response.data.data;
-      console.log(`handleUploadSubmit - upload response: ${uploadedFileData}`)
       setUploadedFile(uploadedFileData);
       alert('Upload successful: ' + uploadedFileData);
     } catch (error) {
-      console.log(`Error uploading image: ${error}`)
       setErrorMessage(error.response?.data?.message || 'Error uploading image.');
     } finally {
       setIsLoading(false);
@@ -122,13 +115,11 @@ function UploadImage() {
         },
       });
       const keywordsName = response.data.data;
-      console.log(`fetching keywords - response: ${keywordsName}`);
 
-      setFetchedKeywords(keywordsName); // Store fetched keywords
-      setTotalPages(response.data.totalPages); // Set total pages from response
-      setShowResults(true); // Show the results after fetching keywords
+      setFetchedKeywords(keywordsName);
+      setTotalPages(response.data.totalPages);
+      setShowResults(true);
     } catch (error) {
-      console.log(`Error fetching keywords: ${error}`)
       setErrorMessage(error.response?.data?.message || 'Error fetching keywords.');
     }
   };
@@ -136,17 +127,17 @@ function UploadImage() {
   const handleColorChange = (color) => {
     setDominantColors(prevColors => {
       if (prevColors.includes(color)) {
-        return prevColors.filter(c => c !== color); // Remove color if already selected
+        return prevColors.filter(c => c !== color);
       } else if (prevColors.length < 3) {
-        return [...prevColors, color]; // Add color if not selected and limit not reached
+        return [...prevColors, color];
       }
-      return prevColors; // Return current state if limit reached
+      return prevColors;
     });
   };
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
-      fetchKeywords(searchQuery, currentPage); // Fetch keywords based on search query
+      fetchKeywords(searchQuery, currentPage);
     } else {
       setErrorMessage('Please enter a search term.');
     }
@@ -168,43 +159,38 @@ function UploadImage() {
         },
       });
       const newKeyword = response.data.data.keyword;
-      console.log(`adding keyword - response: ${newKeyword}`);
-    
-      //setSelectedKeywords(prev => [...prev, newKeyword]); // Add the newly created keyword to selected keywords
-      setAddKeyword(''); // Clear the input
-      setIsAddingKeywords(false); // Hide the input field
+      setAddKeyword('');
+      setIsAddingKeywords(false);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || 'Error creating keyword.');
     }
-
-
   };
 
   const handleCheckboxChange = (keyword) => {
     setSelectedKeywords(prevSelected => {
       if (prevSelected.includes(keyword)) {
-        return prevSelected.filter(k => k !== keyword); // Remove keyword if already selected
+        return prevSelected.filter(k => k !== keyword);
       } else {
-        return [...prevSelected, keyword]; // Add keyword if not selected
+        return [...prevSelected, keyword];
       }
     });
-    console.log(`selectedKeywords: ${selectedKeywords}`); 
-  }
+  };
+
   const toggleLightMode = () => {
     setLightMode(prevMode => !prevMode);
   };
 
   const handleAddKeywords = () => {
-    setIsAddingKeywords(true); // Show keywordsAdd section
+    setIsAddingKeywords(true);
     setTimeout(() => {
       if (addKeywordInputRef.current) {
-        addKeywordInputRef.current.focus(); // Focus on the input field when adding keywords
+        addKeywordInputRef.current.focus();
       }
-    }, 0); // Using setTimeout to delay the focus slightly
+    }, 0);
   };
 
   const handleCancelKeywords = () => {
-    setIsAddingKeywords(false); // Hide keywordsAdd section
+    setIsAddingKeywords(false);
   };
 
   useEffect(() => {
@@ -216,6 +202,12 @@ function UploadImage() {
         !inputRef.current.contains(event.target)
       ) {
         setShowResults(false);
+      }
+      if (
+        dropdownColorRef.current &&
+        !dropdownColorRef.current.contains(event.target)
+      ) {
+        setShowColorDropdown(false); // Close color dropdown
       }
     };
 
@@ -273,7 +265,6 @@ function UploadImage() {
           </div>
 
           <div className='flex items-center'>
-
             <div className='mb-4 mx-2 w-1/2'>
               <label className="block mb-2">Dominant Color</label>
               <div className="relative">
@@ -285,7 +276,7 @@ function UploadImage() {
                   {dominantColors.length > 0 ? dominantColors.join(', ') : 'Select Colors'}
                 </button>
                 {showColorDropdown && (
-                  <div className="absolute bg-bgDarkGray2 border rounded mt-1 w-full z-10">
+                  <div className='absolute bg-bgDarkGray2 border border-t-0 rounded w-full z-10' ref={dropdownColorRef}>
                     <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                       {colors.map((color) => (
                         <label key={color.name} className="flex justify-between items-center p-2 border-b cursor-pointer hover:bg-bgDarkGray">
@@ -298,9 +289,9 @@ function UploadImage() {
                           </span>
                           <input
                             type="checkbox"
-                            value={color.name} // Keep the value as the color name
-                            checked={dominantColors.includes(color.name)} // Check if the color is selected
-                            onChange={() => handleColorChange(color.name)} // Pass the color name to the handler
+                            value={color.name}
+                            checked={dominantColors.includes(color.name)}
+                            onChange={() => handleColorChange(color.name)}
                             className="mr-2"
                           />
                         </label>
@@ -330,11 +321,11 @@ function UploadImage() {
           </div>
 
           <div className='flex mb-4'>
-          {isAddingKeywords ? (
+            {isAddingKeywords ? (
               <div className='keywordsAdd flex justify-between w-full mt-2'>
                 <input
                   type='text'
-                  ref={addKeywordInputRef} 
+                  ref={addKeywordInputRef}
                   className='w-1/2 mx-2 p-2 bg-bgDarkGray2 border rounded'
                   placeholder='Add Keywords'
                   autoComplete='off'
@@ -381,8 +372,8 @@ function UploadImage() {
                         cursor-pointer '>
                         <p className={'text-white'}>{keyword}</p>
                         <input type="checkbox" id={`keyword-${index}`}
-                          checked={selectedKeywords.includes(keyword)} // Check if the keyword is selected
-                          onChange={() => handleCheckboxChange(keyword)} // Update selected keywords on checkbox change
+                          checked={selectedKeywords.includes(keyword)}
+                          onChange={() => handleCheckboxChange(keyword)}
                         />
                       </label>
                     ))}
@@ -390,15 +381,11 @@ function UploadImage() {
                 </div>
                 <button
                   type='button'
-                  onClick={handleAddKeywords} 
+                  onClick={handleAddKeywords}
                   className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded hover:border'>Add
                 </button>
               </div>
             )}
-          </div>
-
-          <div className='flex mb-4 mx-2 px-2 bg-bgDarkGray2'>
-
           </div>
 
           <div className='flex justify-center items-center mt-4'>
