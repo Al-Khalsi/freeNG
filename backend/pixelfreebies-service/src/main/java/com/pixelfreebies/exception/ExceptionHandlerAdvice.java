@@ -31,6 +31,12 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(NOT_FOUND).body(new Result(false, NOT_FOUND, e.getMessage(), null));
     }
 
+    @ExceptionHandler({AlreadyExistsException.class})
+    @ResponseStatus(BAD_REQUEST)
+    public ResponseEntity<Result> handleAlreadyExistException(AlreadyExistsException e) {
+        return ResponseEntity.status(BAD_REQUEST).body(new Result(false, BAD_REQUEST, e.getMessage(), null));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
     public ResponseEntity<Result> handleMethodValidationException(MethodArgumentNotValidException e) {

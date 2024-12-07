@@ -1,5 +1,6 @@
 package com.pixelfreebies.service.impl;
 
+import com.pixelfreebies.exception.AlreadyExistsException;
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.dto.KeywordsDTO;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,9 @@ public class KeywordsServiceImpl implements KeywordsService {
 
     @Override
     public KeywordsDTO createKeyword(KeywordsDTO keywordsDTO) {
+        Optional<Keywords> optionalKeywords = this.keywordsRepository.findByKeyword(keywordsDTO.getKeyword());
+        if (optionalKeywords.isPresent())
+            throw new AlreadyExistsException("Keyword already exist with name: " + keywordsDTO.getKeyword());
         Keywords savedKeyword = this.keywordsRepository.save(this.keywordsConverter.toEntity(keywordsDTO));
         return this.keywordsConverter.toDto(savedKeyword);
     }
@@ -55,7 +61,7 @@ public class KeywordsServiceImpl implements KeywordsService {
                 .map(keyword -> {
                     log.info("Keyword found: {}", keyword.getKeyword());
                     return this.keywordsConverter.toDto(keyword);
-                }).orElseThrow(()-> new NotFoundException("Keyword not found by id: " + keywordId));
+                }).orElseThrow(() -> new NotFoundException("Keyword not found by id: " + keywordId));
     }
 
 }
