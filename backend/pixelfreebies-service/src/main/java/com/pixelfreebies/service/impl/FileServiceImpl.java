@@ -7,6 +7,7 @@ import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.dto.UpdateImageDTO;
+import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
 import com.pixelfreebies.service.FileService;
@@ -98,9 +99,14 @@ public class FileServiceImpl implements FileService {
 
     private ImageDTO convertToDto(Image image) {
         ImageDTO imageDTO = this.imageConverter.toDto(image);
-        imageDTO.setFilePath(image.getVariants().stream()
-                .findFirst().map(ImageVariant::getFilePath)
-                .orElse(image.getFilePath()));
+        String webpImagePath = image.getVariants()
+                .stream().findFirst()
+                .map(imageVariant -> {
+                    if (!imageVariant.getFormat().equals(ImageFormat.WEBP)) return null;
+                    return imageVariant.getFilePath();
+                }).orElse(image.getFilePath());
+        imageDTO.setFilePath(webpImagePath);
+        imageDTO.setContentType("image/webp");
         return imageDTO;
     }
 
@@ -201,10 +207,10 @@ public class FileServiceImpl implements FileService {
         // If exact matches are less than the requested page size, find similar matches
         if (exactMatches.getContent().isEmpty()) {
             return this.imageRepository.searchSimilarFiles(query, pageRequest)
-                    .map(this.imageConverter::toDto);
+                    .map(this::convertToDto);
         }
 
-        return exactMatches.map(this.imageConverter::toDto);
+        return exactMatches.map(this::convertToDto);
     }
 
     @Override
