@@ -101,43 +101,54 @@ const Downloader = () => {
             <div className={`downloaderPage w-full`}>
                 <main className='w-full h-auto flex-auto py-12'>
                     <div className='flex justify-between w-full px-8'>
-                        <div className='flex justify-between w-full h-custom-136 p-4 bg-bgDarkGray rounded-lg'>
-                            <div className={`bg-img w-1/2 h-full rounded p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
+                        <div className='flex flex-col md:flex-row justify-between w-full  p-4 bg-bgDarkGray rounded-lg'>
+                            <div className={`bg-img w-full md:w-1/2 h-56 sm:h-custom-136 rounded p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
                                 <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
                             </div>
-                            <div className='info-img flex flex-col justify-between ms-8 w-1/2'>
+                            <div className='info-img flex flex-col justify-between md:ms-8 md:w-1/2'>
                                 <div className='flex flex-col'>
                                     <h1 className='block text-3xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>
                                         {title}
                                     </h1>
-                                    <div className='flex mt-4 ms-1'>
-                                        <div className='flex justify-between items-center bg-gray-600 px-3 py-2 rounded text-lg text-lightBlue'>
+                                    <div className='flex flex-col sm:flex-row mt-4 sm:ms-1'>
+                                        <div className='flex justify-between items-center bg-gray-600 px-3 py-2 rounded text-base sm:text-lg text-lightBlue'>
+                                            <span className='flex items-center'>
                                             <FaImage />
-                                            <span className='block ml-1'>{size}</span>
+                                            <p className='ms-1'>Size</p>
+                                            </span>
+                                            <strong className='block ml-2'>{size}</strong>
                                         </div>
-                                        <div className='flex justify-between items-center bg-gray-600 ml-2 px-3 py-2 rounded text-lg text-lightBlue'>
+                                        <div className='flex justify-between items-center bg-gray-600 mt-4 sm:mt-0 sm:ml-2 px-3 py-2 rounded text-sm sm:text-lg text-lightBlue'>
+                                            <span className='flex items-center'>
                                             <RxDimensions />
-                                            <span className='block ml-1'>{`${width} × ${height}`}</span>
+                                            <p className='ms-1'>Dimensions</p>
+                                            </span>
+                                            <strong className='block ml-2'>{`${width} × ${height}`}</strong>
                                         </div>
                                     </div>
-                                    <div className='flex items-center mt-4 ms-1 w-full'>
-                                        <div className='showStyle text-lg'>
-                                            <div className='flex items-center bg-gray-600 rounded px-3 py-2'>
-                                                <SiInstructure />
-                                                <span className='ml-2'>Style
+                                    <div className='flex flex-col sm:flex-row items-center mt-4 sm:ms-1 w-full'>
+                                        <div className='showStyle w-full sm:w-auto text-sm sm:text-lg'>
+                                            <div className='flex justify-between items-center bg-gray-600 rounded px-3 py-2'>
+                                                <span className='flex items-center'>
+                                                    <SiInstructure />
+                                                    <p className='ms-1'>Style</p>
+                                                </span>
+                                                <span className='ml-2'>
                                                     <strong> {style}</strong>
                                                 </span>
                                             </div>
                                         </div>
-                                        <div className='dominantColors flex items-center ml-2 py-2 px-3 text-lg bg-gray-600 rounded'>
-                                            <IoColorPaletteOutline />
+                                        <div className='dominantColors flex justify-between items-center w-full sm:w-auto mt-4 sm:mt-0 sm:ml-2 py-2 px-3 text-sm sm:text-lg bg-gray-600 rounded'>
+                                            <span className='flex items-center'>
+                                                <IoColorPaletteOutline />
+                                                <p className='ms-1'>Color</p>
+                                            </span>
                                             <span className='ml-2 flex items-center'>
-                                                Colors
-                                                <div className='flex ml-2'>
+                                                <div className='flex sm:ml-2'>
                                                     {dominantColors && dominantColors.split(',').map((color) => (
                                                         <div key={color} className='flex items-center ml-2'>
                                                             <span
-                                                                className='w-6 h-6 rounded-full border-black border'
+                                                                className='w-4 h-4 sm:w-6 sm:h-6 rounded-full border-black border'
                                                                 style={{ backgroundColor: colorHexMap[color.trim()] || '#000' }}
                                                                 title={color}>
                                                             </span>
@@ -147,22 +158,24 @@ const Downloader = () => {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className='showKeywords flex items-center mt-4 mx-1 py-3 px-2 text-lg bg-gray-600 rounded'>
+                                    <div className='showKeywords flex flex-col sm:flex-row items-start sm:items-center mt-4 py-3 px-2 text-sm sm:text-lg bg-gray-600 rounded'>
+                                        <span className='flex items-center'>
                                         <FaTags className='ml-1' />
-                                        <span className='mx-2'>Tag</span>
+                                        <strong className='ms-1'>Tag</strong>
+                                        </span>
                                         <div className='flex flex-wrap'>
                                             {keywords && JSON.parse(keywords).map((kw) => (
                                                 <button
                                                     key={kw.id}
                                                     onClick={() => handleKeywordClick(kw.id)}
-                                                    className='text-white bg-bgDarkGray2 rounded px-2 py-1 mx-1'>
+                                                    className='text-white bg-bgDarkGray2 rounded mt-4 sm:mt-0 mb-2 px-2 py-1 mx-1'>
                                                     {kw.keyword}
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
                                 </div>
-                                <div className='flex justify-center w-full'>
+                                <div className='flex justify-center w-full mb-2 md:mb-4'>
                                     <button className="buttonDl mt-4" type="button">
                                         <span className="button__text text-xl">Download</span>
                                         <span className="button__icon">

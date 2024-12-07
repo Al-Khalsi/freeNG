@@ -10,16 +10,17 @@ function Card({ image, role, onDelete, onEdit }) {
     const [editedTitle, setEditedTitle] = useState(image.title);
     const [isEditing, setIsEditing] = useState(false);
 
-    const downloadLink = `/downloader/${image.id}
-    ?title=${image.title}
-    &size=${image.size}
-    &width=${image.width}
-    &height=${image.height}
-    &style=${image.style}
-    &dominantColors=${image.dominantColors}
-    &keywords=${image.keywords}
-    &lightMode=${image.lightMode ? 'true' : 'false'}
-    &path=${image.path}`;
+    const downloadLink = `/downloader/${image.id}?${new URLSearchParams({
+        title: image.title,
+        size: image.size,
+        width: image.width,
+        height: image.height,
+        style: image.style,
+        dominantColors: image.dominantColors,
+        keywords: image.keywords,
+        lightMode: image.lightMode ? 'true' : 'false',
+        path: image.path
+    }).toString()}`;
 
     const handleOpenModal = () => {
         setModalOpen(true);
