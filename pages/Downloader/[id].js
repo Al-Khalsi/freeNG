@@ -191,17 +191,17 @@ const Downloader = () => {
                                         <div className='flex items-center flex-wrap ms-2'>
                                             {parsedKeywords.length > 30 ? ( // Check if more than 10 keywords
                                                 <>
-                                                    {parsedKeywords.slice(0, 2).map((kw) => ( // Show first 10 keywords
+                                                    {parsedKeywords.slice(0, 30).map((kw) => ( // Show first 10 keywords
                                                         <button
                                                             key={kw.id}
                                                             onClick={() => handleKeywordClick(kw.id)}
-                                                            className='text-white bg-bgDarkGray2 rounded mt-4 sm:mt-0 mb-2 sm:mb-0 px-2 py-1 mx-1'>
+                                                            className='text-white bg-bgDarkGray2 rounded mt-2 sm:mt-0 mb-1 sm:mb-0 px-2 py-1 mx-1'>
                                                             {kw.keyword}
                                                         </button>
                                                     ))}
                                                     <button
                                                         onClick={openModal}
-                                                        className='text-white hover:text-clDarkGray2 rounded mt-4 sm:mt-0 mb-2 sm:mb-0 px-2 py-1 mx-1'>
+                                                        className='text-white hover:text-clDarkGray2 rounded mt-2 sm:mt-0 mb-1 sm:mb-0 px-2 py-1 mx-1'>
                                                         ...
                                                         Show More
                                                     </button>
@@ -211,7 +211,7 @@ const Downloader = () => {
                                                     <button
                                                         key={kw.id}
                                                         onClick={() => handleKeywordClick(kw.id)}
-                                                        className='text-white bg-bgDarkGray2 rounded mt-4 sm:mt-0 mb-2 sm:mb-0 px-2 py-1 mx-1'>
+                                                        className='text-white bg-bgDarkGray2 rounded mt-2 sm:mt-0 mb-1 sm:mb-0 px-2 py-1 mx-1'>
                                                         {kw.keyword}
                                                     </button>
                                                 ))
