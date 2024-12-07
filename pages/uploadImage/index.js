@@ -23,6 +23,7 @@ function UploadImage() {
   const [showColorDropdown, setShowColorDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
+  const addKeywordInputRef = useRef(null); // Reference for the add keyword input
 
   const colors = [
     { name: 'Red', hex: '#FF0000' },
@@ -195,6 +196,11 @@ function UploadImage() {
 
   const handleAddKeywords = () => {
     setIsAddingKeywords(true); // Show keywordsAdd section
+    setTimeout(() => {
+      if (addKeywordInputRef.current) {
+        addKeywordInputRef.current.focus(); // Focus on the input field when adding keywords
+      }
+    }, 0); // Using setTimeout to delay the focus slightly
   };
 
   const handleCancelKeywords = () => {
@@ -324,25 +330,26 @@ function UploadImage() {
           </div>
 
           <div className='flex mb-4'>
-            {isAddingKeywords ? (
+          {isAddingKeywords ? (
               <div className='keywordsAdd flex justify-between w-full mt-2'>
                 <input
                   type='text'
+                  ref={addKeywordInputRef} 
                   className='w-1/2 mx-2 p-2 bg-bgDarkGray2 border rounded'
                   placeholder='Add Keywords'
                   autoComplete='off'
                   value={addKeyword}
-                  onChange={(e) => setAddKeyword(e.target.value)} // Update addKeyword state
+                  onChange={(e) => setAddKeyword(e.target.value)}
                 />
                 <div className='w-1/2 flex justify-between mx-2'>
                   <button
                     type='button'
-                    onClick={addKeywords} // Save button triggers keyword creation
+                    onClick={addKeywords}
                     className='w-1/2 mx-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save
                   </button>
                   <button
                     type='button'
-                    onClick={handleCancelKeywords} // Cancel button
+                    onClick={handleCancelKeywords}
                     className='w-1/2 mx-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cancel
                   </button>
                 </div>
@@ -383,7 +390,7 @@ function UploadImage() {
                 </div>
                 <button
                   type='button'
-                  onClick={handleAddKeywords} // Add button
+                  onClick={handleAddKeywords} 
                   className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded hover:border'>Add
                 </button>
               </div>
