@@ -112,7 +112,7 @@ const Downloader = () => {
                 <main className='w-full h-auto flex-auto py-12'>
                     <div className='flex justify-between w-full px-8'>
                         <div className='flex flex-col md:flex-row justify-between w-full p-4 bg-bgDarkGray rounded-lg'>
-                            <div className={`bg-img w-full md:w-1/2 h-56 sm:h-custom-136 rounded p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
+                            <div className={`bg-img w-full md:w-1/2 h-56 md:h-custom-136 rounded p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
                                 <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
                             </div>
                             <div className='info-img flex flex-col justify-between md:ms-8 md:w-1/2'>
@@ -120,15 +120,15 @@ const Downloader = () => {
                                     <h1 className='block text-3xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>
                                         {title}
                                     </h1>
-                                    <div className='flex flex-col sm:flex-row mt-4'>
-                                        <div className='flex justify-between items-center bg-gray-600 px-3 py-2 rounded text-base sm:text-lg text-lightBlue'>
+                                    <div className='flex flex-col md:flex-row mt-4'>
+                                        <div className='flex justify-between items-center bg-gray-600 px-3 py-2 rounded text-base md:text-lg text-lightBlue'>
                                             <span className='flex items-center'>
                                                 <FaImage />
                                                 <p className='ms-1'>Size</p>
                                             </span>
                                             <strong className='block ml-2'>{size}</strong>
                                         </div>
-                                        <div className='flex justify-between items-center bg-gray-600 mt-4 sm:mt-0 sm:ml-2 px-3 py-2 rounded text-sm sm:text-lg text-lightBlue'>
+                                        <div className='flex justify-between items-center bg-gray-600 mt-4 md:mt-0 md:ml-2 px-3 py-2 rounded text-sm md:text-lg text-lightBlue'>
                                             <span className='flex items-center'>
                                                 <RxDimensions />
                                                 <p className='ms-1'>Dimensions</p>
@@ -136,8 +136,8 @@ const Downloader = () => {
                                             <strong className='block ml-2'>{`${width} × ${height}`}</strong>
                                         </div>
                                     </div>
-                                    <div className='flex flex-col sm:flex-row items-center mt-4 w-full'>
-                                        <div className='showStyle w-full sm:w-auto text-sm sm:text-lg'>
+                                    <div className='flex flex-col md:flex-row items-center mt-4 w-full'>
+                                        <div className='showStyle w-full md:w-auto text-sm md:text-lg'>
                                             <div className='flex justify-between items-center bg-gray-600 rounded px-3 py-2'>
                                                 <span className='flex items-center'>
                                                     <SiInstructure />
@@ -148,17 +148,17 @@ const Downloader = () => {
                                                 </span>
                                             </div>
                                         </div>
-                                        <div className='dominantColors flex justify-between items-center w-full sm:w-auto mt-4 sm:mt-0 sm:ml-2 py-2 px-3 text-sm sm:text-lg bg-gray-600 rounded'>
+                                        <div className='dominantColors flex justify-between items-center w-full md:w-auto mt-4 md:mt-0 md:ml-2 py-2 px-3 text-sm md:text-lg bg-gray-600 rounded'>
                                             <span className='flex items-center'>
                                                 <IoColorPaletteOutline />
                                                 <p className='ms-1'>Color</p>
                                             </span>
                                             <span className='ml-2 flex items-center'>
-                                                <div className='flex sm:ml-2'>
+                                                <div className='flex md:ml-2'>
                                                     {dominantColors && dominantColors.split(',').map((color) => (
                                                         <div key={color} className='flex items-center ml-2'>
                                                             <span
-                                                                className='w-4 h-4 sm:w-6 sm:h-6 rounded-full border-black border'
+                                                                className='w-4 h-4 md:w-6 md:h-6 rounded-full border-black border'
                                                                 style={{ backgroundColor: colorHexMap[color.trim()] || '#000' }}
                                                                 title={color}>
                                                             </span>
@@ -168,7 +168,7 @@ const Downloader = () => {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className='showKeywords flex flex-col sm:flex-row items-start sm:items-center mt-4 py-3 px-2 text-sm sm:text-lg bg-gray-600 rounded'>
+                                    <div className='showKeywords flex flex-col md:flex-row items-start md:items-center mt-4 py-3 px-2 text-sm md:text-lg bg-gray-600 rounded'>
                                         <span className='flex items-center'>
                                             <FaTags className='ml-1' />
                                             <p className='ms-1'>Tag</p>
