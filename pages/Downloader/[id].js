@@ -174,9 +174,9 @@ const Downloader = () => {
                                             <p className='ms-1'>Tag</p>
                                         </span>
                                         <div className='flex items-center flex-wrap ms-2'>
-                                            {parsedKeywords.length > 4 ? ( // Check if more than 4 keywords
+                                            {parsedKeywords.length > 20 ? ( // Check if more than 4 keywords
                                                 <>
-                                                    {parsedKeywords.slice(0, 4).map((kw) => ( // Show first 4 keywords
+                                                    {parsedKeywords.slice(0, 20).map((kw) => ( // Show first 4 keywords
                                                         <button
                                                             key={kw.id}
                                                             onClick={() => handleKeywordClick(kw.id)}

@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
+import { MdDelete } from "react-icons/md";
 
 function UploadImage() {
   const { token } = useAuth();
@@ -23,7 +24,7 @@ function UploadImage() {
   const [showColorDropdown, setShowColorDropdown] = useState(false); // State for color dropdown
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
-  const addKeywordInputRef = useRef(null); 
+  const addKeywordInputRef = useRef(null);
   const dropdownColorRef = useRef(null); // Reference for the color dropdown
 
   const colors = [
@@ -386,6 +387,21 @@ function UploadImage() {
                 </button>
               </div>
             )}
+          </div>
+
+          <div className='flex items-center flex-wrap mt-4 mx-2 pt-2 rounded bg-bgDarkGray2'>
+            {selectedKeywords.map((keyword, index) => (
+              <div key={index} className="flex items-center mx-1 mb-2 p-1 rounded-sm bg-gray-600">
+                <p className="mr-1">{keyword}</p>
+                <button
+                  type="button"
+                  onClick={() => handleCheckboxChange(keyword)} // This will remove the keyword
+                  className="flex items-center justify-center w-6 h-6 text-white hover:text-red-600"
+                  title={`Remove ${keyword}`}>
+                  <MdDelete />
+                </button>
+              </div>
+            ))}
           </div>
 
           <div className='flex justify-center items-center mt-4'>
