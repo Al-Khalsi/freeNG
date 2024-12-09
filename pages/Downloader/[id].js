@@ -168,7 +168,7 @@ const Downloader = () => {
                                             </span>
                                         </div>
                                     </div>
-                                    <div className='showKeywords flex flex-col md:flex-row items-start md:items-center mt-4 py-3 px-2 text-sm md:text-lg bg-gray-600 rounded'>
+                                    <div className='showKeywords flex flex-col items-start mt-4 py-3 px-2 text-sm md:text-lg bg-gray-600 rounded'>
                                         <span className='flex items-center'>
                                             <FaTags className='ml-1' />
                                             <p className='ms-1'>Tag</p>
