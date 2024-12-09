@@ -257,7 +257,7 @@ function Index() {
                 <meta name="msapplication-TileColor" content="#ffffff" />
                 <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
-            <div className="app relative">
+            <div className="app flex flex-col min-h-screen relative"> 
                 <Header
                     token={token}
                     username={username}
@@ -269,7 +269,7 @@ function Index() {
                     handleSearch={handleSearch}
                 />
 
-                <div className='w-full py-12 px-8'>
+                <div className='w-full py-12 px-8 flex-grow'>
                     {isSearching ? (
                         <div className='filter-result flex justify-center items-center'>
                             <div className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
