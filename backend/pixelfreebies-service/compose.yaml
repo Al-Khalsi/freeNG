@@ -15,7 +15,7 @@ services:
     container_name: backend_server
     image: dukeofjava/pixelfreebies_service:0.1-BETA
     ports:
-      - 8080:8080
+      - 9090:9090
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - DATABASE_HOST=db

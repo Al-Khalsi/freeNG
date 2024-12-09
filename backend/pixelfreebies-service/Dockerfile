@@ -96,6 +96,6 @@ COPY --from=extract build/target/extracted/application/ ./
 # Switch to non-root user
 USER appuser
 
-EXPOSE 8080
+EXPOSE 9090
 
 ENTRYPOINT [ "java", "org.springframework.boot.loader.launch.JarLauncher" ]
