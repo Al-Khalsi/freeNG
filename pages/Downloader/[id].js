@@ -218,7 +218,11 @@ const Downloader = () => {
             </div>
 
             {isModalOpen && ( // Render the modal if it's open
-                <KeywordsModal keywords={parsedKeywords} onClose={closeModal} />
+                <KeywordsModal
+                    keywords={parsedKeywords}
+                    onClose={closeModal}
+                    onKeywordClick={handleKeywordClick} // Pass the keyword click handler
+                />
             )}
         </>
     );
