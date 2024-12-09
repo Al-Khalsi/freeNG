@@ -389,20 +389,22 @@ function UploadImage() {
             )}
           </div>
 
-          <div className='flex items-center flex-wrap mt-4 mx-2 pt-2 rounded bg-bgDarkGray2'>
-            {selectedKeywords.map((keyword, index) => (
-              <div key={index} className="flex items-center mx-1 mb-2 p-1 rounded-sm bg-gray-600">
-                <p className="mr-1">{keyword}</p>
-                <button
-                  type="button"
-                  onClick={() => handleCheckboxChange(keyword)} // This will remove the keyword
-                  className="flex items-center justify-center w-6 h-6 text-white hover:text-red-600"
-                  title={`Remove ${keyword}`}>
-                  <MdDelete />
-                </button>
-              </div>
-            ))}
-          </div>
+          {selectedKeywords.length > 0 && (
+            <div className='flex items-center flex-wrap mt-4 mx-2 pt-2 px-1 rounded bg-bgDarkGray2'>
+              {selectedKeywords.map((keyword, index) => (
+                <div key={index} className="flex items-center mx-1 mb-2 p-1 rounded-sm bg-gray-600">
+                  <p className="mr-1">{keyword}</p>
+                  <button
+                    type="button"
+                    onClick={() => handleCheckboxChange(keyword)} // This will remove the keyword
+                    className="flex items-center justify-center w-6 h-6 text-white hover:text-red-600"
+                    title={`Remove ${keyword}`}>
+                    <MdDelete />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className='flex justify-center items-center mt-4'>
             <button
