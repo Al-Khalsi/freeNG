@@ -57,6 +57,7 @@ public class SecurityConfig {
                 }))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers( //TODO: configure to use permitted urls as dynamic and to follow DRY
+                                "/",
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/register",
                                 "/api/v1/file/download/**",

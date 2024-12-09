@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>PixelFreebies - PNG Download Platform</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #191a1a;
+                color: #191a1a87;
+            }
+            
+            .container {
+                width: 100%;
+                height: 100vh;
+                --color: rgba(114, 114, 114, 0.3);
+                background-image: linear-gradient(0deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent),
+                linear-gradient(90deg, transparent 24%, var(--color) 25%, var(--color) 26%, transparent 27%, transparent 74%, var(--color) 75%, var(--color) 76%, transparent 77%, transparent);
+                background-size: 55px 55px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+            
+            .card {
+                width: 400px;
+                height: auto;
+                padding: 20px 20px 40px;
+                background-color: #F8FBFE;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+            }
+            
+            .tools {
+                display: flex;
+                align-items: center;
+                padding: 9px;
+            }
+            
+            .circle {
+                padding: 0 4px;
+            }
+            
+            .box {
+                display: inline-block;
+                align-items: center;
+                width: 10px;
+                height: 10px;
+                padding: 1px;
+                border-radius: 50%;
+            }
+            
+            .red {
+                background-color: #ff605c;
+            }
+            
+            .yellow {
+                background-color: #ffbd44;
+            }
+            
+            .green {
+                background-color: #00ca4e;
+            }
+            
+            .card__content {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .brutalist-button {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 180px;
+                height: 120px;
+                color: #e5dede;
+                font-weight: bold;
+                text-decoration: none;
+                position: relative;
+                cursor: pointer;
+                overflow: hidden;
+                transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+                background-color: #063525;
+                border: 3px solid #42c498;
+                border-radius: 12px;
+                box-shadow: 4px 4px 1px #000000;
+            }
+            
+            .brutalist-button:hover {
+                background-color: #1a5c46;
+                border-color: #030504;
+                transform: translate(-6px, -6px) rotate(1deg);
+                box-shadow: 10px 10px 0 #000000, 15px 15px 20px rgba(64, 164, 122, 0.2);
+            }
+            
+            .button-text {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                line-height: 1.2;
+                text-align: center;
+            }
+            
+            .button-text span:first-child {
+                font-size: 12px;
+                font-weight: normal;
+                color: #42c498;
+            }
+            
+            .button-text span:last-child {
+                font-size: 16px;
+            }
+            
+            .buttons-container {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+                margin-top: 20px;
+                gap: 30px; /* Increased space between buttons */
+            }
+            
+            .header {
+                margin-bottom: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="card">
+                <div class="tools">
+                    <div class="circle">
+                        <span class="red box"></span>
+                    </div>
+                    <div class="circle">
+                        <span class="yellow box"></span>
+                    </div>
+                    <div class="circle">
+                        <span class="green box"></span>
+                    </div>
+                </div>
+                <div class="card__content">
+                    <div class="header">
+                        <h1>PixelFreebies</h1>
+                        <p>PNG Download Platform</p>
+                    </div>
+                    <div class="buttons-container">
+                        <button class="brutalist-button">
+                            <div class="button-text">
+                                <span>Developed by</span>
+                                <span>Seyed Ali Rizvi</span>
+                                <span>(Backend)</span>
+                            </div>
+                        </button>
+                        <button class="brutalist-button">
+                            <div class="button-text">
+                                <span>Developed by</span>
+                                <span>Mohammad Alkhalsi</span>
+                                <span>(Frontend)</span>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
