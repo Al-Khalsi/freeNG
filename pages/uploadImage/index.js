@@ -365,8 +365,8 @@ function UploadImage() {
                     onClick={handleSearch}
                   >Search
                   </button>
-                  <div className={`result-keywordSelect absolute w-5/6 h-32
-                    ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2`}
+                  <div className={`result-keywordSelect absolute w-5/6 max-h-32
+                    ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2 overflow-y-auto`}
                     ref={dropdownRef}>
                     {fetchedKeywords.map((keyword, index) => (
                       <label htmlFor={`keyword-${index}`} key={index} className='flex justify-between items-center w-full p-2 border-b border-gray-400
@@ -390,13 +390,13 @@ function UploadImage() {
           </div>
 
           {selectedKeywords.length > 0 && (
-            <div className='flex items-center flex-wrap mt-4 mx-2 pt-2 px-1 rounded bg-bgDarkGray2'>
-              {selectedKeywords.map((keyword, index) => (
-                <div key={index} className="flex items-center mx-1 mb-2 p-1 rounded-sm bg-gray-600">
+            <div className='flex items-center flex-wrap mt-4 mx-2 pt-2 px-2 rounded bg-bgDarkGray2'>
+              {selectedKeywords.map((keyword, Index) => (
+                <div key={`${keyword}-${Index}`} className="flex items-center mx-1 mb-2 p-1 rounded-sm bg-gray-600">
                   <p className="mr-1">{keyword}</p>
                   <button
                     type="button"
-                    onClick={() => handleCheckboxChange(keyword)} // This will remove the keyword
+                    onClick={() => handleCheckboxChange(keyword)}
                     className="flex items-center justify-center w-6 h-6 text-white hover:text-red-600"
                     title={`Remove ${keyword}`}>
                     <MdDelete />
