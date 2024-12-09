@@ -42,9 +42,11 @@ const colorHexMap = {
 const Downloader = () => {
     const router = useRouter();
     const { id: fileId, title, path, size, width, height, lightMode, style, dominantColors, source, keywords } = router.query;
-
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
     const [parsedKeywords, setParsedKeywords] = useState([]); // State to hold parsed keywords
+
+    const BACKEND_KEYWORD_FILE_UR = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_FILE_UR
+    const BACKEND_DOWNLOAD_FILE_URL = process.env.NEXT_PUBLIC_BACKEND_DOWNLOAD_FILE_URL;
 
     useEffect(() => {
         if (keywords) {
@@ -67,7 +69,7 @@ const Downloader = () => {
         console.log(`Initiating download for file ID: ${fileId}`);
 
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/file/download/${fileId}`, {
+            const response = await axios.get(`${BACKEND_DOWNLOAD_FILE_URL}/${fileId}`, {
                 responseType: 'blob', // Important for downloading files
             });
 
@@ -92,7 +94,7 @@ const Downloader = () => {
     // Function to handle keyword click
     const handleKeywordClick = async (keywordId) => {
         try {
-            const response = await axios.get(`http://localhost:8080/api/v1/file/keyword/${keywordId}?page=0&size=50`); // Fetch keyword details based on ID
+            const response = await axios.get(`${BACKEND_KEYWORD_FILE_UR}/${keywordId}?page=0&size=50`); // Fetch keyword details based on ID
             const keywordData = response.data.data; // Assuming your backend returns the keyword data
 
             // Redirect to the search page with the keyword ID
@@ -103,11 +105,11 @@ const Downloader = () => {
     };
 
     const openModal = () => {
-        setIsModalOpen(true); // Open the modal
+        setIsModalOpen(true);
     };
 
     const closeModal = () => {
-        setIsModalOpen(false); // Close the modal
+        setIsModalOpen(false);
     };
 
     return (
