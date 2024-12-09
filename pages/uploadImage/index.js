@@ -73,7 +73,7 @@ function UploadImage() {
     'Low Poly',
     'Neon',
     'Outline',
-    'Pixel', 
+    'Pixel',
     'Realistic',
     'Flat',
     'Sticker',
@@ -84,12 +84,12 @@ function UploadImage() {
     'Watercolor',
   ];
 
-  const BACKEND_API_VERSION = "api/v1";
-  const BACKEND_BASE_URL = `http://localhost:8080/${BACKEND_API_VERSION}`;
-  const BACKEND_UPLOAD_URL = `${BACKEND_BASE_URL}/file`;
-  const BACKEND_UPLOAD_FILE_URL = `${BACKEND_UPLOAD_URL}/upload`;
-  const BACKEND_KEYWORD_SEARCH_URL = `${BACKEND_BASE_URL}/file/search/keywords`;
-  const BACKEND_KEYWORD_URL = `${BACKEND_BASE_URL}/keywords`;
+  const BACKEND_API_VERSION = process.env.NEXT_PUBLIC_BACKEND_API_VERSION;
+  const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
+  const BACKEND_UPLOAD_URL = process.env.NEXT_PUBLIC_BACKEND_UPLOAD_URL;
+  const BACKEND_UPLOAD_FILE_URL = process.env.NEXT_PUBLIC_BACKEND_UPLOAD_FILE_URL;
+  const BACKEND_KEYWORD_SEARCH_URL = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_SEARCH_URL;
+  const BACKEND_KEYWORD_URL = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_URL;
 
   const handleImageChange = (e) => {
     const image = e.target.files[0];
