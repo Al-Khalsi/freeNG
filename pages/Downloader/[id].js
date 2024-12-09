@@ -23,6 +23,20 @@ const colorHexMap = {
     'Gray': '#808080',
     'Black': '#000000',
     'White': '#FFFFFF',
+    'Cyan': '#00FFFF',
+    'Magenta': '#FF00FF',
+    'Lime': '#00FF00',
+    'Teal': '#008080',
+    'Navy': '#000080',
+    'Maroon': '#800000',
+    'Olive': '#808000',
+    'Coral': '#FF7F50',
+    'Salmon': '#FA8072',
+    'Khaki': '#F0E68C',
+    'Lavender': '#E6E6FA',
+    'Turquoise': '#40E0D0',
+    'Gold': '#FFD700',
+    'Plum': '#DDA0DD',
 };
 
 const Downloader = () => {

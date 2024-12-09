@@ -39,7 +39,21 @@ function UploadImage() {
     { name: 'Gray', hex: '#808080' },
     { name: 'Black', hex: '#000000' },
     { name: 'White', hex: '#FFFFFF' },
-  ];
+    { name: 'Cyan', hex: '#00FFFF' },
+    { name: 'Magenta', hex: '#FF00FF' },
+    { name: 'Lime', hex: '#00FF00' },
+    { name: 'Teal', hex: '#008080' },
+    { name: 'Navy', hex: '#000080' },
+    { name: 'Maroon', hex: '#800000' },
+    { name: 'Olive', hex: '#808000' },
+    { name: 'Coral', hex: '#FF7F50' },
+    { name: 'Salmon', hex: '#FA8072' },
+    { name: 'Khaki', hex: '#F0E68C' },
+    { name: 'Lavender', hex: '#E6E6FA' },
+    { name: 'Turquoise', hex: '#40E0D0' },
+    { name: 'Gold', hex: '#FFD700' },
+    { name: 'Plum', hex: '#DDA0DD' },
+];
 
   const styles = [
     '3D', 'Pixel', 'Anime', 'Cartoon', 'Realistic', 'Abstract'
