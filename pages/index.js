@@ -23,6 +23,11 @@ function Index() {
     const [isSearching, setIsSearching] = useState(false); // New state for search
     const [totalPages, setTotalPages] = useState(0); // State to store total pages
 
+    const BACKEND_UPLOAD_URL = process.env.NEXT_PUBLIC_BACKEND_UPLOAD_URL;
+    const BACKEND_KEYWORD_URL = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_URL;
+    const BACKEND_LIST_FILE_PAGIANATED_URL = process.env.NEXT_PUBLIC_BACKEND_LIST_FILE_PAGIANATED_URL;
+
+
     const handleSelectToggle = (selectId) => {
         // Toggle the select dropdown
         if (openSelect === selectId) {
@@ -39,10 +44,10 @@ function Index() {
             let url;
             if (keywordId) {
                 // Fetch images based on keyword ID
-                url = `http://localhost:8080/api/v1/file/keyword/${keywordId}?page=${(page - 1)}&size=${size}`;
+                url = `${BACKEND_KEYWORD_URL}/${keywordId}?page=${(page - 1)}&size=${size}`;
             } else {
                 // Fetch images normally
-                url = `http://localhost:8080/api/v1/file/list/paginated?page=${(page - 1)}&size=${size}`;
+                url = `${BACKEND_LIST_FILE_PAGIANATED_URL}?page=${(page - 1)}&size=${size}`;
             }
 
             console.log('Fetching images from URL:', url); // Log the URL being fetched
@@ -91,7 +96,7 @@ function Index() {
         const confirmed = window.confirm("Are you sure you want to delete this image?");
         if (confirmed) {
             try {
-                const response = await apiFetch(`http://localhost:8080/api/v1/file/${imageId}`, 'DELETE', null, {
+                const response = await apiFetch(`${BACKEND_UPLOAD_URL}/${imageId}`, 'DELETE', null, {
                     headers: {
                         'Authorization': `Bearer ${token}`, // Add your token if needed
                     }
@@ -111,7 +116,7 @@ function Index() {
 
     const handleEditImage = async (imageId, updatedData) => {
         try {
-            const response = await apiFetch(`http://localhost:8080/api/v1/file/${imageId}`, 'PUT', updatedData, {
+            const response = await apiFetch(`${BACKEND_UPLOAD_URL}/${imageId}`, 'PUT', updatedData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }
