@@ -53,10 +53,35 @@ function UploadImage() {
     { name: 'Turquoise', hex: '#40E0D0' },
     { name: 'Gold', hex: '#FFD700' },
     { name: 'Plum', hex: '#DDA0DD' },
-];
+  ];
 
   const styles = [
-    '3D', 'Pixel', 'Anime', 'Cartoon', 'Realistic', 'Abstract'
+    '3D',
+    'Abstract',
+    'Anime',
+    'Bokeh',
+    'Cartoon',
+    'Character',
+    'Comic',
+    'Emoji',
+    'Fantasy',
+    'Glitch',
+    'Gradient',
+    'Isometric',
+    'Infographic',
+    'Line Art',
+    'Low Poly',
+    'Neon',
+    'Outline',
+    'Pixel', 
+    'Realistic',
+    'Flat',
+    'Sticker',
+    'Surreal',
+    'Silhouette',
+    'Transparent',
+    'Vintage',
+    'Watercolor',
   ];
 
   const BACKEND_API_VERSION = "api/v1";
