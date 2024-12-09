@@ -19,7 +19,8 @@ function Card({ image, role, onDelete, onEdit }) {
         dominantColors: image.dominantColors,
         keywords: image.keywords,
         lightMode: image.lightMode ? 'true' : 'false',
-        path: image.path
+        path: image.path,
+        source: image.source
     }).toString()}`;
 
     const handleOpenModal = () => {

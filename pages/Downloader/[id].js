@@ -6,6 +6,7 @@ import { RxDimensions } from "react-icons/rx";
 import { SiInstructure } from "react-icons/si";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { FiDownload } from "react-icons/fi";
+import { IoIosLink } from "react-icons/io";
 import { FaTags } from "react-icons/fa6";
 import axios from 'axios';
 import KeywordsModal from '@/components/templates/KeywordsModal';
@@ -26,7 +27,7 @@ const colorHexMap = {
 
 const Downloader = () => {
     const router = useRouter();
-    const { id: fileId, title, path, size, width, height, lightMode, style, dominantColors, keywords } = router.query;
+    const { id: fileId, title, path, size, width, height, lightMode, style, dominantColors, source, keywords } = router.query;
 
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
     const [parsedKeywords, setParsedKeywords] = useState([]); // State to hold parsed keywords
@@ -166,6 +167,17 @@ const Downloader = () => {
                                                     ))}
                                                 </div>
                                             </span>
+                                        </div>
+                                    </div>
+                                    <div className='flex flex-col md:flex-row items-center mt-4 w-full'>
+                                        <div className='sourceLink flex justify-between items-center w-full md:w-auto mt-4 md:mt-0 py-2 px-3 text-sm md:text-lg bg-gray-600 rounded'>
+                                            <span className='flex items-center'>
+                                                <IoIosLink />
+                                                <p className='ms-1'>Source</p>
+                                            </span>
+                                            <p className='ml-2'>
+                                                {source}
+                                            </p>
                                         </div>
                                     </div>
                                     <div className='showKeywords flex flex-col items-start mt-4 py-3 px-2 text-sm md:text-lg bg-gray-600 rounded'>

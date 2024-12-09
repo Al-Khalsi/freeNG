@@ -63,6 +63,7 @@ function Index() {
                     dominantColors: file.dominantColors,
                     uploadedBy: file.uploadedBy.username,
                     lightMode: file.lightMode,
+                    source: file.source,
                     // Convert keywords to a comma-separated string
                     keywords: JSON.stringify(file.keywords)
                 }));
