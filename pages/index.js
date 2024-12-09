@@ -23,9 +23,9 @@ function Index() {
     const [isSearching, setIsSearching] = useState(false); // New state for search
     const [totalPages, setTotalPages] = useState(0); // State to store total pages
 
-    const BACKEND_KEYWORD_URL = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_URL;
-    const BACKEND_LIST_FILE_PAGIANATED_URL = process.env.NEXT_PUBLIC_BACKEND_LIST_FILE_PAGIANATED_URL;
     const BACKEND_UPLOAD_URL = process.env.NEXT_PUBLIC_BACKEND_UPLOAD_URL;
+    const BACKEND_KEYWORD_FILE_URL = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_FILE_URL;
+    const BACKEND_LIST_FILE_PAGIANATED_URL = process.env.NEXT_PUBLIC_BACKEND_LIST_FILE_PAGIANATED_URL;
 
 
     const handleSelectToggle = (selectId) => {
@@ -44,7 +44,7 @@ function Index() {
             let url;
             if (keywordId) {
                 // Fetch images based on keyword ID
-                url = `${BACKEND_KEYWORD_URL}/${keywordId}?page=${(page - 1)}&size=${size}`;
+                url = `${BACKEND_KEYWORD_FILE_URL}/${keywordId}?page=${(page - 1)}&size=${size}`;
             } else {
                 // Fetch images normally
                 url = `${BACKEND_LIST_FILE_PAGIANATED_URL}?page=${(page - 1)}&size=${size}`;
