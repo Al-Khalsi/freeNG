@@ -109,7 +109,7 @@ const Downloader = () => {
     };
 
     const closeModal = () => {
-        setIsModalOpen(false);
+        setIsModalOpen(false); 
     };
 
     return (
