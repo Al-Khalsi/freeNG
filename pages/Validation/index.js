@@ -14,6 +14,9 @@ function AuthForm() {
     const [error, setError] = useState('');
     const router = useRouter();
 
+    const BACKEND_AUTH_LOGIN_URL = process.env.NEXT_PUBLIC_BACKEND_AUTH_LOGIN_URL;
+    const BACKEND_AUTH_REGISTER_URL = process.env.NEXT_PUBLIC_BACKEND_AUTH_REGISTER_URL;
+
     useEffect(() => {
         if (token) {
             router.push('/'); // Redirect to home if token exists
@@ -32,7 +35,7 @@ function AuthForm() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/auth/login', {
+            const response = await axios.post(`${BACKEND_AUTH_LOGIN_URL}`, {
                 email: credentials.email,
                 password: credentials.password,
             });
@@ -79,7 +82,7 @@ function AuthForm() {
     const handleRegistration = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8080/api/v1/auth/register', {
+            const response = await axios.post(`${BACKEND_AUTH_REGISTER_URL}`, {
                 username: credentials.username,
                 email: credentials.email,
                 password: credentials.password,
