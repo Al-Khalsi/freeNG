@@ -59,6 +59,16 @@ services:
     volumes:
       - ./data/db/postgres:/var/lib/postgresql/data
 
+  client:
+    build:
+      context: ../../
+    image: dukeofjava/pixelfreebies-client:0.1-BETA
+    container_name: frontend_client
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
+
 # Define the named volume for file uploads
 volumes:
   file-uploads:
