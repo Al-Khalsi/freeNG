@@ -42,7 +42,18 @@ public class SecurityConfigProd {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) //TODO: configure this
-                .cors(Customizer.withDefaults())
+                .cors(Customizer.withDefaults()) // just for reference:
+                /*
+                .cors(corsConfig -> corsConfig.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(Collections.singletonList("*"));
+                    config.setAllowedMethods(Collections.singletonList("*"));
+                    config.setAllowCredentials(true);
+                    config.setAllowedHeaders(Collections.singletonList("*"));
+                    config.setMaxAge(3600L);
+                    return config;
+                }))
+                 */
                 .authorizeHttpRequests(authz -> authz
 //                        .requestMatchers(this.javaDataTypeConverter.convertListToArray(this.securityUtil.getPERMITTED_URLS())).permitAll()
                                 .requestMatchers( //TODO: configure to use permitted urls as dynamic and to follow DRY

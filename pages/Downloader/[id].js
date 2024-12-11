@@ -10,6 +10,8 @@ import { IoIosLink } from "react-icons/io";
 import { FaTags } from "react-icons/fa6";
 import axios from 'axios';
 import KeywordsModal from '@/components/templates/KeywordsModal';
+import {FILE_API} from "@/utils/api/file";
+import {KEYWORD_API} from "@/utils/api/keyword";
 
 const colorHexMap = {
     'Red': '#FF0000',
@@ -45,9 +47,6 @@ const Downloader = () => {
     const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
     const [parsedKeywords, setParsedKeywords] = useState([]); // State to hold parsed keywords
 
-    const BACKEND_KEYWORD_FILE_UR = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_FILE_UR
-    const BACKEND_DOWNLOAD_FILE_URL = process.env.NEXT_PUBLIC_BACKEND_DOWNLOAD_FILE_URL;
-
     useEffect(() => {
         if (keywords) {
             try {
@@ -69,7 +68,7 @@ const Downloader = () => {
         console.log(`Initiating download for file ID: ${fileId}`);
 
         try {
-            const response = await axios.get(`${BACKEND_DOWNLOAD_FILE_URL}/${fileId}`, {
+            const response = await axios.get(`${FILE_API.DOWNLOAD(fileId)}`, {
                 responseType: 'blob', // Important for downloading files
             });
 
@@ -94,7 +93,7 @@ const Downloader = () => {
     // Function to handle keyword click
     const handleKeywordClick = async (keywordId) => {
         try {
-            const response = await axios.get(`${BACKEND_KEYWORD_FILE_UR}/${keywordId}?page=0&size=50`); // Fetch keyword details based on ID
+            const response = await axios.get(`${KEYWORD_API.KEYWORD_DETAILS_PAGINATED(keywordId, 0, 50)}`); // Fetch keyword details based on ID
             const keywordData = response.data.data; // Assuming your backend returns the keyword data
 
             // Redirect to the search page with the keyword ID

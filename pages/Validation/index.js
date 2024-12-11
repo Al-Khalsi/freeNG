@@ -5,7 +5,8 @@ import { MdEmail } from "react-icons/md";
 import { useAuth } from '@/context/AuthContext'; // Adjust the path as necessary
 import withAuthRedirect from '@/utils/withAuthRedirect'; // Adjust the path as necessary
 import * as jwt_decode from 'jwt-decode';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
+import {AUTH_API} from "@/utils/api/auth"; // Import Axios
 
 function AuthForm() {
     const { token, storeToken, setUsername, setEmail, setRole } = useAuth(); // Added setUsername
@@ -14,8 +15,6 @@ function AuthForm() {
     const [error, setError] = useState('');
     const router = useRouter();
 
-    const BACKEND_AUTH_LOGIN_URL = process.env.NEXT_PUBLIC_BACKEND_AUTH_LOGIN_URL;
-    const BACKEND_AUTH_REGISTER_URL = process.env.NEXT_PUBLIC_BACKEND_AUTH_REGISTER_URL;
 
     useEffect(() => {
         if (token) {
@@ -35,7 +34,7 @@ function AuthForm() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${BACKEND_AUTH_LOGIN_URL}`, {
+            const response = await axios.post(`${AUTH_API.LOGIN}`, {
                 email: credentials.email,
                 password: credentials.password,
             });
@@ -82,7 +81,7 @@ function AuthForm() {
     const handleRegistration = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${BACKEND_AUTH_REGISTER_URL}`, {
+            const response = await axios.post(`${AUTH_API.REGISTER}`, {
                 username: credentials.username,
                 email: credentials.email,
                 password: credentials.password,

@@ -7,7 +7,9 @@ import Header from '@/components/templates/Header';
 import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
 import { MdImageNotSupported, MdDelete } from "react-icons/md";
-import { apiFetch } from '@/utils/api'; // Import apiFetch from utils/api
+import { apiFetch } from '@/utils/api';
+import { FILE_API } from '@/utils/api/file';
+import { KEYWORD_API } from '@/utils/api/keyword';
 import MouseEffect from '@/components/modules/MouseEffect';
 
 function Index() {
@@ -22,11 +24,6 @@ function Index() {
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
     const [isSearching, setIsSearching] = useState(false); // New state for search
     const [totalPages, setTotalPages] = useState(0); // State to store total pages
-
-    const BACKEND_UPLOAD_URL = process.env.NEXT_PUBLIC_BACKEND_UPLOAD_URL;
-    const BACKEND_KEYWORD_FILE_URL = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_FILE_URL;
-    const BACKEND_LIST_FILE_PAGIANATED_URL = process.env.NEXT_PUBLIC_BACKEND_LIST_FILE_PAGIANATED_URL;
-
 
     const handleSelectToggle = (selectId) => {
         // Toggle the select dropdown
@@ -43,11 +40,9 @@ function Index() {
         try {
             let url;
             if (keywordId) {
-                // Fetch images based on keyword ID
-                url = `${BACKEND_KEYWORD_FILE_URL}/${keywordId}?page=${(page - 1)}&size=${size}`;
+                url = `${KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, page -1, size)}`;
             } else {
-                // Fetch images normally
-                url = `${BACKEND_LIST_FILE_PAGIANATED_URL}?page=${(page - 1)}&size=${size}`;
+                url = FILE_API.LIST_IMAGES_PAGINATED(page - 1, size);
             }
 
             console.log('Fetching images from URL:', url); // Log the URL being fetched
@@ -96,7 +91,7 @@ function Index() {
         const confirmed = window.confirm("Are you sure you want to delete this image?");
         if (confirmed) {
             try {
-                const response = await apiFetch(`${BACKEND_UPLOAD_URL}/${imageId}`, 'DELETE', null, {
+                const response = await apiFetch(FILE_API.DELETE(imageId), 'DELETE', null, {
                     headers: {
                         'Authorization': `Bearer ${token}`, // Add your token if needed
                     }
@@ -116,7 +111,7 @@ function Index() {
 
     const handleEditImage = async (imageId, updatedData) => {
         try {
-            const response = await apiFetch(`${BACKEND_UPLOAD_URL}/${imageId}`, 'PUT', updatedData, {
+            const response = await apiFetch(FILE_API.UPDATE(imageId), 'PUT', updatedData, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }
