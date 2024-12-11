@@ -1,4 +1,4 @@
-const API_VERSION = process.env.NEXT_PUBLIC_BACKEND_API_VERSION; // e.g., v1, v2
+const API_VERSION = process.env.NEXT_PUBLIC_BACKEND_API_VERSION || ''; // e.g., v1, v2
 const SERVER_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL; // e.g., http://server:9090/api
 const BASE_URL = `${SERVER_URL}/${API_VERSION}`; // e.g., http://server:9090/api + /v1 => http://server:9090/api/v1
 

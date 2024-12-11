@@ -35,13 +35,16 @@ function Index() {
     };
 
     // Fetch images from the backend
-    const fetchImages = async (keywordId = null, page = currentPage, size = itemsPerPage) => {
+    const fetchImages = async (keywordId = null, query = '', page = currentPage, size = itemsPerPage) => {
         setLoading(true); // Set loading state to true before starting the fetch
         try {
             let url;
             if (keywordId) {
-                url = `${KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, page -1, size)}`;
-            } else {
+                url = `${KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, page - 1, size)}`;
+            } else if (query) {
+                url = `${API_CONFIG}/file/search/paginated?page=${(page - 1)}&size=${size}&query=${encodeURIComponent(query)}`;
+            }
+            else {
                 url = FILE_API.LIST_IMAGES_PAGINATED(page - 1, size);
             }
 
@@ -81,11 +84,19 @@ function Index() {
         }
     };
 
-    // Fetch images when the component mounts or when the token, currentPage, or keywordId changes
     useEffect(() => {
         const keywordId = router.query.keywordId; // Get keywordId from the URL
-        fetchImages(keywordId ? keywordId : '', currentPage); // Call the fetchImages function with the keywordId if present
-    }, [token, currentPage, router.query.keywordId]); // Only run when the token, currentPage, or keywordId changes
+        const searchQuery = router.query.search; // Get search query from the URL
+
+        // Call fetchImages based on the presence of keywordId or searchQuery
+        if (keywordId) {
+            fetchImages(keywordId, '', currentPage); // Fetch images based on keywordId
+        } else if (searchQuery) {
+            fetchImages(null, searchQuery, currentPage); // Fetch images based on search query
+        } else {
+            fetchImages('', currentPage); // Call fetchImages function with an empty string for keywordId and current page
+        }
+    }, [token, currentPage, router.query.keywordId, router.query.search]); // Run when token, currentPage, keywordId, or search query changes
 
     const handleDeleteImage = async (imageId) => {
         const confirmed = window.confirm("Are you sure you want to delete this image?");
@@ -253,7 +264,7 @@ function Index() {
                 <meta name="msapplication-TileColor" content="#ffffff" />
                 <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
-            <div className="app flex flex-col min-h-screen relative"> 
+            <div className="app flex flex-col min-h-screen relative">
                 <Header
                     token={token}
                     username={username}
