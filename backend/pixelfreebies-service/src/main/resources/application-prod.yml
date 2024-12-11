@@ -18,6 +18,11 @@ spring:
 
   # hibernate
   jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: ${SPRING_PROPERTIES_HIBERNATE_SHOW_SQL:false}
+        format_sql: ${SPRING_PROPERTIES_HIBERNATE_FORMAT_SQL:false}
     hibernate:
       ddl-auto: validate
 
@@ -30,14 +35,19 @@ spring:
 spring:
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 10MB
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 file:
   storage:
-    location: ${FILE_UPLOAD_LOCATION:/app/uploads}
+    location: ${FILE_UPLOAD_LOCATION:/home/simi/uploads}
+
+ftp:
+  host: ${FTP_HOST}
+  username: ${FTP_USERNAME}
+  password: ${FTP_PASSWORD}
 
 --- ###Custom Variables
 token:
   jwt:
-    expires_in: 20
+    expires_in: 1440 # 60min * 24hours = 1440min

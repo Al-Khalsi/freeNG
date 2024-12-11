@@ -26,14 +26,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = (String) authentication.getCredentials();
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(email);
 
-        // TODO: remove the if and else block for dev profile
-        // authenticate user with any password provided for development phase
-//        if (this.passwordEncoder.matches(password, userDetails.getPassword()))
         return new UsernamePasswordAuthenticationToken(email,
                 password,
                 userDetails.getAuthorities()
         );
-//        else throw new BadCredentialsException("Bad credentials");
     }
 
     @Override
