@@ -1,0 +1,81 @@
+services:
+
+  server:
+    image: dukeofjava/pixelfreebies-service:0.1-BETA
+    container_name: server
+    ports:
+      - "9090:9090"
+    volumes:
+      - file-uploads:/app/uploads
+      - ./data/db/password.txt:/run/secrets/db-password
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_NAME: pixelfreebies_service
+      DATABASE_USERNAME: user
+      DATABASE_PASSWORD_FILE: /run/secrets/db-password
+      FILE_UPLOAD_LOCATION: /app/uploads
+    secrets:
+      - db-password
+    depends_on:
+      db:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 700m
+    networks:
+      - pixelfreebies
+    healthcheck:
+      test: "curl --fail --silent localhost:9090/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+  db:
+    image: postgres:17-alpine
+    container_name: database
+    ports:
+      - "5432:5432"
+    volumes:
+      - ../data/db/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: pixelfreebies_service
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD_FILE: /run/secrets/db-password
+    secrets:
+      - db-password
+    networks:
+      - pixelfreebies
+    healthcheck:
+      test: [ "CMD", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  client:
+    image: dukeofjava/pixelfreebies-client:0.1-BETA
+    container_name: client
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_BACKEND_API_VERSION: v1
+      NEXT_PUBLIC_BACKEND_BASE_URL: http://server:9090/api/v1
+    networks:
+      - pixelfreebies
+    env_file:
+      - ../../../.env.local
+
+volumes:
+  file-uploads:
+    driver: local
+
+secrets:
+  db-password:
+    file: ../data/db/password.txt
+
+networks:
+  pixelfreebies:

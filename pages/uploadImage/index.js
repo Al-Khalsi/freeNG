@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/context/AuthContext';
 import { MdDelete } from "react-icons/md";
+import {KEYWORD_API} from "@/utils/api/keyword";
+import {FILE_API} from "@/utils/api/file";
 
 function UploadImage() {
   const { token } = useAuth();
@@ -84,13 +86,6 @@ function UploadImage() {
     'Watercolor',
   ];
 
-  const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-  const BACKEND_UPLOAD_URL = process.env.NEXT_PUBLIC_BACKEND_UPLOAD_URL;
-  const BACKEND_KEYWORD_URL = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_URL;
-  const BACKEND_API_VERSION = process.env.NEXT_PUBLIC_BACKEND_API_VERSION;
-  const BACKEND_UPLOAD_FILE_URL = process.env.NEXT_PUBLIC_BACKEND_UPLOAD_FILE_URL;
-  const BACKEND_KEYWORD_SEARCH_URL = process.env.NEXT_PUBLIC_BACKEND_KEYWORD_SEARCH_URL;
-
   const handleImageChange = (e) => {
     const image = e.target.files[0];
     if (image && image.type.startsWith('image/')) {
@@ -124,7 +119,7 @@ function UploadImage() {
     });
 
     try {
-      const response = await axios.post(BACKEND_UPLOAD_FILE_URL, formData, {
+      const response = await axios.post(FILE_API.UPLOAD, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${token}`
@@ -143,7 +138,7 @@ function UploadImage() {
 
   const fetchKeywords = async (query, page = 0, size = 10) => {
     try {
-      const response = await axios.get(`${BACKEND_KEYWORD_SEARCH_URL}/paginated`, {
+      const response = await axios.get(`${KEYWORD_API.SEARCH_PAGINATED}`, {
         params: {
           query,
           page,
@@ -190,7 +185,7 @@ function UploadImage() {
     }
 
     try {
-      const response = await axios.post(BACKEND_KEYWORD_URL, {
+      const response = await axios.post(KEYWORD_API.KEYWORD_URL, {
         keyword: addKeyword
       }, {
         headers: {
