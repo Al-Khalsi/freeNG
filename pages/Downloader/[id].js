@@ -93,7 +93,7 @@ const Downloader = () => {
     // Function to handle keyword click
     const handleKeywordClick = async (keywordId) => {
         try {
-            const response = await axios.get(`${KEYWORD_API.KEYWORD_DETAILS_PAGINATED(keywordId, 0, 50)}`); // Fetch keyword details based on ID
+            const response = await axios.get(`${KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, 0, 50)}`); // Fetch keyword details based on ID
             const keywordData = response.data.data; // Assuming your backend returns the keyword data
 
             // Redirect to the search page with the keyword ID

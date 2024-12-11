@@ -139,7 +139,7 @@ function UploadImage() {
 
   const fetchKeywords = async (query, page = 0, size = 10) => {
     try {
-      const response = await axios.get(`${KEYWORD_API.SEARCH_PAGINATED}`, {
+      const response = await axios.get(`${KEYWORD_API.SEARCH_PAGINATED(query, page, size)}`, {
         params: {
           query,
           page,

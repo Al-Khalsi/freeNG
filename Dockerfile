@@ -61,6 +61,8 @@ COPY package.json .
 # the built application from the build stage into the image.
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/.next ./.next
+COPY --from=build /usr/src/app/public ./public
+COPY --from=build /usr/src/app/package.json ./package.json
 
 # Copy the start script from the build stage
 COPY --from=build /usr/src/app/start.sh .
