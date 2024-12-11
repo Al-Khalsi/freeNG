@@ -9,6 +9,9 @@ FROM node:${NODE_VERSION}-alpine AS base
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
 
+# Copy .env files to image
+COPY .env.production .env.production
+COPY .env.local .env.loca
 
 ################################################################################
 # Create a stage for installing production dependecies.
