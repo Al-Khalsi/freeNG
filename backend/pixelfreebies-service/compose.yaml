@@ -13,11 +13,11 @@ services:
       context: .
       dockerfile: ./Dockerfile
     container_name: backend_server
-    image: dukeofjava/pixelfreebies_service:0.1-BETA
+    image: dukeofjava/pixelfreebies-service:0.1-BETA
     ports:
       - 9090:9090
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_PROFILES_ACTIVE=dev
       - DATABASE_HOST=db
       - DATABASE_PORT=5432
       - DATABASE_NAME=pixelfreebies_service

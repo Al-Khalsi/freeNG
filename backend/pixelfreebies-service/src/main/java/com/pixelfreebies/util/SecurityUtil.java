@@ -24,6 +24,7 @@ public class SecurityUtil {
 
     @PostConstruct
     public void init() {
+        this.PERMITTED_URLS.add("/");
         this.PERMITTED_URLS.add(this.BASE_URL + "/auth/**");
         this.PERMITTED_URLS.add(this.BASE_URL + "/file/download");
         // Swagger UI paths
