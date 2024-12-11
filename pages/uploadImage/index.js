@@ -109,11 +109,12 @@ function UploadImage() {
     const formData = new FormData();
     formData.append('file', image);
     formData.append('fileName', imageName);
+    formData.append('style', style);
+    formData.append('lightMode', lightMode);
+    // formData.append('source', source);
     dominantColors.forEach(color => {
       formData.append('dominantColors', color);
     });
-    formData.append('style', style);
-    formData.append('lightMode', lightMode);
     selectedKeywords.forEach(keyword => {
       formData.append('keywords', keyword);
     });
