@@ -61,6 +61,7 @@ function AuthForm() {
                 setEmail(decodedToken.email); // Store email from token
                 setRole(decodedToken.role); // Store role from token
 
+                console.log('Login successful, displaying notification'); 
                 NotificationManager.success('Login successful!', 'Success');
                 router.push('/');
             } else {
