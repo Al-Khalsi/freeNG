@@ -42,6 +42,13 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 # Copy the rest of the source files into the image.
 COPY . .
+
+# Copy the start script into the image
+COPY start.sh .
+
+# Make the script executable
+RUN chmod +x start.sh
+
 # Run the build script.
 RUN npm run build
 
@@ -64,9 +71,11 @@ COPY package.json .
 COPY --from=deps /usr/src/app/node_modules ./node_modules
 COPY --from=build /usr/src/app/.next ./.next
 
+# Copy the start script from the build stage
+COPY --from=build /usr/src/app/start.sh .
 
 # Expose the port that the application listens on.
 EXPOSE 3000
 
-# Run the application.
-CMD npm start
+# Run the start script
+CMD ["./start.sh"]
