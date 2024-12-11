@@ -42,7 +42,7 @@ function Index() {
             if (keywordId) {
                 url = KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, page - 1, size);
             } else if (query) {
-                url = FILE_API.SEARCH_PAGINATED(page-1, size, encodeURIComponent(query));
+                url = FILE_API.SEARCH_PAGINATED(page - 1, size, encodeURIComponent(query));
             }
             else {
                 url = FILE_API.LIST_IMAGES_PAGINATED(page - 1, size);

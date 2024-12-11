@@ -12,3 +12,8 @@ spring:
 
 base:
   url: /api/v1
+
+cors:
+  origin:
+    url:
+      permitted: ${CORS_ORIGIN_URL:localhost:3000}
