@@ -6,7 +6,9 @@ import { useAuth } from '@/context/AuthContext'; // Adjust the path as necessary
 import withAuthRedirect from '@/utils/withAuthRedirect'; // Adjust the path as necessary
 import * as jwt_decode from 'jwt-decode';
 import axios from 'axios';
-import {AUTH_API} from "@/utils/api/auth"; // Import Axios
+import { AUTH_API } from "@/utils/api/auth"; // Import Axios
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+
 
 function AuthForm() {
     const { token, storeToken, setUsername, setEmail, setRole } = useAuth(); // Added setUsername
@@ -14,7 +16,6 @@ function AuthForm() {
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
     const router = useRouter();
-
 
     useEffect(() => {
         if (token) {
@@ -60,20 +61,17 @@ function AuthForm() {
                 setEmail(decodedToken.email); // Store email from token
                 setRole(decodedToken.role); // Store role from token
 
-                console.log('Login successful');
-                router.push('/'); // Redirect to home after successful login
+                NotificationManager.success('Login successful!', 'Success');
+                router.push('/');
             } else {
-                setError('Failed to retrieve token'); // Error handling
+                NotificationManager.error('Failed to retrieve token', 'Error');
             }
         } catch (error) {
             // Improved error handling
             if (error.response) {
-                console.error('Login error response:', error.response); // Log the entire error response
-                console.error('Login error data:', error.response.data); // Log the data part of the error response
-                setError('Invalid username or password'); // Error message for invalid credentials
+                NotificationManager.error('Invalid username or password', 'Error')
             } else {
-                console.error('Login error:', error.message); // Log the error message
-                setError('An error occurred during login'); // Generic error message
+                NotificationManager.error('An error occurred during login', 'Error');
             }
         }
     };
@@ -106,29 +104,26 @@ function AuthForm() {
                 setEmail(decodedToken.email); // Store email from token
                 setRole(decodedToken.role); // Store role from token
 
-                console.log('Registration successful:', data);
-                router.push('/'); // Redirect to home after successful registration
+                NotificationManager.success('Registration successful!', 'Success');
+                router.push('/');
             } else {
-                setError('Failed to retrieve token'); // Error handling
+                NotificationManager.error('Failed to retrieve token', 'Error');
             }
         } catch (error) {
             // Improved error handling
             if (error.response) {
-                console.error('Registration error:', error.response); // Log the entire error response
-                console.error('Registration error data:', error.response.data); // Log the data part of the error response
-                setError(error.response.data.message || 'Registration failed'); // Set error message from response or default
+                NotificationManager.error(error.response.data.message || 'Registration failed', 'Error');
             } else if (error.request) {
-                console.error('No response received:', error.request); // Log request
-                setError('No response from server'); // Set a generic error message
+                NotificationManager.error('No response from server', 'Error');
             } else {
-                console.error('Error setting up request:', error.message); // Log error message
-                setError('Error during registration'); // Set a generic error message
+                NotificationManager.error('Error during registration', 'Error');
             }
         }
     };
 
     return (
         <div className='Validation w-full h-full flex justify-center items-center min-h-screen bg-bgDarkBlue'>
+            <NotificationContainer />
             <div className={`wrapper relative w-custom-212 h-custom-136 m-5 bg-bgDarkGray rounded-3xl shadow-xl overflow-hidden ${isActive ? 'active' : ''}`}>
                 <div className='login form-box absolute right-0 w-1/2 h-full flex items-center p-10 bg-gradient-to-t from-bgPurple to-bgLightPurple text-center z-10'>
                     <form onSubmit={handleLogin} className='w-full'>
@@ -153,7 +148,7 @@ function AuthForm() {
                             <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <button type='submit' className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-base font-semibold cursor-pointer'>Login</button>
-                        
+
                     </form>
                 </div>
 
@@ -192,7 +187,7 @@ function AuthForm() {
                             className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-clBlack text-base font-semibold cursor-pointer'>
                             Register
                         </button>
-                    
+
                     </form>
                 </div>
 
