@@ -43,6 +43,8 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Copy the rest of the source files into the image.
 COPY . .
 
+RUN ls -la /usr/src/app
+
 # Copy the start script into the image
 COPY start.sh .
 
