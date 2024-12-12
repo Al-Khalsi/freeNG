@@ -158,7 +158,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     </div>
                 ) : (
                     <div className='flex'>
-                        <Link href="/validation" className="button rounded-md ">
+                        <Link href="/authentication" className="button rounded-md ">
                             <IoLogInSharp className='sm:hidden text-2xl' />
                             <span className="fold"></span>
                             <div className="points_wrapper">

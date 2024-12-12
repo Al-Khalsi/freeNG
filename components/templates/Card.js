@@ -10,7 +10,7 @@ function Card({ image, role, onDelete, onEdit }) {
     const [editedTitle, setEditedTitle] = useState(image.title);
     const [isEditing, setIsEditing] = useState(false);
 
-    const downloadLink = `/downloader/${image.id}?${new URLSearchParams({
+    const downloadLink = `/download/${image.id}?${new URLSearchParams({
         title: image.title,
         size: image.size,
         width: image.width,

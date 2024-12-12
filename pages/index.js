@@ -40,8 +40,10 @@ function Index() {
         try {
             let url;
             if (keywordId) {
+                console.log(`keywordId: ${keywordId}`)
                 url = KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, page - 1, size);
             } else if (query) {
+                console.log("query: ", query);
                 url = FILE_API.SEARCH_PAGINATED(page - 1, size, encodeURIComponent(query));
             }
             else {
@@ -86,17 +88,18 @@ function Index() {
 
     useEffect(() => {
         const keywordId = router.query.keywordId; // Get keywordId from the URL
-        const searchQuery = router.query.search; // Get search query from the URL
+        const searchQueryFromUrl = router.query.search; // Get search query from the URL
 
-        // Call fetchImages based on the presence of keywordId or searchQuery
+        // Validate the search query before using it
         if (keywordId) {
             fetchImages(keywordId, '', currentPage); // Fetch images based on keywordId
-        } else if (searchQuery) {
-            fetchImages(null, searchQuery, currentPage); // Fetch images based on search query
+        } else if (searchQueryFromUrl && searchQueryFromUrl.trim() !== '') {
+            // Only fetch images if the search query is a valid non-empty string
+            fetchImages(null, searchQueryFromUrl, currentPage);
         } else {
-            fetchImages('', currentPage); // Call fetchImages function with an empty string for keywordId and current page
+            fetchImages('', '', currentPage, itemsPerPage); // Call fetchImages function with an empty string for keywordId and current page
         }
-    }, [token, currentPage, router.query.keywordId, router.query.search]); // Run when token, currentPage, keywordId, or search query changes
+    }, [token, currentPage, router.query.keywordId, router.query.search]);
 
     const handleDeleteImage = async (imageId) => {
         const confirmed = window.confirm("Are you sure you want to delete this image?");
@@ -218,13 +221,14 @@ function Index() {
     };
 
     const handleSearch = () => {
-        if (!searchQuery.trim()) {
-            return;
+        const trimmedSearchQuery = searchQuery.trim();
+        if (!trimmedSearchQuery) {
+            return; // Do not proceed if the search query is empty
         }
-        setSubmittedSearchQuery(searchQuery);
-        fetchImages(searchQuery, 1);
+        setSubmittedSearchQuery(trimmedSearchQuery);
+        fetchImages(trimmedSearchQuery, 1);
         setIsSearching(true);
-        router.push(`/?search=${encodeURIComponent(searchQuery)}`);
+        router.push(`/?search=${encodeURIComponent(trimmedSearchQuery)}`);
     };
 
     return (
@@ -333,7 +337,7 @@ function Index() {
                 {/* Conditionally render the upload link based on the user's role */}
                 {role === 'ROLE_MASTER' && (
                     <Link
-                        href={'/uploadImage'}
+                        href={'/upload'}
                         className='fixed right-3 bottom-3
                             w-10 h-10 p-6 flex justify-center items-center
                             bg-blue-700 text-white text-2xl outline-none
