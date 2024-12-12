@@ -38,7 +38,6 @@ public interface ImageRepository extends JpaRepository<Image, UUID> {
     @Query(value = """
             SELECT k.keyword
             FROM keywords k
-            LEFT JOIN images_keywords ik ON k.id = ik.keyword_id
             WHERE
             (:query IS NULL OR
             to_tsvector('english', k.keyword) @@ to_tsquery('english', :query))
@@ -48,7 +47,6 @@ public interface ImageRepository extends JpaRepository<Image, UUID> {
     @Query(value = """
             SELECT k.keyword
             FROM keywords k
-            LEFT JOIN images_keywords ik ON k.id = ik.keyword_id
             WHERE
             k.keyword ILIKE CONCAT('%', :query, '%')
             """, nativeQuery = true)
