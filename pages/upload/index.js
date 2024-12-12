@@ -4,6 +4,8 @@ import { useAuth } from '@/context/AuthContext';
 import { MdDelete } from "react-icons/md";
 import { KEYWORD_API } from "@/utils/api/keyword";
 import { FILE_API } from "@/utils/api/file";
+import { LuUpload } from "react-icons/lu";
+import { FaSun , FaMoon} from "react-icons/fa";
 
 function UploadImage() {
   const { token } = useAuth();
@@ -140,21 +142,21 @@ function UploadImage() {
   const fetchKeywords = async (query, page = 0, size = 10) => {
     console.log("Fetching keywords for query:", query);
     try {
-        const url = KEYWORD_API.SEARCH_PAGINATED(query, page, size);
-        console.log("keyword search url: ", url);
-        const response = await axios.get(url, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        });
-        console.log("response for fetchKeywords: ", response.data.data);
-        setFetchedKeywords(response.data.data);
-        setShowResults(true);
+      const url = KEYWORD_API.SEARCH_PAGINATED(query, page, size);
+      console.log("keyword search url: ", url);
+      const response = await axios.get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      console.log("response for fetchKeywords: ", response.data.data);
+      setFetchedKeywords(response.data.data);
+      setShowResults(true);
     } catch (error) {
-        setErrorMessage(error.response?.data?.message || 'Error fetching keywords.');
+      setErrorMessage(error.response?.data?.message || 'Error fetching keywords.');
     }
-};
+  };
 
   const handleColorChange = (color) => {
     setDominantColors(prevColors => {
@@ -170,11 +172,11 @@ function UploadImage() {
   const handleSearch = () => {
     const trimmedQuery = searchQuery.trim();
     if (trimmedQuery) {
-        fetchKeywords(trimmedQuery, currentPage);
+      fetchKeywords(trimmedQuery, currentPage);
     } else {
-        setErrorMessage('Please enter a search term.');
+      setErrorMessage('Please enter a search term.');
     }
-};
+  };
 
   const addKeywords = async () => {
     if (!addKeyword) {
@@ -257,15 +259,13 @@ function UploadImage() {
   return (
     <div className={`UploadImage w-full min-h-dvh py-12 flex justify-center items-center bg-bgDarkBlue`}>
       <div className="w-custom-212 p-6 bg-bgDarkGray text-clWhite rounded shadow-md">
-        <h2 className="text-xl font-bold mb-4">Upload Image</h2>
-
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
         <form onSubmit={handleUploadSubmit} className='w-full'>
 
-          <div className='flex items-center'>
-            <div className="mb-4 mx-2 w-1/2">
-              <label className="block mb-2">Image</label>
+          <div className='flex items-center flex-col sm:flex-row'>
+            <div className="mb-4 mx-2 w-full md-w-1/2">
+              {/* <label className="block mb-2">Image</label> */}
               <div
                 className="border-dashed border-2 border-gray-400
                 rounded p-2 w-full bg-bgDarkGray2 cursor-pointer
@@ -287,10 +287,11 @@ function UploadImage() {
               </div>
             </div>
 
-            <div className="mb-4 mx-2 w-1/2">
-              <label className="block mb-2">Image Name</label>
+            <div className="mb-4 mx-2 w-full sm:w-1/2">
+              {/* <label className="block mb-2">Image Name</label> */}
               <input
                 type="text"
+                placeholder='Image Name'
                 value={imageName}
                 onChange={(e) => setImageName(e.target.value)}
                 className="border rounded p-2 w-full bg-bgDarkGray2"
@@ -300,9 +301,9 @@ function UploadImage() {
             </div>
           </div>
 
-          <div className='flex items-center'>
-            <div className='mb-4 mx-2 w-1/2'>
-              <label className="block mb-2">Dominant Color</label>
+          <div className='flex items-center flex-col sm:flex-row'>
+            <div className='mb-4 mx-2 w-full sm:w-1/2'>
+              {/* <label className="block mb-2">Dominant Color</label> */}
               <div className="relative">
                 <button
                   type="button"
@@ -338,8 +339,8 @@ function UploadImage() {
               </div>
             </div>
 
-            <div className="mb-4 mx-2 w-1/2">
-              <label className="block mb-2">Style</label>
+            <div className="mb-4 mx-2 w-full sm:w-1/2">
+              {/* <label className="block mb-2">Style</label> */}
               <select
                 value={style}
                 onChange={(e) => setStyle(e.target.value)}
@@ -358,32 +359,32 @@ function UploadImage() {
 
           <div className='flex mb-4'>
             {isAddingKeywords ? (
-              <div className='keywordsAdd flex justify-between w-full mt-2'>
+              <div className='keywordsAdd flex flex-col sm:flex-row justify-between w-full mt-2'>
                 <input
                   type='text'
                   ref={addKeywordInputRef}
-                  className='w-1/2 mx-2 p-2 bg-bgDarkGray2 border rounded'
+                  className='w-full sm:w-1/2 mx-0 sm:mx-2 p-2 bg-bgDarkGray2 border rounded'
                   placeholder='Add Keywords'
                   autoComplete='off'
                   value={addKeyword}
                   onChange={(e) => setAddKeyword(e.target.value)}
                 />
-                <div className='w-1/2 flex justify-between mx-2'>
+                <div className='w-full sm:w-1/2 flex justify-between mx-0 sm:mx-2 mt-4 sm:mt-0'>
                   <button
                     type='button'
                     onClick={addKeywords}
-                    className='w-1/2 mx-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save
+                    className='w-full sm:w-1/2 mr-2 sm:ml-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save
                   </button>
                   <button
                     type='button'
                     onClick={handleCancelKeywords}
-                    className='w-1/2 mx-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cancel
+                    className='w-full sm:w-1/2 ml-2 sm:mr-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cancel
                   </button>
                 </div>
               </div>
             ) : (
-              <div className='keywordSelect flex justify-between w-full mt-2'>
-                <div className='relative w-1/2 mx-2'>
+              <div className='keywordSelect flex flex-col sm:flex-row justify-between w-full mt-2'>
+                <div className='relative w-full sm:w-1/2 mx-0 sm:mx-2'>
                   <input
                     type='text'
                     ref={inputRef}
@@ -418,7 +419,7 @@ function UploadImage() {
                 <button
                   type='button'
                   onClick={handleAddKeywords}
-                  className='w-1/2 mx-2 p-2 bg-bgDarkGray2 rounded hover:border'>Add
+                  className='w-full sm:w-1/2 mx-0 sm:mx-2 mt-4 sm:mt-0 p-2 bg-bgDarkGray2 rounded hover:border'>Add
                 </button>
               </div>
             )}
@@ -441,15 +442,15 @@ function UploadImage() {
             </div>
           )}
 
-          <div className='flex justify-center items-center mt-4'>
+          <div className='hidden sm:flex flex-col sm:flex-row justify-center items-center mt-4'>
             <button
               type="submit"
-              className={`bg-bgDarkBlue text-white rounded w-1/2 mx-2 p-2 hover:border
+              className={`bg-bgDarkBlue text-white rounded w-full sm:w-1/2 mx-2 p-2 hover:border
               ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
               disabled={isLoading}>
               {isLoading ? 'Uploading...' : 'Upload'}
             </button>
-            <div className='flex justify-between items-center w-1/2'>
+            <div className='flex flex-col sm:flex-row justify-between items-center w-full sm:w-1/2 mt-4'>
               <button
                 type="button"
                 onClick={toggleLightMode}
@@ -458,10 +459,35 @@ function UploadImage() {
                 {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
               </button>
               <input type="text"
-                className='INPUTSource rounded mx-2 p-2 w-full bg-bgDarkGray2 opacity-50'
+                className='INPUTSource rounded mx-2 mt-4 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
                 placeholder='PixelFreebies' />
+            </div>
+          </div>
+
+          {/* mobile ui */}
+          <div className='flex sm:hidden flex-col sm:flex-row justify-center items-center mt-4'>
+            <input type="text"
+              className='INPUTSource rounded mx-2 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              placeholder='PixelFreebies' />
+            <div className='flex flex-row justify-between items-center w-full sm:w-1/2 mt-4'>
+              <button
+                type="submit"
+                className={`bg-bgDarkBlue flex justify-center text-xl text-white rounded w-full sm:w-1/2 mr-2 sm:ml-2 p-2 hover:border
+              ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                disabled={isLoading}>
+                {isLoading ? '...' : <LuUpload />}
+              </button>
+              <button
+                type="button"
+                onClick={toggleLightMode}
+                className={`rounded flex justify-center p-2 ml-2 sm:mr-2 w-full text-xl font-bold
+              ${lightMode ? 'bg-white text-black border-none' : 'bg-black text-white border-none'}`}>
+                {lightMode ? <FaSun /> : <FaMoon />}
+              </button>
             </div>
           </div>
 
