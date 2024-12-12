@@ -18,6 +18,7 @@ function UploadImage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [uploadedFile, setUploadedFile] = useState('');
   const [lightMode, setLightMode] = useState(false);
+  const [lightModePreview, setLightModePreview] = useState(false)
   const [selectedKeywords, setSelectedKeywords] = useState([]);
   const [isAddingKeywords, setIsAddingKeywords] = useState(false);
   const [addKeyword, setAddKeyword] = useState('');
@@ -25,7 +26,7 @@ function UploadImage() {
   const [showResults, setShowResults] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
-  const [source, setSource] = useState('PixelFreebies');
+  const [source, setSource] = useState('');
   const [showColorDropdown, setShowColorDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
@@ -215,6 +216,7 @@ function UploadImage() {
 
   const toggleLightMode = () => {
     setLightMode(prevMode => !prevMode);
+    setLightModePreview(prevMode => !prevMode);
   };
 
   const handleAddKeywords = () => {
@@ -268,11 +270,11 @@ function UploadImage() {
           <div className='flex items-center flex-col'>
             <div className="mx-2 w-full md-w-1/2">
               <div
-                className="border-dashed border-2 border-gray-400
-                rounded p-2 h-48 sm:h-80 w-full bg-bgDarkGray2 cursor-pointer
-                flex items-center justify-center hover:bg-bgDarkGray"
-                onClick={() => document.getElementById('file-input').click()}
-              >
+                className={`border-dashed border-2 rounded p-2 h-48 sm:h-80 w-full 
+                ${lightModePreview ? 'bg-bgGray text-clDarkGray2 border-bgDarkGray2' : 
+                'bg-bgDarkGray2 text-clGray border-bgGray'} 
+                cursor-pointer flex items-center justify-center hover:bg-bgDarkGray`}
+                onClick={() => document.getElementById('file-input').click()}>
                 {image ? (
                   <>
                     <img
