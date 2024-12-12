@@ -379,7 +379,6 @@ background-color: var(--bg-darkGray2);
   width: 300%;
   height: 100%;
   background-color: var(--bg-darkGray);
-  border-radius: 150px;
   z-index: 20;
   transition: 1.8s ease-in-out;
   
@@ -431,7 +430,6 @@ background-color: var(--bg-darkGray2);
     height: 300%;
     left: 0;
     top: -270%;
-    border-radius: 20vw;
   }
   .wrapper.active .toggle-form::before {
     left: 0;
