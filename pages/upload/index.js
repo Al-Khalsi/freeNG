@@ -265,8 +265,8 @@ function UploadImage() {
 
         <form onSubmit={handleUploadSubmit} className='w-full'>
 
-          <div className='flex items-center flex-col sm:flex-row'>
-            <div className="mb-4 mx-2 w-full md-w-1/2">
+          <div className='flex items-center flex-col'>
+            <div className="mx-2 w-full md-w-1/2">
               <div
                 className="border-dashed border-2 border-gray-400
                 rounded p-2 h-48 sm:h-80 w-full bg-bgDarkGray2 cursor-pointer
@@ -278,7 +278,7 @@ function UploadImage() {
                     <img
                       src={imagePreviewUrl}
                       alt="Preview"
-                      className="mt-2 w-full h-full rounded object-contain" // Add styles for the image
+                      className="mt-4 w-full h-full rounded object-contain" // Add styles for the image
                     />
                   </>
                 ) : (
@@ -294,7 +294,7 @@ function UploadImage() {
               </div>
             </div>
 
-            <div className="mb-4 mx-2 w-full sm:w-1/2">
+            <div className="mt-4 mx-2 w-full sm:w-1/2">
               <input
                 type="text"
                 placeholder='Image Name'
@@ -307,8 +307,8 @@ function UploadImage() {
             </div>
           </div>
 
-          <div className='flex items-center flex-col sm:flex-row'>
-            <div className='mb-4 mx-2 w-full sm:w-1/2'>
+          <div className='flex items-center flex-col sm:flex-row mt-4'>
+            <div className='mx-2 w-full sm:w-1/2'>
               <div className="relative">
                 <button
                   type="button"
@@ -344,7 +344,7 @@ function UploadImage() {
               </div>
             </div>
 
-            <div className="mb-4 mx-2 w-full sm:w-1/2">
+            <div className="mx-2 mt-4 sm:mt-0 w-full sm:w-1/2">
               <select
                 value={style}
                 onChange={(e) => setStyle(e.target.value)}
@@ -361,9 +361,9 @@ function UploadImage() {
             </div>
           </div>
 
-          <div className='flex mb-4'>
+          <div className='flex mt-4'>
             {isAddingKeywords ? (
-              <div className='keywordsAdd flex flex-col sm:flex-row justify-between w-full mt-2'>
+              <div className='keywordsAdd flex flex-col sm:flex-row justify-between w-full'>
                 <input
                   type='text'
                   ref={addKeywordInputRef}
@@ -387,7 +387,7 @@ function UploadImage() {
                 </div>
               </div>
             ) : (
-              <div className='keywordSelect flex flex-col sm:flex-row justify-between w-full mt-2'>
+              <div className='keywordSelect flex flex-col sm:flex-row justify-between w-full'>
                 <div className='relative w-full sm:w-1/2 mx-0 sm:mx-2'>
                   <input
                     type='text'
