@@ -13,46 +13,49 @@ import KeywordsModal from '@/components/templates/KeywordsModal';
 import { FILE_API } from "@/utils/api/file";
 import { KEYWORD_API } from "@/utils/api/keyword";
 
-const colorHexMap = {
-    'Red': '#FF0000',
-    'Green': '#008000',
-    'Blue': '#0000FF',
-    'Yellow': '#FFFF00',
-    'Orange': '#FFA500',
-    'Purple': '#800080',
-    'Pink': '#FFC0CB',
-    'Brown': '#A52A2A',
-    'Gray': '#808080',
-    'Black': '#000000',
-    'White': '#FFFFFF',
-    'Cyan': '#00FFFF',
-    'Magenta': '#FF00FF',
-    'Lime': '#00FF00',
-    'Teal': '#008080',
-    'Navy': '#000080',
-    'Maroon': '#800000',
-    'Olive': '#808000',
-    'Coral': '#FF7F50',
-    'Salmon': '#FA8072',
-    'Khaki': '#F0E68C',
-    'Lavender': '#E6E6FA',
-    'Turquoise': '#40E0D0',
-    'Gold': '#FFD700',
-    'Plum': '#DDA0DD',
-};
+// New colors array
+const colors = [
+    { name: 'Black', hex: '#000000' },
+    { name: 'Gray', hex: '#555555' },
+    { name: 'White', hex: '#FFFFFF' },
+    { name: 'Light Red', hex: '#fb4545' },
+    { name: 'Red', hex: '#FF0000' },
+    { name: 'Dark Red', hex: '#6f0000' },
+    { name: 'Light Green', hex: '#46ff46' },
+    { name: 'Green', hex: '#008000' },
+    { name: 'Dark Green', hex: '#003300' },
+    { name: 'Light Blue', hex: '#40a0ff' },
+    { name: 'Blue', hex: '#0000FF' },
+    { name: 'Dark Blue', hex: '#00003e' },
+    { name: 'Light Yellow', hex: '#fdfd5d' },
+    { name: 'Yellow', hex: '#FFFF00' },
+    { name: 'Dark Yellow', hex: '#7a6800' },
+    { name: 'Light Orange', hex: '#fbaa30' },
+    { name: 'Orange', hex: '#FFA500' },
+    { name: 'Dark Orange', hex: '#854900' },
+    { name: 'Light Purple', hex: '#ae4bff' },
+    { name: 'Purple', hex: '#800080' },
+    { name: 'Dark Purple', hex: '#4B0082' },
+    { name: 'Light Pink', hex: '#ff7ad1' },
+    { name: 'Pink', hex: '#ff00c8' },
+    { name: 'Dark Pink', hex: '#540043' },
+    { name: 'Light Brown', hex: '#ffa654' },
+    { name: 'Brown', hex: '#992202' },
+    { name: 'Dark Brown', hex: '#410e00' },
+];
 
 const Downloader = () => {
     const router = useRouter();
     const { id: fileId, title, path, size, width, height, lightMode, style, dominantColors, source, keywords } = router.query;
-    const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
-    const [parsedKeywords, setParsedKeywords] = useState([]); // State to hold parsed keywords
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [parsedKeywords, setParsedKeywords] = useState([]);
 
     useEffect(() => {
         if (keywords) {
             try {
                 const keywordArray = JSON.parse(keywords);
                 console.log('Keywords:', keywordArray);
-                setParsedKeywords(keywordArray); // Store parsed keywords in state
+                setParsedKeywords(keywordArray);
             } catch (error) {
                 console.error('Error parsing keywords:', error);
             }
@@ -62,27 +65,26 @@ const Downloader = () => {
     const handleDownload = async () => {
         if (!fileId) {
             console.warn('File ID is not available for download.');
-            return; // Ensure id is available
+            return;
         }
 
         console.log(`Initiating download for file ID: ${fileId}`);
 
         try {
             const response = await axios.get(`${FILE_API.DOWNLOAD(fileId)}`, {
-                responseType: 'blob', // Important for downloading files
+                responseType: 'blob',
             });
 
             console.log('Download response received:', response);
 
-            // Create a blob from the response
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const a = document.createElement('a');
             a.href = url;
-            a.download = title || 'download'; // Use the title as the file name
+            a.download = title || 'download';
             document.body.appendChild(a);
             a.click();
             a.remove();
-            window.URL.revokeObjectURL(url); // Clean up the URL object
+            window.URL.revokeObjectURL(url);
 
             console.log('Download initiated successfully.');
         } catch (error) {
@@ -90,15 +92,11 @@ const Downloader = () => {
         }
     };
 
-    // Function to handle keyword click
     const handleKeywordClick = async (keywordId) => {
         try {
-            console.log("handleKeywordClick - keywrodId: ", keywordId)
-            const response = await axios.get(`${KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, 0, 50)}`); // Fetch keyword details based on ID
-            const keywordData = response.data.data; // Assuming your backend returns the keyword data
-
-            // Redirect to the search page with the keyword ID
-            await router.push(`/?keywordId=${keywordId}`); // Pass the keyword ID instead of the keyword
+            console.log("handleKeywordClick - keywordId: ", keywordId)
+            const response = await axios.get(`${KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, 0, 50)}`);
+            await router.push(`/?keywordId=${keywordId}`);
         } catch (error) {
             console.error('Error fetching keyword:', error);
         }
@@ -118,9 +116,7 @@ const Downloader = () => {
                 <title>{title}</title>
                 <link rel="canonical" href={`https://pixelfreebies.com/download/${title}`} />
                 <meta name="description"
-                    content={`${title} is a free png image with
-                    dimensions ${width}x${height} and size ${size} in ${style} style available for free.`} />
-                <meta name="keywords" content="free images, PNG images, download images, PixelFreebies, stock photos" />
+                    content={`${title} is a free png image with dimensions ${width}x${height} and size ${size} in ${style} style available for free.`} />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta name="robots" content="index, follow" />
 
@@ -130,22 +126,18 @@ const Downloader = () => {
                 <meta property="og:url" content={`https://pixelfreebies.com/download/${title}`} />
                 <meta property="og:type" content="website" />
 
-                {/* Favicon for standard browsers */}
                 <link rel="icon" type="image/png" href="/img/LOGO.png" sizes="16x16" />
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-32x32.png" sizes="32x32" />
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-48x48.png" sizes="48x48" />
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-192x192.png" sizes="192x192" />
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-512x512.png" sizes="512x512" />
 
-                {/* Apple Touch Icon for iOS devices */}
                 <link rel="apple-touch-icon" href="/img/LOGO-icon-180x180.png" sizes="180x180" />
                 <link rel="apple-touch-icon" href="/img/LOGO-icon-152x152.png" sizes="152x152" />
                 <link rel="apple-touch-icon" href="/img/LOGO-icon-120x120.png" sizes="120x120" />
 
-                {/* Android Chrome Icon */}
                 <link rel="icon" type="image/png" href="/img/LOGO-icon-192x192.png" sizes="192x192" />
 
-                {/* Microsoft Tiles for Windows */}
                 <meta name="msapplication-TileColor" content="#ffffff" />
                 <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
@@ -196,15 +188,19 @@ const Downloader = () => {
                                             </span>
                                             <span className='ml-2 flex items-center'>
                                                 <div className='flex md:ml-2'>
-                                                    {dominantColors && dominantColors.split(',').map((color) => (
-                                                        <div key={color} className='flex items-center ml-2'>
-                                                            <span
-                                                                className='w-4 h-4 md:w-6 md:h-6 rounded-full border-black border'
-                                                                style={{ backgroundColor: colorHexMap[color.trim()] || '#000' }}
-                                                                title={color}>
-                                                            </span>
-                                                        </div>
-                                                    ))}
+                                                    {dominantColors && dominantColors.split(',').map((colorName) => {
+                                                        // Find the color object by name
+                                                        const colorObj = colors.find(color => color.name.trim() === colorName.trim());
+                                                        return (
+                                                            <div key={colorName} className='flex items-center ml-2'>
+                                                                <span
+                                                                    className='w-4 h-4 md:w-6 md:h-6 rounded-full border-black border'
+                                                                    style={{ backgroundColor: colorObj ? colorObj.hex : '#000' }} // Use hex from the color object
+                                                                    title={colorName}>
+                                                                </span>
+                                                            </div>
+                                                        );
+                                                    })}
                                                 </div>
                                             </span>
                                         </div>
@@ -216,7 +212,7 @@ const Downloader = () => {
                                                 <p className='ms-1'>Source</p>
                                             </span>
                                             <p className='ml-2'>
-                                                {source == "" ? "PixelFreebies" : source}
+                                                {source === "" ? "PixelFreebies" : source}
                                             </p>
                                         </div>
                                     </div>
@@ -226,9 +222,9 @@ const Downloader = () => {
                                             <p className='ms-1'>Tag</p>
                                         </span>
                                         <div className='flex items-center flex-wrap ms-2'>
-                                            {parsedKeywords.length > 20 ? ( // Check if more than 4 keywords
+                                            {parsedKeywords.length > 20 ? (
                                                 <>
-                                                    {parsedKeywords.slice(0, 20).map((kw) => ( // Show first 4 keywords
+                                                    {parsedKeywords.slice(0, 20).map((kw) => (
                                                         <button
                                                             key={kw.id}
                                                             onClick={() => handleKeywordClick(kw.id)}
@@ -243,7 +239,7 @@ const Downloader = () => {
                                                     </button>
                                                 </>
                                             ) : (
-                                                parsedKeywords.map((kw) => ( // Show all keywords if 4 or fewer
+                                                parsedKeywords.map((kw) => (
                                                     <button
                                                         key={kw.id}
                                                         onClick={() => handleKeywordClick(kw.id)}
@@ -269,11 +265,11 @@ const Downloader = () => {
                 </main>
             </div>
 
-            {isModalOpen && ( // Render the modal if it's open
+            {isModalOpen && (
                 <KeywordsModal
                     keywords={parsedKeywords}
                     onClose={closeModal}
-                    onKeywordClick={handleKeywordClick} // Pass the keyword click handler
+                    onKeywordClick={handleKeywordClick}
                 />
             )}
         </>
