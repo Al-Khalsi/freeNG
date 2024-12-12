@@ -176,8 +176,10 @@ function UploadImage() {
     const trimmedQuery = searchQuery.trim();
     if (trimmedQuery) {
       fetchKeywords(trimmedQuery, currentPage);
+      setShowResults(true); // Show results dropdown after fetching
     } else {
       setErrorMessage('Please enter a search term.');
+      setShowResults(false); // Hide results if no query
     }
   };
 
@@ -234,31 +236,22 @@ function UploadImage() {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchQuery.trim()) {
-        fetchKeywords(searchQuery.trim(), currentPage);
-      }
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target) &&
         inputRef.current &&
         !inputRef.current.contains(event.target)
       ) {
-        setShowResults(false);
-      }
-      if (
-        dropdownColorRef.current &&
-        !dropdownColorRef.current.contains(event.target)
-      ) {
-        setShowColorDropdown(false); // Close color dropdown
+        setShowResults(false); // Close results dropdown
       }
     };
-
+  
     document.addEventListener('mousedown', handleClickOutside);
-
+  
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [searchQuery, currentPage]);
+  }, []);
 
   return (
     <div className={`UploadImage w-full min-h-dvh py-12 flex justify-center items-center bg-bgDarkBlue`}>
@@ -271,8 +264,8 @@ function UploadImage() {
             <div className="mx-2 w-full md-w-1/2">
               <div
                 className={`border-dashed border-2 rounded p-2 h-48 sm:h-80 w-full 
-                ${lightModePreview ? 'bg-bgGray text-clDarkGray2 border-bgDarkGray2' : 
-                'bg-bgDarkGray2 text-clGray border-bgGray'} 
+                ${lightModePreview ? 'bg-bgGray text-clDarkGray2 border-bgDarkGray2' :
+                    'bg-bgDarkGray2 text-clGray border-bgGray'} 
                 cursor-pointer flex items-center justify-center`}
                 onClick={() => document.getElementById('file-input').click()}>
                 {image ? (
