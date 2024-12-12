@@ -146,8 +146,15 @@ function Index() {
 
     // Pagination logic
     const handlePageChange = (page) => {
-        router.push(`/?page=${page}`); // Change the page in the URL
-        fetchImages(searchQuery, page); // Fetch images for the new page
+        // Push the new page to the URL
+        router.push(`/?page=${page}`);
+    
+        // Fetch images based on the current search query or default
+        if (searchQuery) {
+            fetchImages(null, searchQuery, page); // If there's a search query, use it
+        } else {
+            fetchImages('', '', page); // Otherwise, fetch default images
+        }
     };
 
     const renderPagination = () => {

@@ -210,7 +210,7 @@ const Downloader = () => {
                                         </div>
                                     </div>
                                     <div className='flex flex-col md:flex-row items-center mt-4 w-full'>
-                                        <div className='sourceLink flex justify-between items-center w-full md:w-auto mt-4 md:mt-0 py-2 px-3 text-sm md:text-lg bg-gray-600 rounded'>
+                                        <div className='sourceLink flex justify-between items-center w-full md:w-auto md:mt-0 py-2 px-3 text-sm md:text-lg bg-gray-600 rounded'>
                                             <span className='flex items-center'>
                                                 <IoIosLink />
                                                 <p className='ms-1'>Source</p>

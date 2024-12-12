@@ -188,7 +188,6 @@ function AuthForm() {
                             className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-clBlack text-base font-semibold cursor-pointer'>
                             Register
                         </button>
-
                     </form>
                 </div>
 
