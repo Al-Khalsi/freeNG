@@ -12,7 +12,6 @@ import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
 import com.pixelfreebies.service.FileService;
-import com.pixelfreebies.service.ImageCreationService;
 import com.pixelfreebies.service.ImageStorageStrategy;
 import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.ImageConverter;
@@ -56,8 +55,10 @@ public class FileServiceImplDev implements FileService {
             // Validate image name
             this.imageValidationService.validateImageName(imageUploadRequest.getFileName());
             String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
-            log.info("Original file name: {}", originalFileName);
-            Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, originalFileName);
+            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+            String newFileName = imageUploadRequest.getFileName() + fileExtension;
+            log.info("Original file name: {} - New file name: {}", originalFileName, newFileName);
+            Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, newFileName);
             log.info("File stored at relative path: {}", relativePath);
 
             // Validate keywords and retrieve their entities
