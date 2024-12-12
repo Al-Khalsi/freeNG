@@ -19,6 +19,10 @@ public class KeywordValidationService {
         Set<Keywords> keywordsSet = new HashSet<>();
         List<String> missingKeywords = new ArrayList<>();
 
+        if (keywords == null) {
+            return keywordsSet;
+        }
+
         for (String keyword : keywords) {
             Optional<Keywords> optionalKeyword = this.keywordsRepository.findByKeyword(keyword);
             if (optionalKeyword.isPresent()) {

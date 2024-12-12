@@ -181,6 +181,7 @@ public class ImageMetadataService {
     }
 
     public void associateImageWithKeywords(Image image, Set<Keywords> keywordsSet) {
+        if (keywordsSet.isEmpty()) return;
         image.getKeywords().addAll(keywordsSet);
     }
 
