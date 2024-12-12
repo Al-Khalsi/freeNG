@@ -30,6 +30,7 @@
   --cl-darkGray: #1E2835;
   --cl-darkGray2: #141b22;
 }
+
 * {
   margin: 0;
   padding: 0;
@@ -46,27 +47,35 @@
 
 /* Custom scrollbar for Chrome, Safari, and Edge */
 ::-webkit-scrollbar {
-  width: 8px; /* Width of the vertical scrollbar */
-  height: 8px; /* Height of the horizontal scrollbar */
+  width: 8px;
+  /* Width of the vertical scrollbar */
+  height: 8px;
+  /* Height of the horizontal scrollbar */
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-darkGray2); /* Background of the scrollbar track */
+  background: var(--bg-darkGray2);
+  /* Background of the scrollbar track */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: var(--bg-purple); /* Color of the scrollbar thumb */
-  border-radius: 10px; /* Rounded corners */
+  background-color: var(--bg-purple);
+  /* Color of the scrollbar thumb */
+  border-radius: 10px;
+  /* Rounded corners */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--cl-lightPurple); /* Color of the scrollbar thumb on hover */
+  background-color: var(--cl-lightPurple);
+  /* Color of the scrollbar thumb on hover */
 }
 
 /* Custom scrollbar for Firefox */
 html {
-  scrollbar-width: thin; /* Can be 'auto' or 'thin' */
-  scrollbar-color: var(--bg-purple) var(--bg-darkGray2); /* Thumb color and track color */
+  scrollbar-width: thin;
+  /* Can be 'auto' or 'thin' */
+  scrollbar-color: var(--bg-purple) var(--bg-darkGray2);
+  /* Thumb color and track color */
 }
 
 body {
@@ -97,7 +106,7 @@ main aside {
 }
 
 .bg-img {
-background-color: var(--bg-darkGray2);
+  background-color: var(--bg-darkGray2);
 }
 
 .lightMod {
@@ -106,11 +115,11 @@ background-color: var(--bg-darkGray2);
 }
 
 .downloaderPage.lightMod .bg-bgDarkGray {
-  background-color: #f0f0f0; 
+  background-color: #f0f0f0;
 }
 
 .downloaderPage.lightMod .text-white {
-  color: black; 
+  color: black;
 }
 
 .input {
@@ -167,12 +176,10 @@ background-color: var(--bg-darkGray2);
   background-repeat: no-repeat;
   background-position: 0 0;
   filter: brightness(1.4);
-  background-image: conic-gradient(rgba(0, 0, 0, 0) 0%, 
-      #4d6dff 
-      rgba(0, 0, 0, 0) 8%,
+  background-image: conic-gradient(rgba(0, 0, 0, 0) 0%,
+      #4d6dff rgba(0, 0, 0, 0) 8%,
       rgba(0, 0, 0, 0) 50%,
-      #6e8cff
-      rgba(0, 0, 0, 0) 58%);
+      #6e8cff rgba(0, 0, 0, 0) 58%);
   transition: all 2s;
 }
 
@@ -381,7 +388,7 @@ background-color: var(--bg-darkGray2);
   background-color: var(--bg-darkGray);
   z-index: 20;
   transition: 1.8s ease-in-out;
-  
+
 }
 
 .toggle-panel {
@@ -416,41 +423,50 @@ background-color: var(--bg-darkGray2);
   .wrapper {
     height: calc(100% - 40px);
   }
+
   .form-box {
     width: 100%;
     height: 70%;
     bottom: 0;
   }
+
   .wrapper.active .form-box {
     right: 0;
     bottom: 30%;
   }
+
   .toggle-form::before {
     width: 100%;
     height: 300%;
     left: 0;
     top: -270%;
   }
+
   .wrapper.active .toggle-form::before {
     left: 0;
     top: 70%;
 
   }
+
   .toggle-panel {
     width: 100%;
     height: 30%;
   }
+
   .toggle-panel.toggle-left {
     top: 0;
   }
+
   .wrapper.active .toggle-panel.toggle-left {
     left: 0;
     top: -30%;
   }
+
   .toggle-panel.toggle-right {
     right: 0;
     bottom: -30%;
   }
+
   .wrapper.active .toggle-panel.toggle-right {
     bottom: 0;
   }
@@ -461,17 +477,17 @@ background-color: var(--bg-darkGray2);
 /*-------------------- button login css --------------------*/
 
 .button {
-    cursor: pointer;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    transition: all 0.25s ease;
-    background: linear-gradient(var(--bg-purple), var(--cl-lightPurple));
-    border: none;
-    outline: none;
-    padding: 12px 18px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.25s ease;
+  background: linear-gradient(var(--bg-purple), var(--cl-lightPurple));
+  border: none;
+  outline: none;
+  padding: 12px 18px;
 }
 
 .button:active {
@@ -487,15 +503,14 @@ background-color: var(--bg-darkGray2);
   width: 1rem;
   display: inline-block;
   transition: all 0.5s ease-in-out;
-  background: radial-gradient(
-    100% 75% at 55%,
-    var(--bg-lightPurple) 0%,
-    rgba(223, 113, 255, 0) 100%
-  );
+  background: radial-gradient(100% 75% at 55%,
+      var(--bg-lightPurple) 0%,
+      rgba(223, 113, 255, 0) 100%);
   box-shadow: 0 0 3px black;
   border-bottom-left-radius: 0.5rem;
   border-top-right-radius: var(--round);
 }
+
 .fold::after {
   content: "";
   position: absolute;
@@ -507,6 +522,7 @@ background-color: var(--bg-darkGray2);
   background-color: #e8e8e8;
   pointer-events: none;
 }
+
 .button:hover .fold {
   margin-top: -1rem;
   margin-right: -1rem;
@@ -531,70 +547,83 @@ background-color: var(--bg-darkGray2);
   background-color: #fff;
   border-radius: 9999px;
 }
+
 @keyframes floating-points {
   0% {
     transform: translateY(0);
   }
+
   85% {
     opacity: 0;
   }
+
   100% {
     transform: translateY(-55px);
     opacity: 0;
   }
 }
+
 .points_wrapper .point:nth-child(1) {
   left: 10%;
   opacity: 1;
   animation-duration: 2.35s;
   animation-delay: 0.2s;
 }
+
 .points_wrapper .point:nth-child(2) {
   left: 30%;
   opacity: 0.7;
   animation-duration: 2.5s;
   animation-delay: 0.5s;
 }
+
 .points_wrapper .point:nth-child(3) {
   left: 25%;
   opacity: 0.8;
   animation-duration: 2.2s;
   animation-delay: 0.1s;
 }
+
 .points_wrapper .point:nth-child(4) {
   left: 44%;
   opacity: 0.6;
   animation-duration: 2.05s;
 }
+
 .points_wrapper .point:nth-child(5) {
   left: 50%;
   opacity: 1;
   animation-duration: 1.9s;
 }
+
 .points_wrapper .point:nth-child(6) {
   left: 75%;
   opacity: 0.5;
   animation-duration: 1.5s;
   animation-delay: 1.5s;
 }
+
 .points_wrapper .point:nth-child(7) {
   left: 88%;
   opacity: 0.9;
   animation-duration: 2.2s;
   animation-delay: 0.2s;
 }
+
 .points_wrapper .point:nth-child(8) {
   left: 58%;
   opacity: 0.8;
   animation-duration: 2.25s;
   animation-delay: 0.2s;
 }
+
 .points_wrapper .point:nth-child(9) {
   left: 98%;
   opacity: 0.6;
   animation-duration: 2.6s;
   animation-delay: 0.1s;
 }
+
 .points_wrapper .point:nth-child(10) {
   left: 65%;
   opacity: 1;
@@ -626,20 +655,24 @@ background-color: var(--bg-darkGray2);
 .button:focus svg.icon {
   fill: white;
 }
+
 .button:hover svg.icon {
   fill: transparent;
   animation:
     dasharray 1s linear forwards,
     filled 0.1s linear forwards 0.95s;
 }
+
 @keyframes dasharray {
   from {
     stroke-dasharray: 0 0 0 0;
   }
+
   to {
     stroke-dasharray: 68 68 0 0;
   }
 }
+
 @keyframes filled {
   to {
     fill: white;
@@ -729,7 +762,7 @@ background-color: var(--bg-darkGray2);
 .subject-text h1 {
   font-weight: 600;
   text-shadow: 0 0 10px var(--bg-lightPurple),
-  0 0 40px var(--bg-lightPurple);
+    0 0 40px var(--bg-lightPurple);
 }
 
 /*-------------------- loding --------------------*/
@@ -764,15 +797,19 @@ background-color: var(--bg-darkGray2);
 }
 
 @keyframes slide {
-  0% , 100% {
+
+  0%,
+  100% {
     bottom: -35px
   }
 
-  25% , 75% {
+  25%,
+  75% {
     bottom: -2px
   }
 
-  20% , 80% {
+  20%,
+  80% {
     bottom: 2px
   }
 }
@@ -782,7 +819,8 @@ background-color: var(--bg-darkGray2);
     transform: rotate(-15deg)
   }
 
-  25% , 75% {
+  25%,
+  75% {
     transform: rotate(0deg)
   }
 
@@ -820,37 +858,45 @@ body:hover #pixelCursor {
 }
 
 @media (max-width: 425px) {
-  a.button .fold, .points_wrapper, .inner {
+
+  a.button .fold,
+  .points_wrapper,
+  .inner {
     display: none;
   }
+
   a.button {
     padding: 12px 12px;
   }
 }
 
 @media (max-width: 768px) {
-   .input {
+  .input {
     padding-inline: 0.75rem;
   }
 }
-  
+
 @media (min-width: 769px) {
   #search {
     display: block;
   }
-  
+
   #main .input {
     width: 391px;
   }
+
   .cosmic-ring {
     max-width: 395px;
   }
+
   .stardust {
     max-width: 400px;
   }
+
   .starfield {
     max-width: 405px;
   }
+
   .nebula {
     max-width: 500px;
   }
@@ -860,15 +906,19 @@ body:hover #pixelCursor {
   #main .input {
     width: 591px;
   }
+
   .cosmic-ring {
     max-width: 595px;
   }
+
   .stardust {
     max-width: 600px;
   }
+
   .starfield {
     max-width: 605px;
   }
+
   .nebula {
     max-width: 700px;
   }
@@ -884,8 +934,10 @@ body:hover #pixelCursor {
   --bg-color: #eee;
   --main-color: #323232;
   position: relative;
-  width: 99%; /* Change width to 100% */
-  height: 60px; /* Keep height as is */
+  width: 99%;
+  /* Change width to 100% */
+  height: 60px;
+  /* Keep height as is */
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -893,11 +945,13 @@ body:hover #pixelCursor {
   border: 1px solid #b0b0b0;
   box-shadow: 18px 18px 10px var(--bg-darkGray2);
   background-color: var(--bg-darkGray2);
-  border-radius: 4px;
+  border-radius: 4px; 
   overflow: hidden;
 }
 
-.buttonDl, .button__icon, .button__text {
+.buttonDl,
+.button__icon,
+.button__text {
   transition: all 0.3s;
 }
 
@@ -914,6 +968,12 @@ body:hover #pixelCursor {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+@media (max-width: 425px) {
+  .buttonDl .button__icon {
+    width: 35%;
+  }
 }
 
 .buttonDl .svg {
@@ -938,12 +998,6 @@ body:hover #pixelCursor {
   transform: translate(3px, 3px);
   box-shadow: 0px 0px var(--main-color);
 }
-
-
-
-
-
-
 
 .Btn:hover .BG {
   transform: rotate(35deg);
