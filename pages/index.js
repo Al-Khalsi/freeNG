@@ -290,7 +290,7 @@ function Index() {
                 <div className='w-full py-12 px-8 flex-grow'>
                     {isSearching ? (
                         <div className='filter-result flex justify-center items-center'>
-                            <div className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
+                            <h2 className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
                                 Result for:
                                 <span className='ml-2'>
                                     {submittedSearchQuery}
@@ -305,7 +305,7 @@ function Index() {
                                     className='ml-2 text-xl text-white hover:text-red-600 rounded-lg'>
                                     <MdDelete />
                                 </button>
-                            </div>
+                            </h2>
                         </div>
                     ) : (
                         <div className='subject-text relative w-full text-center'>

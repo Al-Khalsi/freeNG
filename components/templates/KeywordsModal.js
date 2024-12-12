@@ -28,10 +28,10 @@ const KeywordsModal = ({ keywords, onClose, onKeywordClick }) => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50" onClick={onClose}>
             <div 
                 className="bg-bgDarkGray rounded p-6 w-11/12 md:w-1/2" 
-                onClick={handleContentClick} // Add click handler here
+                onClick={handleContentClick} 
             >
                 <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-2xl font-bold">Tag</h2>
+                    <h4 className="text-2xl font-bold">Tag</h4>
                     <button onClick={onClose} className="text-xl">
                         <FaTimes />
                     </button>
