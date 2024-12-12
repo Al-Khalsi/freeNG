@@ -7,6 +7,7 @@ spring:
 
   config:
     import: application-prod.yml,application-dev.yml
+
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
@@ -16,4 +17,4 @@ base:
 cors:
   origin:
     url:
-      permitted: ${CORS_ORIGIN_URL:localhost:3000}
+      permitted: ${CORS_ORIGIN_URL:http://localhost:3000}

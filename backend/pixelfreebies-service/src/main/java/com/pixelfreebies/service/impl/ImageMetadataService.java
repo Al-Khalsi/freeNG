@@ -53,12 +53,14 @@ public class ImageMetadataService {
             webpVariant.setSize(uploadedMultipartFile.getSize());
             webpVariant.setPurpose(Purpose.DOWNLOAD);
 
-            // Convert and save as WebP
-            Path webpPath = this.imageStorageStrategy.getStorageLocation().resolve(webpFileName);
-            // For lossy compression (smaller file size, some quality loss)
-            saveAsWebp(originalImage, new FileOutputStream(webpPath.toFile()), 0.8f, false); // 0.8f is the quality factor (0.0 to 1.0)
-            // Or for lossless compression (larger file size, no quality loss)
-//            saveAsWebp(originalImage, new FileOutputStream(webpPath.toFile()), 0.0f, true); // 0.8f is the quality factor (0.0 to 1.0)
+            if (imageStorageStrategy.supportsWebP()) {
+                String remotePath = imageStorageStrategy.getStorageLocation().resolve(webpFileName).toString();
+                imageStorageStrategy.storeWebp(originalImage, remotePath, 0.8f, false);
+            } else {
+                // Default fallback: Save WebP locally
+                Path webpPath = imageStorageStrategy.getStorageLocation().resolve(webpFileName);
+                saveAsWebp(originalImage, new FileOutputStream(webpPath.toFile()), 0.8f, false);
+            }
 
             return webpVariant;
 
@@ -87,11 +89,8 @@ public class ImageMetadataService {
 
         WebPWriteParam writeParam = new WebPWriteParam(Locale.getDefault());
         writeParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-
-        if (lossless)
-            writeParam.setCompressionType("Lossless");
-        else {
-            writeParam.setCompressionType("Lossy");
+        writeParam.setCompressionType(lossless ? "Lossless" : "Lossy");
+        if (!lossless) {
             writeParam.setCompressionQuality(quality);
         }
 

@@ -46,7 +46,7 @@ public class JWTTokenService implements TokenService {
                 .subject(authentication.getName())
                 .claims(claims)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + this.expiresIn * 60_000))
+                .expiration(new Date(System.currentTimeMillis() + this.expiresIn * 60_000)) // minutes to millis
                 .signWith(this.getSecretKey())
                 .compact();
     }

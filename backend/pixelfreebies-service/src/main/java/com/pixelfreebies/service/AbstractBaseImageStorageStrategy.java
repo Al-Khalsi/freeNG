@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,6 +46,11 @@ public class AbstractBaseImageStorageStrategy implements ImageStorageStrategy {
     @Override
     public Path store(MultipartFile file, String fileName) throws IOException {
         return null;
+    }
+
+    @Override
+    public void storeWebp(BufferedImage image, String remotePath, float quality, boolean lossless) throws IOException {
+
     }
 
     @Override
