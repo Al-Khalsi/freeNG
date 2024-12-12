@@ -61,7 +61,7 @@ function UploadImage() {
     { name: 'Light Brown', hex: '#ffa654' },
     { name: 'Brown', hex: '#992202' },
     { name: 'Dark Brown', hex: '#410e00' },
-];
+  ];
 
   const styles = [
     '3D',
@@ -136,7 +136,7 @@ function UploadImage() {
 
       const uploadedFileData = response.data.data;
       setUploadedFile(uploadedFileData);
-      alert('Upload successful: ' + uploadedFileData);
+      alert('Upload successful');
     } catch (error) {
       setErrorMessage(error.response?.data?.message || 'Error uploading image.');
     } finally {
@@ -242,14 +242,17 @@ function UploadImage() {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target) &&
         inputRef.current &&
-        !inputRef.current.contains(event.target)
+        !inputRef.current.contains(event.target) &&
+        dropdownColorRef.current && // Check if the click is outside the color dropdown
+        !dropdownColorRef.current.contains(event.target) // Add this line
       ) {
         setShowResults(false); // Close results dropdown
+        setShowColorDropdown(false); // Close color dropdown
       }
     };
-
+  
     document.addEventListener('mousedown', handleClickOutside);
-
+  
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
