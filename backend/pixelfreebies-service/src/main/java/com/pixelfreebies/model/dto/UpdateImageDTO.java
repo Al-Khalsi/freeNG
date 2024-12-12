@@ -1,12 +1,14 @@
 package com.pixelfreebies.model.dto;
 
 import lombok.Data;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 @Data
+@ToString
 public class UpdateImageDTO {
 
     private String fileTitle;

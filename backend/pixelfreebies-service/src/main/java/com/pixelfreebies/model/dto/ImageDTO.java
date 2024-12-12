@@ -2,10 +2,7 @@ package com.pixelfreebies.model.dto;
 
 import com.pixelfreebies.model.domain.Image;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -18,6 +15,7 @@ import java.util.Set;
  */
 @Data
 @Builder
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Details of an image file.")

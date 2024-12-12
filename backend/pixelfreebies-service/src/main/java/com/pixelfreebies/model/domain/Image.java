@@ -13,6 +13,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -56,6 +57,7 @@ public class Image extends BaseEntity<UUID> {
 
     @OneToMany(mappedBy = "image", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
+    @ToString.Exclude
     private Set<ImageVariant> variants = new HashSet<>();
 
     @ManyToMany
@@ -65,6 +67,7 @@ public class Image extends BaseEntity<UUID> {
             inverseJoinColumns = @JoinColumn(name = "keyword_id")
     )
     @Builder.Default
+    @ToString.Exclude
     private Set<Keywords> keywords = new HashSet<>();
 
     // -------------------- Methods --------------------

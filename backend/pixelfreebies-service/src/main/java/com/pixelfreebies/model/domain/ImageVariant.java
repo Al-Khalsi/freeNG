@@ -6,10 +6,12 @@ import com.pixelfreebies.model.enums.Purpose;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name = "image_variants")
 public class ImageVariant extends BaseEntity<Long> {
 

@@ -35,9 +35,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @Transactional
-@Profile("prod")
+@Profile("!prod")
 @RequiredArgsConstructor
-public class FileServiceImpl implements FileService {
+public class FileServiceImplDev implements FileService {
 
     private final ImageRepository imageRepository;
     private final ImageVariantRepository imageVariantRepository;
@@ -51,26 +51,40 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public ImageDTO storeImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
+        log.info("Entering storeImage method with fileName: {}", imageUploadRequest.getFileName());
         try {
             // Validate image name
             this.imageValidationService.validateImageName(imageUploadRequest.getFileName());
             String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
+            log.info("Original file name: {}", originalFileName);
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, originalFileName);
+            log.info("File stored at relative path: {}", relativePath);
 
             // Validate keywords and retrieve their entities
             Set<Keywords> keywordsSet = this.keywordValidationService.validateAndFetchKeywords(imageUploadRequest.getKeywords());
+            log.info("Keywords validated and fetched: {}", keywordsSet);
 
             // Create the domains
             Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, relativePath.toString(), imageUploadRequest);
+            log.info("Image domain created: {}", image);
+
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
+            log.info("Image variant created: {}", imageVariant);
 
             // Associate relationships
             this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
+            log.info("Associated image with image variant");
+
             this.imageMetadataService.associateImageWithKeywords(image, keywordsSet);
+            log.info("Associated image with keywords");
 
             // Save the image (cascades save to associated entities)
             Image savedImage = this.imageRepository.save(image);
             this.imageVariantRepository.save(imageVariant);
+
+            log.info("Image stored successfully.");
+            log.info("Image name: {}", savedImage.getFileTitle());
+            log.info("Image path: {}", savedImage.getFilePath());
 
             return this.imageConverter.toDto(savedImage);
         } catch (IOException e) {
@@ -81,13 +95,19 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Resource loadImageAsResource(String fileId) throws IOException {
+        log.info("Entering loadImageAsResource with fileId: {}", fileId);
         Image image = this.imageRepository.findById(UUID.fromString(fileId))
                 .orElseThrow(() -> new IOException("File not found with id " + fileId));
+
+        Path absolutePath = this.imageStorageStrategy.getStorageLocation().resolve(image.getFilePath()).normalize();
+        log.info("Image loaded from absolute path: {}", absolutePath.toAbsolutePath());
+
         return this.imageStorageStrategy.load(image.getFilePath());
     }
 
     @Override
     public List<ImageDTO> listAllImages() {
+        log.info("Listing all images");
         return this.imageRepository.findAll()
                 .stream()
                 .map(this::convertToDto)
@@ -96,11 +116,13 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Page<ImageDTO> listAllImages(Pageable pageable) {
+        log.info("Loading images with pagination: {}", pageable);
         return this.imageRepository.findAll(pageable)
                 .map(this::convertToDto);
     }
 
     private ImageDTO convertToDto(Image image) {
+        log.info("Converting Image to DTO for image: {}", image);
         ImageDTO imageDTO = this.imageConverter.toDto(image);
         String webpImagePath = image.getVariants()
                 .stream().findFirst()
@@ -108,6 +130,7 @@ public class FileServiceImpl implements FileService {
                     if (!imageVariant.getFormat().equals(ImageFormat.WEBP)) return null;
                     return imageVariant.getFilePath();
                 }).orElse(image.getFilePath());
+        log.info("WEBP image path: {}", webpImagePath);
         imageDTO.setFilePath(webpImagePath);
         imageDTO.setContentType("image/webp");
         return imageDTO;
@@ -115,17 +138,23 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public List<ImageDTO> searchImages(String query) {
+        log.info("Searching images with query: {}", query);
         if (query == null || query.trim().isEmpty()) {
+            log.warn("Query is null or empty, returning empty list");
             return Collections.emptyList();
         }
 
         // Format the query for PostgreSQL full-text search
         String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
+        log.info("Formatted query for search: {}", formattedQuery);
 
         // First attempt to find exact matches
         List<Image> exactMatches = this.imageRepository.searchFiles(formattedQuery);
+        log.info("Exact matches found: {}", exactMatches.size());
+
         // If no exact matches found, search for similar entries
         List<Image> similarMatches = this.imageRepository.searchSimilarFiles(query);
+        log.info("Similar matches found: {}", similarMatches.size());
 
         // Create a set of IDs to avoid duplicates
         Set<UUID> exactMatchIds = exactMatches.stream()
@@ -138,22 +167,25 @@ public class FileServiceImpl implements FileService {
                 .filter(image -> !exactMatchIds.contains(image.getId()))
                 .forEach(combinedResults::add);
 
+        log.info("Combined results size: {}", combinedResults.size());
         return combinedResults.stream()
                 .filter(Image::isActive)
-//                .limit(50) // Limit results
                 .map(this.imageConverter::toDto)
                 .toList();
     }
 
     @Override
     public void deleteImageById(String imageId) {
+        log.info("Deleting image by id: {}", imageId);
         Image image = this.imageRepository.findById(UUID.fromString(imageId))
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
         this.imageRepository.delete(image);
+        log.info("Image with id {} deleted successfully", imageId);
     }
 
     @Override
     public ImageDTO updateImage(String imageId, UpdateImageDTO updateImageDTO) {
+        log.info("Updating image with id: {}", imageId);
         Image foundImage = this.imageRepository.findById(UUID.fromString(imageId))
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
 
@@ -164,22 +196,30 @@ public class FileServiceImpl implements FileService {
         foundImage.setDominantColors(updateImageDTO.getDominantColors());
         foundImage.setAverageRating(updateImageDTO.getAverageRating());
 
-        return this.imageConverter.toDto(this.imageRepository.save(foundImage));
+        Image updatedImage = this.imageRepository.save(foundImage);
+        log.info("Image updated successfully: {}", updatedImage);
+        return this.imageConverter.toDto(updatedImage);
     }
 
     @Override
     public List<String> searchKeywords(String query, int page, int size) {
+        log.info("Searching keywords with query: {}", query);
         if (query == null || query.trim().isEmpty()) {
+            log.warn("Query is null or empty, returning empty list");
             return Collections.emptyList();
         }
 
         // Format the query for PostgreSQL full-text search
         String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
+        log.info("Formatted query for keywords search: {}", formattedQuery);
 
         // First attempt to find exact matches
         List<String> exactMatches = this.imageRepository.searchKeywords(formattedQuery);
+        log.info("Exact keyword matches found: {}", exactMatches.size());
+
         // If no exact matches found, search for similar entries
         List<String> similarMatches = this.imageRepository.searchSimilarKeywords(query);
+        log.info("Similar keyword matches found: {}", similarMatches.size());
 
         // Create a set of IDs to avoid duplicates
         Set<String> exactMatchIds = new HashSet<>(exactMatches);
@@ -190,27 +230,31 @@ public class FileServiceImpl implements FileService {
                 .filter(keyword -> !exactMatchIds.contains(keyword))
                 .forEach(combinedResults::add);
 
-        return combinedResults.stream()
-//                .limit(50) // Limit results
-                .toList();
+        log.info("Combined keyword results size: {}", combinedResults.size());
+        return combinedResults.stream().toList();
     }
 
     @Override
     public Page<ImageDTO> searchImages(String query, PageRequest pageRequest) {
+        log.info("Searching images with query: {} and pageRequest: {}", query, pageRequest);
         if (query == null || query.trim().isEmpty()) {
+            log.warn("Query is null or empty, returning empty Page");
             return Page.empty();
         }
 
         // Format the query for PostgreSQL full-text search
         String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
+        log.info("Formatted query for paginated search: {}", formattedQuery);
 
         // First attempt to find exact matches with pagination
         Page<Image> exactMatches = this.imageRepository.searchFiles(formattedQuery, pageRequest);
+        log.info("Exact matches found: {}", exactMatches.getTotalElements());
 
         // If exact matches are less than the requested page size, find similar matches
         if (exactMatches.getContent().isEmpty()) {
             Page<ImageDTO> map = this.imageRepository.searchSimilarFiles(query, pageRequest)
                     .map(this::convertToDto);
+            log.info("No exact matches found, returning similar matches");
             return map;
         }
 
@@ -219,9 +263,10 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public Page<ImageDTO> listAllImagesByKeywordId(long keywordId, Pageable pageable) {
+        log.info("Listing all images by keywordId: {} with pageable: {}", keywordId, pageable);
         KeywordsDTO foundKeyword = this.keywordsService.findKeywordById(keywordId);
+        log.info("Found keyword: {}", foundKeyword);
         return this.imageRepository.findByKeywords_Id(foundKeyword.getId(), pageable)
                 .map(this.imageConverter::toDto);
     }
-
 }

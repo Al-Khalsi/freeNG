@@ -2,9 +2,11 @@ package com.pixelfreebies.service.impl;
 
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.payload.request.ImageUploadRequest;
+import com.pixelfreebies.service.ImageCreationService;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,11 +17,13 @@ import java.math.BigDecimal;
 
 @Slf4j
 @Service
+@Profile("prod")
 @RequiredArgsConstructor
-public class ImageCreationService {
+public class ImageCreationServiceImpl implements ImageCreationService {
 
     private final SecurityUtil securityUtil;
 
+    @Override
     public Image createImageDomain(MultipartFile uploadedMultipartFile,
                                    String relativePath, ImageUploadRequest imageUploadRequest) {
         Image image = new Image();
