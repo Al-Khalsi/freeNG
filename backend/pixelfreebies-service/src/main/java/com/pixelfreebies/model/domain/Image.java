@@ -27,6 +27,7 @@ public class Image extends BaseEntity<UUID> {
     private boolean isActive;
     private String style;
     private boolean isLightMode;
+    private String source;
 
     private int width;
     private int height;

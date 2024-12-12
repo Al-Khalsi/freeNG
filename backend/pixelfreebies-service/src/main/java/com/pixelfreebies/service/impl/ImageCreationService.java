@@ -1,6 +1,7 @@
 package com.pixelfreebies.service.impl;
 
 import com.pixelfreebies.model.domain.Image;
+import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +12,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -20,11 +20,10 @@ public class ImageCreationService {
 
     private final SecurityUtil securityUtil;
 
-    public Image createImageDomain(MultipartFile uploadedMultipartFile, String imageName,
-                                   String relativePath, List<String> dominantColors,
-                                   String style, boolean lightMode) {
+    public Image createImageDomain(MultipartFile uploadedMultipartFile,
+                                   String relativePath, ImageUploadRequest imageUploadRequest) {
         Image image = new Image();
-        image.setFileTitle(imageName);
+        image.setFileTitle(imageUploadRequest.getFileName());
         image.setFilePath(relativePath);
         image.setContentType(uploadedMultipartFile.getContentType());
         image.setSize(uploadedMultipartFile.getSize()); // size in bytes
@@ -33,10 +32,14 @@ public class ImageCreationService {
         image.setDownloadCount(0);
         image.setUploadedBy(this.securityUtil.getAuthenticatedUser());
         // Calculate dimensions
-        calculateDimension(uploadedMultipartFile, image, imageName);
-        image.setStyle(style);
-        image.setLightMode(lightMode);
-        image.getDominantColors().addAll(dominantColors);
+        calculateDimension(uploadedMultipartFile, image, imageUploadRequest.getFileName());
+        image.setStyle(imageUploadRequest.getStyle());
+        image.setLightMode(imageUploadRequest.isLightMode());
+        String source = imageUploadRequest.getSource() != null
+                ? imageUploadRequest.getSource()
+                : "pixelfreebies.com";
+        image.setSource(source);
+        image.getDominantColors().addAll(imageUploadRequest.getDominantColors());
 
         return image;
     }

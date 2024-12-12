@@ -16,5 +16,6 @@ public class ImageUploadRequest {
     private List<String> dominantColors;
     private String style;
     private boolean lightMode;
+    private String source;
 
 }

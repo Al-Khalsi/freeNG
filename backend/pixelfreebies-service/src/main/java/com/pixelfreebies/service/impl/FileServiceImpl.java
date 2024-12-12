@@ -58,7 +58,7 @@ public class FileServiceImpl implements FileService {
             Set<Keywords> keywordsSet = this.keywordValidationService.validateAndFetchKeywords(imageUploadRequest.getKeywords());
 
             // Create the domains
-            Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, imageUploadRequest.getFileName(), relativePath.toString(), imageUploadRequest.getDominantColors(), imageUploadRequest.getStyle(), imageUploadRequest.isLightMode());
+            Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, relativePath.toString(), imageUploadRequest);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Associate relationships
