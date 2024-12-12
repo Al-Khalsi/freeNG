@@ -140,12 +140,9 @@ function UploadImage() {
   const fetchKeywords = async (query, page = 0, size = 10) => {
     console.log("Fetching keywords for query:", query);
     try {
-        const params = { query, page, size };
-        console.log('Query Parameters:', params);
         const url = KEYWORD_API.SEARCH_PAGINATED(query, page, size);
         console.log("keyword search url: ", url);
         const response = await axios.get(url, {
-            params,
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
@@ -172,8 +169,8 @@ function UploadImage() {
 
   const handleSearch = () => {
     const trimmedQuery = searchQuery.trim();
-    if (singleKeyword) {
-        fetchKeywords(singleKeyword, currentPage);
+    if (trimmedQuery) {
+        fetchKeywords(trimmedQuery, currentPage);
     } else {
         setErrorMessage('Please enter a search term.');
     }
