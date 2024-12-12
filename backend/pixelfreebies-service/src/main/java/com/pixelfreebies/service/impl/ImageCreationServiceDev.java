@@ -41,10 +41,11 @@ public class ImageCreationServiceDev implements ImageCreationService {
         calculateDimension(uploadedMultipartFile, image, imageUploadRequest.getFileName());
         image.setStyle(imageUploadRequest.getStyle());
         image.setLightMode(imageUploadRequest.isLightMode());
-        String source = imageUploadRequest.getSource() != null
-                ? imageUploadRequest.getSource()
-                : "pixelfreebies.com";
+
+        String source = imageUploadRequest.getSource();
+        if (source == null || source.trim().isEmpty()) source = "PixelFreebies";
         image.setSource(source);
+
         image.getDominantColors().addAll(imageUploadRequest.getDominantColors());
 
         log.info("Image domain created: {}", image);
