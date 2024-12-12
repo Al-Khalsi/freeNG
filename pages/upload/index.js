@@ -245,9 +245,9 @@ function UploadImage() {
         setShowResults(false); // Close results dropdown
       }
     };
-  
+
     document.addEventListener('mousedown', handleClickOutside);
-  
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -266,6 +266,7 @@ function UploadImage() {
                 className={`border-dashed border-2 rounded p-2 h-48 sm:h-80 w-full 
                 ${lightModePreview ? 'bg-bgGray text-clDarkGray2 border-bgDarkGray2' :
                     'bg-bgDarkGray2 text-clGray border-bgGray'} 
+                     ${image ? 'border-green-500' : ''}
                 cursor-pointer flex items-center justify-center`}
                 onClick={() => document.getElementById('file-input').click()}>
                 {image ? (
@@ -273,7 +274,7 @@ function UploadImage() {
                     <img
                       src={imagePreviewUrl}
                       alt="Preview"
-                      className="mt-4 w-full h-full rounded object-contain" // Add styles for the image
+                      className="w-full h-full rounded object-contain" // Add styles for the image
                     />
                   </>
                 ) : (
