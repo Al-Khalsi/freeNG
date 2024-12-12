@@ -26,6 +26,7 @@ public class ImageDTO implements Serializable {
     private String filePath;
     private String contentType;
     private String size;
+    private String source;
     private int height;
     private int width;
     private boolean isActive;
