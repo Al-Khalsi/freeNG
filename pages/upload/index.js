@@ -273,7 +273,7 @@ function UploadImage() {
                 className={`border-dashed border-2 rounded p-2 h-48 sm:h-80 w-full 
                 ${lightModePreview ? 'bg-bgGray text-clDarkGray2 border-bgDarkGray2' : 
                 'bg-bgDarkGray2 text-clGray border-bgGray'} 
-                cursor-pointer flex items-center justify-center hover:bg-bgDarkGray`}
+                cursor-pointer flex items-center justify-center`}
                 onClick={() => document.getElementById('file-input').click()}>
                 {image ? (
                   <>
