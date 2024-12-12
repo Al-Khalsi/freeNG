@@ -11,7 +11,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.util.Map;
 
 import static org.springframework.http.HttpStatus.OK;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${base.url}/auth")
@@ -84,8 +87,9 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/register")
-    public ResponseEntity<Result> register(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Result> register(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         Map<String, Object> responseMap = this.authenticationService.registerUser(userDTO);
+        log.info("request to register url. url: {}", request.getRequestURL());
 
         return ResponseEntity.ok(Result.builder()
                 .flag(true)
@@ -152,8 +156,9 @@ public class AuthenticationController {
             )
     })
     @PostMapping("/login")
-    public ResponseEntity<Result> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Result> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         Map<String, Object> result = this.authenticationService.login(loginRequest);
+        log.info("request to login url. url: {}", request.getRequestURL());
 
         return ResponseEntity.status(OK)
                 .header(HttpHeaders.AUTHORIZATION, String.valueOf(result.get("token")))

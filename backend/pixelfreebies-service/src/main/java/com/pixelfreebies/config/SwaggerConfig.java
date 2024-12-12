@@ -23,11 +23,11 @@ import io.swagger.v3.oas.annotations.servers.Server;
         servers = {
                 @Server(
                         description = "Local ENV",
-                        url = "http://localhost:8080"
+                        url = "http://localhost:9090"
                 ),
                 @Server(
-                        description = "some_prod",
-                        url = "some_prod_url"
+                        description = "api.pixelfreebies.com",
+                        url = "https://api.v1.pixelfreebies.com"
                 )
         },
         security = {
