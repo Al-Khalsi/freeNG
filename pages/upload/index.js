@@ -5,11 +5,12 @@ import { MdDelete } from "react-icons/md";
 import { KEYWORD_API } from "@/utils/api/keyword";
 import { FILE_API } from "@/utils/api/file";
 import { LuUpload } from "react-icons/lu";
-import { FaSun , FaMoon} from "react-icons/fa";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 function UploadImage() {
   const { token } = useAuth();
   const [image, setImage] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState(''); // State for image preview
   const [imageName, setImageName] = useState('');
   const [dominantColors, setDominantColors] = useState([]);
   const [style, setStyle] = useState('');
@@ -25,11 +26,11 @@ function UploadImage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [source, setSource] = useState('PixelFreebies');
-  const [showColorDropdown, setShowColorDropdown] = useState(false); // State for color dropdown
+  const [showColorDropdown, setShowColorDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const inputRef = useRef(null);
   const addKeywordInputRef = useRef(null);
-  const dropdownColorRef = useRef(null); // Reference for the color dropdown
+  const dropdownColorRef = useRef(null);
 
   const colors = [
     { name: 'Red', hex: '#FF0000' },
@@ -89,9 +90,10 @@ function UploadImage() {
   ];
 
   const handleImageChange = (e) => {
-    const image = e.target.files[0];
-    if (image && image.type.startsWith('image/')) {
-      setImage(image);
+    const imageFile = e.target.files[0];
+    if (imageFile && imageFile.type.startsWith('image/')) {
+      setImage(imageFile);
+      setImagePreviewUrl(URL.createObjectURL(imageFile)); // Create a preview URL
       setErrorMessage('');
     } else {
       setErrorMessage('Please select a valid image.');
@@ -265,15 +267,20 @@ function UploadImage() {
 
           <div className='flex items-center flex-col sm:flex-row'>
             <div className="mb-4 mx-2 w-full md-w-1/2">
-              {/* <label className="block mb-2">Image</label> */}
               <div
                 className="border-dashed border-2 border-gray-400
-                rounded p-2 w-full bg-bgDarkGray2 cursor-pointer
+                rounded p-2 h-48 sm:h-80 w-full bg-bgDarkGray2 cursor-pointer
                 flex items-center justify-center hover:bg-bgDarkGray"
                 onClick={() => document.getElementById('file-input').click()}
               >
                 {image ? (
-                  <p>{image.name}</p>
+                  <>
+                    <img
+                      src={imagePreviewUrl}
+                      alt="Preview"
+                      className="mt-2 w-full h-full rounded object-contain" // Add styles for the image
+                    />
+                  </>
                 ) : (
                   <p>Click to select image</p>
                 )}
@@ -288,7 +295,6 @@ function UploadImage() {
             </div>
 
             <div className="mb-4 mx-2 w-full sm:w-1/2">
-              {/* <label className="block mb-2">Image Name</label> */}
               <input
                 type="text"
                 placeholder='Image Name'
@@ -303,7 +309,6 @@ function UploadImage() {
 
           <div className='flex items-center flex-col sm:flex-row'>
             <div className='mb-4 mx-2 w-full sm:w-1/2'>
-              {/* <label className="block mb-2">Dominant Color</label> */}
               <div className="relative">
                 <button
                   type="button"
@@ -340,7 +345,6 @@ function UploadImage() {
             </div>
 
             <div className="mb-4 mx-2 w-full sm:w-1/2">
-              {/* <label className="block mb-2">Style</label> */}
               <select
                 value={style}
                 onChange={(e) => setStyle(e.target.value)}
@@ -450,16 +454,16 @@ function UploadImage() {
               disabled={isLoading}>
               {isLoading ? 'Uploading...' : 'Upload'}
             </button>
-            <div className='flex flex-col sm:flex-row justify-between items-center w-full sm:w-1/2 mt-4'>
+            <div className='flex flex-col sm:flex-row justify-between items-center w-full mx-2 sm:w-1/2'>
               <button
                 type="button"
                 onClick={toggleLightMode}
-                className={`rounded p-2 mx-2 w-full hover:border 
+                className={`rounded p-2 mr-2 w-full hover:border 
               ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
                 {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
               </button>
               <input type="text"
-                className='INPUTSource rounded mx-2 mt-4 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
+                className='INPUTSource rounded ml-2 mt-4 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
                 placeholder='PixelFreebies' />
