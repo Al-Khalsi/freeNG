@@ -117,6 +117,7 @@ const Downloader = () => {
                 <link rel="canonical" href={`https://pixelfreebies.com/download/${title}`} />
                 <meta name="description"
                     content={`${title} is a free png image with dimensions ${width}x${height} and size ${size} in ${style} style available for free.`} />
+                 <meta name="keywords" content={parsedKeywords.map(kw => kw.keyword).join(', ')} />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta name="robots" content="index, follow" />
 

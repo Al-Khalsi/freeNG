@@ -246,13 +246,13 @@ function Index() {
                 <meta name="description"
                     content="PixelFreebies offers a vast collection of free PNG images for download. 
                 Explore and find the perfect image for your project." />
-                {/* <meta name="keywords" content="free images, PNG images, download images, PixelFreebies, stock photos" /> */}
+                <meta name="keywords" content="Free PNG Downloads, Stock PNG Files, Free Vector PNG Files, PNG Background Images, PNG Icons and Illustrations" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta name="robots" content="index, follow" />
 
                 <meta property="og:title" content="PixelFreebies - Free PNG Images" />
                 <meta property="og:description" content="Explore our extensive collection of free PNG images for your creative projects." />
-                <meta property="og:image" content="URL_to_a_representative_image.jpg" />
+                <meta property="og:image" content="../img/PixelFreebies_Banner.jpg" />
                 <meta property="og:url" content="https://pixelfreebies.com" />
                 <meta property="og:type" content="website" />
 
