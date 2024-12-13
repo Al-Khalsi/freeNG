@@ -47,9 +47,8 @@ RUN npm run build
 # Create a new stage to run the application with minimal runtime dependencies
 FROM base AS final
 
-# Copy the .env file based on NODE_ENV
-ARG NODE_ENV
-COPY .env.${NODE_ENV} .env
+# Use production node environment by default.
+ENV NODE_ENV production
 
 # Run the application as a non-root user.
 USER node
