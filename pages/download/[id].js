@@ -12,6 +12,7 @@ import axios from 'axios';
 import KeywordsModal from '@/components/templates/KeywordsModal';
 import { FILE_API } from "@/utils/api/file";
 import { KEYWORD_API } from "@/utils/api/keyword";
+import Header from '@/components/templates/Header';
 
 // New colors array
 const colors = [
@@ -143,8 +144,9 @@ const Downloader = () => {
                 <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
             <div className={`downloaderPage w-full`}>
-                <main className='w-full h-auto flex-auto py-12'>
-                    <div className='flex justify-between w-full px-8'>
+                {/* <Header /> */}
+                <main className='w-full h-auto flex-auto'>
+                    <div className='flex justify-between w-full py-8 px-4 lg:px-8'>
                         <div className='flex flex-col md:flex-row justify-between w-full p-4 bg-bgDarkGray rounded-lg'>
                             <div className={`bg-img w-full md:w-1/2 h-56 md:h-custom-136 rounded p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
                                 <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />

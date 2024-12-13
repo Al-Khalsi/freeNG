@@ -123,27 +123,6 @@ function Index() {
         }
     };
 
-    const handleEditImage = async (imageId, updatedData) => {
-        try {
-            const response = await apiFetch(FILE_API.UPDATE(imageId), 'PUT', updatedData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                }
-            });
-
-            if (response) {
-                // Update the images state with the edited image
-                setImages((prevImages) => prevImages.map(image =>
-                    image.id === imageId ? { ...image, ...updatedData } : image
-                ));
-            } else {
-                console.error('Failed to edit image');
-            }
-        } catch (error) {
-            console.error('Error editing image:', error);
-        }
-    };
-
     // Pagination logic
     const handlePageChange = (page) => {
         // Push the new page to the URL
