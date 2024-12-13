@@ -347,8 +347,8 @@ function Index() {
                         href={'/upload'}
                         className='fixed right-3 bottom-3
                             w-10 h-10 p-6 flex justify-center items-center
-                            bg-blue-700 text-white text-2xl outline-none
-                            rounded-full cursor-pointer'>
+                            bg-gradient-to-t from-bgLightPurple to-bgPurple text-white text-2xl 
+                            outline-none rounded-lg cursor-pointer'>
                         +
                     </Link>
                 )}
