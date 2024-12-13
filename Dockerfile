@@ -9,10 +9,6 @@ FROM node:${NODE_VERSION}-alpine AS base
 # Set working directory for all build stages.
 WORKDIR /usr/src/app
 
-# Copy .env files to image
-COPY .env.production .env.production
-COPY .env.local .env.local 
-
 ################################################################################
 # Create a stage for installing production dependencies.
 FROM base AS deps
@@ -52,7 +48,7 @@ RUN npm run build
 FROM base AS final
 
 # Use production node environment by default.
-ENV NODE_ENV production  
+ENV NODE_ENV production
 
 # Run the application as a non-root user.
 USER node
