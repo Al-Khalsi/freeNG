@@ -40,28 +40,21 @@ function AuthForm() {
                 password: credentials.password,
             });
 
-            // Log the entire response and response.data
-            console.log('Response:', response); // Log the entire response object
-            console.log('Response Data:', response.data); // Log the data part of the response
-
             const data = response.data.data; // Get response data
             const userToken = data.token; // Get user token
             const username = data.userDetails.username; // Extract username from response
-            console.log(data); // Log the data received
 
             if (userToken) {
                 storeToken(userToken); // Store the token
 
                 // Decode the token
                 const decodedToken = jwt_decode(userToken);
-                console.log('Decoded Token:', decodedToken);
 
                 // Store user information from token
                 setUsername(username); // Store username from response
                 setEmail(decodedToken.email); // Store email from token
                 setRole(decodedToken.role); // Store role from token
 
-                console.log('Login successful, displaying notification'); 
                 NotificationManager.success('Login successful!', 'Success');
                 await router.push('/');
             } else {
@@ -86,19 +79,14 @@ function AuthForm() {
                 password: credentials.password,
             });
 
-            console.log('Response:', response); // Log the entire response object
-            console.log('Response Data:', response.data); // Log the data part of the response
-
             const data = response.data.data; // Get response data
             const userToken = data.token; // Get user token
-            console.log(data); // Log the data received
 
             if (userToken) {
                 storeToken(userToken); // Store the token
 
                 // Decode the token
                 const decodedToken = jwt_decode(userToken);
-                console.log('Decoded Token:', decodedToken);
 
                 // Store user information from token
                 setUsername(credentials.username); // Store username from registration form

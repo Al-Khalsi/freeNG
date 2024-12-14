@@ -40,20 +40,15 @@ function Index() {
         try {
             let url;
             if (keywordId) {
-                console.log(`keywordId: ${keywordId}`)
                 url = KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, page - 1, size);
             } else if (query) {
-                console.log("query: ", query);
                 url = FILE_API.SEARCH_PAGINATED(page - 1, size, encodeURIComponent(query));
             }
             else {
                 url = FILE_API.LIST_IMAGES_PAGINATED(page - 1, size);
             }
 
-            console.log('Fetching images from URL:', url); // Log the URL being fetched
-
             const response = await apiFetch(url, 'GET', null, {});
-            console.log('Response received:', response); // Log the response received
 
             if (response.flag && response.data) {
                 const fetchedImages = response.data.map((file) => ({
@@ -69,11 +64,9 @@ function Index() {
                     uploadedBy: file.uploadedBy.username,
                     lightMode: file.lightMode,
                     source: file.source,
-                    // Convert keywords to a comma-separated string
                     keywords: JSON.stringify(file.keywords)
                 }));
 
-                console.log('Fetched images:', fetchedImages); // Log the fetched images
                 setImages(fetchedImages); // Update state with the fetched images
                 setTotalPages(response.totalPages); // Set total pages from the response
             } else {

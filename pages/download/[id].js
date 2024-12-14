@@ -55,7 +55,6 @@ const Downloader = () => {
         if (keywords) {
             try {
                 const keywordArray = JSON.parse(keywords);
-                console.log('Keywords:', keywordArray);
                 setParsedKeywords(keywordArray);
             } catch (error) {
                 console.error('Error parsing keywords:', error);
@@ -69,14 +68,10 @@ const Downloader = () => {
             return;
         }
 
-        console.log(`Initiating download for file ID: ${fileId}`);
-
         try {
             const response = await axios.get(`${FILE_API.DOWNLOAD(fileId)}`, {
                 responseType: 'blob',
             });
-
-            console.log('Download response received:', response);
 
             const url = window.URL.createObjectURL(new Blob([response.data]));
             const a = document.createElement('a');
@@ -87,7 +82,6 @@ const Downloader = () => {
             a.remove();
             window.URL.revokeObjectURL(url);
 
-            console.log('Download initiated successfully.');
         } catch (error) {
             console.error('Error downloading the file:', error);
         }
@@ -95,7 +89,6 @@ const Downloader = () => {
 
     const handleKeywordClick = async (keywordId) => {
         try {
-            console.log("handleKeywordClick - keywordId: ", keywordId)
             const response = await axios.get(`${KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, 0, 50)}`);
             await router.push(`/?keywordId=${keywordId}`);
         } catch (error) {

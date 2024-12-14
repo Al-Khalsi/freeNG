@@ -145,17 +145,14 @@ function UploadImage() {
   };
 
   const fetchKeywords = async (query, page = 0, size = 10) => {
-    console.log("Fetching keywords for query:", query);
     try {
       const url = KEYWORD_API.SEARCH_PAGINATED(query, page, size);
-      console.log("keyword search url: ", url);
       const response = await axios.get(url, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
       });
-      console.log("response for fetchKeywords: ", response.data.data);
       setFetchedKeywords(response.data.data);
       setShowResults(true);
     } catch (error) {
