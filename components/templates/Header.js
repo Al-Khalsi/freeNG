@@ -143,7 +143,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                 <button
                     className='md:hidden flex justify-center items-center w-12 h-12 mr-2 rounded-md text-xl text-white bg-gradient-to-t from-bgLightPurple to-bgPurple'
                     onClick={toggleSearchBar}
-                >
+                    aria-label="Search">
                     <FaSearch />
                 </button>
 
@@ -158,7 +158,10 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     </div>
                 ) : (
                     <div className='flex'>
-                        <Link href="/authentication" className="button rounded-md ">
+                        <Link href="/authentication"
+                            className="button rounded-md"
+                            title="Log in or register an account"
+                            aria-label="Log in or register an account">
                             <IoLogInSharp className='sm:hidden text-2xl' />
                             <span className="fold"></span>
                             <div className="points_wrapper">
@@ -173,7 +176,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                                 <i className="point"></i>
                             </div>
                             <h2 className="inner">
-                                Login / Register
+                                Log In / Sign Up
                             </h2>
                         </Link>
                     </div>

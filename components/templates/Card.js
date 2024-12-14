@@ -61,14 +61,15 @@ function Card({ image, role, onDelete, onEdit }) {
                         <button className={`fullScreen flex justify-center items-center 
                         w-7 h-7 ml-1 hover:bg-gray-600 rounded-md cursor-pointer 
                         ${image.lightMode ? 'text-clDarkBlue hover:text-clGray hover:bg-bgDarkBlue' : ''}`}
-                            onClick={handleOpenModal}>
+                            onClick={handleOpenModal}
+                            aria-label="Fullscreen">
                             <MdFullscreen />
                         </button>
                     </div>
-                    <img src={`../../img/${image.path}`} alt={image.fileTitle} className='w-full h-full object-contain' />
+                    <img src={`../../img/${image.path}`} alt={image.title} className='w-full h-full object-contain' />
                 </div>
                 <div className='info-img w-full py-3'>
-                    <h3 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.title}</h3>
+                    <h2 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.title}</h2>
                     <div className='flex mt-3'>
                         <div className='flex justify-between items-center bg-gray-600 px-2 py-1 rounded text-xs text-lightBlue'>
                             <FaImage />

@@ -266,7 +266,7 @@ function Index() {
                     handleSearch={handleSearch}
                 />
 
-                <div className='w-full py-12 px-8 flex-grow'>
+                <div className='w-full py-8 px-8 flex-grow'>
                     {isSearching ? (
                         <div className='filter-result flex justify-center items-center'>
                             <h2 className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
@@ -308,7 +308,7 @@ function Index() {
                     ) : (
                         <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                             {images.map((image) => (
-                                <Card key={image.id} image={image} role={role} onDelete={handleDeleteImage} onEdit={handleEditImage} />
+                                <Card key={image.id} image={image} role={role} onDelete={handleDeleteImage} />
                             ))}
                         </section>
                     )}
