@@ -1,4 +1,5 @@
 import React from 'react'
+import { MdImageNotSupported } from "react-icons/md";
 
 function NoImages() {
     return (

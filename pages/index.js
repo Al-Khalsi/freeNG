@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import Header from '@/components/templates/Header';
 import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
-import { MdImageNotSupported, MdDelete } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 import { apiFetch } from '@/utils/api';
 import { FILE_API } from '@/utils/api/file';
 import { KEYWORD_API } from '@/utils/api/keyword';
@@ -21,14 +21,13 @@ function Index() {
     const [images, setImages] = useState([]); // State to store images from the backend
     const [searchQuery, setSearchQuery] = useState(''); // State for search query
     const [submittedSearchQuery, setSubmittedSearchQuery] = useState(''); // New state for submitted search query
-    const [loading, setLoading] = useState(false); // State to manage loading status
+    const [spinner, setSpinner] = useState(false); // State to manage spinner status
     const itemsPerPage = 50; // Number of items to display per page
     const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
     const [isSearching, setIsSearching] = useState(false); // New state for search
     const [totalPages, setTotalPages] = useState(0); // State to store total pages
 
     const handleSelectToggle = (selectId) => {
-        // Toggle the select dropdown
         if (openSelect === selectId) {
             setOpenSelect(null);
         } else {
@@ -36,9 +35,8 @@ function Index() {
         }
     };
 
-    // Fetch images from the backend
     const fetchImages = async (keywordId = null, query = '', page = currentPage, size = itemsPerPage) => {
-        setLoading(true); // Set loading state to true before starting the fetch
+        setSpinner(true);
         try {
             let url;
             if (keywordId) {
@@ -78,7 +76,7 @@ function Index() {
             console.error('Failed to fetch images:', error);
             router.push('/500');
         } finally {
-            setLoading(false);
+            setSpinner(false);
         }
     };
 
@@ -292,7 +290,7 @@ function Index() {
                 </div>
 
                 <main className='main flex justify-between w-full py-8 px-4 lg:px-8'>
-                    {loading ? (
+                    {spinner ? (
                         <Spinner />
                     ) : images.length === 0 ? (
                         <NoImages />
