@@ -11,6 +11,8 @@ import { apiFetch } from '@/utils/api';
 import { FILE_API } from '@/utils/api/file';
 import { KEYWORD_API } from '@/utils/api/keyword';
 import MouseEffect from '@/components/modules/MouseEffect';
+import Spinner from '@/components/modules/Spinner';
+import NoImages from '@/components/modules/NoImages';
 
 function Index() {
     const { token, username, email, clearToken, userId, role } = useAuth(); // Get user authentication details
@@ -290,15 +292,10 @@ function Index() {
                 </div>
 
                 <main className='main flex justify-between w-full py-8 px-4 lg:px-8'>
-                    {loading ? ( // Show loading indicator while fetching images
-                        <section className='loading flex justify-center w-full my-8 py-1'>
-                            <div className="loader relative w-20 h-20 rounded-lg overflow-hidden bg-white"></div>
-                        </section>
-                    ) : images.length === 0 ? ( // Check if there are no images
-                        <section className='flex flex-col items-center w-full my-8'>
-                            <MdImageNotSupported className='text-6xl text-gray-500' />
-                            <h3 className='text-xl text-gray-500'>No images available</h3>
-                        </section>
+                    {loading ? (
+                        <Spinner />
+                    ) : images.length === 0 ? (
+                        <NoImages />
                     ) : (
                         <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                             {images.map((image) => (
