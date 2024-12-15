@@ -84,6 +84,7 @@ const Downloader = () => {
 
         } catch (error) {
             console.error('Error downloading the file:', error);
+            router.push('/500');
         }
     };
 

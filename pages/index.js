@@ -70,12 +70,13 @@ function Index() {
                 setImages(fetchedImages); // Update state with the fetched images
                 setTotalPages(response.totalPages); // Set total pages from the response
             } else {
-                console.error('Failed to fetch images: ', response.message); // Log an error if the response is not valid
+                console.error('Failed to fetch images: ', response.message);
             }
         } catch (error) {
-            console.error('Failed to fetch images:', error); // Log any errors that occur during the fetch
+            console.error('Failed to fetch images:', error);
+            router.push('/500');
         } finally {
-            setLoading(false); // Set loading state to false after the fetch is complete
+            setLoading(false);
         }
     };
 
