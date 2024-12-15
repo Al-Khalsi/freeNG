@@ -72,11 +72,6 @@ body {
   /* cursor: none; */
 }
 
-.app {
-  width: 100%;
-  height: 100%;
-}
-
 img {
   width: 100%;
   display: block;
@@ -85,10 +80,6 @@ img {
 header.fixed {
   transition: 0.6s;
   transform: translateY(96px);
-}
-
-main aside {
-  flex-shrink: 0.25;
 }
 
 .bg-img {
@@ -337,8 +328,6 @@ main aside {
   }
 }
 
-/*-------------------- Validation css --------------------*/
-
 .form-box {
   transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
 }
@@ -455,8 +444,6 @@ main aside {
     bottom: 0;
   }
 }
-
-/*-------------------- button login css --------------------*/
 
 .button {
   cursor: pointer;
@@ -660,23 +647,11 @@ main aside {
     fill: white;
   }
 }
-/*-------------------- btn download link --------------------*/
 
 .Download-button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-family: inherit;
-  font-weight: 500;
-  font-size: 17px;
-  padding: 12px 20px;
-  border: none;
   box-shadow: 0 0.7em 1.5em -0.5em rgba(59, 48, 78, 0.527);
   letter-spacing: 0.05em;
-  border-radius: 8px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s;
 }
 
 .Download-button:hover {
@@ -729,15 +704,11 @@ main aside {
   transform: translate(-5px, 15px) rotate(45deg);
 }
 
-/*-------------------- subject-text --------------------*/
-
 .subject-text h1 {
   font-weight: 600;
   text-shadow: 0 0 10px var(--bg-lightPurple),
     0 0 40px var(--bg-lightPurple);
 }
-
-/*-------------------- loding --------------------*/
 
 .loader:before {
   content: "";
@@ -894,64 +865,20 @@ body:hover #pixelCursor {
   }
 }
 
-/*-------------------- buttonDl --------------------*/
-
 .buttonDl {
-  --main-focus: #2d8cf0;
-  --font-color: #323232;
-  --bg-color-sub: #dedede;
-  --bg-color: #eee;
-  --main-color: #323232;
-  position: relative;
-  width: 99%;
-  /* Change width to 100% */
-  height: 60px;
-  /* Keep height as is */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   border: 1px solid #b0b0b0;
   box-shadow: 18px 18px 10px var(--bg-darkGray2);
-  background-color: var(--bg-darkGray2);
-  border-radius: 4px; 
-  overflow: hidden;
-}
-
-.buttonDl,
-.button__icon,
-.button__text {
-  transition: all 0.3s;
-}
-
-.buttonDl .button__text {
-  color: white;
-  font-weight: 600;
-  width: 100%;
 }
 
 .buttonDl .button__icon {
-  height: 100%;
   width: 15%;
   background-color: #b0b0b0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 @media (max-width: 425px) {
   .buttonDl .button__icon {
     width: 35%;
   }
-}
-
-.buttonDl .svg {
-  width: 20%;
-  fill: var(--main-color);
-}
-
-.buttonDl:hover {
-  background: var(--bg-color);
 }
 
 .buttonDl:hover .button__text {
@@ -978,8 +905,6 @@ body:hover #pixelCursor {
   backdrop-filter: blur(4px);
 }
 
-/* INPUTSource */
-
 .INPUTSource {
   box-shadow: inset 0 0 3px white;
 }
@@ -997,6 +922,5 @@ body:hover #pixelCursor {
 }
 
 /*-------------------- 500 --------------------*/
-/*-------------------- 500 --------------------*/
-/*-------------------- 500 --------------------*/
+
 

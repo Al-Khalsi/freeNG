@@ -248,9 +248,13 @@ const Downloader = () => {
                                     </div>
                                 </div>
                                 <div className='flex justify-center w-full mb-2 md:mb-4'>
-                                    <button className="buttonDl mt-4" type="button" onClick={handleDownload}>
-                                        <span className="button__text text-lg md:text-xl">Download</span>
-                                        <span className="button__icon">
+                                    <button className="buttonDl relative flex justify-between items-center
+                                    w-full h-16 mt-4 bg-bgDarkGray2 rounded overflow-hidden duration-300
+                                    cursor-pointer" type="button" onClick={handleDownload}>
+                                        <span className="button__text w-full text-white text-lg
+                                        md:text-xl font-semibold duration-300">Download</span>
+                                        <span className="button__icon
+                                        flex justify-center items-center h-full duration-300">
                                             <FiDownload className='text-black text-3xl' />
                                         </span>
                                     </button>

@@ -247,7 +247,7 @@ function Index() {
                 <meta name="msapplication-TileColor" content="#ffffff" />
                 <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
-            <div className="app flex flex-col min-h-screen relative">
+            <div className="app w-full h-full flex flex-col min-h-screen relative">
                 <Header
                     token={token}
                     username={username}

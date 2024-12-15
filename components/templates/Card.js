@@ -80,7 +80,9 @@ function Card({ image, role, onDelete, onEdit }) {
                             <span className='block ml-1'>{`${image.width} × ${image.height}`}</span>
                         </div>
                     </div>
-                    <Link href={downloadLink} className="Download-button w-full rounded mt-3 py-2 bg-gray-600 text-clWhite">
+                    <Link href={downloadLink} className="Download-button relative flex justify-center items-center 
+                    w-full mt-3 py-3 px-5 text-lg font-medium rounded-lg border-none bg-gray-600 text-clWhite 
+                    cursor-pointer duration-200">
                         <span>Download</span>
                     </Link>
                 </div>
