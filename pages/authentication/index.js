@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { useAuth } from '@/context/AuthContext'; // Adjust the path as necessary
 import withAuthRedirect from '@/utils/withAuthRedirect'; // Adjust the path as necessary
@@ -15,6 +15,7 @@ function AuthForm() {
     const [isActive, setIsActive] = useState(false);
     const [credentials, setCredentials] = useState({ username: '', email: '', password: '' });
     const [error, setError] = useState('');
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -30,6 +31,10 @@ function AuthForm() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCredentials({ ...credentials, [name]: value }); // Update credentials state
+    };
+
+    const togglePasswordVisibility = () => {
+        setIsPasswordVisible(!isPasswordVisible);
     };
 
     const handleLogin = async (e) => {
@@ -128,13 +133,18 @@ function AuthForm() {
                             <FaUser className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <div className="inputBox relative my-7">
-                            <input type="password"
+                            <input type={isPasswordVisible ? "text" : "password"}
                                 name="password"
                                 value={credentials.password}
                                 onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
-                            <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
+                            <div
+                                onClick={togglePasswordVisibility}
+                                className='absolute right-5 top-1/2 -translate-y-1/2 
+                                cursor-pointer text-gray-500'>
+                                {isPasswordVisible ? <FaEyeSlash /> : <FaEye /> }
+                            </div>
                         </div>
                         <button type='submit' className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-base font-semibold cursor-pointer'>Login</button>
 
@@ -164,13 +174,18 @@ function AuthForm() {
                             <MdEmail className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
                         </div>
                         <div className="inputBox relative my-7">
-                            <input type="password"
+                            <input type={isPasswordVisible ? "text" : "password"}
                                 name="password"
                                 value={credentials.password}
                                 onChange={handleChange}
                                 className='w-full py-3 pr-12 pl-5 bg-bgGray rounded-lg border-none outline-none text-clBlack text-base font-medium placeholder-font-normal'
                                 placeholder='Password' required />
-                            <FaLock className='absolute right-5 top-1/2 -translate-y-1/2 text-gray-500' />
+                            <div
+                                onClick={togglePasswordVisibility}
+                                className='absolute right-5 top-1/2 -translate-y-1/2 
+                                cursor-pointer text-gray-500'>
+                                {isPasswordVisible ? <FaEyeSlash /> : <FaEye /> }
+                            </div>
                         </div>
                         <button type='submit'
                             className='btn w-full h-12 rounded-lg bg-bgDarkBlue text-white shadow-lg border-none text-clBlack text-base font-semibold cursor-pointer'>
@@ -193,8 +208,8 @@ function AuthForm() {
                             onClick={() => handleClick("login")}>Login</button>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
 
