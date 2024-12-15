@@ -41,41 +41,27 @@
   height: 100vh;
 }
 
-.antialiased {
-  height: 100%;
-}
-
-/* Custom scrollbar for Chrome, Safari, and Edge */
 ::-webkit-scrollbar {
   width: 8px;
-  /* Width of the vertical scrollbar */
   height: 8px;
-  /* Height of the horizontal scrollbar */
 }
 
 ::-webkit-scrollbar-track {
   background: var(--bg-darkGray2);
-  /* Background of the scrollbar track */
 }
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--bg-purple);
-  /* Color of the scrollbar thumb */
   border-radius: 10px;
-  /* Rounded corners */
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: var(--cl-lightPurple);
-  /* Color of the scrollbar thumb on hover */
 }
 
-/* Custom scrollbar for Firefox */
 html {
   scrollbar-width: thin;
-  /* Can be 'auto' or 'thin' */
   scrollbar-color: var(--bg-purple) var(--bg-darkGray2);
-  /* Thumb color and track color */
 }
 
 body {
@@ -352,8 +338,6 @@ main aside {
 }
 
 /*-------------------- Validation css --------------------*/
-/*-------------------- Validation css --------------------*/
-/*-------------------- Validation css --------------------*/
 
 .form-box {
   transition: 0.6s ease-in-out 1.2s, visibility 0s 1s;
@@ -472,8 +456,6 @@ main aside {
   }
 }
 
-/*-------------------- button login css --------------------*/
-/*-------------------- button login css --------------------*/
 /*-------------------- button login css --------------------*/
 
 .button {
@@ -678,16 +660,6 @@ main aside {
     fill: white;
   }
 }
-
-
-/*-------------------- LOGO css --------------------*/
-/*-------------------- LOGO css --------------------*/
-/*-------------------- LOGO css --------------------*/
-
-
-
-/*-------------------- btn download link --------------------*/
-/*-------------------- btn download link --------------------*/
 /*-------------------- btn download link --------------------*/
 
 .Download-button {
@@ -765,8 +737,6 @@ main aside {
     0 0 40px var(--bg-lightPurple);
 }
 
-/*-------------------- loding --------------------*/
-/*-------------------- loding --------------------*/
 /*-------------------- loding --------------------*/
 
 .loader:before {
@@ -925,8 +895,7 @@ body:hover #pixelCursor {
 }
 
 /*-------------------- buttonDl --------------------*/
-/*-------------------- buttonDl --------------------*/
-/*-------------------- buttonDl --------------------*/
+
 .buttonDl {
   --main-focus: #2d8cf0;
   --font-color: #323232;
@@ -1026,3 +995,8 @@ body:hover #pixelCursor {
   border: 0;
   outline: 0;
 }
+
+/*-------------------- 500 --------------------*/
+/*-------------------- 500 --------------------*/
+/*-------------------- 500 --------------------*/
+
