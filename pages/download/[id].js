@@ -14,7 +14,6 @@ import { FILE_API } from "@/utils/api/file";
 import { KEYWORD_API } from "@/utils/api/keyword";
 import Header from '@/components/templates/Header';
 
-// New colors array
 const colors = [
     { name: 'Black', hex: '#000000' },
     { name: 'Gray', hex: '#555555' },

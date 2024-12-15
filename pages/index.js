@@ -15,17 +15,17 @@ import Spinner from '@/components/modules/Spinner';
 import NoImages from '@/components/modules/NoImages';
 
 function Index() {
-    const { token, username, email, clearToken, userId, role } = useAuth(); // Get user authentication details
-    const router = useRouter(); // Initialize router for navigation
-    const [openSelect, setOpenSelect] = useState(null); // State to manage select dropdown
-    const [images, setImages] = useState([]); // State to store images from the backend
-    const [searchQuery, setSearchQuery] = useState(''); // State for search query
-    const [submittedSearchQuery, setSubmittedSearchQuery] = useState(''); // New state for submitted search query
-    const [spinner, setSpinner] = useState(false); // State to manage spinner status
-    const itemsPerPage = 50; // Number of items to display per page
-    const currentPage = parseInt(router.query.page) || 1; // Get the current page from the URL
-    const [isSearching, setIsSearching] = useState(false); // New state for search
-    const [totalPages, setTotalPages] = useState(0); // State to store total pages
+    const { token, username, email, clearToken, userId, role } = useAuth();
+    const router = useRouter();
+    const [openSelect, setOpenSelect] = useState(null);
+    const [images, setImages] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [submittedSearchQuery, setSubmittedSearchQuery] = useState('');
+    const [spinner, setSpinner] = useState(false);
+    const itemsPerPage = 50;
+    const currentPage = parseInt(router.query.page) || 1;
+    const [isSearching, setIsSearching] = useState(false);
+    const [totalPages, setTotalPages] = useState(0);
 
     const handleSelectToggle = (selectId) => {
         if (openSelect === selectId) {
@@ -84,7 +84,6 @@ function Index() {
         const keywordId = router.query.keywordId; // Get keywordId from the URL
         const searchQueryFromUrl = router.query.search; // Get search query from the URL
 
-        // Validate the search query before using it
         if (keywordId) {
             fetchImages(keywordId, '', currentPage); // Fetch images based on keywordId
         } else if (searchQueryFromUrl && searchQueryFromUrl.trim() !== '') {
@@ -121,7 +120,7 @@ function Index() {
     const handlePageChange = (page) => {
         // Push the new page to the URL
         router.push(`/?page=${page}`);
-    
+
         // Fetch images based on the current search query or default
         if (searchQuery) {
             fetchImages(null, searchQuery, page); // If there's a search query, use it
@@ -322,7 +321,7 @@ function Index() {
                 )}
             </div>
         </>
-    );
+    )
 }
 
 export default Index;
