@@ -1,6 +1,5 @@
-import { AuthProvider } from '../context/AuthContext'; // Adjust the path as necessary
+import { AuthProvider } from '../context/AuthContext'; 
 import "../styles/globals.css";
-import 'react-notifications/lib/notifications.css';
 
 
 function App({ Component, pageProps }) {

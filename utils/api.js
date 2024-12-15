@@ -17,7 +17,6 @@ export const apiFetch = async (url, method = 'GET', body = null, customOptions =
         // Axios automatically resolves the response, so we can return response.data directly
         return response.data;
     } catch (error) {
-        console.error('Fetch error:', error);
         throw error; // Re-throw the error for handling in the calling function
     }
 };

@@ -3,12 +3,11 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import { useAuth } from '@/context/AuthContext'; // Adjust the path as necessary
-import withAuthRedirect from '@/utils/withAuthRedirect'; // Adjust the path as necessary
+import { useAuth } from '@/context/AuthContext';
+import withAuthRedirect from '@/utils/withAuthRedirect';
 import * as jwt_decode from 'jwt-decode';
 import axios from 'axios';
-import { AUTH_API } from "@/utils/api/auth"; // Import Axios
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { AUTH_API } from "@/utils/api/auth"; 
 
 
 function AuthForm() {
@@ -60,18 +59,18 @@ function AuthForm() {
                 setUsername(username); // Store username from response
                 setEmail(decodedToken.email); // Store email from token
                 setRole(decodedToken.role); // Store role from token
-
-                NotificationManager.success('Login successful!', 'Success');
+                
+                console.success('Login successful!', 'Success');
                 await router.push('/');
             } else {
-                NotificationManager.error('Failed to retrieve token', 'Error');
+                console.error('Failed to retrieve token', 'Error');
             }
         } catch (error) {
             // Improved error handling
             if (error.response) {
-                NotificationManager.error('Invalid username or password', 'Error')
+                console.error('Invalid username or password', 'Error')
             } else {
-                NotificationManager.error('An error occurred during login', 'Error');
+                console.error('An error occurred during login', 'Error');
             }
         }
     };
@@ -99,19 +98,19 @@ function AuthForm() {
                 setEmail(decodedToken.email); // Store email from token
                 setRole(decodedToken.role); // Store role from token
 
-                NotificationManager.success('Registration successful!', 'Success');
+                console.success('Registration successful!', 'Success');
                 await router.push('/');
             } else {
-                NotificationManager.error('Failed to retrieve token', 'Error');
+                console.error('Failed to retrieve token', 'Error');
             }
         } catch (error) {
             // Improved error handling
             if (error.response) {
-                NotificationManager.error(error.response.data.message || 'Registration failed', 'Error');
+                console.error(error.response.data.message || 'Registration failed', 'Error');
             } else if (error.request) {
-                NotificationManager.error('No response from server', 'Error');
+                console.error('No response from server', 'Error');
             } else {
-                NotificationManager.error('Error during registration', 'Error');
+                console.error('Error during registration', 'Error');
             }
         }
     };
@@ -149,7 +148,6 @@ function AuthForm() {
                 <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
             <div className='Validation w-full h-full flex justify-center items-center min-h-screen bg-bgDarkBlue'>
-                <NotificationContainer />
                 <div className={`wrapper relative w-custom-212 h-custom-136 m-5 bg-bgDarkGray rounded-3xl shadow-xl overflow-hidden ${isActive ? 'active' : ''}`}>
                     <div className='login form-box absolute right-0 w-1/2 h-full flex items-center p-10 bg-gradient-to-t from-bgPurple to-bgLightPurple text-center z-10'>
                         <form onSubmit={handleLogin} className='w-full'>

@@ -70,11 +70,11 @@ function Index() {
                 setImages(fetchedImages); // Update state with the fetched images
                 setTotalPages(response.totalPages); // Set total pages from the response
             } else {
+                response.status === 500 ? router.push('/500') : 
                 console.error('Failed to fetch images: ', response.message);
             }
         } catch (error) {
             console.error('Failed to fetch images:', error);
-            router.push('/500');
         } finally {
             setSpinner(false);
         }
@@ -259,10 +259,10 @@ function Index() {
                     handleSearch={handleSearch}
                 />
 
-                <div className='w-full py-8 px-8 flex-grow'>
+                <div className='w-full py-12 px-8 flex-grow'>
                     {isSearching ? (
                         <div className='filter-result flex justify-center items-center'>
-                            <h2 className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
+                            <h3 className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
                                 Result for:
                                 <span className='ml-2'>
                                     {submittedSearchQuery}
@@ -277,7 +277,7 @@ function Index() {
                                     className='ml-2 text-xl text-white hover:text-red-600 rounded-lg'>
                                     <MdDelete />
                                 </button>
-                            </h2>
+                            </h3>
                         </div>
                     ) : (
                         <div className='subject-text relative w-full text-center'>
@@ -288,7 +288,7 @@ function Index() {
                     )}
                 </div>
 
-                <main className='main flex justify-between w-full py-8 px-4 lg:px-8'>
+                <main className='main flex justify-between w-full py-4 px-4 lg:px-8'>
                     {spinner ? (
                         <Spinner />
                     ) : images.length === 0 ? (
