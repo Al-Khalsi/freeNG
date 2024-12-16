@@ -266,7 +266,8 @@ function Index() {
                         <div className='filter-result flex justify-center items-center'>
                             <h3 className='search-result flex items-center rounded p-2 
                             bg-gradient-to-t from-bgLightPurple to-bgPurple'>
-                                {submittedSearchQuery ? 'Result search for' : 'Result tag for'}
+                                {router.query.keywordId ? 'Result tag for' : 'Result search for'}
+                                :
                                 <span className='ml-2'>
                                     {submittedSearchQuery || (router.query.keywordName ? router.query.keywordName : '')}
                                 </span>
