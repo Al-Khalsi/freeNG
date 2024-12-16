@@ -13,6 +13,8 @@ import KeywordsModal from '@/components/templates/KeywordsModal';
 import { FILE_API } from "@/utils/api/file";
 import { KEYWORD_API } from "@/utils/api/keyword";
 import Header from '@/components/templates/Header';
+import { useAuth } from '@/context/AuthContext';
+import Footer from '@/components/templates/Footer';
 
 const colors = [
     { name: 'Black', hex: '#000000' },
@@ -47,8 +49,10 @@ const colors = [
 const Downloader = () => {
     const router = useRouter();
     const { id: fileId, title, path, size, width, height, lightMode, style, dominantColors, source, keywords } = router.query;
+    const { token, username, email, clearToken, userId, role } = useAuth();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [parsedKeywords, setParsedKeywords] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         if (keywords) {
@@ -104,6 +108,12 @@ const Downloader = () => {
         setIsModalOpen(false);
     };
 
+    const handleSearch = () => {
+        if (searchQuery.trim()) {
+            router.push(`/?search=${encodeURIComponent(searchQuery)}`);
+        }
+    };
+
     return (
         <>
             <Head>
@@ -111,7 +121,7 @@ const Downloader = () => {
                 <link rel="canonical" href={`https://pixelfreebies.com/download/${title}`} />
                 <meta name="description"
                     content={`${title} is a free png image with dimensions ${width}x${height} and size ${size} in ${style} style available for free.`} />
-                 <meta name="keywords" content={parsedKeywords.map(kw => kw.keyword).join(', ')} />
+                <meta name="keywords" content={parsedKeywords.map(kw => kw.keyword).join(', ')} />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta name="robots" content="index, follow" />
 
@@ -137,9 +147,18 @@ const Downloader = () => {
                 <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
             <div className={`downloaderPage w-full`}>
-                {/* <Header /> */}
+                <Header
+                    token={token}
+                    username={username}
+                    email={email}
+                    userId={userId}
+                    handleLogout={clearToken}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
+                    handleSearch={handleSearch}
+                />
                 <main className='w-full h-auto flex-auto'>
-                    <div className='flex justify-between w-full py-8 px-4 lg:px-8'>
+                    <div className='flex justify-between w-full py-12 px-4 lg:px-8'>
                         <div className='flex flex-col md:flex-row justify-between w-full p-4 bg-bgDarkGray rounded-lg'>
                             <div className={`bg-img w-full md:w-1/2 h-56 md:h-custom-136 rounded p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
                                 <img src={`../../img/${path}`} className='w-full h-full object-contain' alt={title} />
@@ -263,6 +282,7 @@ const Downloader = () => {
                         </div>
                     </div>
                 </main>
+                <Footer />
             </div>
 
             {isModalOpen && (
