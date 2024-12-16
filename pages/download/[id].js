@@ -91,10 +91,10 @@ const Downloader = () => {
         }
     };
 
-    const handleKeywordClick = async (keywordId) => {
+    const handleKeywordClick = async (keywordId, keywordName) => {
         try {
             const response = await axios.get(`${KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, 0, 50)}`);
-            await router.push(`/?keywordId=${keywordId}`);
+            await router.push(`/?keywordId=${keywordId}&keywordName=${encodeURIComponent(keywordName)}`);
         } catch (error) {
             console.error('Error fetching keyword:', error);
         }
@@ -242,7 +242,7 @@ const Downloader = () => {
                                                     {parsedKeywords.slice(0, 20).map((kw) => (
                                                         <button
                                                             key={kw.id}
-                                                            onClick={() => handleKeywordClick(kw.id)}
+                                                            onClick={() => handleKeywordClick(kw.id, kw.keyword)}
                                                             className='text-white bg-bgDarkGray2 rounded my-1 md:my-1 px-2 py-1 mx-1'>
                                                             {kw.keyword}
                                                         </button>
@@ -257,7 +257,7 @@ const Downloader = () => {
                                                 parsedKeywords.map((kw) => (
                                                     <button
                                                         key={kw.id}
-                                                        onClick={() => handleKeywordClick(kw.id)}
+                                                        onClick={() => handleKeywordClick(kw.id, kw.keyword)}
                                                         className='text-white bg-bgDarkGray2 rounded my-1 md:my-1 px-2 py-1 mx-1'>
                                                         {kw.keyword}
                                                     </button>

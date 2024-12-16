@@ -70,8 +70,8 @@ function Index() {
                 setImages(fetchedImages); // Update state with the fetched images
                 setTotalPages(response.totalPages); // Set total pages from the response
             } else {
-                response.status === 500 ? router.push('/500') : 
-                console.error('Failed to fetch images: ', response.message);
+                response.status === 500 ? router.push('/500') :
+                    console.error('Failed to fetch images: ', response.message);
             }
         } catch (error) {
             console.error('Failed to fetch images:', error);
@@ -82,17 +82,20 @@ function Index() {
 
     useEffect(() => {
         const keywordId = router.query.keywordId; // Get keywordId from the URL
+        const keywordName = router.query.keywordName; // Get keywordName from the URL
         const searchQueryFromUrl = router.query.search; // Get search query from the URL
 
         if (keywordId) {
             fetchImages(keywordId, '', currentPage); // Fetch images based on keywordId
+            setSubmittedSearchQuery(keywordName); // Set submittedSearchQuery to the keyword name
         } else if (searchQueryFromUrl && searchQueryFromUrl.trim() !== '') {
-            // Only fetch images if the search query is a valid non-empty string
             fetchImages(null, searchQueryFromUrl, currentPage);
+            setSubmittedSearchQuery(searchQueryFromUrl); // Set submittedSearchQuery to the search query
         } else {
-            fetchImages('', '', currentPage, itemsPerPage); // Call fetchImages function with an empty string for keywordId and current page
+            fetchImages('', '', currentPage, itemsPerPage);
+            setSubmittedSearchQuery(''); // Reset submittedSearchQuery
         }
-    }, [token, currentPage, router.query.keywordId, router.query.search]);
+    }, [token, currentPage, router.query.keywordId, router.query.keywordName, router.query.search]);
 
     const handleDeleteImage = async (imageId) => {
         const confirmed = window.confirm("Are you sure you want to delete this image?");
@@ -256,16 +259,16 @@ function Index() {
                     handleLogout={handleLogout}
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
-                    handleSearch={handleSearch}
-                />
+                    handleSearch={handleSearch} />
 
                 <div className='w-full py-12 px-8 flex-grow'>
-                    {isSearching ? (
+                    {isSearching || submittedSearchQuery ? (
                         <div className='filter-result flex justify-center items-center'>
-                            <h3 className='search-result flex items-center rounded p-2 bg-gradient-to-t from-bgLightPurple to-bgPurple'>
-                                Result for:
+                            <h3 className='search-result flex items-center rounded p-2 
+                            bg-gradient-to-t from-bgLightPurple to-bgPurple'>
+                                {submittedSearchQuery ? 'Result search for' : 'Result tag for'}
                                 <span className='ml-2'>
-                                    {submittedSearchQuery}
+                                    {submittedSearchQuery || (router.query.keywordName ? router.query.keywordName : '')}
                                 </span>
                                 <button
                                     onClick={() => {
@@ -294,7 +297,8 @@ function Index() {
                     ) : images.length === 0 ? (
                         <NoImages />
                     ) : (
-                        <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
+                        <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 
+                        md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                             {images.map((image) => (
                                 <Card key={image.id} image={image} role={role} onDelete={handleDeleteImage} />
                             ))}
@@ -308,7 +312,6 @@ function Index() {
 
                 <Footer />
 
-                {/* Conditionally render the upload link based on the user's role */}
                 {role === 'ROLE_MASTER' && (
                     <Link
                         href={'/upload'}
