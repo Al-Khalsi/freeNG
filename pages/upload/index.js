@@ -237,26 +237,24 @@ function UploadImage() {
     const handleClickOutside = (event) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
+        !dropdownRef.current.contains(event.target) && 
         inputRef.current &&
-        !inputRef.current.contains(event.target) &&
-        dropdownColorRef.current && // Check if the click is outside the color dropdown
-        !dropdownColorRef.current.contains(event.target) // Add this line
+        !inputRef.current.contains(event.target)
       ) {
-        setShowResults(false); // Close results dropdown
-        setShowColorDropdown(false); // Close color dropdown
+        setShowResults(false);
+        setShowColorDropdown(false); 
       }
     };
-  
+
     document.addEventListener('mousedown', handleClickOutside);
-  
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   return (
-    <div className={`UploadImage w-full min-h-dvh py-12 flex justify-center items-center bg-bgDarkBlue`}>
+    <div className={`UploadImage w-full min-h-dvh flex justify-center items-center bg-bgDarkBlue`}>
       <div className="w-custom-212 p-6 bg-bgDarkGray text-clWhite rounded shadow-md">
         {errorMessage && <p className="text-red-500 mb-4">{errorMessage}</p>}
 
@@ -407,8 +405,9 @@ function UploadImage() {
                     ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2 overflow-y-auto`}
                     ref={dropdownRef}>
                     {fetchedKeywords.map((keyword, index) => (
-                      <label htmlFor={`keyword-${index}`} key={index} className='flex justify-between items-center w-full p-2 border-b border-gray-400
-                        cursor-pointer '>
+                      <label htmlFor={`keyword-${index}`} key={index}
+                        className='flex justify-between items-center w-full p-2 
+                      border-b border-gray-400 cursor-pointer '>
                         <p className={'text-white'}>{keyword}</p>
                         <input type="checkbox" id={`keyword-${index}`}
                           checked={selectedKeywords.includes(keyword)}
