@@ -39,7 +39,7 @@ const NotFoundPage = () => {
         <h5>ERROR</h5>
         <h1 className="text-5xl">404</h1>
         <hr className="my-4" />
-        <h6>Page Not Found</h6>
+        <p>Page Not Found</p>
       </div>
       <div className="absolute top-1/2 transform -translate-y-1/2 animate-astronautFly">
         <img

@@ -36,10 +36,10 @@ const Error500 = () => {
   return (
     <div className="flex justify-center items-center h-screen bg-gradient-to-t from-[#2e1753] to-[#050819] relative overflow-hidden">
       <div className="absolute top-10 text-white text-center">
-        <div>ERROR</div>
+        <h5>ERROR</h5>
         <h1 className="text-5xl">500</h1>
         <hr className="my-4" />
-        <div>Internal Server Error!</div>
+        <p>Internal Server Error!</p>
       </div>
       <div className="absolute top-1/2 transform -translate-y-1/2 animate-astronautFly">
         <img
