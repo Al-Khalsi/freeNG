@@ -31,22 +31,6 @@ public class SearchController {
 
     // Endpoint for searching files
     @Operation(
-            summary = "Search files",
-            description = "Searches the files from the database."
-    )
-    @GetMapping
-    public ResponseEntity<Result> searchFiles(@RequestParam String query) {
-        List<ImageDTO> searchedFiles = this.fileService.searchImages(query);
-
-        if (searchedFiles.isEmpty()) {
-            return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedFiles));
-        }
-
-        return ResponseEntity.ok(Result.success("Search files result.", searchedFiles));
-    }
-
-    // Endpoint for searching files
-    @Operation(
             summary = "Search files paginated",
             description = "Searches the files from the database and return a paginated result."
     )
