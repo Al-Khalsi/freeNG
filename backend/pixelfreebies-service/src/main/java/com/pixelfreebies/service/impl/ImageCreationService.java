@@ -5,7 +5,6 @@ import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +40,9 @@ public class ImageCreationService {
         if (source == null || source.trim().isEmpty()) source = "PixelFreebies";
         image.setSource(source);
 
-        image.getDominantColors().addAll(imageUploadRequest.getDominantColors());
+        if (imageUploadRequest.getDominantColors() != null) {
+            image.getDominantColors().addAll(imageUploadRequest.getDominantColors());
+        }
 
         return image;
     }
