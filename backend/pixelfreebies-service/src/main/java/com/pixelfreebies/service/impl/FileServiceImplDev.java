@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,7 +48,7 @@ public class FileServiceImplDev implements FileService {
     private final KeywordsService keywordsService;
 
     @Override
-    public ImageDTO storeImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
+    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
         log.info("Entering storeImage method with fileName: {}", imageUploadRequest.getFileName());
         try {
             // Validate image name
@@ -107,15 +106,6 @@ public class FileServiceImplDev implements FileService {
     }
 
     @Override
-    public List<ImageDTO> listAllImages() {
-        log.info("Listing all images");
-        return this.imageRepository.findAll()
-                .stream()
-                .map(this::convertToDto)
-                .toList();
-    }
-
-    @Override
     public Page<ImageDTO> listAllImages(Pageable pageable) {
         log.info("Loading images with pagination: {}", pageable);
         return this.imageRepository.findAll(pageable)
@@ -135,44 +125,6 @@ public class FileServiceImplDev implements FileService {
         imageDTO.setFilePath(webpImagePath);
         imageDTO.setContentType("image/webp");
         return imageDTO;
-    }
-
-    @Override
-    public List<ImageDTO> searchImages(String query) {
-        log.info("Searching images with query: {}", query);
-        if (query == null || query.trim().isEmpty()) {
-            log.warn("Query is null or empty, returning empty list");
-            return Collections.emptyList();
-        }
-
-        // Format the query for PostgreSQL full-text search
-        String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
-        log.info("Formatted query for search: {}", formattedQuery);
-
-        // First attempt to find exact matches
-        List<Image> exactMatches = this.imageRepository.searchFiles(formattedQuery);
-        log.info("Exact matches found: {}", exactMatches.size());
-
-        // If no exact matches found, search for similar entries
-        List<Image> similarMatches = this.imageRepository.searchSimilarFiles(query);
-        log.info("Similar matches found: {}", similarMatches.size());
-
-        // Create a set of IDs to avoid duplicates
-        Set<UUID> exactMatchIds = exactMatches.stream()
-                .map(Image::getId)
-                .collect(Collectors.toSet());
-
-        // Add similar matches that are not in exact matches
-        List<Image> combinedResults = new ArrayList<>(exactMatches);
-        similarMatches.stream()
-                .filter(image -> !exactMatchIds.contains(image.getId()))
-                .forEach(combinedResults::add);
-
-        log.info("Combined results size: {}", combinedResults.size());
-        return combinedResults.stream()
-                .filter(Image::isActive)
-                .map(this.imageConverter::toDto)
-                .toList();
     }
 
     @Override

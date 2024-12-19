@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.query.SortDirection;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -53,7 +52,7 @@ public class FileController {
                                              @ModelAttribute ImageUploadRequest imageUploadRequest) {
         try {
 
-            ImageDTO imageDTO = this.fileService.storeImage(multipartFile, imageUploadRequest);
+            ImageDTO imageDTO = this.fileService.saveImage(multipartFile, imageUploadRequest);
             return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
 
         } catch (IllegalArgumentException e) {
@@ -94,18 +93,6 @@ public class FileController {
         } catch (IOException e) {
             return ResponseEntity.notFound().build();
         }
-    }
-
-    // Endpoint for fetching files
-    @Operation(
-            summary = "List all files",
-            description = "Fetches all the files from the database."
-    )
-    @GetMapping("/list")
-    public ResponseEntity<Result> fetchFiles() {
-        List<ImageDTO> fileDTOs = this.fileService.listAllImages();
-
-        return ResponseEntity.ok(Result.success("List files.", fileDTOs));
     }
 
     // Endpoint for fetching files

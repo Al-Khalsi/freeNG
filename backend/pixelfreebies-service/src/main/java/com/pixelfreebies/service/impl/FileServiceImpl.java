@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -49,7 +48,7 @@ public class FileServiceImpl implements FileService {
     private final KeywordsService keywordsService;
 
     @Override
-    public ImageDTO storeImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
+    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
         try {
             // Validate image name
             this.imageValidationService.validateImageName(imageUploadRequest.getFileName());
@@ -88,14 +87,6 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<ImageDTO> listAllImages() {
-        return this.imageRepository.findAll()
-                .stream()
-                .map(this::convertToDto)
-                .toList();
-    }
-
-    @Override
     public Page<ImageDTO> listAllImages(Pageable pageable) {
         return this.imageRepository.findAll(pageable)
                 .map(this::convertToDto);
@@ -112,38 +103,6 @@ public class FileServiceImpl implements FileService {
         imageDTO.setFilePath(webpImagePath);
         imageDTO.setContentType("image/webp");
         return imageDTO;
-    }
-
-    @Override
-    public List<ImageDTO> searchImages(String query) {
-        if (query == null || query.trim().isEmpty()) {
-            return Collections.emptyList();
-        }
-
-        // Format the query for PostgreSQL full-text search
-        String formattedQuery = query.trim().replaceAll("\\s+", " & "); // Replace spaces with AND operator
-
-        // First attempt to find exact matches
-        List<Image> exactMatches = this.imageRepository.searchFiles(formattedQuery);
-        // If no exact matches found, search for similar entries
-        List<Image> similarMatches = this.imageRepository.searchSimilarFiles(query);
-
-        // Create a set of IDs to avoid duplicates
-        Set<UUID> exactMatchIds = exactMatches.stream()
-                .map(Image::getId)
-                .collect(Collectors.toSet());
-
-        // Add similar matches that are not in exact matches
-        List<Image> combinedResults = new ArrayList<>(exactMatches);
-        similarMatches.stream()
-                .filter(image -> !exactMatchIds.contains(image.getId()))
-                .forEach(combinedResults::add);
-
-        return combinedResults.stream()
-                .filter(Image::isActive)
-//                .limit(50) // Limit results
-                .map(this.imageConverter::toDto)
-                .toList();
     }
 
     @Override

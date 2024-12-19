@@ -14,15 +14,11 @@ import java.util.List;
 
 public interface FileService {
 
-    ImageDTO storeImage(MultipartFile multipartFile, ImageUploadRequest imageUploadRequest) throws IOException;
+    ImageDTO saveImage(MultipartFile multipartFile, ImageUploadRequest imageUploadRequest) throws IOException;
 
     Resource loadImageAsResource(String fileId) throws IOException;
 
-    List<ImageDTO> listAllImages();
-
     Page<ImageDTO> listAllImages(Pageable pageable);
-
-    List<ImageDTO> searchImages(String query);
 
     void deleteImageById(String fileId);
 
