@@ -131,21 +131,6 @@ function AuthForm() {
                 <meta property="og:image" content="../img/PixelFreebies_Banner.jpg" />
                 <meta property="og:url" content="https://pixelfreebies.com" />
                 <meta property="og:type" content="website" />
-
-                <link rel="icon" type="image/png" href="/img/LOGO.png" sizes="16x16" />
-                <link rel="icon" type="image/png" href="/img/LOGO-icon-32x32.png" sizes="32x32" />
-                <link rel="icon" type="image/png" href="/img/LOGO-icon-48x48.png" sizes="48x48" />
-                <link rel="icon" type="image/png" href="/img/LOGO-icon-192x192.png" sizes="192x192" />
-                <link rel="icon" type="image/png" href="/img/LOGO-icon-512x512.png" sizes="512x512" />
-
-                <link rel="apple-touch-icon" href="/img/LOGO-icon-180x180.png" sizes="180x180" />
-                <link rel="apple-touch-icon" href="/img/LOGO-icon-152x152.png" sizes="152x152" />
-                <link rel="apple-touch-icon" href="/img/LOGO-icon-120x120.png" sizes="120x120" />
-
-                <link rel="icon" type="image/png" href="/img/LOGO-icon-192x192.png" sizes="192x192" />
-
-                <meta name="msapplication-TileColor" content="#ffffff" />
-                <meta name="msapplication-TileImage" content="/img/LOGO-icon-270x270.png" />
             </Head>
             <div className='Validation w-full h-full flex justify-center items-center min-h-screen bg-bgDarkBlue'>
                 <div className={`wrapper relative w-custom-212 h-custom-136 m-5 bg-bgDarkGray rounded-3xl shadow-xl overflow-hidden ${isActive ? 'active' : ''}`}>
