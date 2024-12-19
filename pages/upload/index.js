@@ -241,7 +241,7 @@ function UploadImage() {
         inputRef.current &&
         !inputRef.current.contains(event.target) &&
         dropdownColorRef.current && 
-        !dropdownColorRef.current.contains(event.target) // Check for color dropdown
+        !dropdownColorRef.current.contains(event.target)
       ) {
         setShowResults(false);
         setShowColorDropdown(false); 
