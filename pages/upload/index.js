@@ -239,15 +239,17 @@ function UploadImage() {
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target) && 
         inputRef.current &&
-        !inputRef.current.contains(event.target)
+        !inputRef.current.contains(event.target) &&
+        dropdownColorRef.current && 
+        !dropdownColorRef.current.contains(event.target) // Check for color dropdown
       ) {
         setShowResults(false);
         setShowColorDropdown(false); 
       }
     };
-
+  
     document.addEventListener('mousedown', handleClickOutside);
-
+  
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
