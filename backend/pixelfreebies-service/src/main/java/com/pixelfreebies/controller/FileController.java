@@ -1,13 +1,10 @@
 package com.pixelfreebies.controller;
 
-import com.pixelfreebies.config.properties.S3Properties;
 import com.pixelfreebies.model.dto.ImageDTO;
-import com.pixelfreebies.model.dto.UpdateImageDTO;
 import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
 import com.pixelfreebies.model.payload.response.Result;
 import com.pixelfreebies.service.FileService;
-import com.pixelfreebies.service.MinioS3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -42,8 +38,6 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 public class FileController {
 
     private final FileService fileService;
-    private final MinioS3Service minioS3Service;
-    private final S3Properties s3Properties;
 
     // Endpoint for uploading a file
     @Operation(
@@ -54,7 +48,6 @@ public class FileController {
     @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_ADMIN')")
     public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
                                              @ModelAttribute ImageUploadRequest imageUploadRequest) throws Exception {
-        /*
         try {
 
             ImageDTO imageDTO = this.fileService.saveImage(multipartFile, imageUploadRequest);
@@ -68,9 +61,6 @@ public class FileController {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR)
                     .body(Result.error(INTERNAL_SERVER_ERROR, "Failed to upload file: " + e.getMessage()));
         }
-         */
-        this.minioS3Service.uploadFile(this.s3Properties.getBucket(), multipartFile.getOriginalFilename(), multipartFile);
-        return ResponseEntity.ok(Result.success("done?",null));
     }
 
     // Endpoint for downloading a file

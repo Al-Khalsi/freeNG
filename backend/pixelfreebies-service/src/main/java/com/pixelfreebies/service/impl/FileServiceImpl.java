@@ -1,5 +1,6 @@
 package com.pixelfreebies.service.impl;
 
+import com.pixelfreebies.config.properties.S3Properties;
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
@@ -44,6 +45,7 @@ public class FileServiceImpl implements FileService {
     private final KeywordValidationService keywordValidationService;
     private final ImageCreationService imageCreationService;
     private final KeywordsService keywordsService;
+    private final S3Properties s3Properties;
 
     @Override
     public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
@@ -62,6 +64,15 @@ public class FileServiceImpl implements FileService {
             Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, relativePath.toString(), imageUploadRequest);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
+            // Set full paths
+            String normalizedPath = relativePath.toString().replace("\\", "/");
+            String imagePath = this.getFullPath(normalizedPath);
+            image.setFilePath(imagePath);
+
+            String normalizedWebpFilePath = imageVariant.getFilePath().replace("\\", "/");
+            String webpPath = this.getFullPath( normalizedWebpFilePath);
+            imageVariant.setFilePath(webpPath);
+
             // Associate relationships
             this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
             this.imageMetadataService.associateImageWithKeywords(image, keywordsSet);
@@ -75,6 +86,13 @@ public class FileServiceImpl implements FileService {
             log.error("-> FILE -> Failed to store file: {}", e.getMessage());
             throw e;
         }
+    }
+
+    public String getFullPath(String objectName) {
+        if (objectName.startsWith("/")) {
+            objectName = objectName.substring(1);
+        }
+        return String.format("https://%s/%s/%s", this.s3Properties.getEndpointUrl(), this.s3Properties.getBucket(), objectName);
     }
 
     @Override

@@ -66,7 +66,7 @@ function Card({ image, role, onDelete, onEdit }) {
                             <MdFullscreen />
                         </button>
                     </div>
-                    <img src={`../../img/${image.path}`} alt={image.title} className='w-full h-full object-contain' />
+                    <img src={`${image.path}`} alt={image.title} className='w-full h-full object-contain' />
                 </div>
                 <div className='info-img w-full py-3'>
                     <h2 className='block text-xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>{image.title}</h2>

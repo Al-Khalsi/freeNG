@@ -45,6 +45,7 @@ public class ImageMetadataService {
             webpVariant.setFormat(ImageFormat.WEBP);
 
             // Generate WebP filename
+            relativePath = relativePath.replace("\\images\\png\\", "\\images\\webp\\");
             String webpFileName = generateWebpFileName(relativePath);
             webpVariant.setFilePath(webpFileName);
             webpVariant.setWidth(originalImage.getWidth());
@@ -54,7 +55,7 @@ public class ImageMetadataService {
             webpVariant.setPurpose(Purpose.DOWNLOAD);
 
             if (imageStorageStrategy.supportsWebP()) {
-                String remotePath = imageStorageStrategy.getStorageLocation().resolve(webpFileName).toString();
+                String remotePath = webpFileName;
                 imageStorageStrategy.storeWebp(originalImage, remotePath, 0.8f, false);
             } else {
                 // Default fallback: Save WebP locally
