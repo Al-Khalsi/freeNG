@@ -375,12 +375,12 @@ function UploadImage() {
                   <button
                     type='button'
                     onClick={addKeywords}
-                    className='w-full sm:w-1/2 mr-2 sm:ml-2 p-2 bg-green-700 rounded opacity-60 hover:opacity-100'>Save
+                    className='w-full sm:w-1/2 mr-2 sm:ml-2 p-2 bg-green-700 rounded opacity-100 hover:opacity-80'>Save
                   </button>
                   <button
                     type='button'
                     onClick={handleCancelKeywords}
-                    className='w-full sm:w-1/2 ml-2 sm:mr-2 p-2 bg-red-700 rounded opacity-60 hover:opacity-100'>Cancel
+                    className='w-full sm:w-1/2 ml-2 sm:mr-2 p-2 bg-red-700 rounded opacity-100 hover:opacity-80'>Cancel
                   </button>
                 </div>
               </div>
