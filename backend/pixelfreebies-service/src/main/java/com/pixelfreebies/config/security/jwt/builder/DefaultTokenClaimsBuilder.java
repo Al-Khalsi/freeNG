@@ -1,6 +1,5 @@
-package com.pixelfreebies.config.security.jwt.impl;
+package com.pixelfreebies.config.security.jwt.builder;
 
-import com.pixelfreebies.config.security.jwt.TokenClaimsBuilder;
 import com.pixelfreebies.model.domain.User;
 import com.pixelfreebies.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

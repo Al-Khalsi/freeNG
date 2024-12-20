@@ -1,4 +1,4 @@
-package com.pixelfreebies.config.security;
+package com.pixelfreebies.config.security.auth;
 
 import com.pixelfreebies.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
