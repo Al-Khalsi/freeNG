@@ -32,7 +32,6 @@ import java.util.*;
 @Slf4j
 @Service
 @Transactional
-@Profile("prod")
 @RequiredArgsConstructor
 public class FileServiceImpl implements FileService {
 
