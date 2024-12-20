@@ -6,7 +6,6 @@ import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.KeywordsDTO;
-import com.pixelfreebies.model.dto.UpdateImageDTO;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import com.pixelfreebies.repository.ImageRepository;
@@ -110,21 +109,6 @@ public class FileServiceImpl implements FileService {
         Image image = this.imageRepository.findById(UUID.fromString(imageId))
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
         this.imageRepository.delete(image);
-    }
-
-    @Override
-    public ImageDTO updateImage(String imageId, UpdateImageDTO updateImageDTO) {
-        Image foundImage = this.imageRepository.findById(UUID.fromString(imageId))
-                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
-
-        foundImage.setFileTitle(updateImageDTO.getFileTitle());
-        foundImage.setActive(updateImageDTO.isActive());
-        foundImage.setStyle(updateImageDTO.getStyle());
-        foundImage.setLightMode(updateImageDTO.isLightMode());
-        foundImage.setDominantColors(updateImageDTO.getDominantColors());
-        foundImage.setAverageRating(updateImageDTO.getAverageRating());
-
-        return this.imageConverter.toDto(this.imageRepository.save(foundImage));
     }
 
     @Override

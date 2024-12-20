@@ -1,6 +1,6 @@
 package com.pixelfreebies.service;
 
-import com.pixelfreebies.config.FileStorageProperties;
+import com.pixelfreebies.config.properties.FileStorageProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

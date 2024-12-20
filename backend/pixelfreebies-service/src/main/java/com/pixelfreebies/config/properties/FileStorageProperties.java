@@ -1,4 +1,4 @@
-package com.pixelfreebies.config;
+package com.pixelfreebies.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;

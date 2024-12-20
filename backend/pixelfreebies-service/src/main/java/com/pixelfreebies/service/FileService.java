@@ -1,7 +1,6 @@
 package com.pixelfreebies.service;
 
 import com.pixelfreebies.model.dto.ImageDTO;
-import com.pixelfreebies.model.dto.UpdateImageDTO;
 import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -21,8 +20,6 @@ public interface FileService {
     Page<ImageDTO> listAllImages(Pageable pageable);
 
     void deleteImageById(String fileId);
-
-    ImageDTO updateImage(String imageId, UpdateImageDTO updateImageDTO);
 
     List<String> searchKeywords(String query, int page, int size);
 
