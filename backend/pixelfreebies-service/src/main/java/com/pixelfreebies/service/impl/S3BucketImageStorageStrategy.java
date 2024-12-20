@@ -3,6 +3,7 @@ package com.pixelfreebies.service.impl;
 import com.luciad.imageio.webp.WebPWriteParam;
 import com.pixelfreebies.config.properties.FileStorageProperties;
 import com.pixelfreebies.config.properties.S3Properties;
+import com.pixelfreebies.model.MultipartFileInputStream;
 import com.pixelfreebies.service.AbstractBaseImageStorageStrategy;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -52,12 +53,12 @@ public class S3BucketImageStorageStrategy extends AbstractBaseImageStorageStrate
         try {
             // https://c567062.parspack.net/c567062//api.png --> if in the root home folder, after the bucket name i.e., c567062 comes "//"
             // https://c567062.parspack.net/c567062/images/api.png --> if in another folder, after the bucket name i.e., c567062 comes "/"
-            String remotePath = "/images/" + imageName;
-            boolean result = this.minioS3Service.storeMultipartFileToS3Bucket(this.s3Properties.getBucket(), remotePath, multipartFile);
+            String desiredImageNameWithRemotePath = "/images/png/" + imageName;
+            boolean result = this.minioS3Service.storeMultipartFileToS3Bucket(this.s3Properties.getBucket(), desiredImageNameWithRemotePath, multipartFile);
 
             if (!result) throw new RuntimeException("Error uploading multipartFile");
-            Path path = Paths.get(remotePath);
-            log.info("Stored multipartFile path on ParsPack S3: {}", path);
+            Path path = Paths.get(desiredImageNameWithRemotePath);
+            log.info("Stored (png) multipartFile on ParsPack S3. Path: {}", path);
 
             return path;
         } catch (Exception e) {
@@ -73,9 +74,9 @@ public class S3BucketImageStorageStrategy extends AbstractBaseImageStorageStrate
 
     // upload to ftp
     /*@Override
-    public void storeWebp(BufferedImage image, String remotePath, float quality, boolean lossless) throws IOException {
+    public void storeWebp(BufferedImage image, String normalizedRemotePath, float quality, boolean lossless) throws IOException {
         // Normalize path for FTP compatibility
-        String normalizedRemotePath = remotePath.replace("\\", "/");
+        String normalizedRemotePath = normalizedRemotePath.replace("\\", "/");
         log.info("Normalized FTP path: {}", normalizedRemotePath);
 
         // Prepare the WebP image output to a ByteArrayOutputStream
@@ -129,8 +130,9 @@ public class S3BucketImageStorageStrategy extends AbstractBaseImageStorageStrate
     @Override
     public void storeWebp(BufferedImage image, String remotePath, float quality, boolean lossless) {
         // Normalize path for S3 compatibility (if needed)
+        remotePath = remotePath.replace("\\images\\png\\", "\\images\\webp\\");
         String normalizedRemotePath = remotePath.replace("\\", "/");
-        log.info("Normalized S3 path: {}", normalizedRemotePath);
+        log.info("(webp) S3 normalized path: {}", normalizedRemotePath);
 
         // Prepare the WebP image output to a ByteArrayOutputStream
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -159,16 +161,15 @@ public class S3BucketImageStorageStrategy extends AbstractBaseImageStorageStrate
 
             // Convert ByteArrayOutputStream to InputStream
             InputStream inputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+            // Convert ByteArrayOutputStream to MultipartFile for uploading to s3
+            MultipartFileInputStream multipartFile = new MultipartFileInputStream(inputStream, byteArrayOutputStream.size(), normalizedRemotePath);
 
             // Upload to S3 bucket using MinIO
-            this.minioClient.putObject(
-                    PutObjectArgs.builder()
-                            .bucket(this.s3Properties.getBucket())
-                            .object(normalizedRemotePath)
-                            .stream(inputStream, byteArrayOutputStream.size(), -1)
-                            .contentType("image/webp")
-                            .build()
-            );
+            boolean result = this.minioS3Service.storeMultipartFileToS3Bucket(this.s3Properties.getBucket(), normalizedRemotePath, multipartFile);
+
+            if (!result) {
+                throw new RuntimeException("Error uploading WebP image");
+            }
 
             // Verify the upload by checking if the object exists
             this.minioClient.statObject(StatObjectArgs.builder()
@@ -176,7 +177,7 @@ public class S3BucketImageStorageStrategy extends AbstractBaseImageStorageStrate
                     .object(normalizedRemotePath)
                     .build());
 
-            log.info("WebP image successfully uploaded to S3: {}", normalizedRemotePath);
+            log.info("Stored (webp) multipartFile on ParsPack S3. Path: {}", normalizedRemotePath);
 
         } catch (IOException | ErrorResponseException | InsufficientDataException | InternalException |
                  InvalidKeyException | InvalidResponseException | NoSuchAlgorithmException | ServerException |

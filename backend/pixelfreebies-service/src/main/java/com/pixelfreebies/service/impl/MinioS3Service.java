@@ -1,7 +1,6 @@
 package com.pixelfreebies.service.impl;
 
 import io.minio.MinioClient;
-import io.minio.ObjectWriteResponse;
 import io.minio.PutObjectArgs;
 import io.minio.StatObjectArgs;
 import io.minio.errors.MinioException;
