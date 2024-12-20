@@ -237,19 +237,19 @@ function UploadImage() {
     const handleClickOutside = (event) => {
       if (
         dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) && 
+        !dropdownRef.current.contains(event.target) &&
         inputRef.current &&
         !inputRef.current.contains(event.target) &&
-        dropdownColorRef.current && 
+        dropdownColorRef.current &&
         !dropdownColorRef.current.contains(event.target)
       ) {
         setShowResults(false);
-        setShowColorDropdown(false); 
+        setShowColorDropdown(false);
       }
     };
-  
+
     document.addEventListener('mousedown', handleClickOutside);
-  
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
@@ -390,7 +390,7 @@ function UploadImage() {
                   <input
                     type='text'
                     ref={inputRef}
-                    className='p-2 w-full bg-bgDarkGray2 border rounded'
+                    className='p-2 w-full bg-bgDarkGray2 border focus:outline-none rounded'
                     placeholder='Search Keywords'
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
@@ -398,10 +398,16 @@ function UploadImage() {
                   />
                   <button
                     type='button'
-                    className='absolute right-0 top-1/2 -translate-y-1/2 h-full px-2
-                    text-black bg-white rounded-r'
-                    onClick={handleSearch}
-                  >Search
+                    className={`absolute right-0 top-1/2 -translate-y-1/2 h-full px-2 rounded-r 
+                      ${showResults ? 'bg-red-700' : 'bg-green-700'} text-white`}
+                    onClick={() => {
+                      if (showResults) {
+                        setShowResults(false); // Close the dropdown if it's currently open
+                      } else {
+                        handleSearch(); // Perform search if dropdown is closed
+                      }
+                    }}>
+                    {showResults ? 'Close' : 'Search'}
                   </button>
                   <div className={`result-keywordSelect absolute w-5/6 max-h-32
                     ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2 overflow-y-auto`}
@@ -409,12 +415,11 @@ function UploadImage() {
                     {fetchedKeywords.map((keyword, index) => (
                       <label htmlFor={`keyword-${index}`} key={index}
                         className='flex justify-between items-center w-full p-2 
-                      border-b border-gray-400 cursor-pointer '>
+                        border-b border-gray-400 cursor-pointer '>
                         <p className={'text-white'}>{keyword}</p>
                         <input type="checkbox" id={`keyword-${index}`}
                           checked={selectedKeywords.includes(keyword)}
-                          onChange={() => handleCheckboxChange(keyword)}
-                        />
+                          onChange={() => handleCheckboxChange(keyword)} />
                       </label>
                     ))}
                   </div>
