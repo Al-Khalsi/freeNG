@@ -72,18 +72,19 @@ const Downloader = () => {
         }
 
         try {
-            const response = await axios.get(`${FILE_API.DOWNLOAD(fileId)}`, {
-                responseType: 'blob',
-            });
+            const response = await axios.get(`${FILE_API.DOWNLOAD(fileId)}`);
+            // The final S3 URL after backend redirect with 302 response code
+            const s3Url = response.request.responseURL;
 
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = title || 'download';
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            window.URL.revokeObjectURL(url);
+            // Create a temporary link and click it
+            const link = document.createElement('a');
+            link.href = s3Url;
+            /* opens in new tab : نوموخوام برای دانلود صفحه جدیدی باز شه پس اینو کامنت میکنم */
+            // link.target = '_blank';
+            link.rel = 'noopener noreferrer';  // Security best practice
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
 
         } catch (error) {
             console.error('Error downloading the file:', error);
