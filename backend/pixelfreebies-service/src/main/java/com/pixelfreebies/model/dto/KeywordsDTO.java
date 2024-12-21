@@ -19,4 +19,8 @@ public class KeywordsDTO implements Serializable {
     private Long id;
     private String keyword;
 
+    public KeywordsDTO(String keyword) {
+        this.keyword = keyword;
+    }
+
 }
