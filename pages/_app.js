@@ -1,5 +1,6 @@
 import PreventDevTools from '@/components/modules/PreventDevTools';
 import { AuthProvider } from '../context/AuthContext';
+import { ImageProvider } from '@/context/ImageContext'; 
 import { useAuth } from '@/context/AuthContext';
 import "../styles/globals.css";
 
@@ -8,7 +9,9 @@ function App({ Component, pageProps }) {
   return (
     <AuthProvider>
       <AuthConsumer />
-      <Component {...pageProps} />
+      <ImageProvider>
+        <Component {...pageProps} />
+      </ImageProvider>
     </AuthProvider>
   );
 }

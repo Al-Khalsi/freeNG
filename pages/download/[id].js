@@ -15,6 +15,7 @@ import { KEYWORD_API } from "@/utils/api/keyword";
 import Header from '@/components/templates/Header';
 import { useAuth } from '@/context/AuthContext';
 import Footer from '@/components/templates/Footer';
+import { useImageContext } from '@/context/ImageContext';
 
 const colors = [
     { name: 'Black', hex: '#000000' },
@@ -48,7 +49,8 @@ const colors = [
 
 const Downloader = () => {
     const router = useRouter();
-    const { id: fileId, title, path, size, width, height, lightMode, style, dominantColors, source, keywords } = router.query;
+    const { imageData } = useImageContext();
+    const { id: fileId, title, path, size, width, height, lightMode, style, dominantColors, source, keywords } = imageData || {};
     const { token, username, email, clearToken, userId, role } = useAuth();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [parsedKeywords, setParsedKeywords] = useState([]);

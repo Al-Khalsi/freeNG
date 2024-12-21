@@ -4,24 +4,30 @@ import { FaImage } from "react-icons/fa";
 import { RxDimensions } from "react-icons/rx";
 import Link from 'next/link';
 import FullScreenModal from '@/components/templates/FullScreenModal';
+import { useRouter } from 'next/router';
+import { useImageContext } from '@/context/ImageContext';
 
-function Card({ image, role, onDelete, onEdit }) {
+function Card({ image, role, onDelete }) {
+    const { setImageData } = useImageContext();
+    const router = useRouter();
     const [isModalOpen, setModalOpen] = useState(false);
-    const [editedTitle, setEditedTitle] = useState(image.title);
-    const [isEditing, setIsEditing] = useState(false);
 
-    const downloadLink = `/download/${image.id}?${new URLSearchParams({
-        title: image.title,
-        size: image.size,
-        width: image.width,
-        height: image.height,
-        style: image.style,
-        dominantColors: image.dominantColors,
-        keywords: image.keywords,
-        lightMode: image.lightMode ? 'true' : 'false',
-        path: image.path,
-        source: image.source
-    }).toString()}`;
+    const handleDownload = () => {
+        setImageData({
+            id: image.id,
+            size: image.size,
+            width: image.width,
+            height: image.height,
+            style: image.style,
+            dominantColors: Array.isArray(image.dominantColors) ? image.dominantColors.join(',') : image.dominantColors,
+            keywords: Array.isArray(image.keywords) ? image.keywords.join(',') : image.keywords,
+            lightMode: image.lightMode ? 'true' : 'false',
+            path: image.path,
+            source: image.source
+        });
+        // Navigate to the download page
+        router.push(`/download/${image.title}`);
+    };
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -29,12 +35,6 @@ function Card({ image, role, onDelete, onEdit }) {
 
     const handleCloseModal = () => {
         setModalOpen(false);
-    };
-
-    const handleEdit = () => {
-        const updatedData = { fileTitle: editedTitle };
-        onEdit(image.id, updatedData);
-        setIsEditing(false);
     };
 
     return (
@@ -80,11 +80,11 @@ function Card({ image, role, onDelete, onEdit }) {
                             <span className='block ml-1'>{`${image.width} × ${image.height}`}</span>
                         </div>
                     </div>
-                    <Link href={downloadLink} className="Download-button relative flex justify-center items-center 
+                    <button onClick={handleDownload} className="Download-button relative flex justify-center items-center 
                     w-full mt-3 py-3 px-5 text-lg font-medium rounded-lg border-none bg-gray-600 text-clWhite 
                     cursor-pointer duration-200">
                         <span>Download</span>
-                    </Link>
+                    </button>
                 </div>
             </div>
 
