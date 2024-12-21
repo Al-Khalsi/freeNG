@@ -15,16 +15,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.net.URI;
+import java.util.UUID;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -70,27 +69,12 @@ public class FileController {
     )
     @GetMapping("/download/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
-        try {
-            Resource resource = this.fileService.loadImageAsResource(fileId);
+        ImageDTO image = this.fileService.findImageById(UUID.fromString(fileId));
 
-            // Get the file's MIME type
-            String contentType;
-            try {
-
-                contentType = Files.probeContentType(Paths.get(resource.getFile().getAbsolutePath()));
-
-            } catch (IOException e) {
-                contentType = MediaType.APPLICATION_OCTET_STREAM_VALUE;
-            }
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-                    .body(resource);
-
-        } catch (IOException e) {
-            return ResponseEntity.notFound().build();
-        }
+        // Redirect to the S3 URL
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(URI.create(image.getFilePath()))
+                .build();
     }
 
     // Endpoint for fetching files

@@ -1,4 +1,4 @@
-package com.pixelfreebies.config;
+package com.pixelfreebies.config.debug;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

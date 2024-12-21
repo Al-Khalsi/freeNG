@@ -1,7 +1,6 @@
-package com.pixelfreebies.config.security.jwt.impl;
+package com.pixelfreebies.config.security.jwt;
 
-import com.pixelfreebies.config.security.jwt.TokenClaimsBuilder;
-import com.pixelfreebies.config.security.jwt.TokenService;
+import com.pixelfreebies.config.security.jwt.builder.TokenClaimsBuilder;
 import com.pixelfreebies.exception.NotFoundException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

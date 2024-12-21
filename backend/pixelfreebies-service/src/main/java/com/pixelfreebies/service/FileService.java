@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 public interface FileService {
 
@@ -18,6 +19,8 @@ public interface FileService {
     Resource loadImageAsResource(String fileId) throws IOException;
 
     Page<ImageDTO> listAllImages(Pageable pageable);
+
+    ImageDTO findImageById(UUID fileId);
 
     void deleteImageById(String fileId);
 

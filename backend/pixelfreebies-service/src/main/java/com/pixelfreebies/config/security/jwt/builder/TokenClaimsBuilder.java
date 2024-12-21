@@ -1,4 +1,4 @@
-package com.pixelfreebies.config.security.jwt;
+package com.pixelfreebies.config.security.jwt.builder;
 
 import org.springframework.security.core.Authentication;
 
