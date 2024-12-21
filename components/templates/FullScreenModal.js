@@ -28,7 +28,7 @@ const FullScreenModal = ({ image, onClose, lightMode }) => {
             <button onClick={onClose} className="absolute top-8 right-8 text-2xl">✖</button>
             <div className='relative flex justify-center items-center max-w-full h-full m-auto p-8 z-10 overflow-hidden'>
                 <img
-                    src={`../../img/${image.path}`}
+                    src={`${image.path}`}
                     alt={image.fileTitle}
                     className="max-w-full max-h-full object-contain"
                     onClick={(e) => e.stopPropagation()} />
