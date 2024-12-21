@@ -23,7 +23,7 @@ public class ImageCreationService {
     public Image createImageDomain(MultipartFile uploadedMultipartFile,
                                    String relativePath, ImageUploadRequest imageUploadRequest) {
         Image image = new Image();
-        image.setFileTitle(imageUploadRequest.getFileName());
+        image.setFileTitle(this.capitalizeFirstLetters(imageUploadRequest.getFileName()));
         image.setFilePath(relativePath);
         image.setContentType(uploadedMultipartFile.getContentType());
         image.setSize(uploadedMultipartFile.getSize()); // size in bytes
@@ -45,6 +45,24 @@ public class ImageCreationService {
         }
 
         return image;
+    }
+
+    public String capitalizeFirstLetters(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        String[] words = input.split(" "); // Split the string into words
+        StringBuilder capitalizedString = new StringBuilder();
+
+        for (String word : words) {
+            if (!word.isEmpty()) { // Check if the word is not empty
+                String capitalizedWord = word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase(); // Capitalize first letter
+                capitalizedString.append(capitalizedWord).append(" "); // Append the capitalized word
+            }
+        }
+
+        return capitalizedString.toString().trim();
     }
 
     private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) {
