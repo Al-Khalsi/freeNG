@@ -15,6 +15,7 @@ function Card({ image, role, onDelete }) {
     const handleDownload = () => {
         setImageData({
             id: image.id,
+            title: image.title,
             size: image.size,
             width: image.width,
             height: image.height,
