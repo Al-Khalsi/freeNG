@@ -17,7 +17,6 @@ import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -106,6 +105,13 @@ public class FileServiceImpl implements FileService {
     public Page<ImageDTO> listAllImages(Pageable pageable) {
         return this.imageRepository.findAll(pageable)
                 .map(this::convertToDto);
+    }
+
+    @Override
+    public ImageDTO findImageById(UUID fileId) {
+        return this.imageRepository.findById(fileId)
+                .map(this.imageConverter::toDto)
+                .orElseThrow(() -> new RuntimeException("File not found with id " + fileId));
     }
 
     private ImageDTO convertToDto(Image image) {
