@@ -34,12 +34,12 @@ public class KeywordsServiceImpl implements KeywordsService {
 
     @Override
     public KeywordsDTO createKeyword(KeywordsDTO keywordsDTO) {
-        String[] keywordsArray = keywordsDTO.getKeyword().split(",");
+        String[] keywordsArray = keywordsDTO.getKeyword().toLowerCase().split(",");
         List<KeywordsDTO> createdKeywords = new ArrayList<>();
 
         // Check if any keyword already exists
         for (String keyword : keywordsArray) {
-            String trimmedKeyword = keyword.trim();
+            String trimmedKeyword = keyword.trim().replace(" ", "-");
             Optional<Keywords> optionalKeywords = this.keywordsRepository.findByKeyword(trimmedKeyword);
 
             if (optionalKeywords.isPresent()) throw new AlreadyExistsException("Keyword already exists with name: " + trimmedKeyword);
