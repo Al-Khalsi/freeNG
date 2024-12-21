@@ -127,7 +127,7 @@ const Downloader = () => {
 
                 <meta property="og:title" content={title} />
                 <meta property="og:description" content={`Download ${title} - A beautiful PNG image`} />
-                <meta property="og:image" content={`../../img/${path}`} />
+                <meta property="og:image" content={`${path}`} />
                 <meta property="og:url" content={`https://pixelfreebies.com/download/${title}`} />
                 <meta property="og:type" content="website" />
             </Head>
