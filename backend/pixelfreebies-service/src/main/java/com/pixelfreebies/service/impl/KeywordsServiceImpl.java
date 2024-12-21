@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,11 +34,25 @@ public class KeywordsServiceImpl implements KeywordsService {
 
     @Override
     public KeywordsDTO createKeyword(KeywordsDTO keywordsDTO) {
-        Optional<Keywords> optionalKeywords = this.keywordsRepository.findByKeyword(keywordsDTO.getKeyword());
-        if (optionalKeywords.isPresent())
-            throw new AlreadyExistsException("Keyword already exist with name: " + keywordsDTO.getKeyword());
-        Keywords savedKeyword = this.keywordsRepository.save(this.keywordsConverter.toEntity(keywordsDTO));
-        return this.keywordsConverter.toDto(savedKeyword);
+        String[] keywordsArray = keywordsDTO.getKeyword().split(",");
+        List<KeywordsDTO> createdKeywords = new ArrayList<>();
+
+        // Check if any keyword already exists
+        for (String keyword : keywordsArray) {
+            String trimmedKeyword = keyword.trim();
+            Optional<Keywords> optionalKeywords = this.keywordsRepository.findByKeyword(trimmedKeyword);
+
+            if (optionalKeywords.isPresent()) throw new AlreadyExistsException("Keyword already exists with name: " + trimmedKeyword);
+        }
+
+        // If no existing keywords were found, save all of them
+        for (String keyword : keywordsArray) {
+            String trimmedKeyword = keyword.trim();
+            Keywords savedKeyword = this.keywordsRepository.save(this.keywordsConverter.toEntity(new KeywordsDTO(trimmedKeyword)));
+            createdKeywords.add(this.keywordsConverter.toDto(savedKeyword));
+        }
+
+        return createdKeywords.isEmpty() ? null : createdKeywords.get(0);
     }
 
     @Override
