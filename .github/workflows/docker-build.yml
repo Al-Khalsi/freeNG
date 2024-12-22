@@ -42,14 +42,14 @@ jobs:
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
-          path: backend/.m2
-          key: "${{ runner.os }}-maven-${{ hashFiles('backend/pom.xml') }}"
+          path: backend/pixelfreebies-service/.m2
+          key: "${{ runner.os }}-maven-${{ hashFiles('backend/pixelfreebies-service/pom.xml') }}"
           restore-keys: |
             ${{ runner.os }}-maven-
 
       # Build Docker Image with Jib
       - name: Build Backend Docker Image
-        working-directory: backend
+        working-directory: backend/pixelfreebies-service
         env:
           DATABASE_HOST: 127.0.0.1
           DATABASE_PORT: 5432
@@ -79,7 +79,7 @@ jobs:
 
       # Push Docker Image to Registry
       - name: Push Backend Docker Image
-        working-directory: backend
+        working-directory: backend/pixelfreebies-service
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           if [ "${{ github.ref_name }}" == "main" ]; then
