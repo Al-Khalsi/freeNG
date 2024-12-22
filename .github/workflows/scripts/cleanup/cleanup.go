@@ -74,9 +74,9 @@ func main() {
 	}
 	fmt.Printf("SHA values of tags: %v\n", shaValues)
 
-	// Keep the latest 3 tags, delete the rest
-	if len(devTags) > 3 {
-		tagsToDelete := devTags[3:]
+	// Keep the latest 2 tags, delete the rest
+	if len(devTags) > 2 {
+		tagsToDelete := devTags[2:]
 		for _, tag := range tagsToDelete {
 			deleteURL := fmt.Sprintf("https://hub.docker.com/v2/repositories/%s/tags/%s/", repo, tag)
 			deleteReq, _ := http.NewRequest("DELETE", deleteURL, nil)
