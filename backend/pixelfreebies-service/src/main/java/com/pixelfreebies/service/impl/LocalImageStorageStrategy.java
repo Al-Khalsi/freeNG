@@ -2,17 +2,17 @@ package com.pixelfreebies.service.impl;
 
 import com.pixelfreebies.config.properties.FileStorageProperties;
 import com.pixelfreebies.exception.PixelfreebiesException;
-import com.pixelfreebies.service.AbstractBaseImageStorageStrategy;
+import com.pixelfreebies.service.ImageStorageStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -21,11 +21,35 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Component
 @Primary
 @Profile("!prod")
-public class LocalImageStorageStrategy extends AbstractBaseImageStorageStrategy {
+public class LocalImageStorageStrategy implements ImageStorageStrategy {
 
-    public LocalImageStorageStrategy(final FileStorageProperties fileStorageProperties) throws PixelfreebiesException {
-        super(fileStorageProperties);
-        log.info("LocalImageStorageStrategyDev initialized with storage location: {}", fileStorageProperties.getLocation());
+    protected final Path fileStorageLocation;
+
+    public LocalImageStorageStrategy(FileStorageProperties fileStorageProperties) throws PixelfreebiesException {
+        String fileStoragePath = fileStorageProperties.getLocation();
+        if (fileStoragePath == null || fileStoragePath.trim().isEmpty()) {
+            log.error("-> FILE -> File location is null or empty");
+            throw new PixelfreebiesException("File storage location must be configured", INTERNAL_SERVER_ERROR);
+        }
+
+        // Set up the directory where files will be stored
+        this.fileStorageLocation = Paths.get(fileStoragePath).toAbsolutePath().normalize();
+        initializeStorageLocation();
+    }
+
+    private void initializeStorageLocation() throws PixelfreebiesException {
+        try {
+            // Create the directory if it doesn't exist
+            Files.createDirectories(this.fileStorageLocation);
+            // Ensure it's writable
+            if (!Files.isWritable(this.fileStorageLocation)) {
+                log.error("-> FILE -> File storage location is not writable: {}", this.fileStorageLocation);
+                throw new PixelfreebiesException("File storage location is not writable: " + this.fileStorageLocation, INTERNAL_SERVER_ERROR);
+            }
+        } catch (IOException e) {
+            log.error("-> FILE -> Failed to create directory: {}. Cause=[{}]", this.fileStorageLocation, e.getMessage());
+            throw new PixelfreebiesException("Could not create the directory where the uploaded files will be stored: " + e.getMessage(), INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override

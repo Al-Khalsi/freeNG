@@ -42,7 +42,8 @@ public class KeywordsServiceImpl implements KeywordsService {
             String trimmedKeyword = keyword.trim().replace(" ", "-");
             Optional<Keywords> optionalKeywords = this.keywordsRepository.findByKeyword(trimmedKeyword);
 
-            if (optionalKeywords.isPresent()) throw new AlreadyExistsException("Keyword already exists with name: " + trimmedKeyword);
+            if (optionalKeywords.isPresent())
+                throw new AlreadyExistsException("Keyword already exists with name: " + trimmedKeyword);
         }
 
         // If no existing keywords were found, save all of them
