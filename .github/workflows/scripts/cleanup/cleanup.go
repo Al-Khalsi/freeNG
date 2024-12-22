@@ -84,12 +84,10 @@ func main() {
 
 			deleteResp, err := client.Do(deleteReq)
 			if err != nil || deleteResp.StatusCode != http.StatusNoContent {
-				log.Printf("Failed to delete tag %s: %v", tag, err)
+				fmt.Printf("Failed to delete tag %s: %v", tag, err)
 			} else {
-				log.Printf("Deleted tag: %s", tag)
+				fmt.Printf("Deleted tag: %s", tag)
 			}
 		}
-	} else {
-		fmt.Println("No tags to delete")
 	}
 }
