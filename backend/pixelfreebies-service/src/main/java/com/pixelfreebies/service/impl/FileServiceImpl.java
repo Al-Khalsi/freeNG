@@ -29,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -129,20 +128,17 @@ public class FileServiceImpl implements FileService {
     public void deleteImageById(String imageId) throws PixelfreebiesException {
         Image image = this.imageRepository.findById(UUID.fromString(imageId))
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
-        image.getVariants().stream()
-                .map(imageVariant -> {
-                    Optional<ImageVariant> optionalImageVariant = this.imageVariantRepository.findById(imageVariant.getId());
-                    if (optionalImageVariant.isEmpty()) {
-                        return null;
-                    }
-                    String objectName = imageVariant.getFilePath().replace(String.format("https://%s/%s/", this.s3Properties.getEndpointUrl(), this.s3Properties.getBucket()), "");
-                    boolean deleted = this.minioS3Service.removeObjectFromS3Bucket(this.s3Properties.getBucket(), objectName);
-                    if (!deleted) {
-                        log.error("Couldn't delete variant object from S3 bucket: {}", objectName);
-                        throw new PixelfreebiesException("Couldn't delete variant object from S3 bucket: " + objectName, INTERNAL_SERVER_ERROR);
-                    }
-                    return objectName;
-                });
+        image.getVariants().forEach(imageVariant -> {
+            Optional<ImageVariant> optionalImageVariant = this.imageVariantRepository.findById(imageVariant.getId());
+            if (optionalImageVariant.isPresent()) {
+                String objectName = imageVariant.getFilePath().replace(String.format("https://%s/%s/", this.s3Properties.getEndpointUrl(), this.s3Properties.getBucket()), "");
+                boolean deleted = this.minioS3Service.removeObjectFromS3Bucket(this.s3Properties.getBucket(), objectName);
+                if (!deleted) {
+                    log.error("Couldn't delete variant object from S3 bucket: {}", objectName);
+                    throw new PixelfreebiesException("Couldn't delete variant object from S3 bucket: " + objectName, INTERNAL_SERVER_ERROR);
+                }
+            }
+        });
 
         String mainImageObjectName = image.getFilePath().replace(String.format("https://%s/%s/", this.s3Properties.getEndpointUrl(), this.s3Properties.getBucket()), "");
         boolean mainImageDeleted = this.minioS3Service.removeObjectFromS3Bucket(this.s3Properties.getBucket(), mainImageObjectName);
