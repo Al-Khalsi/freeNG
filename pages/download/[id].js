@@ -120,7 +120,7 @@ const Downloader = () => {
     return (
         <>
             <Head>
-                <title>{title}</title>
+                <title>{title} - Free Download</title>
                 <link rel="canonical" href={`https://pixelfreebies.com/download/${title}`} />
                 <meta name="description"
                     content={`${title} is a free png image with dimensions ${width}x${height} and size ${size} in ${style} style available for free.`} />

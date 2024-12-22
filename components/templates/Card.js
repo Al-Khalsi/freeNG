@@ -26,8 +26,6 @@ function Card({ image, role, onDelete }) {
             path: image.path,
             source: image.source
         });
-        // Navigate to the download page
-        router.push(`/download/${image.title}`);
     };
 
     const handleOpenModal = () => {
@@ -81,11 +79,11 @@ function Card({ image, role, onDelete }) {
                             <span className='block ml-1'>{`${image.width} × ${image.height}`}</span>
                         </div>
                     </div>
-                    <button onClick={handleDownload} className="Download-button relative flex justify-center items-center 
+                    <Link href={`/download/${image.title}`} onClick={handleDownload} className="Download-button relative flex justify-center items-center 
                     w-full mt-3 py-3 px-5 text-lg font-medium rounded-lg border-none bg-gray-600 text-clWhite 
                     cursor-pointer duration-200">
                         <span>Download</span>
-                    </button>
+                    </Link>
                 </div>
             </div>
 
