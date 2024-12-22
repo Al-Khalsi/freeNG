@@ -1,11 +1,10 @@
 package com.pixelfreebies.service.impl;
 
 import com.luciad.imageio.webp.WebPWriteParam;
-import com.pixelfreebies.config.properties.FileStorageProperties;
 import com.pixelfreebies.config.properties.S3Properties;
 import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.MultipartFileInputStream;
-import com.pixelfreebies.service.AbstractBaseImageStorageStrategy;
+import com.pixelfreebies.service.ImageStorageStrategy;
 import io.minio.MinioClient;
 import io.minio.StatObjectArgs;
 import io.minio.errors.*;
@@ -36,14 +35,13 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Slf4j
 @Service
 @Profile("prod")
-public class S3BucketImageStorageStrategy extends AbstractBaseImageStorageStrategy {
+public class S3BucketImageStorageStrategy implements ImageStorageStrategy {
 
     private final MinioS3Service minioS3Service;
     private final S3Properties s3Properties;
     private final MinioClient minioClient;
 
-    public S3BucketImageStorageStrategy(final FileStorageProperties fileStorageProperties, MinioS3Service minioS3Service, S3Properties s3Properties, MinioClient minioClient) throws IOException {
-        super(fileStorageProperties);
+    public S3BucketImageStorageStrategy(MinioS3Service minioS3Service, S3Properties s3Properties, MinioClient minioClient) {
         this.minioS3Service = minioS3Service;
         this.s3Properties = s3Properties;
         this.minioClient = minioClient;
