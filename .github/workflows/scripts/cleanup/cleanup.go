@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 	"sort"
 	"strings"
 )
@@ -19,12 +18,9 @@ type DockerHubResponse struct {
 }
 
 func main() {
-    username := os.Getenv("DOCKER_USERNAME")
-// 	username := "dukeofjava"
-    password := os.Getenv("DOCKER_PASSWORD")
-//	password := "2devsimi20"
-    repo := os.Getenv("IMAGE_NAME")
-//	repo := "dukeofjava/pixelfreebies-service"
+	username := os.Getenv("DOCKER_USERNAME")
+	password := os.Getenv("DOCKER_PASSWORD")
+	repo := os.Getenv("IMAGE_NAME")
 
 	if username == "" || password == "" || repo == "" {
 		log.Fatal("Missing required environment variables: DOCKER_USERNAME, DOCKER_PASSWORD, IMAGE_NAME")
@@ -67,6 +63,15 @@ func main() {
 		}
 	}
 	sort.Sort(sort.Reverse(sort.StringSlice(devTags)))
+
+	// Logging purpose: Print the SHA values of the tags
+	fmt.Printf("Found tags length: %d\n", len(devTags))
+	var shaValues []string
+	for _, tag := range devTags {
+		shaValue := strings.TrimPrefix(tag, "0.1-BETA-dev-") // Remove the prefix
+		shaValues = append(shaValues, shaValue)              // Collect the SHA values
+	}
+	fmt.Printf("SHA values of tags: %v\n", shaValues)
 
 	// Keep the latest 3 tags, delete the rest
 	if len(devTags) > 3 {
