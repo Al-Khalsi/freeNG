@@ -90,3 +90,22 @@ jobs:
           fi
           echo "Pushing Docker image: $TAG"
           docker push $TAG
+
+      # Install Required Dependencies
+      - name: Install jq and curl
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq curl
+
+      # Clean up old Docker tags
+      - name: Cleanup old Docker tags
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          TAGS=$(curl -s "https://hub.docker.com/v2/repositories/${IMAGE_NAME}/tags/" | jq -r '.results[].name' | grep 'dev-')
+          TAGS_TO_DELETE=$(echo "$TAGS" | sort -r | tail -n +4)
+          for TAG in $TAGS_TO_DELETE; do
+            echo "Deleting tag: ${TAG}"
+            curl -s -X DELETE \
+              -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_PASSWORD }}" \
+              "https://hub.docker.com/v2/repositories/${IMAGE_NAME}/tags/${TAG}/"
+          done
