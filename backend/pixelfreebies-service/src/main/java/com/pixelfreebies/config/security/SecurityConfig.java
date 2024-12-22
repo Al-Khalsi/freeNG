@@ -19,6 +19,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.Collections;
+
 @Configuration
 @Profile("!prod")
 @EnableWebSecurity
@@ -34,7 +36,7 @@ public class SecurityConfig extends BaseSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        this.configureCors(http, "*");
+        this.configureCors(http, Collections.singletonList("*"));
         this.configureCommonSecurity(http, this.jwtTokenValidatorFilter, this.jwtTokenGeneratorFilter, this.customBasicAuthenticationEntryPoint, this.customBearerTokenAuthenticationEntryPoint, this.customBearerTokenAccessDeniedHandler);
 
         http.authorizeHttpRequests(authz -> authz

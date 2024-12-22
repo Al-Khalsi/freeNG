@@ -73,7 +73,6 @@ public class KeywordsServiceImpl implements KeywordsService {
     @Override
     public KeywordsDTO findKeywordById(long keywordId) {
         return this.keywordsRepository.findById(keywordId)
-//                .map(this.keywordsConverter::toDto)
                 .map(keyword -> {
                     log.info("Keyword found: {}", keyword.getKeyword());
                     return this.keywordsConverter.toDto(keyword);

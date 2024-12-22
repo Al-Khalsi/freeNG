@@ -17,4 +17,4 @@ base:
 cors:
   origin:
     url:
-      permitted: ${CORS_ORIGIN_URL:http://localhost:3000}
+      permitted: ${CORS_ORIGIN_URL:http://localhost:3000} # comma-separated

@@ -2,6 +2,7 @@ package com.pixelfreebies.service.impl;
 
 import com.pixelfreebies.config.properties.S3Properties;
 import com.pixelfreebies.exception.NotFoundException;
+import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
@@ -17,10 +18,10 @@ import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @Service
@@ -45,9 +48,10 @@ public class FileServiceImpl implements FileService {
     private final ImageCreationService imageCreationService;
     private final KeywordsService keywordsService;
     private final S3Properties s3Properties;
+    private final MinioS3Service minioS3Service;
 
     @Override
-    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
+    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) {
         try {
             // Validate image name
             this.imageValidationService.validateImageName(imageUploadRequest.getFileName());
@@ -69,7 +73,7 @@ public class FileServiceImpl implements FileService {
             image.setFilePath(imagePath);
 
             String normalizedWebpFilePath = imageVariant.getFilePath().replace("\\", "/");
-            String webpPath = this.getFullPath( normalizedWebpFilePath);
+            String webpPath = this.getFullPath(normalizedWebpFilePath);
             imageVariant.setFilePath(webpPath);
 
             // Associate relationships
@@ -82,8 +86,8 @@ public class FileServiceImpl implements FileService {
 
             return this.imageConverter.toDto(savedImage);
         } catch (IOException e) {
-            log.error("-> FILE -> Failed to store file: {}", e.getMessage());
-            throw e;
+            log.error("-> FILE -> Failed to save the image: {}", e.getMessage());
+            throw new PixelfreebiesException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -92,13 +96,6 @@ public class FileServiceImpl implements FileService {
             objectName = objectName.substring(1);
         }
         return String.format("https://%s/%s/%s", this.s3Properties.getEndpointUrl(), this.s3Properties.getBucket(), objectName);
-    }
-
-    @Override
-    public Resource loadImageAsResource(String fileId) throws IOException {
-        Image image = this.imageRepository.findById(UUID.fromString(fileId))
-                .orElseThrow(() -> new IOException("File not found with id " + fileId));
-        return this.imageStorageStrategy.load(image.getFilePath());
     }
 
     @Override
@@ -111,7 +108,7 @@ public class FileServiceImpl implements FileService {
     public ImageDTO findImageById(UUID fileId) {
         return this.imageRepository.findById(fileId)
                 .map(this.imageConverter::toDto)
-                .orElseThrow(() -> new RuntimeException("File not found with id " + fileId));
+                .orElseThrow(() -> new NotFoundException("File not found with id " + fileId));
     }
 
     private ImageDTO convertToDto(Image image) {
@@ -128,9 +125,28 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void deleteImageById(String imageId) {
+    public void deleteImageById(String imageId) throws PixelfreebiesException {
         Image image = this.imageRepository.findById(UUID.fromString(imageId))
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+        image.getVariants().forEach(imageVariant -> {
+            Optional<ImageVariant> optionalImageVariant = this.imageVariantRepository.findById(imageVariant.getId());
+            if (optionalImageVariant.isPresent()) {
+                String objectName = imageVariant.getFilePath().replace(String.format("https://%s/%s/", this.s3Properties.getEndpointUrl(), this.s3Properties.getBucket()), "");
+                boolean deleted = this.minioS3Service.removeObjectFromS3Bucket(this.s3Properties.getBucket(), objectName);
+                if (!deleted) {
+                    log.error("Couldn't delete variant object from S3 bucket: {}", objectName);
+                    throw new PixelfreebiesException("Couldn't delete variant object from S3 bucket: " + objectName, INTERNAL_SERVER_ERROR);
+                }
+            }
+        });
+
+        String mainImageObjectName = image.getFilePath().replace(String.format("https://%s/%s/", this.s3Properties.getEndpointUrl(), this.s3Properties.getBucket()), "");
+        boolean mainImageDeleted = this.minioS3Service.removeObjectFromS3Bucket(this.s3Properties.getBucket(), mainImageObjectName);
+        if (!mainImageDeleted) {
+            log.error("Couldn't delete image object from S3 bucket: {}", mainImageObjectName);
+            throw new PixelfreebiesException("Couldn't delete image object from S3 bucket: " + mainImageObjectName, INTERNAL_SERVER_ERROR);
+        }
+
         this.imageRepository.delete(image);
     }
 

@@ -7,6 +7,8 @@ import com.pixelfreebies.config.security.entrypoint.CustomBearerTokenAuthenticat
 import com.pixelfreebies.config.security.filter.JWTTokenGeneratorFilter;
 import com.pixelfreebies.config.security.filter.JWTTokenValidatorFilter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @Profile("prod")
 @EnableWebSecurity
@@ -27,6 +32,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @RequiredArgsConstructor
 public class SecurityConfigProd extends BaseSecurityConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(SecurityConfigProd.class);
     private final CustomBearerTokenAuthenticationEntryPoint customBearerTokenAuthenticationEntryPoint;
     private final CustomBasicAuthenticationEntryPoint customBasicAuthenticationEntryPoint;
     private final CustomBearerTokenAccessDeniedHandler customBearerTokenAccessDeniedHandler;
@@ -37,7 +43,9 @@ public class SecurityConfigProd extends BaseSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        this.configureCors(http, this.permittedCorsOriginUrl);
+        List<String> permittedCorsOrigins = Arrays.asList(this.permittedCorsOriginUrl.split(","));
+        log.debug("cors origins: {}", permittedCorsOrigins);
+        this.configureCors(http, permittedCorsOrigins);
         this.configureCommonSecurity(http, this.jwtTokenValidatorFilter, this.jwtTokenGeneratorFilter, this.customBasicAuthenticationEntryPoint, this.customBearerTokenAuthenticationEntryPoint, this.customBearerTokenAccessDeniedHandler);
 
         http.authorizeHttpRequests(authz -> authz

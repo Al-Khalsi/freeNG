@@ -7,6 +7,12 @@ spring:
   config:
     activate:
       on-profile: prod
+logging:
+  level:
+    com.pixelfreebies:
+      config.security: ${SECURITY_LOG_LEVEL}
+      controller: ${CONTROLLER_LOG_LEVEL}
+      service: ${SERVICE_LOG_LEVEL}
 
 --- ###Datasource
 spring:

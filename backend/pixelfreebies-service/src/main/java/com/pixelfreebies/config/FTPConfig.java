@@ -1,4 +1,4 @@
-package com.pixelfreebies.config;
+/*package com.pixelfreebies.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.net.ftp.FTP;
@@ -22,14 +22,14 @@ public class FTPConfig {
     @Bean
     public FTPClient ftpClient() {
         FTPClient ftpClient = new FTPClient();
-        log.info("Connecting to FTP server...");
+        log.debug("Connecting to FTP server...");
         try {
 
             ftpClient.connect(this.host);
             ftpClient.login(this.username, this.password);
             ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
             ftpClient.enterLocalPassiveMode();
-            log.info("Successfully connected to FTP server.");
+            log.debug("Successfully connected to FTP server.");
 
             return ftpClient;
 
@@ -40,3 +40,4 @@ public class FTPConfig {
     }
 
 }
+*/
