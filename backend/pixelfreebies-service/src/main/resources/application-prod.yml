@@ -10,9 +10,9 @@ spring:
 logging:
   level:
     com.pixelfreebies:
-      config.security: ${SECURITY_LOG_LEVEL}
-      controller: ${CONTROLLER_LOG_LEVEL}
-      service: ${SERVICE_LOG_LEVEL}
+      config.security: ${SECURITY_LOG_LEVEL:INFO}
+      controller: ${CONTROLLER_LOG_LEVEL:INFO}
+      service: ${SERVICE_LOG_LEVEL:INFO}
 
 --- ###Datasource
 spring:
@@ -47,11 +47,6 @@ spring:
 file:
   storage:
     location: ${FILE_UPLOAD_LOCATION:/home/simi/uploads}
-
-ftp:
-  host: ${FTP_HOST}
-  username: ${FTP_USERNAME}
-  password: ${FTP_PASSWORD}
 
 s3:
   bucket: c567062
