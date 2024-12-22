@@ -21,12 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.URI;
 import java.util.UUID;
-
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @RestController
@@ -46,20 +42,9 @@ public class FileController {
     @PostMapping("/upload")
     @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_ADMIN')")
     public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
-                                             @ModelAttribute ImageUploadRequest imageUploadRequest) throws Exception {
-        try {
-
-            ImageDTO imageDTO = this.fileService.saveImage(multipartFile, imageUploadRequest);
-            return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
-
-        } catch (IllegalArgumentException e) {
-            log.warn("Invalid input for file upload: {}", e.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(Result.error(BAD_REQUEST, "Invalid input: " + e.getMessage()));
-        } catch (IOException e) {
-            return ResponseEntity.status(INTERNAL_SERVER_ERROR)
-                    .body(Result.error(INTERNAL_SERVER_ERROR, "Failed to upload file: " + e.getMessage()));
-        }
+                                             @ModelAttribute ImageUploadRequest imageUploadRequest) {
+        ImageDTO imageDTO = this.fileService.saveImage(multipartFile, imageUploadRequest);
+        return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
     }
 
     // Endpoint for downloading a file

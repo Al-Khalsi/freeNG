@@ -1,10 +1,12 @@
 package com.pixelfreebies.service.impl;
 
+import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,7 +67,7 @@ public class ImageCreationService {
         return capitalizedString.toString().trim();
     }
 
-    private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) {
+    private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) throws PixelfreebiesException {
         try {
 
             BufferedImage image = ImageIO.read(uploadedMultipartFile.getInputStream());
@@ -75,7 +77,8 @@ public class ImageCreationService {
             } else log.warn("Unable to read image dimensions for imageEntity: {}", imageName);
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("error calculating image dimension: {}", e.getMessage());
+            throw new PixelfreebiesException("error calculating image dimension: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

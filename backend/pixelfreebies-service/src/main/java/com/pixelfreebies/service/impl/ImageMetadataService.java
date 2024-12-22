@@ -1,6 +1,7 @@
 package com.pixelfreebies.service.impl;
 
 import com.luciad.imageio.webp.WebPWriteParam;
+import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
@@ -28,6 +29,8 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Set;
 
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,7 +38,7 @@ public class ImageMetadataService {
 
     private final ImageStorageStrategy imageStorageStrategy;
 
-    public ImageVariant createImageVariants(MultipartFile uploadedMultipartFile, String relativePath) {
+    public ImageVariant createImageVariants(MultipartFile uploadedMultipartFile, String relativePath) throws PixelfreebiesException {
         try {
             // Read original image
             BufferedImage originalImage = ImageIO.read(uploadedMultipartFile.getInputStream());
@@ -67,7 +70,7 @@ public class ImageMetadataService {
 
         } catch (IOException e) {
             log.error("Error creating image variants: {}", e.getMessage());
-            throw new RuntimeException(e.getMessage());
+            throw new PixelfreebiesException("Error creating image variant: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -76,7 +79,7 @@ public class ImageMetadataService {
         return originalPath.replaceFirst("[.][^.]+$", "") + ".webp";
     }
 
-    private void saveAsWebp(BufferedImage image, OutputStream output, float quality, boolean lossless) throws IOException {
+    private void saveAsWebp(BufferedImage image, OutputStream output, float quality, boolean lossless) throws IOException, PixelfreebiesException {
         // Convert to TYPE_INT_ARGB if the image has transparency, otherwise TYPE_INT_RGB
         BufferedImage convertedImage = hasTransparency(image)
                 ? convertToARGB(image)
@@ -84,7 +87,7 @@ public class ImageMetadataService {
 
         Iterator<ImageWriter> writers = ImageIO.getImageWritersByMIMEType("image/webp");
         if (!writers.hasNext()) {
-            throw new IOException("No WebP writer found");
+            throw new PixelfreebiesException("No WebP writer found", INTERNAL_SERVER_ERROR);
         }
         ImageWriter writer = writers.next();
 
@@ -99,6 +102,9 @@ public class ImageMetadataService {
             writer.setOutput(stream);
             writer.write(null, new IIOImage(convertedImage, null, null), writeParam);
             stream.flush();
+        } catch (IOException e) {
+            log.error("Error saving image webp: {}", e.getMessage());
+            throw new PixelfreebiesException("Error saving image webp: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         } finally {
             writer.dispose();
         }

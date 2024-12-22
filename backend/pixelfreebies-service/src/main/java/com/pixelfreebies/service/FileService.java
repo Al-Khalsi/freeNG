@@ -2,7 +2,6 @@ package com.pixelfreebies.service;
 
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.payload.request.ImageUploadRequest;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,9 +13,7 @@ import java.util.UUID;
 
 public interface FileService {
 
-    ImageDTO saveImage(MultipartFile multipartFile, ImageUploadRequest imageUploadRequest) throws IOException;
-
-    Resource loadImageAsResource(String fileId) throws IOException;
+    ImageDTO saveImage(MultipartFile multipartFile, ImageUploadRequest imageUploadRequest);
 
     Page<ImageDTO> listAllImages(Pageable pageable);
 

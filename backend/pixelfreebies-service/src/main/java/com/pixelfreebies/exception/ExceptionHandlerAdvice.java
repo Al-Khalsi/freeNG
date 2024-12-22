@@ -25,16 +25,16 @@ import static org.springframework.http.HttpStatus.*;
 @RestControllerAdvice
 public class ExceptionHandlerAdvice {
 
-    @ExceptionHandler({ObjectNotFoundException.class})
-    @ResponseStatus(NOT_FOUND)
-    public ResponseEntity<Result> handleArtifactNotFoundException(ObjectNotFoundException e) {
-        return ResponseEntity.status(NOT_FOUND).body(new Result(false, NOT_FOUND, e.getMessage(), null));
-    }
-
     @ExceptionHandler({AlreadyExistsException.class})
     @ResponseStatus(BAD_REQUEST)
     public ResponseEntity<Result> handleAlreadyExistException(AlreadyExistsException e) {
         return ResponseEntity.status(BAD_REQUEST).body(new Result(false, BAD_REQUEST, e.getMessage(), null));
+    }
+
+    @ExceptionHandler({NotFoundException.class})
+    @ResponseStatus(NOT_FOUND)
+    public ResponseEntity<Result> handleNotFoundException(NotFoundException e) {
+        return ResponseEntity.status(NOT_FOUND).body(new Result(false, NOT_FOUND, "the object requested was not found", e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -73,6 +73,11 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(FORBIDDEN)
     public ResponseEntity<Result> handleAccessDeniedException(org.springframework.security.access.AccessDeniedException e) {
         return ResponseEntity.status(FORBIDDEN).body(new Result(false, FORBIDDEN, "No permission.", e.getMessage()));
+    }
+
+    @ExceptionHandler({PixelfreebiesException.class})
+    public ResponseEntity<Result> handlePixelfreebiesException(PixelfreebiesException e) {
+        return ResponseEntity.status(e.getHttpStatus()).body(new Result(false, e.getHttpStatus(), "error occurred in application", e.getMessage()));
     }
 
     /**

@@ -2,6 +2,7 @@ package com.pixelfreebies.service.impl;
 
 import com.pixelfreebies.config.properties.S3Properties;
 import com.pixelfreebies.exception.NotFoundException;
+import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
@@ -17,10 +18,10 @@ import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,7 +48,7 @@ public class FileServiceImpl implements FileService {
     private final S3Properties s3Properties;
 
     @Override
-    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) throws IOException {
+    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) {
         try {
             // Validate image name
             this.imageValidationService.validateImageName(imageUploadRequest.getFileName());
@@ -82,8 +83,8 @@ public class FileServiceImpl implements FileService {
 
             return this.imageConverter.toDto(savedImage);
         } catch (IOException e) {
-            log.error("-> FILE -> Failed to store file: {}", e.getMessage());
-            throw e;
+            log.error("-> FILE -> Failed to save the image: {}", e.getMessage());
+            throw new PixelfreebiesException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -92,13 +93,6 @@ public class FileServiceImpl implements FileService {
             objectName = objectName.substring(1);
         }
         return String.format("https://%s/%s/%s", this.s3Properties.getEndpointUrl(), this.s3Properties.getBucket(), objectName);
-    }
-
-    @Override
-    public Resource loadImageAsResource(String fileId) throws IOException {
-        Image image = this.imageRepository.findById(UUID.fromString(fileId))
-                .orElseThrow(() -> new IOException("File not found with id " + fileId));
-        return this.imageStorageStrategy.load(image.getFilePath());
     }
 
     @Override
@@ -111,7 +105,7 @@ public class FileServiceImpl implements FileService {
     public ImageDTO findImageById(UUID fileId) {
         return this.imageRepository.findById(fileId)
                 .map(this.imageConverter::toDto)
-                .orElseThrow(() -> new RuntimeException("File not found with id " + fileId));
+                .orElseThrow(() -> new NotFoundException("File not found with id " + fileId));
     }
 
     private ImageDTO convertToDto(Image image) {

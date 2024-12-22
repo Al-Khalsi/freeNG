@@ -40,52 +40,6 @@ public class AuthenticationController {
             summary = "Register a new user",
             description = "Creates a new user account with the provided details"
     )
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "User created successfully",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(example = """
-                                    {
-                                      "flag": true,
-                                      "code": "CREATED",
-                                      "message": "User created successfully",
-                                      "data": {
-                                        "token": "eyJhbGciOiJIUzI1NiJ9...",
-                                        "userDTO": {
-                                          "id": "9962c489-70e1-4043-b8a5-7044a344321b",
-                                          "username": "string",
-                                          "email": "string",
-                                          "password": null,
-                                          "roles": [
-                                            {
-                                              "id": 1,
-                                              "roleName": "ROLE_USER"
-                                            }
-                                          ]
-                                        }
-                                      }
-                                    }
-                                    """)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(example = """
-                                    {
-                                        "flag":false,
-                                        "code":"INTERNAL_SERVER_ERROR",
-                                        "message":"internal server error occurred.",
-                                        "data":"some message from exception.getMessage()"
-                                    }
-                                    """)
-                    )
-            )
-    })
     @PostMapping("/register")
     public ResponseEntity<Result> register(@RequestBody UserDTO userDTO, HttpServletRequest request) {
         Map<String, Object> responseMap = this.authenticationService.registerUser(userDTO);
@@ -101,60 +55,6 @@ public class AuthenticationController {
     }
 
     @Operation(summary = "User Login", description = "Authenticate user and generate access token")
-    @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "Successful Login",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(example = """
-                                    {
-                                        "flag":true,
-                                        "code":"CREATED",
-                                        "message":"User logged-in successfully",
-                                        "data": {
-                                            "token":"eyJhbGciOiJIUzI1NiJ9...",
-                                            "userDetails": {
-                                                "email":"string",
-                                                "username":"string",
-                                                "role":"ROLE_USER"
-                                            }
-                                        }
-                                    }
-                                    """)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "401",
-                    description = "Unauthorized - Invalid Credentials",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(example = """
-                                    {
-                                            "flag":false,
-                                            "code":"UNAUTHORIZED",
-                                            "message":"username or password is incorrect.",
-                                            "data":"User not found: stringg"
-                                    }
-                                    """)
-                    )
-            ),
-            @ApiResponse(
-                    responseCode = "500",
-                    description = "Internal Server Error",
-                    content = @Content(
-                            mediaType = "application/json",
-                            schema = @Schema(example = """
-                                    {
-                                        "flag":false,
-                                        "code":"INTERNAL_SERVER_ERROR",
-                                        "message":"internal server error occurred.",
-                                        "data":"some message from exception.getMessage()"
-                                    }
-                                    """)
-                    )
-            )
-    })
     @PostMapping("/login")
     public ResponseEntity<Result> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         Map<String, Object> result = this.authenticationService.login(loginRequest);

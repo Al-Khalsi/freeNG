@@ -1,5 +1,6 @@
 package com.pixelfreebies.service.impl;
 
+import com.pixelfreebies.exception.PixelfreebiesException;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.StatObjectArgs;
@@ -7,12 +8,15 @@ import io.minio.errors.MinioException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+
+import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @Service
@@ -22,7 +26,7 @@ public class MinioS3Service {
 
     private final MinioClient minioClient;
 
-    public boolean storeMultipartFileToS3Bucket(String bucketName, String desiredFilename, MultipartFile multipartFile) {
+    public boolean storeMultipartFileToS3Bucket(String bucketName, String desiredFilename, MultipartFile multipartFile) throws PixelfreebiesException {
         try {
             // upload the multipart file to s3
             this.minioClient.putObject(
@@ -41,7 +45,7 @@ public class MinioS3Service {
 
             return true; // If no exception was thrown, the object exists
         } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
-            throw new RuntimeException("Error uploading multipartFile: " + e.getMessage());
+            throw new PixelfreebiesException("Error uploading multipartFile: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 
