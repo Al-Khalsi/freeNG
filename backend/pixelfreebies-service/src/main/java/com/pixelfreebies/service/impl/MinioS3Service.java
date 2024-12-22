@@ -46,7 +46,7 @@ public class MinioS3Service {
             return true; // If no exception was thrown, the object exists
 
         } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
-            log.error("Error uploading object to S3 bucket: {}",e.getMessage());
+            log.error("Error uploading object to S3 bucket: {}", e.getMessage());
             throw new PixelfreebiesException("Error uploading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
@@ -55,9 +55,9 @@ public class MinioS3Service {
         try {
             // remove the object
             this.minioClient.removeObject(RemoveObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(objectName)
-                            .build());
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .build());
 
             // Verify deletion by checking if the object exists
             try {
@@ -77,7 +77,7 @@ public class MinioS3Service {
         } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
                  InvalidResponseException | IOException | NoSuchAlgorithmException | ServerException |
                  XmlParserException e) {
-            log.error("Error removing object from S3 bucket: {}",e.getMessage());
+            log.error("Error removing object from S3 bucket: {}", e.getMessage());
             throw new PixelfreebiesException("Error deleting object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
