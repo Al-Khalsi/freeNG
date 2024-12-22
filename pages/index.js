@@ -74,7 +74,6 @@ function Index() {
             }
         } catch (error) {
             console.error('Failed to fetch images:', error);
-            router.push('/500')
         } finally {
             setSpinner(false);
         }
