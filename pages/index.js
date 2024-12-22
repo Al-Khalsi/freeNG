@@ -70,11 +70,11 @@ function Index() {
                 setImages(fetchedImages); // Update state with the fetched images
                 setTotalPages(response.totalPages); // Set total pages from the response
             } else {
-                response.status === 500 ? router.push('/500') :
-                    console.error('Failed to fetch images: ', response.message);
+                console.error('Failed to fetch images: ', response.message);
             }
         } catch (error) {
             console.error('Failed to fetch images:', error);
+            router.push('/500')
         } finally {
             setSpinner(false);
         }
@@ -216,7 +216,7 @@ function Index() {
     return (
         <>
             <Head>
-                <title>PixelFreebies</title>
+                <title>PixelFreebies - Free Download PNG</title>
                 <link rel="canonical" href="https://pixelfreebies.com" />
                 <meta name="description"
                     content="PixelFreebies offers a vast collection of free PNG images for download. 
