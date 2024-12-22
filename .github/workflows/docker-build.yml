@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Backend Docker Image
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-push:
+  build-and-push-backend:
     runs-on: ubuntu-latest
 
     env:
@@ -18,7 +18,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres:17-alpine
+        image: postgres:15
         ports:
           - 5432:5432
         env:
@@ -42,13 +42,14 @@ jobs:
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          path: backend/.m2
+          key: "${{ runner.os }}-maven-${{ hashFiles('backend/pom.xml') }}"
           restore-keys: |
             ${{ runner.os }}-maven-
 
       # Build Docker Image with Jib
-      - name: Build Docker Image
+      - name: Build Backend Docker Image
+        working-directory: backend
         env:
           DATABASE_HOST: 127.0.0.1
           DATABASE_PORT: 5432
@@ -77,7 +78,8 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       # Push Docker Image to Registry
-      - name: Push Docker Image
+      - name: Push Backend Docker Image
+        working-directory: backend
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
           if [ "${{ github.ref_name }}" == "main" ]; then
