@@ -1,5 +1,6 @@
 package com.pixelfreebies.service;
 
+import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.payload.request.ImageUploadRequest;
 import org.springframework.data.domain.Page;
@@ -19,7 +20,7 @@ public interface FileService {
 
     ImageDTO findImageById(UUID fileId);
 
-    void deleteImageById(String fileId);
+    void deleteImageById(String fileId) throws PixelfreebiesException;
 
     List<String> searchKeywords(String query, int page, int size);
 

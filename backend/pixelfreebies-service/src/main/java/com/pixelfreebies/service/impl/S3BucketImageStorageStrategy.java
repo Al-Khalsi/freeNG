@@ -55,7 +55,7 @@ public class S3BucketImageStorageStrategy extends AbstractBaseImageStorageStrate
             // https://c567062.parspack.net/c567062//api.png --> if in the root home folder, after the bucket name i.e., c567062 comes "//"
             // https://c567062.parspack.net/c567062/images/api.png --> if in another folder, after the bucket name i.e., c567062 comes "/"
             String desiredImageNameWithRemotePath = "/images/png/" + imageName;
-            boolean result = this.minioS3Service.storeMultipartFileToS3Bucket(this.s3Properties.getBucket(), desiredImageNameWithRemotePath, multipartFile);
+            boolean result = this.minioS3Service.uploadObjectToS3Bucket(this.s3Properties.getBucket(), desiredImageNameWithRemotePath, multipartFile);
 
             if (!result) throw new PixelfreebiesException("Error uploading multipartFile", INTERNAL_SERVER_ERROR);
             Path path = Paths.get(desiredImageNameWithRemotePath);
@@ -166,7 +166,7 @@ public class S3BucketImageStorageStrategy extends AbstractBaseImageStorageStrate
             MultipartFileInputStream multipartFile = new MultipartFileInputStream(inputStream, byteArrayOutputStream.size(), normalizedRemotePath);
 
             // Upload to S3 bucket using MinIO
-            boolean result = this.minioS3Service.storeMultipartFileToS3Bucket(this.s3Properties.getBucket(), normalizedRemotePath, multipartFile);
+            boolean result = this.minioS3Service.uploadObjectToS3Bucket(this.s3Properties.getBucket(), normalizedRemotePath, multipartFile);
 
             if (!result) {
                 throw new PixelfreebiesException("Error uploading WebP image", INTERNAL_SERVER_ERROR);

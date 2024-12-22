@@ -43,8 +43,9 @@
     <properties>
         <java.version>17</java.version>
         <jwt.version>0.12.5</jwt.version>
-        <ftp.version>3.11.0</ftp.version>
+<!--        <ftp.version>3.11.0</ftp.version>-->
         <imageio.webp.version>0.1.6</imageio.webp.version>
+        <minio.client.version>8.5.14</minio.client.version>
     </properties>
 
     <dependencies>
@@ -67,11 +68,11 @@
         </dependency>
 
         <!-- File handling (FTP Protocol) -->
-        <dependency>
-            <groupId>commons-net</groupId>
-            <artifactId>commons-net</artifactId>
-            <version>${ftp.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>commons-net</groupId>-->
+<!--            <artifactId>commons-net</artifactId>-->
+<!--            <version>${ftp.version}</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.sejda.imageio</groupId>
             <artifactId>webp-imageio</artifactId>
@@ -86,7 +87,7 @@
         <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
-            <version>8.5.2</version>
+            <version>${minio.client.version}</version>
         </dependency>
 
         <!-- JWT -->
