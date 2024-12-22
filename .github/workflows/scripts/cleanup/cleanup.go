@@ -86,7 +86,8 @@ func main() {
 			if err != nil || deleteResp.StatusCode != http.StatusNoContent {
 				fmt.Printf("Failed to delete tag %s: %v", tag, err)
 			} else {
-				fmt.Printf("Deleted tag: %s", tag)
+			    shaValue := strings.TrimPrefix(tag, "0.1-BETA-dev-")
+				fmt.Printf("Deleted tag SHA value: %s\n", shaValue)
 			}
 		}
 	}
