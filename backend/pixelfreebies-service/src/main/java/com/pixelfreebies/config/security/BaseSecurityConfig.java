@@ -18,6 +18,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.cors.CorsConfiguration;
 
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 public abstract class BaseSecurityConfig {
@@ -43,10 +44,10 @@ public abstract class BaseSecurityConfig {
             "/webjars/**"
     };
 
-    protected void configureCors(HttpSecurity http, String permittedCorsOrigin) throws Exception {
+    protected void configureCors(HttpSecurity http, List<String> permittedCorsOrigins) throws Exception {
         http.cors(corsConfig -> corsConfig.configurationSource(request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(Collections.singletonList(permittedCorsOrigin));
+            config.setAllowedOrigins(permittedCorsOrigins);
             config.setAllowedMethods(Collections.singletonList("*"));
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setMaxAge(3600L);
