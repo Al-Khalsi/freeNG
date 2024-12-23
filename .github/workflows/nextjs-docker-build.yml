@@ -35,9 +35,9 @@ jobs:
           TAG="${IMAGE_NAME}:${VERSION}"
           echo "Building Docker image: $TAG"
           docker build --progress=plain \
-            --build-arg NEXT_PUBLIC_BACKEND_API_VERSION=v1 \
-            --build-arg NEXT_PUBLIC_BACKEND_BASE_URL=http://localhost:9090/api \
-            --build-arg NEXT_PUBLIC_BACKEND_BASE_URL_PRODUCTION=https://api.v1.pixelfreebies.com/api \
+            --build-arg NEXT_PUBLIC_BACKEND_API_VERSION=${{ secrets.BACKEND_API_VERSION }} \
+            --build-arg NEXT_PUBLIC_BACKEND_BASE_URL=${{ secrets.BACKEND_BASE_URL }} \
+            --build-arg NEXT_PUBLIC_BACKEND_BASE_URL_PRODUCTION=${{ secrets.BACKEND_BASE_URL_PRODUCTION }} \
             -t $TAG .
         env:
           IMAGE_NAME: ${{ env.IMAGE_NAME }}
