@@ -61,12 +61,7 @@ jobs:
           S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            TAG="${IMAGE_NAME}:${VERSION}"
-          else
-            HASH=$(echo "${{ github.sha }}" | head -c 7)
-            TAG="${IMAGE_NAME}:${VERSION}-dev-${HASH}"
-          fi
+          TAG="${IMAGE_NAME}:${VERSION}-BETA"
           echo "Building Docker image: $TAG"
           mvn compile jib:dockerBuild -Dimage=$TAG
 
@@ -82,28 +77,6 @@ jobs:
         working-directory: backend/pixelfreebies-service
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          if [ "${{ github.ref_name }}" == "main" ]; then
-            TAG="${IMAGE_NAME}:${VERSION}"
-          else
-            HASH=$(echo "${{ github.sha }}" | head -c 7)
-            TAG="${IMAGE_NAME}:${VERSION}-dev-${HASH}"
-          fi
+          TAG="${IMAGE_NAME}:${VERSION}-BETA"
           echo "Pushing Docker image: $TAG"
           docker push $TAG
-
-      # Install Go
-      - name: Install Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: '1.20'
-
-      # Build and run the cleanup script
-      - name: Cleanup old Docker tags
-        run: |
-          cd .github/workflows/scripts/cleanup
-          go build -o cleanup cleanup.go
-          ./cleanup
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
