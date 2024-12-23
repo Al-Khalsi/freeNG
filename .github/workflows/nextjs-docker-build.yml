@@ -1,0 +1,55 @@
+name: Build and Push Next.js Docker Image
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-push-nextjs:
+    runs-on: ubuntu-latest
+
+    env:
+      IMAGE_NAME: dukeofjava/pixelfreebies-client
+      VERSION: 0.1-BETA
+
+    steps:
+      # Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Install Docker BuildKit
+      - name: Enable Docker BuildKit
+        run: |
+          echo '{ "experimental": true, "features": { "buildkit": true } }' | sudo tee /etc/docker/daemon.json
+          sudo service docker restart
+
+      # Build Docker Image using BuildKit
+      - name: Build Docker Image
+        run: |
+          export DOCKER_BUILDKIT=1
+          TAG="${IMAGE_NAME}:${VERSION}"
+          echo "Building Docker image: $TAG"
+          docker build --progress=plain --build-arg NODE_VERSION=22.9.0 -t $TAG .
+        env:
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
+
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Push Docker Image to Registry
+      - name: Push Docker Image
+        run: |
+          TAG="${IMAGE_NAME}:${VERSION}"
+          echo "Pushing Docker image: $TAG"
+          docker push $TAG
+        env:
+          IMAGE_NAME: ${{ env.IMAGE_NAME }}
