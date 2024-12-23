@@ -1,10 +1,10 @@
 name: Build and Push Backend Docker Image
 
 on:
-  push:
-    branches-ignore:
-      - main
   pull_request:
+    branches:
+      - main
+  push:
     branches:
       - main
   workflow_dispatch:
@@ -61,7 +61,7 @@ jobs:
           S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          TAG="${IMAGE_NAME}:${VERSION}-BETA"
+          TAG="${IMAGE_NAME}:${VERSION}"
           echo "Building Docker image: $TAG"
           mvn compile jib:dockerBuild -Dimage=$TAG
 
@@ -77,6 +77,6 @@ jobs:
         working-directory: backend/pixelfreebies-service
         run: |
           VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
-          TAG="${IMAGE_NAME}:${VERSION}-BETA"
+          TAG="${IMAGE_NAME}:${VERSION}"
           echo "Pushing Docker image: $TAG"
           docker push $TAG
