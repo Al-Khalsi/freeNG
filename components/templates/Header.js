@@ -135,9 +135,6 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                 </div>
             </div>
 
-
-
-
             <div className='flex'>
                 {/* Mobile Search Button */}
                 <button
