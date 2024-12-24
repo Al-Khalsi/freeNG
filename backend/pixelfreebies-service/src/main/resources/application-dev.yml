@@ -41,9 +41,9 @@ file:
 
 s3:
   bucket: c567062
-  endpointUrl: ${S3_ENDPOINT_URL}
-  accessKey: ${S3_ACCESS_KEY}
-  secretKey: ${S3_SECRET_KEY}
+  endpointUrl: ${S3_ENDPOINT_URL:dummy}
+  accessKey: ${S3_ACCESS_KEY:dummy}
+  secretKey: ${S3_SECRET_KEY:dummy}
 
 --- ###Custom Variables
 token:
