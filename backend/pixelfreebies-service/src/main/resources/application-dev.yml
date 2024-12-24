@@ -39,6 +39,12 @@ file:
     location: ${FILE_UPLOAD_LOCATION:C:\Users\Al-Khalsi\Desktop\WebSite\pixelfreebies-client\public\img}
 #    location: ${FILE_UPLOAD_LOCATION:/home/simi/uploads}
 
+s3:
+  bucket: c567062
+  endpointUrl: ${S3_ENDPOINT_URL}
+  accessKey: ${S3_ACCESS_KEY}
+  secretKey: ${S3_SECRET_KEY}
+
 --- ###Custom Variables
 token:
   jwt:
