@@ -28,4 +28,14 @@ public class ImageValidationService {
         }
     }
 
+    public String replaceSpacesWithHyphens(String input) {
+        if (input == null) throw new NullPointerException("Input is null");
+        return input.trim().replace(" ", "-");
+    }
+
+    public String replaceHyphensWithSpaces(String input) {
+        if (input == null) throw new NullPointerException("Input is null");
+        return input.trim().replace("-", " ");
+    }
+
 }

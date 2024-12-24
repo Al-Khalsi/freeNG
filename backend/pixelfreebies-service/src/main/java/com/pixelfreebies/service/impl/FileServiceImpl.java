@@ -54,10 +54,11 @@ public class FileServiceImpl implements FileService {
     public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) {
         try {
             // Validate image name
-            this.imageValidationService.validateImageName(imageUploadRequest.getFileName());
+            String hyphenedFilename = this.imageValidationService.replaceSpacesWithHyphens(imageUploadRequest.getFileName());
+            this.imageValidationService.validateImageName(hyphenedFilename);
             String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
             String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String newFileName = imageUploadRequest.getFileName() + fileExtension;
+            String newFileName = hyphenedFilename + fileExtension;
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, newFileName);
 
             // Validate keywords and retrieve their entities
@@ -68,13 +69,17 @@ public class FileServiceImpl implements FileService {
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Set full paths
-            String normalizedPath = relativePath.toString().replace("\\", "/");
-            String imagePath = this.getFullPath(normalizedPath);
-            image.setFilePath(imagePath);
+            String normalizedPngPath = relativePath.toString().replace("\\", "/");
+            String pngPath = this.getFullPath(normalizedPngPath);
+            image.setFilePath(pngPath);
+            log.debug("Normalized path (png) for saving image: {}", normalizedPngPath);
+            log.debug("Full Path (png): {}", pngPath);
 
             String normalizedWebpFilePath = imageVariant.getFilePath().replace("\\", "/");
             String webpPath = this.getFullPath(normalizedWebpFilePath);
             imageVariant.setFilePath(webpPath);
+            log.debug("Normalized path (webp) for saving image: {}", normalizedWebpFilePath);
+            log.debug("Full Path (webp): {}", webpPath);
 
             // Associate relationships
             this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
