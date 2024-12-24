@@ -8,6 +8,7 @@ import com.pixelfreebies.repository.KeywordsRepository;
 import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.KeywordsConverter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,11 +19,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class KeywordsServiceImpl implements KeywordsService {
 
-    private static final Logger log = LoggerFactory.getLogger(KeywordsServiceImpl.class);
     private final KeywordsRepository keywordsRepository;
     private final KeywordsConverter keywordsConverter;
 
@@ -48,7 +49,7 @@ public class KeywordsServiceImpl implements KeywordsService {
 
         // If no existing keywords were found, save all of them
         for (String keyword : keywordsArray) {
-            String trimmedKeyword = keyword.trim();
+            String trimmedKeyword = keyword.trim().replace(" ", "-");
             Keywords savedKeyword = this.keywordsRepository.save(this.keywordsConverter.toEntity(new KeywordsDTO(trimmedKeyword)));
             createdKeywords.add(this.keywordsConverter.toDto(savedKeyword));
         }
