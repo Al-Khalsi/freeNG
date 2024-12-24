@@ -147,10 +147,26 @@ function SearchPage() {
     return (
         <>
             <Head>
-                <title>{query} - PNG Image</title>
+                <title>{query} - Free PNG Images</title>
                 <link rel="canonical" href={`https://pixelfreebies.com/search/${query}`} />
-                <meta name="description" content={`${query}`} />
-                <meta name="keywords" content={query} />
+                <meta name="description"
+                    content={`${query} image png collection for free download at PixelFreebies`} />
+                <meta name="keywords" content={`
+                    ${query} png,
+                    ${query} png free,
+                    ${query} png download,
+                    ${query} png images,
+                    ${query} free png
+                `} />
+                <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                <meta name="robots" content="index, follow" />
+
+                <meta property="og:title" content={`${query} - Free PNG Images`} />
+                <meta property="og:description"
+                    content={`${query} image png collection for free download at PixelFreebies`} />
+                <meta property="og:image" content="/img/PixelFreebies_Banner.jpg" />
+                <meta property="og:url" content="https://pixelfreebies.com" />
+                <meta property="og:type" content="website" />
             </Head>
             <div className='w-full h-full flex flex-col min-h-screen relative'>
                 <Header

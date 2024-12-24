@@ -120,11 +120,7 @@ function AuthForm() {
             <Head>
                 <title>Log In / SignUp</title>
                 <link rel="canonical" href={`https://pixelfreebies.com/authentication`} />
-                <meta name="description" content="Log in or create an account on PixelFreebies to access thousands of free PNG images.
-                Join our community and start downloading your favorite images for your projects." />
-                <meta name="keywords" content="PixelFreebies, Log In, SignUp, Free PNG" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-                <meta name="robots" content="index, follow" />
 
                 <meta property="og:title" content="PixelFreebies - Free PNG Images" />
                 <meta property="og:description" content="Explore our extensive collection of free PNG images for your creative projects." />
