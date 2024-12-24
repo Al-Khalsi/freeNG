@@ -11,6 +11,10 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
 
+  threads:
+    virtual:
+      enabled: true
+
 base:
   url: /api/v1
 
