@@ -10,7 +10,6 @@ import { MdDelete } from "react-icons/md";
 import { apiFetch } from '@/utils/api';
 import { FILE_API } from '@/utils/api/file';
 import { KEYWORD_API } from '@/utils/api/keyword';
-import MouseEffect from '@/components/modules/MouseEffect';
 import Spinner from '@/components/modules/Spinner';
 import NoImages from '@/components/modules/NoImages';
 
@@ -24,7 +23,6 @@ function Index() {
     const [spinner, setSpinner] = useState(false);
     const itemsPerPage = 50;
     const currentPage = parseInt(router.query.page) || 1;
-    const [isSearching, setIsSearching] = useState(false);
     const [totalPages, setTotalPages] = useState(0);
 
     const handleSelectToggle = (selectId) => {
@@ -43,8 +41,7 @@ function Index() {
                 url = KEYWORD_API.LIST_IMAGES_BY_KEYWORD(keywordId, page - 1, size);
             } else if (query) {
                 url = FILE_API.SEARCH_PAGINATED(page - 1, size, encodeURIComponent(query));
-            }
-            else {
+            } else {
                 url = FILE_API.LIST_IMAGES_PAGINATED(page - 1, size);
             }
 
@@ -124,11 +121,7 @@ function Index() {
         router.push(`/?page=${page}`);
 
         // Fetch images based on the current search query or default
-        if (searchQuery) {
-            fetchImages(null, searchQuery, page); // If there's a search query, use it
-        } else {
-            fetchImages('', '', page); // Otherwise, fetch default images
-        }
+        fetchImages('', '', page); // Fetch default images
     };
 
     const renderPagination = () => {
@@ -207,9 +200,7 @@ function Index() {
             return; // Do not proceed if the search query is empty
         }
         setSubmittedSearchQuery(trimmedSearchQuery);
-        fetchImages(trimmedSearchQuery, 1);
-        setIsSearching(true);
-        router.push(`/?search=${encodeURIComponent(trimmedSearchQuery)}`);
+        router.push(`/search?query=${encodeURIComponent(trimmedSearchQuery)}`);
     };
 
     return (
@@ -242,34 +233,11 @@ function Index() {
                     handleSearch={handleSearch} />
 
                 <div className='w-full py-12 px-8 flex-grow'>
-                    {isSearching || submittedSearchQuery ? (
-                        <div className='filter-result flex justify-center items-center'>
-                            <h3 className='search-result flex items-center rounded p-2 
-                            bg-gradient-to-t from-bgLightPurple to-bgPurple'>
-                                {router.query.keywordId ? 'Result tag for' : 'Result search for'}
-                                :
-                                <span className='ml-2'>
-                                    {submittedSearchQuery || (router.query.keywordName ? router.query.keywordName : '')}
-                                </span>
-                                <button
-                                    onClick={() => {
-                                        setSearchQuery('');
-                                        setIsSearching(false);
-                                        fetchImages();
-                                        router.push('/');
-                                    }}
-                                    className='ml-2 text-xl text-white hover:text-red-600 rounded-lg'>
-                                    <MdDelete />
-                                </button>
-                            </h3>
-                        </div>
-                    ) : (
-                        <div className='subject-text relative w-full text-center'>
-                            <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
-                                Free Reference for Downloading All PNG Images
-                            </h1>
-                        </div>
-                    )}
+                    <div className='subject-text relative w-full text-center'>
+                        <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
+                            Free Reference for Downloading All PNG Images
+                        </h1>
+                    </div>
                 </div>
 
                 <main className='main flex justify-between w-full py-4 px-4 lg:px-8'>
