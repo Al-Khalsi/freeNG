@@ -50,9 +50,9 @@ file:
 
 s3:
   bucket: c567062
-  endpointUrl: ${S3_ENDPOINT_URL:c567062.parspack.net}
-  accessKey: ${S3_ACCESS_KEY:ZGxnMRgbfHdakpAE}
-  secretKey: ${S3_SECRET_KEY:mC8Se7MaRnSkHAhzydzELb3sWsbCBCpY}
+  endpointUrl: ${S3_ENDPOINT_URL}
+  accessKey: ${S3_ACCESS_KEY}
+  secretKey: ${S3_SECRET_KEY}
 
 --- ###Custom Variables
 token:
