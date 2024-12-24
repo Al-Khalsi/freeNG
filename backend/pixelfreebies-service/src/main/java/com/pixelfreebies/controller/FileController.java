@@ -53,12 +53,15 @@ public class FileController {
             description = "Download a file from the server using its ID"
     )
     @GetMapping("/download/{fileId}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
+    public ResponseEntity<?> downloadFile(@PathVariable String fileId) {
         ImageDTO image = this.fileService.findImageById(UUID.fromString(fileId));
+        URI location = URI.create(image.getFilePath());
+        log.debug("Download request for image: {}", image);
+        log.debug("Download location URI: {}", location);
 
         // Redirect to the S3 URL
         return ResponseEntity.status(HttpStatus.FOUND)
-                .location(URI.create(image.getFilePath()))
+                .location(location)
                 .build();
     }
 

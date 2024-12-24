@@ -8,6 +8,7 @@ import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.dto.RoleDTO;
 import com.pixelfreebies.model.dto.UserDTO;
 import com.pixelfreebies.service.impl.ImageMetadataService;
+import com.pixelfreebies.service.impl.ImageValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
 
     private final RoleConverter roleConverter;
     private final ImageMetadataService imageMetadataService;
+    private final ImageValidationService imageValidationService;
 
     @Override
     public Image toEntity(ImageDTO dto) {
@@ -67,7 +69,7 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
 
         ImageDTO imageDTO = ImageDTO.builder()
                 .id(entity.getId().toString())
-                .fileTitle(entity.getFileTitle())
+                .fileTitle(this.imageValidationService.replaceHyphensWithSpaces(entity.getFileTitle()))
                 .filePath(entity.getFilePath())
                 .contentType(entity.getContentType())
                 .size(this.imageMetadataService.formatImageSize(entity.getSize()))

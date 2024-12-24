@@ -71,8 +71,14 @@ public class ExceptionHandlerAdvice {
 
     @ExceptionHandler({AccessDeniedException.class})
     @ResponseStatus(FORBIDDEN)
-    public ResponseEntity<Result> handleAccessDeniedException(org.springframework.security.access.AccessDeniedException e) {
+    public ResponseEntity<Result> handleAccessDeniedException(AccessDeniedException e) {
         return ResponseEntity.status(FORBIDDEN).body(new Result(false, FORBIDDEN, "No permission.", e.getMessage()));
+    }
+
+    @ExceptionHandler({NullPointerException.class})
+    @ResponseStatus(INTERNAL_SERVER_ERROR)
+    public ResponseEntity<Result> handleNullPointerException(NullPointerException e) {
+        return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new Result(false, INTERNAL_SERVER_ERROR, "Null pointer exception occurred.", e.getMessage()));
     }
 
     @ExceptionHandler({PixelfreebiesException.class})
