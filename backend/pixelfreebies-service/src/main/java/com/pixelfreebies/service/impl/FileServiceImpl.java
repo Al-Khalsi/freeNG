@@ -61,7 +61,7 @@ public class FileServiceImpl implements FileService {
             String newFileName = hyphenedFilename + fileExtension;
             Optional<Image> imageOptional = this.imageRepository.findByFileTitle(newFileName);
             if (imageOptional.isPresent()) {
-                newFileName = newFileName + new Random().nextInt(1000) + 1;
+                newFileName = newFileName + new Random().nextInt(1000) + 1 + "-pixelfreebies";
             }
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, newFileName);
 

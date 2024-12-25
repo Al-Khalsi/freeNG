@@ -69,7 +69,7 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
 
         ImageDTO imageDTO = ImageDTO.builder()
                 .id(entity.getId().toString())
-                .fileTitle(this.imageValidationService.replaceHyphensWithSpaces(entity.getFileTitle()))
+                .fileTitle(this.imageValidationService.replaceHyphensWithSpaces(entity.getFileTitle()).replace("-pixelfreebies",""))
                 .filePath(entity.getFilePath())
                 .contentType(entity.getContentType())
                 .size(this.imageMetadataService.formatImageSize(entity.getSize()))
