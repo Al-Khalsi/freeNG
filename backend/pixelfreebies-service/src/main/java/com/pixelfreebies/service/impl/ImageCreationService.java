@@ -7,7 +7,6 @@ import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +15,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -26,9 +24,9 @@ public class ImageCreationService {
 
     private final SecurityUtil securityUtil;
     private final ImageRepository imageRepository;
+    private final ImageValidationService imageValidationService;
 
-    public Image createImageDomain(MultipartFile uploadedMultipartFile,
-                                   String relativePath, ImageUploadRequest imageUploadRequest) {
+    public Image createImageDomain(MultipartFile uploadedMultipartFile, String relativePath, ImageUploadRequest imageUploadRequest) {
         Image image = new Image();
         image.setFileTitle(this.generateImageName(imageUploadRequest.getFileName()));
         image.setFilePath(relativePath);
@@ -54,32 +52,29 @@ public class ImageCreationService {
         return image;
     }
 
-    public String generateImageName(String imageName) {
-        String capitalizedImageTitle = this.capitalizeFirstLetters(imageName);
-        Optional<Image> imageOptional = this.imageRepository.findByFileTitle(capitalizedImageTitle);
-        if (imageOptional.isPresent()) {
-            capitalizedImageTitle = capitalizedImageTitle + " " + new Random().nextInt(1000) + 1 + " pixelfreebies";
-        } else capitalizedImageTitle = capitalizedImageTitle + " pixelfreebies";
+    public String generateImageName(String originalName) {
+        // Remove file extension if present
+        String baseName = originalName.contains(".")
+                ? originalName.substring(0, originalName.lastIndexOf("."))
+                : originalName;
 
-        return capitalizedImageTitle;
+        // Capitalize words and add "Pixelfreebies" suffix
+        String capitalizedName = this.imageValidationService.capitalizeWords(baseName);
+        String nameWithSuffix = capitalizedName + " Pixelfreebies";
+
+        // Check if name exists and add random number if needed
+        String finalName = nameWithSuffix;
+        while (this.imageRepository.existsByFileTitle(finalName)) {
+            int random = new Random().nextInt(1000);
+            finalName = nameWithSuffix + " " + random;
+        }
+
+        return finalName;
     }
 
-    public String capitalizeFirstLetters(String input) {
-        if (input == null || input.isEmpty()) {
-            return input;
-        }
-
-        String[] words = input.split(" "); // Split the string into words
-        StringBuilder capitalizedString = new StringBuilder();
-
-        for (String word : words) {
-            if (!word.isEmpty()) { // Check if the word is not empty
-                String capitalizedWord = word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase(); // Capitalize first letter
-                capitalizedString.append(capitalizedWord).append(" "); // Append the capitalized word
-            }
-        }
-
-        return capitalizedString.toString().trim();
+    public String generateImagePath(String fileName) {
+        // Convert to lowercase and replace spaces with hyphens
+        return fileName.toLowerCase().trim().replace(" ", "-");
     }
 
     private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) throws PixelfreebiesException {

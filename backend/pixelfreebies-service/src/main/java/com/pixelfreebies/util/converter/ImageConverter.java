@@ -67,10 +67,10 @@ public class ImageConverter implements Converter<Image, ImageDTO> {
     public ImageDTO toDto(Image entity) {
         if (entity == null) return null;
 
-        String replacedHyphensWithSpaces = this.imageValidationService.replaceHyphensWithSpaces(entity.getFileTitle());
+        String cleanedTitle = this.imageValidationService.cleanDisplayName(entity.getFileTitle());
         ImageDTO imageDTO = ImageDTO.builder()
                 .id(entity.getId().toString())
-                .fileTitle(this.imageValidationService.removeLastTwoWords(replacedHyphensWithSpaces))
+                .fileTitle(cleanedTitle)
                 .filePath(entity.getFilePath())
                 .contentType(entity.getContentType())
                 .size(this.imageMetadataService.formatImageSize(entity.getSize()))
