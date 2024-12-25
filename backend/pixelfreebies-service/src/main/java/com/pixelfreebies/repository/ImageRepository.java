@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public interface ImageRepository extends JpaRepository<Image, UUID> {
@@ -74,6 +73,6 @@ public interface ImageRepository extends JpaRepository<Image, UUID> {
 
     Page<Image> findByKeywords_Id(Long id, Pageable pageable);
 
-    Optional<Image> findByFileTitle(String fileTitle);
+    boolean existsByFileTitle(String finalName);
 
 }
