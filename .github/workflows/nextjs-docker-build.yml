@@ -54,5 +54,9 @@ jobs:
       - name: Push Docker Image
         run: |
           TAG="${IMAGE_NAME}:${VERSION}"
-          echo "Pushing Docker image: $TAG"
+          echo "Pushing Docker image with version tag: $TAG"
           docker push $TAG
+          LATEST_TAG="${IMAGE_NAME}:latest"
+          echo "Pushing Docker image with latest tag: $LATEST_TAG"
+          docker tag $TAG $LATEST_TAG
+          docker push $LATEST_TAG
