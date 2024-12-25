@@ -54,15 +54,12 @@ public class FileServiceImpl implements FileService {
     public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) {
         try {
             // Validate image name
-            String hyphenedFilename = this.imageValidationService.replaceSpacesWithHyphens(imageUploadRequest.getFileName());
+            String generatedImageName = this.imageCreationService.generateImageName(imageUploadRequest.getFileName());
+            String hyphenedFilename = this.imageValidationService.replaceSpacesWithHyphens(generatedImageName.toLowerCase());
             this.imageValidationService.validateImageName(hyphenedFilename);
             String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
             String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
             String newFileName = hyphenedFilename + fileExtension;
-            Optional<Image> imageOptional = this.imageRepository.findByFileTitle(newFileName);
-            if (imageOptional.isPresent()) {
-                newFileName = newFileName + new Random().nextInt(1000) + 1 + "-pixelfreebies";
-            }
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, newFileName);
 
             // Validate keywords and retrieve their entities
