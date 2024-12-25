@@ -5,9 +5,9 @@ on:
     types: [closed]  # Trigger only when pull requests are closed i.e., merged to main
     branches:
       - main
-#  push:              # Trigger a workflow when a commit or push has made on main branch
-#    branches:
-#      - main
+  push:              # Trigger a workflow when a commit or push has made on main branch
+    branches:
+      - main
   workflow_dispatch: # Allow triggering a workflow manually in github
 
 jobs:
