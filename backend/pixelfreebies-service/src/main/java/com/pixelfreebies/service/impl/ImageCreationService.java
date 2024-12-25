@@ -34,7 +34,7 @@ public class ImageCreationService {
         image.setDownloadCount(0);
         image.setUploadedBy(this.securityUtil.getAuthenticatedUser());
         // Calculate dimensions
-        calculateDimension(uploadedMultipartFile, image, imageUploadRequest.getFileName());
+        this.calculateDimension(uploadedMultipartFile, image, imageUploadRequest.getFileName());
         image.setStyle(imageUploadRequest.getStyle());
         image.setLightMode(imageUploadRequest.isLightMode());
 
