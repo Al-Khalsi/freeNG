@@ -147,10 +147,10 @@ function SearchPage() {
     return (
         <>
             <Head>
-                <title>{query} - Free PNG Images</title>
+                <title>{submittedSearchQuery} - Free PNG Images</title>
                 <link rel="canonical" href={`https://pixelfreebies.com/search/${query}`} />
                 <meta name="description"
-                    content={`${query} image png collection for free download at PixelFreebies`} />
+                    content={`${submittedSearchQuery} image png collection for free download at PixelFreebies`} />
                 <meta name="keywords" content={`
                     ${query} png,
                     ${query} png free,
