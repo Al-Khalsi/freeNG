@@ -38,4 +38,18 @@ public class ImageValidationService {
         return input.trim().replace("-", " ");
     }
 
+    public String removeLastTwoWords(String input) {
+        String[] words = input.split(" ");
+
+        StringBuilder result = new StringBuilder();
+
+        // Append all words except the last two
+        for (int i = 0; i < words.length - 2; i++) {
+            result.append(words[i]);
+            result.append(" "); // Add a space between words
+        }
+
+        return result.toString().trim();
+    }
+
 }

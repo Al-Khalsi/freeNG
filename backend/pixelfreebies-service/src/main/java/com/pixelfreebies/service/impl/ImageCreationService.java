@@ -3,9 +3,11 @@ package com.pixelfreebies.service.impl;
 import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.payload.request.ImageUploadRequest;
+import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,6 +16,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @Service
@@ -21,11 +25,12 @@ import java.math.BigDecimal;
 public class ImageCreationService {
 
     private final SecurityUtil securityUtil;
+    private final ImageRepository imageRepository;
 
     public Image createImageDomain(MultipartFile uploadedMultipartFile,
                                    String relativePath, ImageUploadRequest imageUploadRequest) {
         Image image = new Image();
-        image.setFileTitle(this.capitalizeFirstLetters(imageUploadRequest.getFileName()));
+        image.setFileTitle(this.generateImageName(imageUploadRequest.getFileName()));
         image.setFilePath(relativePath);
         image.setContentType(uploadedMultipartFile.getContentType());
         image.setSize(uploadedMultipartFile.getSize()); // size in bytes
@@ -47,6 +52,16 @@ public class ImageCreationService {
         }
 
         return image;
+    }
+
+    public String generateImageName(String imageName) {
+        String capitalizedImageTitle = this.capitalizeFirstLetters(imageName);
+        Optional<Image> imageOptional = this.imageRepository.findByFileTitle(capitalizedImageTitle);
+        if (imageOptional.isPresent()) {
+            capitalizedImageTitle = capitalizedImageTitle + " " + new Random().nextInt(1000) + 1 + " pixelfreebies";
+        } else capitalizedImageTitle = capitalizedImageTitle + " pixelfreebies";
+
+        return capitalizedImageTitle;
     }
 
     public String capitalizeFirstLetters(String input) {

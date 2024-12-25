@@ -3,6 +3,8 @@ package com.pixelfreebies.exception;
 import com.pixelfreebies.model.payload.response.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusException;
@@ -35,6 +37,12 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(NOT_FOUND)
     public ResponseEntity<Result> handleNotFoundException(NotFoundException e) {
         return ResponseEntity.status(NOT_FOUND).body(new Result(false, NOT_FOUND, "the object requested was not found", e.getMessage()));
+    }
+
+    @ExceptionHandler({IncorrectResultSizeDataAccessException.class})
+    @ResponseStatus(CONFLICT)
+    public ResponseEntity<Result> handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
+        return ResponseEntity.status(CONFLICT).body(new Result(false, CONFLICT, "query did not return a unique result", e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
