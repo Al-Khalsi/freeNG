@@ -1,13 +1,14 @@
 name: Build and Push SpringBoot Docker Image
 
 on:
-  pull_request:
+  pull_request:      # Trigger a workflow when a pull request is made
+    types: [closed]  # Trigger only when pull requests are closed i.e., merged to main
     branches:
       - main
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+#  push:              # Trigger a workflow when a commit or push has made on main branch
+#    branches:
+#      - main
+  workflow_dispatch: # Allow triggering a workflow manually in github
 
 jobs:
   build-and-push-backend:
