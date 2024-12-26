@@ -6,12 +6,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @Service
 public class ImageValidationService {
+
+    private static final String PIXELFREEBIES_SUFFIX = " Pixelfreebies";
+    private static final Pattern NUMBER_PATTERN = Pattern.compile(" \\d+$");
 
     public void validateImageName(String fileName) throws IOException, PixelfreebiesException {
         if (fileName == null || fileName.trim().isEmpty()) {
@@ -28,14 +32,34 @@ public class ImageValidationService {
         }
     }
 
-    public String replaceSpacesWithHyphens(String input) {
-        if (input == null) throw new NullPointerException("Input is null");
-        return input.trim().replace(" ", "-");
+    public String capitalizeWords(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        // Split the string into words
+        String[] words = input.toLowerCase().split("\\s+");
+        StringBuilder result = new StringBuilder();
+
+        // Capitalize first letter of each word
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                result.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1))
+                        .append(" ");
+            }
+        }
+
+        return result.toString().trim();
     }
 
-    public String replaceHyphensWithSpaces(String input) {
-        if (input == null) throw new NullPointerException("Input is null");
-        return input.trim().replace("-", " ");
+    public String cleanDisplayName(String fileTitle) {
+        // Remove random number if present
+        String withoutNumber = NUMBER_PATTERN.matcher(fileTitle).replaceAll("");
+
+        // Remove "pixelfreebies" suffix and capitalize
+        String cleaned = withoutNumber.replace(PIXELFREEBIES_SUFFIX, "").trim();
+        return this.capitalizeWords(cleaned);
     }
 
 }
