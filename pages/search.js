@@ -10,6 +10,7 @@ import Footer from '@/components/templates/Footer';
 import Header from '@/components/templates/Header';
 import { useAuth } from '@/context/AuthContext';
 import { MdDelete } from "react-icons/md";
+import Link from 'next/link';
 
 function SearchPage() {
     const router = useRouter();
@@ -76,6 +77,28 @@ function SearchPage() {
         setIsSearching(false);
         fetchImages('');
         router.push('/'); // Navigate back to the home page
+    };
+
+    const handleDeleteImage = async (imageId) => {
+        const confirmed = window.confirm("Are you sure you want to delete this image?");
+        if (confirmed) {
+            try {
+                const response = await apiFetch(FILE_API.DELETE(imageId), 'DELETE', null, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`, // Add your token if needed
+                    }
+                });
+
+                if (response) {
+                    // Update the state to remove the deleted image
+                    setImages((prevImages) => prevImages.filter(image => image.id !== imageId));
+                } else {
+                    console.error('Failed to delete image');
+                }
+            } catch (error) {
+                console.error('Error deleting image:', error);
+            }
+        }
     };
 
     // Pagination logic
@@ -215,7 +238,7 @@ function SearchPage() {
                     ) : (
                         <section className='grid gap-6 w-full grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'>
                             {images.map(image => (
-                                <Card key={image.id} image={image} />
+                                <Card key={image.id} image={image} role={role} onDelete={handleDeleteImage} />
                             ))}
                         </section>
                     )}
@@ -224,6 +247,18 @@ function SearchPage() {
                     {renderPagination()}
                 </div>
                 <Footer />
+
+                {role === 'ROLE_MASTER' && (
+                    <Link
+                        href={'/upload'}
+                        className='fixed right-3 bottom-3
+                            w-10 h-10 p-6 flex justify-center items-center
+                            bg-gradient-to-t from-bgLightPurple to-bgPurple text-white text-2xl 
+                            outline-none rounded-lg cursor-pointer'>
+                        +
+                    </Link>
+                )}
+
             </div>
         </>
     );
