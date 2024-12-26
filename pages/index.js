@@ -238,7 +238,7 @@ function Index() {
                     <div className='subject-text relative w-full text-center'>
                         <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
                             Free Reference for Downloading All PNG Images
-                            <sub className='ml-2 lg:text-3xl'>({totalElements})</sub>
+                            <sub className='ml-1 lg:ml-2 text-base md:text-xl lg:text-3xl'>({totalElements})</sub>
                         </h1>
                     </div>
                 </div>
