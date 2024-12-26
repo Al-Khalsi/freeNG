@@ -63,9 +63,12 @@ function SearchPage() {
     }, [query, currentPage]);
 
     const handleSearch = () => {
-        if (searchQuery.trim()) {
-            router.push(`/?search=${encodeURIComponent(searchQuery)}`);
+        const trimmedSearchQuery = searchQuery.trim();
+        if (!trimmedSearchQuery) {
+            return; // Do not proceed if the search query is empty
         }
+        setSubmittedSearchQuery(trimmedSearchQuery);
+        router.push(`/search?query=${encodeURIComponent(trimmedSearchQuery)}`);
     };
 
     const handleClearSearch = () => {
