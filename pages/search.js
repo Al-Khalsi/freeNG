@@ -263,7 +263,6 @@ function SearchPage() {
                         +
                     </Link>
                 )}
-
             </div>
         </>
     );
