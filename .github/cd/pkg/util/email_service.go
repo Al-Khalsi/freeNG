@@ -57,7 +57,7 @@ func (emailService *EmailService) SendErrorEmail(recipients []string, serviceNam
 	<html>
 	<head>
 		<meta charset="UTF-8">
-		<title>Deployment Error Notification</title>
+		<title>Deployment Success Notification</title>
 		<style>
 			body {
 				font-family: 'Arial', sans-serif;
@@ -80,8 +80,8 @@ func (emailService *EmailService) SendErrorEmail(recipients []string, serviceNam
 				padding: 20px;
 			}
 			.banner {
-				background-color: #7a5af8; /* --bg-purple for error */
-				color: #fff;
+				background-color: hsla(286, 100%%, 72%%, 0.8); /* --bg-lightPurple for success */
+				color: #000; /* --cl-black */
 				padding: 15px;
 				text-align: center;
 				font-size: 1.2em;
@@ -93,7 +93,7 @@ func (emailService *EmailService) SendErrorEmail(recipients []string, serviceNam
 			}
 			.section h3 {
 				margin: 0 0 8px 0;
-				color: #DF71FFCC; /* --cl-lightPurple */
+				color: #7a5af8; /* --bg-purple for success template */
 				font-size: 1.1em;
 			}
 			.section p {
@@ -114,25 +114,17 @@ func (emailService *EmailService) SendErrorEmail(recipients []string, serviceNam
 				font-size: 0.85em;
 				color: #798DA3; /* --cl-lightBlue */
 			}
-			@keyframes twinkle {
-				0%% { opacity: 0; }
-				50%% { opacity: 1; }
-				100%% { opacity: 0; }
-			}
 			.star {
 				position: absolute;
 				color: rgba(255, 255, 255, 0.13); /* --cl-gray-m1 */
 				pointer-events: none;
 				z-index: 1;
+				animation: twinkle 2s infinite; /* Apply animation */
 			}
-			.banner::after {
-				content: '';
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
+			@keyframes twinkle {
+				0%% { opacity: 0; }
+				50%% { opacity: 1; }
+				100%% { opacity: 0; }
 			}
 		</style>
 	</head>
@@ -167,17 +159,17 @@ func (emailService *EmailService) SendErrorEmail(recipients []string, serviceNam
 			function createStars() {
 				const container = document.querySelector('.container');
 				const starCount = 30;
-				const stars = ['✧', '✦', '⋆', '✫'];
+				const stars = ['✧', '✦', '⋆', '✫', '✯', '★', '✳', '✴', '✵'];
 				
 				for (let i = 0; i < starCount; i++) {
 					const star = document.createElement('span');
 					star.className = 'star';
 					star.textContent = stars[Math.floor(Math.random() * stars.length)];
-					star.style.left = '$${Math.random() * 100}%%';
-					star.style.top = '$${Math.random() * 100}%%';
-					star.style.animationDelay = '$${Math.random() * 3}s';
-					star.style.animationDuration = '$${2 + Math.random() * 3}s';
-					star.style.fontSize = '$${8 + Math.random() * 8}px';
+					star.style.left = Math.random() * 100 + '%%';
+					star.style.top = Math.random() * 100 + '%%';
+					star.style.animationDelay = Math.random() * 3 + 's';
+					star.style.animationDuration = (2 + Math.random() * 3) + 's';
+					star.style.fontSize = (8 + Math.random() * 8) + 'px';
 					container.appendChild(star);
 				}
 			}
@@ -225,8 +217,8 @@ func (emailService *EmailService) SendSuccessEmail(recipients []string, serviceN
 				padding: 20px;
 			}
 			.banner {
-				background-color: hsla(286, 100%%, 72%%, 0.8); /* --bg-lightPurple for success */
-    			color: #000; /* --cl-black */
+				background-color: #a5eec6;
+				color: #000; /* --cl-black */
 				padding: 15px;
 				text-align: center;
 				font-size: 1.2em;
@@ -259,48 +251,40 @@ func (emailService *EmailService) SendSuccessEmail(recipients []string, serviceN
 				font-size: 0.85em;
 				color: #798DA3; /* --cl-lightBlue */
 			}
-			@keyframes twinkle {
-				0%% { opacity: 0; }
-				50%% { opacity: 1; }
-				100%% { opacity: 0; }
-			}
 			.star {
 				position: absolute;
 				color: rgba(255, 255, 255, 0.13); /* --cl-gray-m1 */
 				pointer-events: none;
 				z-index: 1;
+				animation: twinkle 2s infinite; /* Apply animation */
 			}
-			.banner::after {
-				content: '';
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
+			@keyframes twinkle {
+				0%% { opacity: 0; }
+				50%% { opacity: 1; }
+				100%% { opacity: 0; }
 			}
 		</style>
 	</head>
 	<body>
 		<div class="container">
-			<div class="banner">\u26a0 Deployment Failed</div>
+			<div class="banner">\u26a0 Deployment Success</div>
 			<div class="content">
 				<div class="section">
-                    <h3>Service:</h3>
-                    <p>%s</p>
-                </div>
-                <div class="section">
-                    <h3>Image:</h3>
-                    <p>%s</p>
-                </div>
-                <div class="section">
-                    <h3>Tag:</h3>
-                    <p>%s</p>
-                </div>
-                <div class="section">
-                    <h3>Deployment Time:</h3>
-                    <p>%s</p>
-                </div>
+					<h3>Service:</h3>
+					<p>%s</p>
+				</div>
+				<div class="section">
+					<h3>Image:</h3>
+					<p>%s</p>
+				</div>
+				<div class="section">
+					<h3>Tag:</h3>
+					<p>%s</p>
+				</div>
+				<div class="section">
+					<h3>Deployment Time:</h3>
+					<p>%s</p>
+				</div>
 				<footer>Thank you for your attention.</footer>
 			</div>
 		</div>
@@ -314,11 +298,11 @@ func (emailService *EmailService) SendSuccessEmail(recipients []string, serviceN
 					const star = document.createElement('span');
 					star.className = 'star';
 					star.textContent = stars[Math.floor(Math.random() * stars.length)];
-					star.style.left = '$${Math.random() * 100}%%';
-					star.style.top = '$${Math.random() * 100}%%';
-					star.style.animationDelay = '$${Math.random() * 3}s';
-					star.style.animationDuration = '$${2 + Math.random() * 3}s';
-					star.style.fontSize = '$${8 + Math.random() * 8}px';
+					star.style.left = Math.random() * 100 + '%%';
+					star.style.top = Math.random() * 100 + '%%';
+					star.style.animationDelay = Math.random() * 3 + 's';
+					star.style.animationDuration = (2 + Math.random() * 3) + 's';
+					star.style.fontSize = (8 + Math.random() * 8) + 'px';
 					container.appendChild(star);
 				}
 			}
