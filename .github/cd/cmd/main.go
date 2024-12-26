@@ -17,11 +17,14 @@ import (
 func getConfig() model.Config {
 	return model.Config{
 		DockerUsername:    util.GetEnvOrDefault("DOCKER_USERNAME", "dukeofjava"),
-		ComposeFilePath:   utils.GetEnvOrDefault("COMPOSE_FILE_PATH", "/home/simi/DockGE/pixel/docker-compose.yaml"),
+		ComposeFilePath:   util.GetEnvOrDefault("COMPOSE_FILE_PATH", "/home/simi/DockGE/pixel/docker-compose.yaml"),
 		DockerAccessToken: os.Getenv("DOCKER_ACCESS_TOKEN"),
 	}
 }
 
+// main application
+// Build the binary file for linux system while inside cd directory with the following command:
+// `$env:GOOS="linux"; $env:GOARCH="amd64"; go build -o webhook-server .\cmd\main.go`
 func main() {
 	loc := util.GetFileAndMethod()
 	cfg := getConfig()
