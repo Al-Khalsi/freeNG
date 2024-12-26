@@ -16,9 +16,8 @@ import (
 
 func getConfig() model.Config {
 	return model.Config{
-		DockerUsername: util.GetEnvOrDefault("DOCKER_USERNAME", "dukeofjava"),
-		//ComposeFilePath:   utils.GetEnvOrDefault("COMPOSE_FILE_PATH", "/home/simi/DockGE/pixel/docker-compose.yaml"),
-		ComposeFilePath:   util.GetEnvOrDefault("COMPOSE_FILE_PATH", "D:\\Skill-Development\\Spring-boot-Tutorial\\source-code\\Resume-Projects\\PixelFreebies\\backend\\pixelfreebies-service\\docker-compose\\compose.yaml"),
+		DockerUsername:    util.GetEnvOrDefault("DOCKER_USERNAME", "dukeofjava"),
+		ComposeFilePath:   utils.GetEnvOrDefault("COMPOSE_FILE_PATH", "/home/simi/DockGE/pixel/docker-compose.yaml"),
 		DockerAccessToken: os.Getenv("DOCKER_ACCESS_TOKEN"),
 	}
 }
