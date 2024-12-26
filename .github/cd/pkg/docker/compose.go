@@ -42,7 +42,7 @@ func LoginToDockerHub(ctx context.Context, cfg model.Config) error {
 	return nil
 }
 
-func PullSpecifiedTag(ctx context.Context, fullImage, tag, image string) (string, error) {
+func PullSpecifiedTag(ctx context.Context, fullImage string) (string, error) {
 	loc := util.GetFileAndMethod()
 	log.Printf("%s: INFO: Pulling image '%s'.", loc, fullImage)
 
@@ -56,6 +56,22 @@ func PullSpecifiedTag(ctx context.Context, fullImage, tag, image string) (string
 
 	log.Printf("%s: INFO: Successfully pulled image '%s'.\n\tOutput: %s", loc, fullImage, string(output))
 	return fullImage, nil
+}
+
+func PruneDanglingImages(ctx context.Context, fullImage string) error {
+	loc := util.GetFileAndMethod()
+	log.Printf("%s: INFO: Pruning dangling images for '%s'.", loc, fullImage)
+
+	cmd := exec.CommandContext(ctx, "docker", "image", "prune", "-f")
+	output, err := cmd.CombinedOutput()
+
+	if err != nil {
+		log.Printf("%s: ERROR: Failed to prune dangling images.\n\tOutput: %s\n\tError: %v", loc, string(output), err)
+		return fmt.Errorf("failed to prune dangling images: %w", err)
+	}
+
+	log.Printf("%s: INFO: Successfully pruned dangling images.\n\tOutput: %s", loc, string(output))
+	return nil
 }
 
 func ComposeDownContainers(ctx context.Context, cfg model.Config, serviceName string) error {
@@ -87,21 +103,5 @@ func ComposeUpContainer(ctx context.Context, cfg model.Config, serviceName strin
 	}
 
 	log.Printf("%s: INFO: Successfully started containers for service '%s'.\n\tOutput: %s", loc, serviceName, string(output))
-	return nil
-}
-
-func PruneDanglingImages(ctx context.Context, fullImage string) error {
-	loc := util.GetFileAndMethod()
-	log.Printf("%s: INFO: Pruning dangling images for '%s'.", loc, fullImage)
-
-	cmd := exec.CommandContext(ctx, "docker", "image", "prune", "-f")
-	output, err := cmd.CombinedOutput()
-
-	if err != nil {
-		log.Printf("%s: ERROR: Failed to prune dangling images.\n\tOutput: %s\n\tError: %v", loc, string(output), err)
-		return fmt.Errorf("failed to prune dangling images: %w", err)
-	}
-
-	log.Printf("%s: INFO: Successfully pruned dangling images.\n\tOutput: %s", loc, string(output))
 	return nil
 }
