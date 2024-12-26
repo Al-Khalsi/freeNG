@@ -147,7 +147,7 @@
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background-color: rgba(0, 0, 0, 0.8);
+                background-color: #e8e8e8; /* Changed background color */
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -179,6 +179,7 @@
                 height: fit-content;
                 margin-bottom: 6px;
                 animation: motion 1s linear infinite;
+                z-index: 1; /* Ensure truck is above the road and lamp post */
             }
             
             /* Truck suspension animation */
@@ -204,6 +205,7 @@
                 padding: 0px 10px 0px 15px;
                 position: absolute;
                 bottom: 0;
+                z-index: 1; /* Ensure tires are above the road */
             }
             .truckTires svg {
                 width: 30px; /* Increased size */
@@ -211,34 +213,35 @@
             
             .road {
                 width: 100%;
-                height: 2px; /* Increased size */
-                background-color: #282828;
+                height: 4px; /* Increased size for better visibility */
+                background-color: #282828; /* Dark road color */
                 position: relative;
                 bottom: 0;
                 align-self: flex-end;
                 border-radius: 3px;
+                z-index: 2; /* Ensure road is above the truck */
             }
             .road::before {
                 content: "";
                 position: absolute;
                 width: 20px;
                 height: 100%;
-                background-color: #282828;
+                background-color: #282828; /* Dark road color */
                 right: -50%;
                 border-radius: 3px;
                 animation: roadAnimation 1.4s linear infinite;
-                border-left: 10px solid white;
+                border-left: 10px solid white; /* White border for visibility */
             }
             .road::after {
                 content: "";
                 position: absolute;
                 width: 10px;
                 height: 100%;
-                background-color: #282828;
+                background-color: #282828; /* Dark road color */
                 right: -65%;
                 border-radius: 3px;
                 animation: roadAnimation 1.4s linear infinite;
-                border-left: 4px solid white;
+                border-left: 4px solid white; /* White border for visibility */
             }
             
             .lampPost {
@@ -247,6 +250,7 @@
                 right: -90%;
                 height: 90px;
                 animation: roadAnimation 1.4s linear infinite;
+                z-index: 3; /* Ensure lamp post is above the truck */
             }
             
             @keyframes roadAnimation {
@@ -259,7 +263,7 @@
             }
             
             .loading-text {
-                color: #ffffff; /* White text for visibility */
+                color: #000000; /* Black text for visibility against light background */
                 font-size: 20px; /* Adjust font size */
                 text-align: center;
                 margin-top: 20px; /* Space between truck and text */
@@ -448,14 +452,14 @@
             buttons[0].addEventListener('click', () => {
                 loadingOverlay.style.display = 'flex';
                 setTimeout(() => {
-                    window.location.href = 'https://github.com/Al-Khalsi';
+                    window.location.href = 'https://github.com/seyedali-dev';
                 }, 5000); // Redirect after 5 seconds
             });
             
             buttons[1].addEventListener('click', () => {
                 loadingOverlay.style.display = 'flex';
                 setTimeout(() => {
-                    window.location.href = 'https://github.com/seyedali-dev';
+                    window.location.href = 'https://github.com/Al-Khalsi';
                 }, 5000); // Redirect after 5 seconds
             });
         </script>
