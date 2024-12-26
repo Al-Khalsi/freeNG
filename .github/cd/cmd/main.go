@@ -16,9 +16,10 @@ import (
 
 func getConfig() model.Config {
 	return model.Config{
-		DockerUsername:    util.GetEnvOrDefault("DOCKER_USERNAME", "dukeofjava"),
-		ComposeFilePath:   util.GetEnvOrDefault("COMPOSE_FILE_PATH", "/home/simi/DockGE/pixel/docker-compose.yaml"),
-		DockerAccessToken: os.Getenv("DOCKER_ACCESS_TOKEN"),
+		DockerUsername:                   util.GetEnvOrDefault("DOCKER_USERNAME", "dukeofjava"),
+		ComposeFilePath:                  util.GetEnvOrDefault("COMPOSE_FILE_PATH", "/home/simi/DockGE/pixel/docker-compose.yaml"),
+		DockerAccessToken:                os.Getenv("DOCKER_ACCESS_TOKEN"),
+		GoogleAccountApplicationPassword: os.Getenv("GOOGLE_ACCOUNT_APPLICATION_PASSWORD"),
 	}
 }
 
@@ -64,3 +65,6 @@ func main() {
 		os.Exit(1)
 	}
 }
+
+// --------- Packages Used ---------
+// go get gopkg.in/gomail.v2 --> email

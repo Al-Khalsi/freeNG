@@ -17,6 +17,7 @@ func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {
 func WebhookHandler(cfg model.Config) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		loc := util.GetFileAndMethod()
+
 		service := r.URL.Query().Get("service")
 		image := r.URL.Query().Get("image")
 		tag := r.URL.Query().Get("tag")
@@ -31,7 +32,15 @@ func WebhookHandler(cfg model.Config) http.HandlerFunc {
 		ctx := r.Context()
 		log.Printf("%s: INFO: Deploying service '%s'", loc, service)
 
-		if err := deploy.DeployService(ctx, cfg, service, image, tag); err != nil {
+		// Create EmailService
+		emailService := util.NewEmailService(
+			"duke.of.java.spring@gmail.com",
+			cfg.GoogleAccountApplicationPassword,
+			"smtp.gmail.com",
+			587,
+		)
+
+		if err := deploy.DeployService(ctx, cfg, service, image, tag, emailService); err != nil {
 			log.Printf("%s: ERROR: Deployment failed.\n\tService: %s\n\tImage: %s:%s\n\tError: %v", loc, service, image, tag, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

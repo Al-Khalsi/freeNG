@@ -7,9 +7,10 @@ import (
 	"github.com/seyedali-dev/cd/pkg/model"
 	"github.com/seyedali-dev/cd/pkg/util"
 	"log"
+	"time"
 )
 
-func DeployService(ctx context.Context, cfg model.Config, serviceName, image, tag string) error {
+func DeployService(ctx context.Context, cfg model.Config, serviceName, image, tag string, emailService *util.EmailService) error {
 	loc := util.GetFileAndMethod()
 
 	if tag == "" {
@@ -57,5 +58,15 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 	}
 
 	log.Printf("%s: INFO: Successfully deployed service '%s'.\n\tImage: %s", loc, serviceName, fullImage)
+
+	// Prepare email details
+	subject := fmt.Sprintf("Deployment Successful: %s", serviceName)
+	body := fmt.Sprintf("Service %s has been successfully deployed with image %s.\n\nDeployment Time: %s\nTag: %s\nDescription: Deployed the latest version of the service.", serviceName, fullImage, time.Now().Format(time.RFC1123), tag)
+
+	// Send email notification
+	recipients := []string{"seyed.ali.devl@gmail.com", "mohammad.hassan.alkhalsi@gmail.com"}
+	if err := emailService.SendEmail(recipients, subject, body); err != nil {
+		log.Printf("%s: ERROR: Failed to send email notification: %v", loc, err)
+	}
 	return nil
 }
