@@ -20,9 +20,20 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 
 	log.Printf("%s: INFO: Starting deployment process for service '%s'.\n\tImage: %s", loc, serviceName, fullImage)
 
+	// Helper function to send error notifications
+	sendErrorEmail := func(err error) {
+		subject := fmt.Sprintf("Deployment Failed: %s", serviceName)
+		body := fmt.Sprintf("Deployment of service %s failed.\n\nError: %v\n\nImage: %s\nTag: %s", serviceName, err, fullImage, tag)
+		recipients := []string{"seyed.ali.devl@gmail.com", "mohammad.hassan.alkhalsi@gmail.com"}
+		if emailErr := emailService.SendEmail(recipients, subject, body); emailErr != nil {
+			log.Printf("%s: ERROR: Failed to send error email notification: %v", loc, emailErr)
+		}
+	}
+
 	// Login to Docker Hub
 	if err := docker.LoginToDockerHub(ctx, cfg); err != nil {
 		log.Printf("%s: ERROR: Docker login failed.\n\tError: %v", loc, err)
+		sendErrorEmail(err) // Send error email
 		return fmt.Errorf("docker login failed: %w", err)
 	}
 
@@ -30,6 +41,7 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 	fullImage, err := docker.PullSpecifiedTag(ctx, fullImage)
 	if err != nil {
 		log.Printf("%s: ERROR: Failed to pull image '%s'.\n\tError: %v", loc, fullImage, err)
+		sendErrorEmail(err) // Send error email
 		return fmt.Errorf("failed to pull image: %w", err)
 	}
 
@@ -42,12 +54,14 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 	// Stop and remove old containers
 	if err := docker.ComposeDownContainers(ctx, cfg, serviceName); err != nil {
 		log.Printf("%s: ERROR: Failed to stop containers for service '%s'.\n\tError: %v", loc, serviceName, err)
+		sendErrorEmail(err) // Send error email
 		return fmt.Errorf("failed to stop containers: %w", err)
 	}
 
 	// Start new containers
 	if err := docker.ComposeUpContainer(ctx, cfg, serviceName); err != nil {
 		log.Printf("%s: ERROR: Failed to start containers for service '%s'.\n\tError: %v", loc, serviceName, err)
+		sendErrorEmail(err) // Send error email
 		return fmt.Errorf("failed to start containers: %w", err)
 	}
 
@@ -59,14 +73,15 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 
 	log.Printf("%s: INFO: Successfully deployed service '%s'.\n\tImage: %s", loc, serviceName, fullImage)
 
-	// Prepare email details
+	// Prepare email details for success
 	subject := fmt.Sprintf("Deployment Successful: %s", serviceName)
 	body := fmt.Sprintf("Service %s has been successfully deployed with image %s.\n\nDeployment Time: %s\nTag: %s\nDescription: Deployed the latest version of the service.", serviceName, fullImage, time.Now().Format(time.RFC1123), tag)
 
-	// Send email notification
+	// Send success email notification
 	recipients := []string{"seyed.ali.devl@gmail.com", "mohammad.hassan.alkhalsi@gmail.com"}
 	if err := emailService.SendEmail(recipients, subject, body); err != nil {
 		log.Printf("%s: ERROR: Failed to send email notification: %v", loc, err)
 	}
+
 	return nil
 }
