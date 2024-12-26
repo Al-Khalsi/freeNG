@@ -410,7 +410,7 @@ function UploadImage() {
                     {showResults ? 'Close' : 'Search'}
                   </button>
                   <div className={`result-keywordSelect absolute w-5/6 max-h-32
-                    ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2 overflow-y-auto`}
+                    ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2 overflow-y-auto z-50`}
                     ref={dropdownRef}>
                     {fetchedKeywords.map((keyword, index) => (
                       <label htmlFor={`keyword-${index}`} key={index}
