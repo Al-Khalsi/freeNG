@@ -54,90 +54,137 @@ func (emailService *EmailService) SendErrorEmail(recipients []string, serviceNam
 	subject := fmt.Sprintf("🚨 Deployment Failed: %s", serviceName)
 	body := fmt.Sprintf(`
 	<!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Deployment Error Notification</title>
-        <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                background-color: #141b22;
-                margin: 0;
-                padding: 0;
-                color: #eee;
-            }
-            .container {
-                width: 90%%;
-                max-width: 600px;
-                margin: 20px auto;
-                background-color: #141b22;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                overflow: hidden;
-            }
-            .banner {
-                background-color: #7a5af8;
-                color: #fff;
-                padding: 15px;
-                text-align: center;
-                font-size: 1.2em;
-                font-weight: bold;
-            }
-            .content {
-                padding: 20px;
-            }
-            .section {
-                margin-bottom: 15px;
-            }
-            .section h3 {
-                margin: 0 0 5px 0;
-                color: hsla(286, 100%%, 72%%, 0.8);
-            }
-            .section p {
-                margin: 0;
-                background: #1E2835;
-                padding: 10px;
-                border-radius: 4px;
-                color: #798DA3;
-                white-space: pre-wrap;
-            }
-            footer {
-                margin-top: 20px;
-                text-align: center;
-                font-size: 0.85em;
-                color: #798DA3;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="banner">\u26a0 Deployment Failed</div>
-            <div class="content">
-                <div class="section">
-                    <h3>Service:</h3>
-                    <p>%s</p>
-                </div>
-                <div class="section">
-                    <h3>Error:</h3>
-                    <p>%s</p>
-                </div>
-                <div class="section">
-                    <h3>Docker Output:</h3>
-                    <p>%s</p>
-                </div>
-                <div class="section">
-                    <h3>Image:</h3>
-                    <p>%s</p>
-                </div>
-                <div class="section">
-                    <h3>Tag:</h3>
-                    <p>%s</p>
-                </div>
-                <footer>Thank you for your attention.</footer>
-            </div>
-        </div>
-    </body>
-    </html>
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Deployment Error Notification</title>
+		<style>
+			body {
+				font-family: 'Arial', sans-serif;
+				background-color: #05071b; /* --bg-darkBlue */
+				margin: 0;
+				padding: 20px;
+				color: #eee;
+			}
+			.container {
+				width: 90%%;
+				max-width: 600px;
+				margin: 0 auto;
+				background-color: #141b22; /* --bg-darkGray2 */
+				border-radius: 8px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 0 50px rgba(122, 90, 248, 0.2);
+				position: relative;
+				overflow: hidden;
+			}
+			.content {
+				padding: 20px;
+			}
+			.banner {
+				background-color: #7a5af8; /* --bg-purple for error */
+				color: #fff;
+				padding: 15px;
+				text-align: center;
+				font-size: 1.2em;
+				font-weight: bold;
+				position: relative;
+			}
+			.section {
+				margin-bottom: 20px;
+			}
+			.section h3 {
+				margin: 0 0 8px 0;
+				color: #DF71FFCC; /* --cl-lightPurple */
+				font-size: 1.1em;
+			}
+			.section p {
+				margin: 0;
+				background: #1E2835; /* --bg-darkGray */
+				padding: 12px 16px;
+				border-radius: 4px;
+				color: #798DA3; /* --cl-lightBlue */
+				white-space: pre-wrap;
+				font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+				font-size: 0.9em;
+				border: 1px solid rgba(255, 255, 255, 0.13); /* --cl-gray-m1 */
+				overflow-x: auto;
+			}
+			footer {
+				margin-top: 20px;
+				text-align: center;
+				font-size: 0.85em;
+				color: #798DA3; /* --cl-lightBlue */
+			}
+			@keyframes twinkle {
+				0%% { opacity: 0; }
+				50%% { opacity: 1; }
+				100%% { opacity: 0; }
+			}
+			.star {
+				position: absolute;
+				color: rgba(255, 255, 255, 0.13); /* --cl-gray-m1 */
+				pointer-events: none;
+				z-index: 1;
+			}
+			.banner::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="banner">\u26a0 Deployment Failed</div>
+			<div class="content">
+				<div class="section">
+					<h3>Service:</h3>
+					<p>%s</p>
+				</div>
+				<div class="section">
+					<h3>Error:</h3>
+					<p>%s</p>
+				</div>
+				<div class="section">
+					<h3>Docker Output:</h3>
+					<p>%s</p>
+				</div>
+				<div class="section">
+					<h3>Image:</h3>
+					<p>%s</p>
+				</div>
+				<div class="section">
+					<h3>Tag:</h3>
+					<p>%s</p>
+				</div>
+				<footer>Thank you for your attention.</footer>
+			</div>
+		</div>
+		<script>
+			function createStars() {
+				const container = document.querySelector('.container');
+				const starCount = 30;
+				const stars = ['✧', '✦', '⋆', '✫'];
+				
+				for (let i = 0; i < starCount; i++) {
+					const star = document.createElement('span');
+					star.className = 'star';
+					star.textContent = stars[Math.floor(Math.random() * stars.length)];
+					star.style.left = '$${Math.random() * 100}%%';
+					star.style.top = '$${Math.random() * 100}%%';
+					star.style.animationDelay = '$${Math.random() * 3}s';
+					star.style.animationDuration = '$${2 + Math.random() * 3}s';
+					star.style.fontSize = '$${8 + Math.random() * 8}px';
+					container.appendChild(star);
+				}
+			}
+			window.addEventListener('load', createStars);
+		</script>
+	</body>
+	</html>
 	`, serviceName, err, output, image, tag)
 
 	if err := emailService.SendEmail(recipients, subject, body, true); err != nil {
@@ -152,66 +199,93 @@ func (emailService *EmailService) SendSuccessEmail(recipients []string, serviceN
 	subject := fmt.Sprintf("✅ Deployment Successful: %s", serviceName)
 	body := fmt.Sprintf(`
 	<!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>Deployment Success Notification</title>
-        <style>
-            body {
-                font-family: 'Arial', sans-serif;
-                background-color: #05071b;
-                margin: 0;
-                padding: 0;
-                color: #eee;
-            }
-            .container {
-                width: 90%%;
-                max-width: 600px;
-                margin: 20px auto;
-                background-color: #141b22;
-                border-radius: 8px;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                overflow: hidden;
-            }
-            .banner {
-                background-color: #a5eec6;
-                color: #000;
-                padding: 15px;
-                text-align: center;
-                font-size: 1.2em;
-                font-weight: bold;
-            }
-            .content {
-                padding: 20px;
-            }
-            .section {
-                margin-bottom: 15px;
-            }
-            .section h3 {
-                margin: 0 0 5px 0;
-                color: #7a5af8;
-            }
-            .section p {
-                margin: 0;
-                background: #eee;
-                padding: 10px;
-                border-radius: 4px;
-                color: #DF71FFCC;
-                white-space: pre-wrap;
-            }
-            footer {
-                margin-top: 20px;
-                text-align: center;
-                font-size: 0.85em;
-                color: #798DA3;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="banner">\u2705 Deployment Successful</div>
-            <div class="content">
-                <div class="section">
+	<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Deployment Success Notification</title>
+		<style>
+			body {
+				font-family: 'Arial', sans-serif;
+				background-color: #05071b; /* --bg-darkBlue */
+				margin: 0;
+				padding: 20px;
+				color: #eee;
+			}
+			.container {
+				width: 90%%;
+				max-width: 600px;
+				margin: 0 auto;
+				background-color: #141b22; /* --bg-darkGray2 */
+				border-radius: 8px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 0 50px rgba(122, 90, 248, 0.2);
+				position: relative;
+				overflow: hidden;
+			}
+			.content {
+				padding: 20px;
+			}
+			.banner {
+				background-color: hsla(286, 100%%, 72%%, 0.8); /* --bg-lightPurple for success */
+    			color: #000; /* --cl-black */
+				padding: 15px;
+				text-align: center;
+				font-size: 1.2em;
+				font-weight: bold;
+				position: relative;
+			}
+			.section {
+				margin-bottom: 20px;
+			}
+			.section h3 {
+				margin: 0 0 8px 0;
+				color: #7a5af8; /* --bg-purple for success template */
+				font-size: 1.1em;
+			}
+			.section p {
+				margin: 0;
+				background: #1E2835; /* --bg-darkGray */
+				padding: 12px 16px;
+				border-radius: 4px;
+				color: #798DA3; /* --cl-lightBlue */
+				white-space: pre-wrap;
+				font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+				font-size: 0.9em;
+				border: 1px solid rgba(255, 255, 255, 0.13); /* --cl-gray-m1 */
+				overflow-x: auto;
+			}
+			footer {
+				margin-top: 20px;
+				text-align: center;
+				font-size: 0.85em;
+				color: #798DA3; /* --cl-lightBlue */
+			}
+			@keyframes twinkle {
+				0%% { opacity: 0; }
+				50%% { opacity: 1; }
+				100%% { opacity: 0; }
+			}
+			.star {
+				position: absolute;
+				color: rgba(255, 255, 255, 0.13); /* --cl-gray-m1 */
+				pointer-events: none;
+				z-index: 1;
+			}
+			.banner::after {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1));
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="banner">\u26a0 Deployment Failed</div>
+			<div class="content">
+				<div class="section">
                     <h3>Service:</h3>
                     <p>%s</p>
                 </div>
@@ -227,11 +301,31 @@ func (emailService *EmailService) SendSuccessEmail(recipients []string, serviceN
                     <h3>Deployment Time:</h3>
                     <p>%s</p>
                 </div>
-                <footer>Thank you for your attention.</footer>
-            </div>
-        </div>
-    </body>
-    </html>
+				<footer>Thank you for your attention.</footer>
+			</div>
+		</div>
+		<script>
+			function createStars() {
+				const container = document.querySelector('.container');
+				const starCount = 30;
+				const stars = ['✧', '✦', '⋆', '✫', '✯', '★', '✳', '✴', '✵'];
+				
+				for (let i = 0; i < starCount; i++) {
+					const star = document.createElement('span');
+					star.className = 'star';
+					star.textContent = stars[Math.floor(Math.random() * stars.length)];
+					star.style.left = '$${Math.random() * 100}%%';
+					star.style.top = '$${Math.random() * 100}%%';
+					star.style.animationDelay = '$${Math.random() * 3}s';
+					star.style.animationDuration = '$${2 + Math.random() * 3}s';
+					star.style.fontSize = '$${8 + Math.random() * 8}px';
+					container.appendChild(star);
+				}
+			}
+			window.addEventListener('load', createStars);
+		</script>
+	</body>
+	</html>
 	`, serviceName, image, tag, time.Now().Format(time.RFC1123))
 
 	if err := emailService.SendEmail(recipients, subject, body, true); err != nil {
