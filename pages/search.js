@@ -23,6 +23,7 @@ function SearchPage() {
     const [isSearching, setIsSearching] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
 
     const fetchImages = async (searchQuery, page = 1) => {
         setSpinner(true);
@@ -45,7 +46,8 @@ function SearchPage() {
                     keywords: JSON.stringify(file.keywords)
                 }));
                 setImages(fetchedImages);
-                setTotalPages(response.totalPages); // Set total pages from the response
+                setTotalPages(response.totalPages);
+                setTotalElements(response.totalElements);
             } else {
                 console.error('Failed to fetch images: ', response.message);
             }
@@ -214,6 +216,9 @@ function SearchPage() {
                                 :
                                 <span className='ml-2'>
                                     {submittedSearchQuery || (router.query.keywordName ? router.query.keywordName : '')}
+                                </span>
+                                <span className='ml-2 text-white'>
+                                    ({totalElements})
                                 </span>
                                 <button
                                     onClick={handleClearSearch}

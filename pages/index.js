@@ -24,6 +24,7 @@ function Index() {
     const itemsPerPage = 50;
     const currentPage = parseInt(router.query.page) || 1;
     const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
 
     const handleSelectToggle = (selectId) => {
         if (openSelect === selectId) {
@@ -65,7 +66,8 @@ function Index() {
                 }));
 
                 setImages(fetchedImages); // Update state with the fetched images
-                setTotalPages(response.totalPages); // Set total pages from the response
+                setTotalPages(response.totalPages);
+                setTotalElements(response.totalElements);
             } else {
                 console.error('Failed to fetch images: ', response.message);
             }
@@ -236,6 +238,7 @@ function Index() {
                     <div className='subject-text relative w-full text-center'>
                         <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
                             Free Reference for Downloading All PNG Images
+                            <sub className='ml-2 lg:text-3xl'>({totalElements})</sub>
                         </h1>
                     </div>
                 </div>
