@@ -26,10 +26,16 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 	}
 
 	// Pull the specified tag
-	fullImage, err := docker.PullSpecifiedTag(ctx, fullImage, tag, image)
+	fullImage, err := docker.PullSpecifiedTag(ctx, fullImage)
 	if err != nil {
 		log.Printf("%s: ERROR: Failed to pull image '%s'.\n\tError: %v", loc, fullImage, err)
 		return fmt.Errorf("failed to pull image: %w", err)
+	}
+
+	// Prune dangling images
+	if err := docker.PruneDanglingImages(ctx, fullImage); err != nil {
+		log.Printf("%s: WARNING: Failed to prune dangling images.\n\tError: %v", loc, err)
+		// Continue even if pruning fails
 	}
 
 	// Stop and remove old containers
@@ -44,7 +50,7 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 		return fmt.Errorf("failed to start containers: %w", err)
 	}
 
-	// Prune dangling images
+	// Prune dangling images again if any remain
 	if err := docker.PruneDanglingImages(ctx, fullImage); err != nil {
 		log.Printf("%s: WARNING: Failed to prune dangling images.\n\tError: %v", loc, err)
 		// Continue even if pruning fails
