@@ -215,7 +215,7 @@ function SearchPage() {
                                 {router.query.keywordId ? 'Result tag for' : 'Result search for'}
                                 :
                                 <span className='ml-2'>
-                                    {submittedSearchQuery || (router.query.keywordName ? router.query.keywordName : '')}
+                                    {submittedSearchQuery.length > 8 ? `${submittedSearchQuery.slice(0, 8)}...` : submittedSearchQuery}
                                 </span>
                                 <span className='ml-2 text-white'>
                                     ({totalElements})
