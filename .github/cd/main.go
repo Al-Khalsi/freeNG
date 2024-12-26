@@ -16,47 +16,60 @@ func deployService(serviceName, image, tag string) error {
 	// Login to docker for private repositories
 	log.Println("Attempting to log in to dockerhub.")
 	cmd := exec.Command("docker", "login", "-u", "dukeofjava", "-p", "dckr_pat_BtLuwm5qumhUSPtatv0q4WsxBi0")
-	if output, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("Failed to login to docker: %s, output: %s\n", err, output)
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("Failed to login to docker: %s\n", err)
 	}
 	log.Println("Successfully logged in to docker")
+	log.Printf("output: %s\n", string(output))
 
 	// Pull the specified tag
 	log.Printf("Attempting to pull image: %s\n", fullImage)
 	cmd = exec.Command("docker", "pull", fullImage)
-	if _, err := cmd.CombinedOutput(); err != nil {
+	output, err = cmd.CombinedOutput()
+	if err != nil {
 		log.Printf("Tag %s not found for image %s, falling back to 'latest'\n", tag, image)
 		fullImage = fmt.Sprintf("%s:latest", image)
 		cmd = exec.Command("docker", "pull", fullImage)
-		if output, err := cmd.CombinedOutput(); err != nil {
-			return fmt.Errorf("error pulling fallback 'latest' tag: %s, output: %s\n", err, output)
+		output, err := cmd.CombinedOutput()
+		if err != nil {
+			return fmt.Errorf("error pulling fallback 'latest' tag: %s\n", err)
 		}
+		log.Printf("Successfully pulled fallback 'latest' tag: %s\n", tag)
+		log.Printf("output: %s\n", string(output))
 	}
 	log.Printf("Successfully pulled image: %s\n", fullImage)
+	log.Printf("output: %s\n", string(output))
 
 	// Stop and Remove old container
 	log.Printf("Attempting to stop and remove container: %s\n", serviceName)
-	cmd = exec.Command("docker-compose", "-f", "/home/simi/DockGE/pixel/docker-compose.yaml", "down", serviceName)
-	if err := cmd.Run(); err != nil {
+	cmd = exec.Command("docker", "compose", "-f", "/home/simi/DockGE/pixel/docker-compose.yaml", "down", serviceName)
+	output, err = cmd.CombinedOutput()
+	if err != nil {
 		return fmt.Errorf("Failed to stop container %s: %s\n", serviceName, err)
 	}
 	log.Printf("Successfully stopped container: %s\n", serviceName)
+	log.Printf("output: %s\n", string(output))
 
 	// Start service with docker-compose
 	log.Printf("Attempting to start container: %s\n", serviceName)
 	cmd = exec.Command("docker", "compose", "-f", "/home/simi/DockGE/pixel/docker-compose.yaml", "up", serviceName, "-d")
-	if output, err := cmd.CombinedOutput(); err != nil {
-		return fmt.Errorf("error starting service %s: %s, output: %s\n", serviceName, err, output)
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		return fmt.Errorf("error starting service %s: %s\n", serviceName, err)
 	}
 	log.Printf("Successfully started service: %s\n", serviceName)
+	log.Printf("output: %s\n", string(output))
 
 	// Prune dangling images
 	log.Printf("Attempting to purne images: %s\n", fullImage)
 	cmd = exec.Command("docker", "image", "prune", "-f")
-	if output, err := cmd.CombinedOutput(); err != nil {
-		log.Printf("Warning: error pruning images: %s, output: %s\n", err, output)
+	output, err = cmd.CombinedOutput()
+	if err != nil {
+		log.Printf("Warning: error pruning images: %s\n", err)
 	}
 	log.Printf("Successfully pruned images: %s\n", fullImage)
+	log.Printf("output: %s\n", string(output))
 
 	return nil
 }
