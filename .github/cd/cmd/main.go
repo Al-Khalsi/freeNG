@@ -44,21 +44,21 @@ func main() {
 		signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 		<-sigChan
 
-		log.Printf("%s: Shutting down server...", loc)
+		log.Printf("%s: INFO: Shutting down server...", loc)
 
 		shutdownCtx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 		defer cancel()
 
 		if err := srv.Shutdown(shutdownCtx); err != nil {
-			log.Printf("%s: HTTP server shutdown error:\n                    %v", loc, err)
+			log.Printf("%s: ERROR: HTTP server shutdown failed: %v", loc, err)
 		}
 	}()
 
-	log.Printf("%s: Go webhook server started successfully", loc)
-	log.Printf("%s: Listening on %s...", loc, srv.Addr)
+	log.Printf("%s: INFO: Go webhook server started successfully", loc)
+	log.Printf("%s: INFO: Listening on %s", loc, srv.Addr)
 
 	if err := srv.ListenAndServe(); !errors.Is(err, http.ErrServerClosed) {
-		log.Printf("%s: HTTP server error:\n                    %v", loc, err)
+		log.Printf("%s: ERROR: HTTP server error: %v", loc, err)
 		os.Exit(1)
 	}
 }

@@ -17,36 +17,39 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 	}
 	fullImage := fmt.Sprintf("%s:%s", image, tag)
 
-	// Login to docker for private repositories
+	log.Printf("%s: INFO: Starting deployment process for service '%s'.\n\tImage: %s", loc, serviceName, fullImage)
+
+	// Login to Docker Hub
 	if err := docker.LoginToDockerHub(ctx, cfg); err != nil {
-		log.Printf("%s: Docker login failed:\n                    Error: %v", loc, err)
+		log.Printf("%s: ERROR: Docker login failed.\n\tError: %v", loc, err)
 		return fmt.Errorf("docker login failed: %w", err)
 	}
 
 	// Pull the specified tag
 	fullImage, err := docker.PullSpecifiedTag(ctx, fullImage, tag, image)
 	if err != nil {
-		log.Printf("%s: Failed to pull image:\n                    Error: %v", loc, err)
+		log.Printf("%s: ERROR: Failed to pull image '%s'.\n\tError: %v", loc, fullImage, err)
 		return fmt.Errorf("failed to pull image: %w", err)
 	}
 
-	// Stop and Remove old container
+	// Stop and remove old containers
 	if err := docker.ComposeDownContainers(ctx, cfg, serviceName); err != nil {
-		log.Printf("%s: Failed to stop containers:\n                    Error: %v", loc, err)
+		log.Printf("%s: ERROR: Failed to stop containers for service '%s'.\n\tError: %v", loc, serviceName, err)
 		return fmt.Errorf("failed to stop containers: %w", err)
 	}
 
-	// Start service with docker-compose
+	// Start new containers
 	if err := docker.ComposeUpContainer(ctx, cfg, serviceName); err != nil {
-		log.Printf("%s: Failed to start containers:\n                    Error: %v", loc, err)
+		log.Printf("%s: ERROR: Failed to start containers for service '%s'.\n\tError: %v", loc, serviceName, err)
 		return fmt.Errorf("failed to start containers: %w", err)
 	}
 
 	// Prune dangling images
 	if err := docker.PruneDanglingImages(ctx, fullImage); err != nil {
-		log.Printf("%s: Warning: failed to prune images:\n                    Error: %v", loc, err)
+		log.Printf("%s: WARNING: Failed to prune dangling images.\n\tError: %v", loc, err)
 		// Continue even if pruning fails
 	}
 
+	log.Printf("%s: INFO: Successfully deployed service '%s'.\n\tImage: %s", loc, serviceName, fullImage)
 	return nil
 }
