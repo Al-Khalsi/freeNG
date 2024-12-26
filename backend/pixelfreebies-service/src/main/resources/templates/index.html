@@ -271,6 +271,12 @@
                 text-align: center;
                 margin-top: 20px; /* Space between truck and text */
             }
+            
+            /*      Typewriter effect      */
+            .loading-text p {
+                font-family: monospace; /* Optional: gives a typewriter feel */
+                white-space: pre; /* Preserves spaces */
+            }
         </style>
     </head>
     <body>
@@ -441,8 +447,8 @@
             </svg>
                 </div>
                 <div class="loading-text">
-                    <p>You will now witness the genius behind implementation of <strong>PixelFreebies</strong> website!
-                        🚚✨</p>
+                    <p id="typewriter-text"></p>
+                    <p id="countdown" style="margin-top: 13px">Redirecting in <span id="countdown-timer">5</span> seconds...</p> <!-- Default countdown text -->
                 </div>
             </div>
         </div>
@@ -451,19 +457,57 @@
         <script>
             const buttons = document.querySelectorAll('.brutalist-button');
             const loadingOverlay = document.getElementById('loadingOverlay');
+            const typewriterTextElement = document.getElementById('typewriter-text');
+            const countdownElement = document.getElementById('countdown-timer');
+            
+            const fullText = "You will now witness the genius behind the implementation of \"PixelFreebies\" website! 🚚✨";
+            let index = 0;
+            let countdown = 5; // Countdown starting from 5 seconds
+            let countdownInterval; // Variable to hold the countdown interval
+            
+            function typeWriter() {
+                if (index < fullText.length) {
+                    typewriterTextElement.innerHTML += fullText.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 30); // Adjust speed of typing here (faster)
+                }
+            }
+            
+            function startCountdown() {
+                countdownElement.innerHTML = countdown; // Set initial countdown value
+                countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownElement.innerHTML = countdown; // Update countdown timer
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        // Redirect based on the button clicked
+                        if (buttons[0].style.display !== 'none') {
+                            window.location.href = 'https://github.com/seyedali-dev';
+                        } else {
+                            window.location.href = 'https://github.com/Al-Khalsi';
+                        }
+                    }
+                }, 1000);
+            }
             
             buttons[0].addEventListener('click', () => {
                 loadingOverlay.style.display = 'flex';
-                setTimeout(() => {
-                    window.location.href = 'https://github.com/seyedali-dev';
-                }, 5000); // Redirect after 5 seconds
+                typewriterTextElement.innerHTML = ''; // Clear previous text
+                index = 0; // Reset index for typewriter effect
+                countdown = 5; // Reset countdown
+                countdownElement.innerHTML = countdown; // Reset countdown display
+                startCountdown(); // Start countdown immediately
+                typeWriter(); // Start typewriter effect
             });
             
             buttons[1].addEventListener('click', () => {
                 loadingOverlay.style.display = 'flex';
-                setTimeout(() => {
-                    window.location.href = 'https://github.com/Al-Khalsi';
-                }, 5000); // Redirect after 5 seconds
+                typewriterTextElement.innerHTML = ''; // Clear previous text
+                index = 0; // Reset index for typewriter effect
+                countdown = 5; // Reset countdown
+                countdownElement.innerHTML = countdown; // Reset countdown display
+                startCountdown(); // Start countdown immediately
+                typeWriter(); // Start typewriter effect
             });
         </script>
     </body>
