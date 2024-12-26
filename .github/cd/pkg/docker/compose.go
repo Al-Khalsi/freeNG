@@ -9,20 +9,20 @@ import (
 	"os/exec"
 )
 
-func LoginToDockerHub(ctx context.Context, cfg model.Config) error {
+func LoginToDockerHub(ctx context.Context, cfg model.Config) (outputResult []byte, error error) {
 	loc := util.GetFileAndMethod()
 	log.Printf("%s: INFO: Attempting to log in to Docker Hub.", loc)
 
 	if cfg.DockerAccessToken == "" {
 		log.Printf("%s: ERROR: Docker access token not set.", loc)
-		return fmt.Errorf("docker access token not set in environment variables")
+		return nil, fmt.Errorf("docker access token not set in environment variables")
 	}
 
 	cmd := exec.CommandContext(ctx, "docker", "login", "-u", cfg.DockerUsername, "--password-stdin")
 	stdin, err := cmd.StdinPipe()
 	if err != nil {
 		log.Printf("%s: ERROR: Failed to create stdin pipe: %v", loc, err)
-		return fmt.Errorf("failed to create stdin pipe: %w", err)
+		return nil, fmt.Errorf("failed to create stdin pipe: %w", err)
 	}
 
 	go func() {
@@ -35,14 +35,14 @@ func LoginToDockerHub(ctx context.Context, cfg model.Config) error {
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("%s: ERROR: Docker login failed.\n\tOutput: %s\n\tError: %v", loc, string(output), err)
-		return fmt.Errorf("docker login failed: %w", err)
+		return output, fmt.Errorf("docker login failed: %w", err)
 	}
 
 	log.Printf("%s: INFO: Successfully logged in to Docker Hub.", loc)
-	return nil
+	return output, nil
 }
 
-func PullSpecifiedTag(ctx context.Context, fullImage string) (string, error) {
+func PullSpecifiedTag(ctx context.Context, fullImage string) (outputResult []byte, image string, error error) {
 	loc := util.GetFileAndMethod()
 	log.Printf("%s: INFO: Pulling image '%s'.", loc, fullImage)
 
@@ -51,14 +51,14 @@ func PullSpecifiedTag(ctx context.Context, fullImage string) (string, error) {
 
 	if err != nil {
 		log.Printf("%s: ERROR: Failed to pull image '%s'.\n\tOutput: %s\n\tError: %v", loc, fullImage, string(output), err)
-		return "", fmt.Errorf("failed to pull image: %w", err)
+		return output, "", fmt.Errorf("failed to pull image: %w", err)
 	}
 
 	log.Printf("%s: INFO: Successfully pulled image '%s'.\n\tOutput: %s", loc, fullImage, string(output))
-	return fullImage, nil
+	return output, fullImage, nil
 }
 
-func PruneDanglingImages(ctx context.Context, fullImage string) error {
+func PruneDanglingImages(ctx context.Context, fullImage string) (outputResult []byte, error error) {
 	loc := util.GetFileAndMethod()
 	log.Printf("%s: INFO: Pruning dangling images for '%s'.", loc, fullImage)
 
@@ -67,14 +67,14 @@ func PruneDanglingImages(ctx context.Context, fullImage string) error {
 
 	if err != nil {
 		log.Printf("%s: ERROR: Failed to prune dangling images.\n\tOutput: %s\n\tError: %v", loc, string(output), err)
-		return fmt.Errorf("failed to prune dangling images: %w", err)
+		return output, fmt.Errorf("failed to prune dangling images: %w", err)
 	}
 
 	log.Printf("%s: INFO: Successfully pruned dangling images.\n\tOutput: %s", loc, string(output))
-	return nil
+	return output, nil
 }
 
-func ComposeDownContainers(ctx context.Context, cfg model.Config, serviceName string) error {
+func ComposeDownContainers(ctx context.Context, cfg model.Config, serviceName string) (outputResult []byte, error error) {
 	loc := util.GetFileAndMethod()
 	log.Printf("%s: INFO: Stopping and removing containers for service '%s'.", loc, serviceName)
 
@@ -83,14 +83,14 @@ func ComposeDownContainers(ctx context.Context, cfg model.Config, serviceName st
 
 	if err != nil {
 		log.Printf("%s: ERROR: Failed to stop containers for service '%s'.\n\tOutput: %s\n\tError: %v", loc, serviceName, string(output), err)
-		return fmt.Errorf("failed to stop containers: %w", err)
+		return output, fmt.Errorf("failed to stop containers: %w", err)
 	}
 
 	log.Printf("%s: INFO: Successfully stopped and removed containers for service '%s'.\n\tOutput: %s", loc, serviceName, string(output))
-	return nil
+	return output, nil
 }
 
-func ComposeUpContainer(ctx context.Context, cfg model.Config, serviceName string) error {
+func ComposeUpContainer(ctx context.Context, cfg model.Config, serviceName string) (outputResult []byte, error error) {
 	loc := util.GetFileAndMethod()
 	log.Printf("%s: INFO: Starting containers for service '%s'.", loc, serviceName)
 
@@ -99,9 +99,9 @@ func ComposeUpContainer(ctx context.Context, cfg model.Config, serviceName strin
 
 	if err != nil {
 		log.Printf("%s: ERROR: Failed to start containers for service '%s'.\n\tOutput: %s\n\tError: %v", loc, serviceName, string(output), err)
-		return fmt.Errorf("failed to start containers: %w", err)
+		return output, fmt.Errorf("failed to start containers: %w", err)
 	}
 
 	log.Printf("%s: INFO: Successfully started containers for service '%s'.\n\tOutput: %s", loc, serviceName, string(output))
-	return nil
+	return output, nil
 }

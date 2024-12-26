@@ -40,7 +40,8 @@ func WebhookHandler(cfg model.Config) http.HandlerFunc {
 			587,
 		)
 
-		if err := deploy.DeployService(ctx, cfg, service, image, tag, emailService); err != nil {
+		recipients := []string{"seyed.ali.devl@gmail.com", "mohammad.hassan.alkhalsi@gmail.com"}
+		if err := deploy.DeployService(ctx, cfg, service, image, tag, recipients, emailService); err != nil {
 			log.Printf("%s: ERROR: Deployment failed.\n\tService: %s\n\tImage: %s:%s\n\tError: %v", loc, service, image, tag, err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
