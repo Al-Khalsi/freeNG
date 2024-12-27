@@ -212,10 +212,9 @@ function SearchPage() {
                         <div className='filter-result flex justify-center items-center'>
                             <h3 className='search-result flex items-center rounded p-2 
                             bg-gradient-to-t from-bgLightPurple to-bgPurple'>
-                                {router.query.keywordId ? 'Result tag for' : 'Result search for'}
-                                :
+                                Result :
                                 <span className='ml-2'>
-                                    {submittedSearchQuery.length > 8 ? `${submittedSearchQuery.slice(0, 8)}...` : submittedSearchQuery}
+                                    {submittedSearchQuery.length > 10 ? `${submittedSearchQuery.slice(0, 10)}...` : submittedSearchQuery}
                                 </span>
                                 <span className='ml-2 text-white'>
                                     ({totalElements})
