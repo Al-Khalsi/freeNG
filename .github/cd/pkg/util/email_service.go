@@ -183,7 +183,7 @@ func (emailService *EmailService) SendErrorEmail(recipients []string, serviceNam
 		log.Printf("%s: ERROR: Failed to send error email notification: %v", loc, err)
 		return
 	}
-	log.Printf("%s: INFO: Successfully sent failure email notification", loc)
+	log.Printf("%s: INFO: Successfully sent failure email notification to recipients: {%s}", loc, recipients)
 }
 
 // SendSuccessEmail sends a success email notification.
@@ -318,5 +318,5 @@ func (emailService *EmailService) SendSuccessEmail(recipients []string, serviceN
 		log.Printf("%s: ERROR: Failed to send success email notification: %v", loc, err)
 		return
 	}
-	log.Printf("%s: INFO: Successfully sent success email notification", loc)
+	log.Printf("%s: INFO: Successfully sent success email notification to recipients: {%s}", loc, recipients)
 }
