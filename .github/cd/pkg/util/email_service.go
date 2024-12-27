@@ -181,7 +181,9 @@ func (emailService *EmailService) SendErrorEmail(recipients []string, serviceNam
 
 	if err := emailService.SendEmail(recipients, subject, body, true); err != nil {
 		log.Printf("%s: ERROR: Failed to send error email notification: %v", loc, err)
+		return
 	}
+	log.Printf("%s: INFO: Successfully sent failure email notification", loc)
 }
 
 // SendSuccessEmail sends a success email notification.
@@ -314,5 +316,7 @@ func (emailService *EmailService) SendSuccessEmail(recipients []string, serviceN
 
 	if err := emailService.SendEmail(recipients, subject, body, true); err != nil {
 		log.Printf("%s: ERROR: Failed to send success email notification: %v", loc, err)
+		return
 	}
+	log.Printf("%s: INFO: Successfully sent success email notification", loc)
 }
