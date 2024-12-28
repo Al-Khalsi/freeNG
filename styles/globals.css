@@ -78,7 +78,6 @@ img {
 }
 
 header.fixed {
-  transition: 0.6s;
   transform: translateY(96px);
 }
 
