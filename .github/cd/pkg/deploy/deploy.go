@@ -36,18 +36,18 @@ func DeployService(ctx context.Context, cfg model.Config, serviceName, image, ta
 		return fmt.Errorf("failed to pull image: %w", err)
 	}
 
-	// Prune dangling images
-	if _, err := docker.PruneDanglingImages(ctx, fullImage); err != nil {
-		log.Printf("%s: WARNING: Failed to prune dangling images.\n\tError: %v", loc, err)
-		// Continue even if pruning fails
-	}
-
 	// Stop and remove old containers
 	if output, err := docker.ComposeDownContainers(ctx, cfg, serviceName); err != nil {
 		errorMessage := fmt.Sprintf("%s: ERROR: Failed to stop containers for service '%s'.\n\tError: %v", loc, serviceName, err)
 		log.Printf(errorMessage)
 		emailService.SendErrorEmail(recipients, serviceName, string(output), image, tag, errorMessage)
 		return fmt.Errorf("failed to stop containers: %w", err)
+	}
+
+	// Prune dangling images
+	if _, err := docker.PruneDanglingImages(ctx, fullImage); err != nil {
+		log.Printf("%s: WARNING: Failed to prune dangling images.\n\tError: %v", loc, err)
+		// Continue even if pruning fails
 	}
 
 	// Start new containers

@@ -64,32 +64,16 @@ function UploadImage() {
   ];
 
   const styles = [
-    '3D',
-    'Abstract',
-    'Anime',
-    'Bokeh',
-    'Cartoon',
-    'Character',
-    'Comic',
-    'Emoji',
-    'Fantasy',
-    'Glitch',
-    'Gradient',
-    'Isometric',
-    'Infographic',
-    'Line Art',
-    'Low Poly',
-    'Neon',
-    'Outline',
-    'Pixel',
-    'Realistic',
-    'Flat',
-    'Sticker',
-    'Surreal',
-    'Silhouette',
-    'Transparent',
-    'Vintage',
-    'Watercolor',
+      '3D',
+      'Anime',
+      'Cartoon',
+      'Fantasy',
+      'Flat',
+      'Logo',
+      'Isometric',
+      'Outline',
+      'Pixel',
+      'Realistic',
   ];
 
   const handleImageChange = (e) => {
@@ -414,7 +398,7 @@ function UploadImage() {
                     ref={dropdownRef}>
                     {fetchedKeywords.map((keyword, index) => (
                       <label htmlFor={`keyword-${index}`} key={index}
-                        className='flex justify-between items-center w-full p-2 
+                        className='flex justify-between items-center w-full p-2
                         border-b border-gray-400 cursor-pointer '>
                         <p className={'text-white'}>{keyword}</p>
                         <input type="checkbox" id={`keyword-${index}`}
