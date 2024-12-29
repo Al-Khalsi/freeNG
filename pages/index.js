@@ -6,12 +6,12 @@ import { useRouter } from 'next/router';
 import Header from '@/components/templates/Header';
 import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
-import { MdDelete } from "react-icons/md";
 import { apiFetch } from '@/utils/api';
 import { FILE_API } from '@/utils/api/file';
 import { KEYWORD_API } from '@/utils/api/keyword';
 import Spinner from '@/components/modules/Spinner';
 import NoImages from '@/components/modules/NoImages';
+import PageTitle from '@/components/templates/PageTitle';
 
 function Index() {
     const { token, username, email, clearToken, userId, role } = useAuth();
@@ -232,16 +232,13 @@ function Index() {
                     handleLogout={handleLogout}
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
-                    handleSearch={handleSearch} />
+                    handleSearch={handleSearch}
+                />
 
-                <div className='w-full py-12 px-8 flex-grow'>
-                    <div className='subject-text relative w-full text-center'>
-                        <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
-                            Free Reference for Downloading All PNG Images
-                            <sub className='ml-1 lg:ml-2 text-base md:text-xl lg:text-3xl'>({totalElements})</sub>
-                        </h1>
-                    </div>
-                </div>
+                <PageTitle
+                    title={"Free Reference for Downloading All PNG Images"}
+                    totalElements={totalElements}
+                />
 
                 <main className='main flex justify-between w-full py-4 px-4 lg:px-8'>
                     {spinner ? (

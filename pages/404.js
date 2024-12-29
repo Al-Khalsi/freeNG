@@ -1,4 +1,3 @@
-// pages/404.js
 import { useEffect } from 'react';
 
 const NotFoundPage = () => {
@@ -9,7 +8,6 @@ const NotFoundPage = () => {
       const top = Math.random() * window.innerHeight;
       const star = document.createElement('div');
 
-      // Add classes individually
       star.classList.add('absolute', 'w-1', 'h-1', 'bg-white', 'rounded-full', 'star');
       body.appendChild(star);
       star.style.top = `${top}px`;
