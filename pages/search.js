@@ -196,7 +196,7 @@ function SearchPage() {
                 <meta property="og:url" content="https://pixelfreebies.com" />
                 <meta property="og:type" content="website" />
             </Head>
-            <div className='w-full h-full flex flex-col min-h-screen relative'>
+            <div className='w-full flex flex-col min-h-screen relative'>
                 <Header
                     token={token}
                     username={username}

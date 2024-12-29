@@ -223,7 +223,7 @@ function Index() {
                 <meta property="og:url" content="https://pixelfreebies.com" />
                 <meta property="og:type" content="website" />
             </Head>
-            <div className="app w-full h-full flex flex-col min-h-screen relative">
+            <div className="app w-full flex flex-col min-h-screen relative">
                 <Header
                     token={token}
                     username={username}

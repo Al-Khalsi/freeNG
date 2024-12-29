@@ -77,10 +77,6 @@ img {
   display: block;
 }
 
-header.fixed {
-  transform: translateY(96px);
-}
-
 .bg-img {
   background-color: var(--bg-darkGray2);
 }
