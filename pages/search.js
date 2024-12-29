@@ -11,6 +11,7 @@ import Header from '@/components/templates/Header';
 import { useAuth } from '@/context/AuthContext';
 import { MdDelete } from "react-icons/md";
 import Link from 'next/link';
+import Pagination from '@/components/templates/Pagination';
 
 function SearchPage() {
     const router = useRouter();
@@ -111,69 +112,6 @@ function SearchPage() {
         fetchImages(submittedSearchQuery, page); // Fetch images for the new page
     };
 
-    const renderPagination = () => {
-        const pagination = []; // Array to hold pagination buttons
-        const maxVisiblePages = 5; // Maximum number of visible pagination buttons
-
-        let startPage, endPage;
-        if (totalPages <= maxVisiblePages) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            const middlePage = Math.ceil(maxVisiblePages / 2);
-            if (currentPage <= middlePage) {
-                startPage = 1;
-                endPage = maxVisiblePages;
-            } else if (currentPage + middlePage - 1 >= totalPages) {
-                startPage = totalPages - maxVisiblePages + 1;
-                endPage = totalPages;
-            } else {
-                startPage = currentPage - middlePage + 1;
-                endPage = currentPage + middlePage - 1;
-            }
-        }
-
-        // Add "First" button
-        if (startPage > 1) {
-            pagination.push(
-                <button key="first" onClick={() => handlePageChange(1)} className="mx-2 px-4 py-2 rounded-lg bg-bgDarkGray hover:bg-bgDarkGray2">
-                    First
-                </button>
-            );
-            if (startPage > 2) {
-                pagination.push(<span key="ellipsis-start">...</span>);
-            }
-        }
-
-        // Render pagination buttons
-        for (let i = startPage; i <= endPage; i++) {
-            pagination.push(
-                <button
-                    key={i}
-                    onClick={() => handlePageChange(i)}
-                    className={`mx-2 px-4 py-2 rounded-lg 
-                    ${currentPage === i ? 'bg-gradient-to-t from-bgLightPurple to-bgPurple text-white' : 'bg-bgDarkGray hover:bg-bgDarkGray2'}`}>
-                    {i}
-                </button>
-            );
-        }
-
-        // Add "Last" button
-        if (endPage < totalPages) {
-            if (endPage < totalPages - 1) {
-                pagination.push(<span key="ellipsis-end">...</span>);
-            }
-            pagination.push(
-                <button key="last" onClick={() => handlePageChange(totalPages)}
-                    className="mx-2 px-4 py-2 rounded-lg bg-bgDarkGray hover:bg-bgDarkGray2">
-                    Last
-                </button>
-            );
-        }
-
-        return pagination;
-    };
-
     return (
         <>
             <Head>
@@ -205,36 +143,28 @@ function SearchPage() {
                     email={email}
                     userId={userId}
                     handleLogout={clearToken}
-                    searchQuery={searchQuery} // Pass searchQuery to Header
+                    searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
                     handleSearch={handleSearch}
                 />
                 <div className='w-full py-12 px-8 flex-grow'>
-                    {isSearching || submittedSearchQuery ? (
-                        <div className='filter-result flex justify-center items-center'>
-                            <h3 className='search-result flex items-center rounded p-2 
+                    <div className='filter-result flex justify-center items-center'>
+                        <h3 className='search-result flex items-center rounded p-2 
                             bg-gradient-to-t from-bgLightPurple to-bgPurple'>
-                                Result :
-                                <span className='ml-2'>
-                                    {submittedSearchQuery.length > 10 ? `${submittedSearchQuery.slice(0, 10)}...` : submittedSearchQuery}
-                                </span>
-                                <span className='ml-2 text-white'>
-                                    ({totalElements})
-                                </span>
-                                <button
-                                    onClick={handleClearSearch}
-                                    className='ml-2 text-xl text-white hover:text-red-600 rounded-lg'>
-                                    <MdDelete />
-                                </button>
-                            </h3>
-                        </div>
-                    ) : (
-                        <div className='subject-text relative w-full text-center'>
-                            <h1 className='relative text-2xl md:text-4xl lg:text-6xl text-clLightPurple'>
-                                Free Reference for Downloading All PNG Images
-                            </h1>
-                        </div>
-                    )}
+                            Result :
+                            <span className='ml-2'>
+                                {submittedSearchQuery.length > 10 ? `${submittedSearchQuery.slice(0, 10)}...` : submittedSearchQuery}
+                            </span>
+                            <span className='ml-2 text-white'>
+                                ({totalElements})
+                            </span>
+                            <button
+                                onClick={handleClearSearch}
+                                className='ml-2 text-xl text-white hover:text-red-600 rounded-lg'>
+                                <MdDelete />
+                            </button>
+                        </h3>
+                    </div>
                 </div>
                 <main className='main flex justify-between w-full py-4 px-4 lg:px-8'>
                     {spinner ? (
@@ -249,9 +179,13 @@ function SearchPage() {
                         </section>
                     )}
                 </main>
-                <div className="pagination flex justify-center py-4">
-                    {renderPagination()}
-                </div>
+                
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
+                
                 <Footer />
 
                 {role === 'ROLE_MASTER' && (

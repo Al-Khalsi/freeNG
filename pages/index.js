@@ -12,6 +12,7 @@ import { KEYWORD_API } from '@/utils/api/keyword';
 import Spinner from '@/components/modules/Spinner';
 import NoImages from '@/components/modules/NoImages';
 import PageTitle from '@/components/templates/PageTitle';
+import Pagination from '@/components/templates/Pagination';
 
 function Index() {
     const { token, username, email, clearToken, userId, role } = useAuth();
@@ -126,71 +127,7 @@ function Index() {
         fetchImages('', '', page); // Fetch default images
     };
 
-    const renderPagination = () => {
-        const pagination = []; // Array to hold pagination buttons
-        const maxVisiblePages = 5; // Maximum number of visible pagination buttons
 
-        // Calculate the start and end page numbers
-        let startPage, endPage;
-        if (totalPages <= maxVisiblePages) {
-            // If total pages are less than or equal to maxVisiblePages, show all pages
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            // Calculate start and end page based on current page
-            const middlePage = Math.ceil(maxVisiblePages / 2);
-            if (currentPage <= middlePage) {
-                startPage = 1;
-                endPage = maxVisiblePages;
-            } else if (currentPage + middlePage - 1 >= totalPages) {
-                startPage = totalPages - maxVisiblePages + 1;
-                endPage = totalPages;
-            } else {
-                startPage = currentPage - middlePage + 1;
-                endPage = currentPage + middlePage - 1;
-            }
-        }
-
-        // Add "First" button
-        if (startPage > 1) {
-            pagination.push(
-                <button key="first" onClick={() => handlePageChange(1)} className="mx-2 px-4 py-2 rounded-lg bg-bgDarkGray hover:bg-bgDarkGray2">
-                    First
-                </button>
-            );
-            if (startPage > 2) {
-                pagination.push(<span key="ellipsis-start">...</span>);
-            }
-        }
-
-        // Render pagination buttons
-        for (let i = startPage; i <= endPage; i++) {
-            pagination.push(
-                <button
-                    key={i}
-                    onClick={() => handlePageChange(i)}
-                    className={`mx-2 px-4 py-2 rounded-lg 
-                    ${currentPage === i ? 'bg-gradient-to-t from-bgLightPurple to-bgPurple text-white' : 'bg-bgDarkGray hover:bg-bgDarkGray2'}`}>
-                    {i}
-                </button>
-            );
-        }
-
-        // Add "Last" button
-        if (endPage < totalPages) {
-            if (endPage < totalPages - 1) {
-                pagination.push(<span key="ellipsis-end">...</span>);
-            }
-            pagination.push(
-                <button key="last" onClick={() => handlePageChange(totalPages)}
-                    className="mx-2 px-4 py-2 rounded-lg bg-bgDarkGray hover:bg-bgDarkGray2">
-                    Last
-                </button>
-            );
-        }
-
-        return pagination;
-    };
 
     const handleLogout = () => {
         clearToken();
@@ -255,9 +192,11 @@ function Index() {
                     )}
                 </main>
 
-                <div className="pagination flex justify-center py-4">
-                    {renderPagination()}
-                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
 
                 <Footer />
 

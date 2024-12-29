@@ -10,7 +10,6 @@ const withAuthRedirect = (WrappedComponent) => {
 
         useEffect(() => {
             if (token) {
-                // If token exists, redirect to the home page
                 router.push('/');
             }
         }, [token, router]);
