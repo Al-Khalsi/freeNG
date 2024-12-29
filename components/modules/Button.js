@@ -5,7 +5,7 @@ const Button = ({ type, onClick, className, disabled, children }) => {
     <button
       type={type}
       onClick={onClick}
-      className={`rounded p-2 ${className}`}
+      className={`${className}`}
       disabled={disabled}
     >
       {children}

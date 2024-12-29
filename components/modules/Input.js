@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Input = React.forwardRef(({ type, value, onChange, placeholder, className, required, autoComplete, checked }, ref) => {
+const Input = React.forwardRef(({ id, type, value, onChange, placeholder, className, required, autoComplete, checked }, ref) => {
   if (type === 'checkbox') {
     return (
       <input
@@ -8,6 +8,7 @@ const Input = React.forwardRef(({ type, value, onChange, placeholder, className,
         checked={checked}
         onChange={onChange}
         className={className}
+        id={id}
       />
     );
   }
@@ -19,6 +20,7 @@ const Input = React.forwardRef(({ type, value, onChange, placeholder, className,
         onChange={onChange}
         className={className}
         ref={ref}
+        id={id}
       />
     );
   }
