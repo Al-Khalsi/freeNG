@@ -9,6 +9,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
     const searchBarRef = useRef(null); // Ref for the search bar
     const searchInputRef = useRef(null); // Ref for the search input
 
+    // Effect to handle scroll event to make header sticky
     useEffect(() => {
         const handleScroll = () => {
             if (window.scrollY > 100) {
@@ -24,6 +25,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
         };
     }, []);
 
+    // Function to toggle the visibility of the search bar on mobile
     const toggleSearchBar = () => {
         setIsSearchBarVisible(!isSearchBarVisible);
     };
@@ -87,13 +89,13 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                             name="text"
                             type="text"
                             placeholder="Search..."
-                            value={searchQuery}
+                            value={searchQuery} // Keep the search query in the input
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                     e.preventDefault();
                                     if (searchQuery.trim()) {
-                                        handleSearch();
+                                        handleSearch(); // Call the search function on Enter
                                     }
                                 }
                             }}
@@ -171,7 +173,6 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                                 <i className="point"></i>
                                 <i className="point"></i>
                                 <i className="point"></i>
-                                <i className="point"></i>
                             </div>
                             <h2 className="inner">
                                 Log In / Sign Up
@@ -192,13 +193,13 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                                 name="text"
                                 type="text"
                                 placeholder="Search..."
-                                value={searchQuery}
+                                value={searchQuery} // Keep the search query in the input
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         e.preventDefault();
                                         if (searchQuery.trim()) {
-                                            handleSearch();
+                                            handleSearch(); // Call the search function on Enter
                                         }
                                     }
                                 }}
@@ -217,7 +218,7 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                     </div>
                 )
             }
-        </header >
+        </header>
     );
 }
 

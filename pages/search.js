@@ -17,7 +17,7 @@ function SearchPage() {
     const { query } = router.query;
     const [images, setImages] = useState([]);
     const [spinner, setSpinner] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQuery, setSearchQuery] = useState(query || '');
     const { token, username, email, clearToken, userId, role } = useAuth();
     const [submittedSearchQuery, setSubmittedSearchQuery] = useState('');
     const [isSearching, setIsSearching] = useState(false);
@@ -61,6 +61,7 @@ function SearchPage() {
     useEffect(() => {
         if (query) {
             setSubmittedSearchQuery(query); // Set the submitted search query
+            setSearchQuery(query); // Set the search query from URL
             fetchImages(query, currentPage); // Fetch images with the current page
         }
     }, [query, currentPage]);
@@ -77,8 +78,9 @@ function SearchPage() {
     const handleClearSearch = () => {
         setSearchQuery('');
         setIsSearching(false);
+        setSubmittedSearchQuery('');
         fetchImages('');
-        router.push('/'); // Navigate back to the home page
+        router.push('/');
     };
 
     const handleDeleteImage = async (imageId) => {
@@ -180,11 +182,11 @@ function SearchPage() {
                 <meta name="description"
                     content={`${submittedSearchQuery} image png collection for free download at PixelFreebies`} />
                 <meta name="keywords" content={`
-                    ${query} png,
-                    ${query} png free,
-                    ${query} png download,
-                    ${query} png images,
-                    ${query} free png
+                    ${submittedSearchQuery} png,
+                    ${submittedSearchQuery} png free,
+                    ${submittedSearchQuery} png download,
+                    ${submittedSearchQuery} png images,
+                    ${submittedSearchQuery} free png
                 `} />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
                 <meta name="robots" content="index, follow" />
@@ -203,7 +205,7 @@ function SearchPage() {
                     email={email}
                     userId={userId}
                     handleLogout={clearToken}
-                    searchQuery={searchQuery}
+                    searchQuery={searchQuery} // Pass searchQuery to Header
                     setSearchQuery={setSearchQuery}
                     handleSearch={handleSearch}
                 />
