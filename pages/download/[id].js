@@ -154,7 +154,7 @@ const Downloader = () => {
                             <div className={`bg-img w-full md:w-1/2 h-56 md:h-custom-136 rounded p-4 ${lightMode === 'true' ? 'lightMod' : ''}`}>
                                 <img src={`${path}`} className='w-full h-full object-contain' alt={title} />
                             </div>
-                            <div className='info-img flex flex-col justify-between md:ms-8 md:w-1/2'>
+                            <div className='info-img flex flex-col justify-between md:mx-8 md:w-1/2'>
                                 <div className='flex flex-col'>
                                     <h1 className='block text-3xl text-white text-ellipsis overflow-hidden whitespace-nowrap'>
                                         {title}
