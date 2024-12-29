@@ -6,6 +6,7 @@ import { KEYWORD_API } from "@/utils/api/keyword";
 import { FILE_API } from "@/utils/api/file";
 import { LuUpload } from "react-icons/lu";
 import { FaSun, FaMoon } from "react-icons/fa";
+import Button from '@/components/modules/Button';
 
 function UploadImage() {
   const { token } = useAuth();
@@ -64,16 +65,16 @@ function UploadImage() {
   ];
 
   const styles = [
-      '3D',
-      'Anime',
-      'Cartoon',
-      'Fantasy',
-      'Flat',
-      'Logo',
-      'Isometric',
-      'Outline',
-      'Pixel',
-      'Realistic',
+    '3D',
+    'Anime',
+    'Cartoon',
+    'Fantasy',
+    'Flat',
+    'Logo',
+    'Isometric',
+    'Outline',
+    'Pixel',
+    'Realistic',
   ];
 
   const handleImageChange = (e) => {
@@ -292,13 +293,13 @@ function UploadImage() {
           <div className='flex items-center flex-col sm:flex-row mt-4'>
             <div className='mx-2 w-full sm:w-1/2'>
               <div className="relative">
-                <button
+                <Button
                   type="button"
-                  className="flex border rounded px-3 py-2 w-full bg-bgDarkGray2"
                   onClick={() => setShowColorDropdown(prev => !prev)}
+                  className="flex border rounded px-3 py-2 w-full bg-bgDarkGray2"
                 >
                   {dominantColors.length > 0 ? dominantColors.join(', ') : 'Select Colors'}
-                </button>
+                </Button>
                 {showColorDropdown && (
                   <div className='absolute bg-bgDarkGray2 border border-t-0 rounded w-full z-10' ref={dropdownColorRef}>
                     <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
@@ -356,16 +357,20 @@ function UploadImage() {
                   onChange={(e) => setAddKeyword(e.target.value)}
                 />
                 <div className='w-full sm:w-1/2 flex justify-between mx-0 sm:mx-2 mt-4 sm:mt-0'>
-                  <button
+                  <Button
                     type='button'
                     onClick={addKeywords}
-                    className='w-full sm:w-1/2 mr-2 sm:ml-2 p-2 bg-green-700 rounded opacity-100 hover:opacity-80'>Save
-                  </button>
-                  <button
+                    className='w-full sm:w-1/2 mr-2 sm:ml-2 p-2 bg-green-700 rounded opacity-100 hover:opacity-80'
+                  >
+                    Save
+                  </Button>
+                  <Button
                     type='button'
                     onClick={handleCancelKeywords}
-                    className='w-full sm:w-1/2 ml-2 sm:mr-2 p-2 bg-red-700 rounded opacity-100 hover:opacity-80'>Cancel
-                  </button>
+                    className='w-full sm:w-1/2 ml-2 sm:mr-2 p-2 bg-red-700 rounded opacity-100 hover:opacity-80'
+                  >
+                    Cancel
+                  </Button>
                 </div>
               </div>
             ) : (
@@ -380,19 +385,20 @@ function UploadImage() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     autoComplete='off'
                   />
-                  <button
+                  <Button
                     type='button'
-                    className={`absolute right-0 top-1/2 -translate-y-1/2 h-full px-2 rounded-r 
+                    className={`absolute right-0 top-1/2 -translate-y-1/2 h-full px-2 rounded-r
                       ${showResults ? 'bg-red-700' : 'bg-green-700'} text-white`}
                     onClick={() => {
                       if (showResults) {
-                        setShowResults(false); // Close the dropdown if it's currently open
+                        setShowResults(false);
                       } else {
-                        handleSearch(); // Perform search if dropdown is closed
+                        handleSearch();
                       }
-                    }}>
+                    }}
+                  >
                     {showResults ? 'Close' : 'Search'}
-                  </button>
+                  </Button>
                   <div className={`result-keywordSelect absolute w-5/6 max-h-32
                     ${showResults ? 'flex' : 'hidden'} flex-col rounded-b bg-bgDarkGray2 overflow-y-auto z-50`}
                     ref={dropdownRef}>
@@ -408,11 +414,13 @@ function UploadImage() {
                     ))}
                   </div>
                 </div>
-                <button
+                <Button
                   type='button'
                   onClick={handleAddKeywords}
-                  className='w-full sm:w-1/2 mx-0 sm:mx-2 mt-4 sm:mt-0 p-2 bg-bgDarkGray2 rounded hover:border'>Add
-                </button>
+                  className='w-full sm:w-1/2 mx-0 sm:mx-2 mt-4 sm:mt-0 p-2 bg-bgDarkGray2 rounded hover:border'
+                >
+                  Add
+                </Button>
               </div>
             )}
           </div>
@@ -422,34 +430,37 @@ function UploadImage() {
               {selectedKeywords.map((keyword, Index) => (
                 <div key={`${keyword}-${Index}`} className="flex items-center mx-1 mb-2 p-1 rounded-sm bg-gray-600">
                   <p className="mr-1">{keyword}</p>
-                  <button
+                  <Button
                     type="button"
                     onClick={() => handleCheckboxChange(keyword)}
                     className="flex items-center justify-center w-6 h-6 text-white hover:text-red-600"
-                    title={`Remove ${keyword}`}>
+                    title={`Remove ${keyword}`}
+                  >
                     <MdDelete />
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
           )}
 
           <div className='hidden sm:flex flex-col sm:flex-row justify-center items-center mt-4'>
-            <button
+            <Button
               type="submit"
               className={`bg-bgDarkBlue text-white rounded w-full sm:w-1/2 mx-2 p-2 hover:border
               ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? 'Uploading...' : 'Upload'}
-            </button>
+            </Button>
             <div className='flex flex-col sm:flex-row justify-between items-center w-full mx-2 sm:w-1/2'>
-              <button
+              <Button
                 type="button"
                 onClick={toggleLightMode}
                 className={`rounded p-2 mr-2 w-full hover:border 
-              ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}>
+              ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}
+              >
                 {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
-              </button>
+              </Button>
               <input type="text"
                 className='INPUTSource rounded ml-2 mt-4 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
                 value={source}
@@ -466,20 +477,20 @@ function UploadImage() {
               onChange={(e) => setSource(e.target.value)}
               placeholder='PixelFreebies' />
             <div className='flex flex-row justify-between items-center w-full sm:w-1/2 mt-4'>
-              <button
+              <Button
                 type="submit"
                 className={`bg-bgDarkBlue flex justify-center text-xl text-white rounded w-full sm:w-1/2 mr-2 sm:ml-2 p-2 hover:border
               ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
                 disabled={isLoading}>
                 {isLoading ? '...' : <LuUpload />}
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
                 onClick={toggleLightMode}
-                className={`rounded flex justify-center p-2 ml-2 sm:mr-2 w-full text-xl font-bold
+                className={`flex justify-center p-2 ml-2 sm:mr-2 w-full text-xl font-bold rounded
               ${lightMode ? 'bg-white text-black border-none' : 'bg-black text-white border-none'}`}>
                 {lightMode ? <FaSun /> : <FaMoon />}
-              </button>
+              </Button>
             </div>
           </div>
 
