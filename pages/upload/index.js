@@ -7,6 +7,7 @@ import { FILE_API } from "@/utils/api/file";
 import { LuUpload } from "react-icons/lu";
 import { FaSun, FaMoon } from "react-icons/fa";
 import Button from '@/components/modules/Button';
+import Input from '@/components/modules/Input';
 
 function UploadImage() {
   const { token } = useAuth();
@@ -267,7 +268,7 @@ function UploadImage() {
                 ) : (
                   <p>Click to select image</p>
                 )}
-                <input
+                <Input
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
@@ -278,7 +279,7 @@ function UploadImage() {
             </div>
 
             <div className="mt-4 mx-2 w-full sm:w-1/2">
-              <input
+              <Input
                 type="text"
                 placeholder='Image Name'
                 value={imageName}
@@ -312,7 +313,7 @@ function UploadImage() {
                             ></span>
                             {color.name}
                           </span>
-                          <input
+                          <Input
                             type="checkbox"
                             value={color.name}
                             checked={dominantColors.includes(color.name)}
@@ -347,14 +348,14 @@ function UploadImage() {
           <div className='flex mt-4'>
             {isAddingKeywords ? (
               <div className='keywordsAdd flex flex-col sm:flex-row justify-between w-full'>
-                <input
+                <Input
                   type='text'
                   ref={addKeywordInputRef}
-                  className='w-full sm:w-1/2 mx-0 sm:mx-2 p-2 bg-bgDarkGray2 border rounded'
                   placeholder='Add Keywords'
                   autoComplete='off'
                   value={addKeyword}
                   onChange={(e) => setAddKeyword(e.target.value)}
+                  className='w-full sm:w-1/2 mx-0 sm:mx-2 p-2 bg-bgDarkGray2 border rounded'
                 />
                 <div className='w-full sm:w-1/2 flex justify-between mx-0 sm:mx-2 mt-4 sm:mt-0'>
                   <Button
@@ -376,14 +377,13 @@ function UploadImage() {
             ) : (
               <div className='keywordSelect flex flex-col sm:flex-row justify-between w-full'>
                 <div className='relative w-full sm:w-1/2 mx-0 sm:mx-2'>
-                  <input
+                  <Input
                     type='text'
                     ref={inputRef}
-                    className='p-2 w-full bg-bgDarkGray2 border focus:outline-none rounded'
                     placeholder='Search Keywords'
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    autoComplete='off'
+                    className='p-2 w-full bg-bgDarkGray2 border focus:outline-none rounded'
                   />
                   <Button
                     type='button'
@@ -407,9 +407,12 @@ function UploadImage() {
                         className='flex justify-between items-center w-full p-2
                         border-b border-gray-400 cursor-pointer '>
                         <p className={'text-white'}>{keyword}</p>
-                        <input type="checkbox" id={`keyword-${index}`}
+                        <Input
+                          type="checkbox"
+                          id={`keyword-${index}`}
                           checked={selectedKeywords.includes(keyword)}
-                          onChange={() => handleCheckboxChange(keyword)} />
+                          onChange={() => handleCheckboxChange(keyword)}
+                        />
                       </label>
                     ))}
                   </div>
@@ -461,21 +464,25 @@ function UploadImage() {
               >
                 {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
               </Button>
-              <input type="text"
+              <Input
+                type="text"
                 className='INPUTSource rounded ml-2 mt-4 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
-                placeholder='PixelFreebies' />
+                placeholder='PixelFreebies'
+              />
             </div>
           </div>
 
           {/* mobile ui */}
           <div className='flex sm:hidden flex-col sm:flex-row justify-center items-center mt-4'>
-            <input type="text"
+            <Input
+              type="text"
               className='INPUTSource rounded mx-2 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
               value={source}
               onChange={(e) => setSource(e.target.value)}
-              placeholder='PixelFreebies' />
+              placeholder='PixelFreebies'
+            />
             <div className='flex flex-row justify-between items-center w-full sm:w-1/2 mt-4'>
               <Button
                 type="submit"
