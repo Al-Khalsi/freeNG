@@ -265,23 +265,18 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO imageRemoveStyleDTO) throws NotFoundException {
+    public ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO removeStyleDTO) throws NotFoundException {
         Image existingImage = this.imageRepository.findById(imageId)
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
 
-        List<String> stylesToRemove = imageRemoveStyleDTO.getStylesToRemove();
-        if (stylesToRemove != null) {
+        String styleToRemove = removeStyleDTO.getStyleToRemove();
+        if (styleToRemove != null) {
             // Check if any styles to remove exist
             List<String> existingStyles = existingImage.getStyles();
-            List<String> notFoundStyles = stylesToRemove.stream()
-                    .filter(style -> !existingStyles.contains(style))
-                    .toList();
-
-            if (!notFoundStyles.isEmpty())
-                throw new NotFoundException("The following styles were not found: " + notFoundStyles);
+            if (!existingStyles.contains(styleToRemove)) throw new NotFoundException("The following style was not found: " + styleToRemove);
 
             // Remove the specified styles
-            existingImage.getStyles().removeAll(stylesToRemove);
+            existingImage.getStyles().remove(styleToRemove);
         }
 
         return this.convertToDto(this.imageRepository.save(existingImage));
