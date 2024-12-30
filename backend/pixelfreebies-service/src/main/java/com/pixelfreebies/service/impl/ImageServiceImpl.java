@@ -31,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -235,16 +234,22 @@ public class ImageServiceImpl implements ImageService {
         if (imageName != null) image.setFileTitle(imageName + " Pixelfreebies");
         if (lightMode != image.isLightMode()) image.setLightMode(lightMode);
         if (source != null) image.setSource(source);
+
+        // Handle styles
         if (styles != null) {
             List<String> currentStyles = image.getStyles();
-            currentStyles.addAll(styles);
+            styles.forEach(newStyle -> {
+                if (!currentStyles.contains(newStyle)) currentStyles.add(newStyle); // Add only if a newStyle doesn't already exist
+            });
         }
 
+        // Handle dominantColors
         if (dominantColors != null) {
-            image.getDominantColors().clear(); // Clear existing colors
-            image.getDominantColors().addAll(dominantColors); // Add new colors
+            Set<String> currentDominantColors = image.getDominantColors();
+            currentDominantColors.addAll(dominantColors); // Since this is a Set, it'll only add new dominantColors
         }
 
+        // Handle keywords
         if (keywords != null) {
             Set<Keywords> currentKeywords = image.getKeywords();
             Set<Keywords> newKeywords = this.keywordValidationService.validateAndFetchKeywords(keywords);
@@ -272,7 +277,8 @@ public class ImageServiceImpl implements ImageService {
                     .filter(style -> !existingStyles.contains(style))
                     .toList();
 
-            if (!notFoundStyles.isEmpty()) throw new NotFoundException("The following styles were not found: " + notFoundStyles);
+            if (!notFoundStyles.isEmpty())
+                throw new NotFoundException("The following styles were not found: " + notFoundStyles);
 
             // Remove the specified styles
             existingImage.getStyles().removeAll(stylesToRemove);
