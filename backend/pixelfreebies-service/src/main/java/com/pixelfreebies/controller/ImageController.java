@@ -1,6 +1,7 @@
 package com.pixelfreebies.controller;
 
 import com.pixelfreebies.model.dto.ImageDTO;
+import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
 import com.pixelfreebies.model.payload.response.Result;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -112,6 +114,18 @@ public class ImageController {
         ImageDTO image = this.imageService.updateImage(UUID.fromString(imageId), imageOperationRequest);
 
         return ResponseEntity.ok(Result.success("Image updated successfully.", image));
+    }
+
+    // Endpoint for removing style from image
+    @Operation(
+            summary = "Remove style from an Image.",
+            description = "Update an image; remove style from image from the server using its ID"
+    )
+    @PatchMapping("/style/{imageId}")
+    public ResponseEntity<Result> removeStylesFromImage(@PathVariable String imageId, @RequestBody ImageRemoveStyleDTO removeStyleDTO) {
+        ImageDTO image = this.imageService.removeStylesFromImage(UUID.fromString(imageId), removeStyleDTO);
+
+        return ResponseEntity.ok(Result.success("Styles removed from image successfully.", image));
     }
 
 }

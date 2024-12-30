@@ -2,6 +2,7 @@ package com.pixelfreebies.service;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.dto.ImageDTO;
+import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,5 +29,7 @@ public interface ImageService {
     Page<ImageDTO> listAllImagesByKeywordId(long keywordId, Pageable pageable);
 
     ImageDTO updateImage(UUID imageId, ImageOperationRequest imageOperationRequest);
+
+    ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO imageRemoveStyleDTO);
 
 }

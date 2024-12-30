@@ -7,6 +7,7 @@ import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.dto.ImageDTO;
+import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
 import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
@@ -30,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -255,6 +257,28 @@ public class ImageServiceImpl implements ImageService {
         // Save the updated image
         Image updatedImage = this.imageRepository.save(image);
         return this.convertToDto(updatedImage);
+    }
+
+    @Override
+    public ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO imageRemoveStyleDTO) {
+        Image existingImage = this.imageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+
+        List<String> stylesToRemove = imageRemoveStyleDTO.getStylesToRemove();
+        if (stylesToRemove != null) {
+            // Check if any styles to remove exist
+            List<String> existingStyles = existingImage.getStyles();
+            List<String> notFoundStyles = stylesToRemove.stream()
+                    .filter(style -> !existingStyles.contains(style))
+                    .toList();
+
+            if (!notFoundStyles.isEmpty()) throw new NotFoundException("The following styles were not found: " + notFoundStyles);
+
+            // Remove the specified styles
+            existingImage.getStyles().removeAll(stylesToRemove);
+        }
+
+        return this.convertToDto(this.imageRepository.save(existingImage));
     }
 
 }
