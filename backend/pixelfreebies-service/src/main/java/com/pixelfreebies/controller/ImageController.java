@@ -1,16 +1,15 @@
 package com.pixelfreebies.controller;
 
 import com.pixelfreebies.model.dto.ImageDTO;
-import com.pixelfreebies.model.payload.request.ImageUploadRequest;
+import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
 import com.pixelfreebies.model.payload.response.Result;
-import com.pixelfreebies.service.FileService;
+import com.pixelfreebies.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,9 +29,9 @@ import java.util.UUID;
 @RequestMapping("${base.url}/file")
 @Tag(name = "File API", description = "Endpoints for file operations")
 @SecurityRequirement(name = "BearerToken")
-public class FileController {
+public class ImageController {
 
-    private final FileService fileService;
+    private final ImageService imageService;
 
     // Endpoint for uploading a file
     @Operation(
@@ -41,9 +40,9 @@ public class FileController {
     )
     @PostMapping("/upload")
     @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_ADMIN')")
-    public ResponseEntity<Result> uploadFile(@RequestParam(name = "file") MultipartFile multipartFile,
-                                             @ModelAttribute ImageUploadRequest imageUploadRequest) {
-        ImageDTO imageDTO = this.fileService.saveImage(multipartFile, imageUploadRequest);
+    public ResponseEntity<Result> uploadImage(@RequestParam(name = "file") MultipartFile multipartFile,
+                                              @ModelAttribute ImageOperationRequest imageOperationRequest) {
+        ImageDTO imageDTO = this.imageService.saveImage(multipartFile, imageOperationRequest);
         return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
     }
 
@@ -53,8 +52,8 @@ public class FileController {
             description = "Download a file from the server using its ID"
     )
     @GetMapping("/download/{fileId}")
-    public ResponseEntity<?> downloadFile(@PathVariable String fileId) {
-        ImageDTO image = this.fileService.findImageById(UUID.fromString(fileId));
+    public ResponseEntity<?> downloadImage(@PathVariable String fileId) {
+        ImageDTO image = this.imageService.findImageById(UUID.fromString(fileId));
         URI location = URI.create(image.getFilePath());
         log.debug("Download request for image: {}", image);
         log.debug("Download location URI: {}", location);
@@ -74,7 +73,7 @@ public class FileController {
     public ResponseEntity<PaginatedResult<ImageDTO>> fetchFiles(@RequestParam(defaultValue = "0") int page,
                                                                 @RequestParam(defaultValue = "50") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<ImageDTO> imageDTOs = this.fileService.listAllImages(pageable);
+        Page<ImageDTO> imageDTOs = this.imageService.listAllImages(pageable);
 
         return ResponseEntity.ok(PaginatedResult.success("List files.", true, imageDTOs));
     }
@@ -83,7 +82,7 @@ public class FileController {
     @DeleteMapping("/{imageId}")
     @PreAuthorize("hasRole('ROLE_MASTER')")
     public ResponseEntity<Result> deleteImage(@PathVariable String imageId) {
-        this.fileService.deleteImageById(imageId);
+        this.imageService.deleteImageById(imageId);
 
         return ResponseEntity.ok(Result.success("Deleted file successfully.", null));
     }
@@ -98,9 +97,21 @@ public class FileController {
                                                                             @RequestParam(defaultValue = "0") int page,
                                                                             @RequestParam(defaultValue = "50") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<ImageDTO> imageDTOs = this.fileService.listAllImagesByKeywordId(keywordId, pageable);
+        Page<ImageDTO> imageDTOs = this.imageService.listAllImagesByKeywordId(keywordId, pageable);
 
         return ResponseEntity.ok(PaginatedResult.success("List found images by keywordId.", true, imageDTOs));
+    }
+
+    // Endpoint for updating an image
+    @Operation(
+            summary = "Update an Image.",
+            description = "Update an image from the server using its ID"
+    )
+    @PatchMapping("/{imageId}")
+    public ResponseEntity<Result> updateImage(@PathVariable String imageId, @RequestBody ImageOperationRequest imageOperationRequest) {
+        ImageDTO image = this.imageService.updateImage(UUID.fromString(imageId), imageOperationRequest);
+
+        return ResponseEntity.ok(Result.success("Image updated successfully.", image));
     }
 
 }
