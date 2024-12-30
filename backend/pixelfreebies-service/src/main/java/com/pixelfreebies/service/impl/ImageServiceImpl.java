@@ -287,19 +287,14 @@ public class ImageServiceImpl implements ImageService {
         Image existingImage = this.imageRepository.findById(imageId)
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
 
-        Set<String> colorsToRemove = removeColorDTO.getColorsToRemove();
-        if (colorsToRemove != null) {
+        String colorToRemove = removeColorDTO.getColorToRemove();
+        if (colorToRemove != null) {
             Set<String> currentColors = existingImage.getDominantColors();
             // Find colors that are not present in the image
-            Set<String> notFoundColors = colorsToRemove.stream()
-                    .filter(color -> !currentColors.contains(color))
-                    .collect(Collectors.toSet());
-
-            if (!notFoundColors.isEmpty())
-                throw new NotFoundException("The following colors were not found: " + notFoundColors);
+            if (!currentColors.contains(colorToRemove)) throw new NotFoundException("The following color was not found: " + colorToRemove);
 
             // Remove the specified colors
-            currentColors.removeAll(colorsToRemove);
+            currentColors.remove(colorToRemove);
         }
 
         return this.convertToDto(this.imageRepository.save(existingImage));
