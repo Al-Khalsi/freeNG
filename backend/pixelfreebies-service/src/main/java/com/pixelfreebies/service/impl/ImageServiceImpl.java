@@ -7,6 +7,7 @@ import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.dto.ImageDTO;
+import com.pixelfreebies.model.dto.ImageRemoveDominantColorDTO;
 import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
 import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.enums.ImageFormat;
@@ -31,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -282,6 +284,29 @@ public class ImageServiceImpl implements ImageService {
 
             // Remove the specified styles
             existingImage.getStyles().removeAll(stylesToRemove);
+        }
+
+        return this.convertToDto(this.imageRepository.save(existingImage));
+    }
+
+    @Override
+    public ImageDTO removeDominantColorsFromImage(UUID imageId, ImageRemoveDominantColorDTO removeColorDTO) {
+        Image existingImage = this.imageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+
+        Set<String> colorsToRemove = removeColorDTO.getColorsToRemove();
+        if (colorsToRemove != null) {
+            Set<String> currentColors = existingImage.getDominantColors();
+            // Find colors that are not present
+            Set<String> notFoundColors = colorsToRemove.stream()
+                    .filter(color -> !currentColors.contains(color))
+                    .collect(Collectors.toSet());
+
+            if (!notFoundColors.isEmpty())
+                throw new NotFoundException("The following colors were not found: " + notFoundColors);
+
+            // Remove the specified colors
+            currentColors.removeAll(colorsToRemove);
         }
 
         return this.convertToDto(this.imageRepository.save(existingImage));

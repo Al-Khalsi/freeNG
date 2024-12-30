@@ -1,6 +1,7 @@
 package com.pixelfreebies.controller;
 
 import com.pixelfreebies.model.dto.ImageDTO;
+import com.pixelfreebies.model.dto.ImageRemoveDominantColorDTO;
 import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
@@ -126,6 +127,17 @@ public class ImageController {
         ImageDTO image = this.imageService.removeStylesFromImage(UUID.fromString(imageId), removeStyleDTO);
 
         return ResponseEntity.ok(Result.success("Styles removed from image successfully.", image));
+    }
+
+    // Endpoint for removing dominant colors from an image
+    @Operation(
+            summary = "Remove dominant colors from an Image.",
+            description = "Update an image; remove dominant colors from the image on the server using its ID"
+    )
+    @PatchMapping("/dominant-color/{imageId}")
+    public ResponseEntity<Result> removeDominantColorsFromImage(@PathVariable String imageId, @RequestBody ImageRemoveDominantColorDTO removeColorDTO) {
+        ImageDTO image = this.imageService.removeDominantColorsFromImage(UUID.fromString(imageId), removeColorDTO);
+        return ResponseEntity.ok(Result.success("Dominant colors removed from image successfully.", image));
     }
 
 }
