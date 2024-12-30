@@ -9,12 +9,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageUploadRequest {
+public class ImageOperationRequest {
 
     private String fileName;
     private List<String> keywords;
     private List<String> dominantColors;
-    private String style;
+    private List<String> style;
     private boolean lightMode;
     private String source;
 

@@ -3,7 +3,7 @@ package com.pixelfreebies.controller;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
 import com.pixelfreebies.model.payload.response.Result;
-import com.pixelfreebies.service.FileService;
+import com.pixelfreebies.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,7 +27,7 @@ import java.util.List;
 @SecurityRequirement(name = "BearerToken")
 public class SearchController {
 
-    private final FileService fileService;
+    private final ImageService imageService;
 
     // Endpoint for searching files
     @Operation(
@@ -39,7 +39,7 @@ public class SearchController {
                                                                           @RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "50") int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<ImageDTO> searchedFiles = this.fileService.searchImages(query, pageRequest);
+        Page<ImageDTO> searchedFiles = this.imageService.searchImages(query, pageRequest);
 
         if (searchedFiles.isEmpty()) {
             return ResponseEntity.ok(PaginatedResult.success("No exact matches found. Here are similar results paginated:", true, searchedFiles));
@@ -58,7 +58,7 @@ public class SearchController {
     public ResponseEntity<Result> searchKeywords(@RequestParam String query,
                                                  @RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "10") int size) {
-        List<String> searchedKeywords = this.fileService.searchKeywords(query, page, size);
+        List<String> searchedKeywords = this.imageService.searchKeywords(query, page, size);
 
         if (searchedKeywords.isEmpty()) {
             return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedKeywords));

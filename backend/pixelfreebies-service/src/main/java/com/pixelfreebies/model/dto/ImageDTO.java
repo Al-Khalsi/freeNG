@@ -7,7 +7,9 @@ import lombok.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -32,7 +34,7 @@ public class ImageDTO implements Serializable {
     private boolean isActive;
     @Builder.Default
     private Set<KeywordsDTO> keywords = new HashSet<>();
-    private String style;
+    private List<String> style = new ArrayList<>();
     private boolean isLightMode;
     @Builder.Default
     private Set<String> dominantColors = new HashSet<>();
