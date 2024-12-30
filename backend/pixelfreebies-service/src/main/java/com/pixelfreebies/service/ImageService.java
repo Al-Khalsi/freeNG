@@ -1,8 +1,10 @@
 package com.pixelfreebies.service;
 
+import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.ImageRemoveDominantColorDTO;
+import com.pixelfreebies.model.dto.ImageRemoveKeywordsDTO;
 import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import org.springframework.data.domain.Page;
@@ -31,8 +33,10 @@ public interface ImageService {
 
     ImageDTO updateImage(UUID imageId, ImageOperationRequest imageOperationRequest);
 
-    ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO imageRemoveStyleDTO);
+    ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO imageRemoveStyleDTO) throws NotFoundException;
 
-    ImageDTO removeDominantColorsFromImage(UUID imageId, ImageRemoveDominantColorDTO removeColorDTO);
+    ImageDTO removeDominantColorsFromImage(UUID imageId, ImageRemoveDominantColorDTO removeColorDTO) throws NotFoundException;
+
+    ImageDTO removeKeywordsFromImage(UUID imageId, ImageRemoveKeywordsDTO removeKeywordsDTO) throws NotFoundException;
 
 }

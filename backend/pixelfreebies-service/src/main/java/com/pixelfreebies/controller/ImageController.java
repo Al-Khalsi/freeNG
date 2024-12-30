@@ -2,6 +2,7 @@ package com.pixelfreebies.controller;
 
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.ImageRemoveDominantColorDTO;
+import com.pixelfreebies.model.dto.ImageRemoveKeywordsDTO;
 import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
@@ -138,6 +139,17 @@ public class ImageController {
     public ResponseEntity<Result> removeDominantColorsFromImage(@PathVariable String imageId, @RequestBody ImageRemoveDominantColorDTO removeColorDTO) {
         ImageDTO image = this.imageService.removeDominantColorsFromImage(UUID.fromString(imageId), removeColorDTO);
         return ResponseEntity.ok(Result.success("Dominant colors removed from image successfully.", image));
+    }
+
+    // Endpoint for removing keywords from an image
+    @Operation(
+            summary = "Remove keywords from an Image.",
+            description = "Update an image; remove keywords from the image on the server using its ID"
+    )
+    @PatchMapping("/keywords/{imageId}")
+    public ResponseEntity<Result> removeKeywordsFromImage(@PathVariable String imageId, @RequestBody ImageRemoveKeywordsDTO removeKeywordsDTO) {
+        ImageDTO image = this.imageService.removeKeywordsFromImage(UUID.fromString(imageId), removeKeywordsDTO);
+        return ResponseEntity.ok(Result.success("Keywords removed from image successfully.", image));
     }
 
 }

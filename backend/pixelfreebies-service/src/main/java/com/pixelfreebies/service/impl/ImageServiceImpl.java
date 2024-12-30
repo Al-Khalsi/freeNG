@@ -6,10 +6,7 @@ import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
-import com.pixelfreebies.model.dto.ImageDTO;
-import com.pixelfreebies.model.dto.ImageRemoveDominantColorDTO;
-import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
-import com.pixelfreebies.model.dto.KeywordsDTO;
+import com.pixelfreebies.model.dto.*;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
@@ -241,7 +238,8 @@ public class ImageServiceImpl implements ImageService {
         if (styles != null) {
             List<String> currentStyles = image.getStyles();
             styles.forEach(newStyle -> {
-                if (!currentStyles.contains(newStyle)) currentStyles.add(newStyle); // Add only if a newStyle doesn't already exist
+                if (!currentStyles.contains(newStyle))
+                    currentStyles.add(newStyle); // Add only if a newStyle doesn't already exist
             });
         }
 
@@ -267,7 +265,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO imageRemoveStyleDTO) {
+    public ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO imageRemoveStyleDTO) throws NotFoundException {
         Image existingImage = this.imageRepository.findById(imageId)
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
 
@@ -290,14 +288,14 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public ImageDTO removeDominantColorsFromImage(UUID imageId, ImageRemoveDominantColorDTO removeColorDTO) {
+    public ImageDTO removeDominantColorsFromImage(UUID imageId, ImageRemoveDominantColorDTO removeColorDTO) throws NotFoundException {
         Image existingImage = this.imageRepository.findById(imageId)
                 .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
 
         Set<String> colorsToRemove = removeColorDTO.getColorsToRemove();
         if (colorsToRemove != null) {
             Set<String> currentColors = existingImage.getDominantColors();
-            // Find colors that are not present
+            // Find colors that are not present in the image
             Set<String> notFoundColors = colorsToRemove.stream()
                     .filter(color -> !currentColors.contains(color))
                     .collect(Collectors.toSet());
@@ -307,6 +305,38 @@ public class ImageServiceImpl implements ImageService {
 
             // Remove the specified colors
             currentColors.removeAll(colorsToRemove);
+        }
+
+        return this.convertToDto(this.imageRepository.save(existingImage));
+    }
+
+    @Override
+    public ImageDTO removeKeywordsFromImage(UUID imageId, ImageRemoveKeywordsDTO removeKeywordsDTO) throws NotFoundException {
+        Image existingImage = this.imageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+
+        Set<Long> keywordsToRemove = removeKeywordsDTO.getKeywordsToRemove();
+        if (keywordsToRemove != null) {
+            Set<Keywords> currentKeywords = existingImage.getKeywords();
+            // Find keywords that are not present in the image
+            Set<Keywords> notFoundKeywords = keywordsToRemove.stream()
+                    .map(keywordId -> currentKeywords.stream()
+                            .filter(currentKeyword -> currentKeyword.getId().equals(keywordId))
+                            .findFirst().orElse(null))
+                    .filter(Objects::isNull)
+                    .collect(Collectors.toSet());
+
+            if (!notFoundKeywords.isEmpty())
+                throw new NotFoundException("The following keywords were not found in the image: " + notFoundKeywords);
+
+            // Check if the keyword exist in database
+            for (Long keywordId : keywordsToRemove) {
+                this.keywordsRepository.findById(keywordId)
+                        .orElseThrow(() -> new NotFoundException("Keyword not found with id " + keywordId));
+            }
+
+            // Remove the specified keywords
+            currentKeywords.removeIf(keyword -> keywordsToRemove.contains(keyword.getId()));
         }
 
         return this.convertToDto(this.imageRepository.save(existingImage));
