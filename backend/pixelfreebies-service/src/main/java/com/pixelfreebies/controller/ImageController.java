@@ -24,8 +24,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Slf4j
 @RestController
@@ -48,6 +53,65 @@ public class ImageController {
                                               @ModelAttribute ImageOperationRequest imageOperationRequest) {
         ImageDTO imageDTO = this.imageService.saveImage(multipartFile, imageOperationRequest);
         return ResponseEntity.ok(Result.success("File uploaded successfully", imageDTO));
+    }
+
+    // New method for batch uploading with virtual threads
+    @Operation(
+            summary = "Batch upload files with virtual threads",
+            description = "Upload multiple files to the server using Java virtual threads for performance"
+    )
+    @PostMapping("/upload/virtual-batch")
+    @PreAuthorize("hasAnyRole('ROLE_MASTER', 'ROLE_ADMIN')")
+    public ResponseEntity<Result> uploadImagesWithVirtualThreads(
+            @RequestParam("files") List<MultipartFile> multipartFiles,
+            @ModelAttribute ImageOperationRequest imageOperationRequest) {
+
+        // TODO: implement multi-threading
+        /*ExecutorService executorService = Executors.newVirtualThreadPerTaskExecutor();
+        List<CompletableFuture<ImageDTO>> futures = new ArrayList<>();
+
+        for (MultipartFile file : multipartFiles) {
+            futures.add(CompletableFuture.supplyAsync(() -> {
+                try {
+                    return this.imageService.saveImage(file, imageOperationRequest);
+                } catch (Exception e) {
+                    log.error("Error processing file: {}", e.getMessage(), e);
+                    throw new CompletionException(e);
+                }
+            }, executorService));
+        }
+
+        List<ImageDTO> results = new ArrayList<>();
+        List<String> errors = new ArrayList<>();
+
+        for (CompletableFuture<ImageDTO> future : futures) {
+            try {
+                results.add(future.join());
+            } catch (CompletionException e) {
+                errors.add(e.getCause().getMessage());
+                log.error("Error during batch processing: {}", e.getCause().getMessage(), e);
+            }
+        }
+
+        executorService.shutdown();
+
+        if (!errors.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(Result.partialSuccess("Some files failed to upload", results, errors));
+        }
+
+        return ResponseEntity.ok(Result.success("All files uploaded successfully", results));*/
+        List<ImageDTO> results = new ArrayList<>();
+        for (MultipartFile file : multipartFiles) {
+                try {
+                    ImageDTO imageDTO = this.imageService.saveImage(file, imageOperationRequest);
+                    results.add(imageDTO);
+                } catch (Exception e) {
+                    log.error("Error processing file: {}", e.getMessage(), e);
+                    throw new CompletionException(e);
+                }
+        }
+
+        return ResponseEntity.ok(Result.success("All files uploaded successfully", results));
     }
 
     // Endpoint for downloading a file

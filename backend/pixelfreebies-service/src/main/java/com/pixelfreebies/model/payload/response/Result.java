@@ -1,10 +1,14 @@
 package com.pixelfreebies.model.payload.response;
 
+import com.pixelfreebies.model.dto.ImageDTO;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
+
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -61,6 +65,18 @@ public class Result {
                 .code(status)
                 .message(message)
                 .data(null)
+                .build();
+    }
+
+    public static Result partialSuccess(String message, List<ImageDTO> results, List<String> errors) {
+        return Result.builder()
+                .flag(true)
+                .code(HttpStatus.PARTIAL_CONTENT)
+                .message(message)
+                .data(Map.of(
+                        "results", results,
+                        "errors", errors
+                ))
                 .build();
     }
 
