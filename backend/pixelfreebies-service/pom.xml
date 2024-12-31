@@ -46,6 +46,7 @@
 <!--        <ftp.version>3.11.0</ftp.version>-->
         <imageio.webp.version>0.1.6</imageio.webp.version>
         <minio.client.version>8.5.14</minio.client.version>
+        <google.jib.version>3.3.2</google.jib.version>
     </properties>
 
     <dependencies>
@@ -203,8 +204,11 @@
             <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
-                <version>3.3.2</version>
+                <version>${google.jib.version}</version>
                 <configuration>
+                    <from>
+                        <image>eclipse-temurin:21-jre</image>
+                    </from>
                     <to>
                         <image>dukeofjava/${project.artifactId}:${project.version}</image>
                     </to>
