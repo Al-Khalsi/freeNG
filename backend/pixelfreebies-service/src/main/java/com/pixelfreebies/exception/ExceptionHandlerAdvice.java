@@ -3,6 +3,8 @@ package com.pixelfreebies.exception;
 import com.pixelfreebies.model.payload.response.Result;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.ObjectNotFoundException;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,12 @@ public class ExceptionHandlerAdvice {
     @ResponseStatus(CONFLICT)
     public ResponseEntity<Result> handleIncorrectResultSizeDataAccessException(IncorrectResultSizeDataAccessException e) {
         return ResponseEntity.status(CONFLICT).body(new Result(false, CONFLICT, "query did not return a unique result", e.getMessage()));
+    }
+
+    @ExceptionHandler({DataIntegrityViolationException.class})
+    @ResponseStatus(CONFLICT)
+    public ResponseEntity<Result> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        return ResponseEntity.status(CONFLICT).body(new Result(false, CONFLICT, "duplicate key value violates unique constraint", e.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

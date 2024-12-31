@@ -6,13 +6,13 @@ import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
-import com.pixelfreebies.model.dto.ImageDTO;
-import com.pixelfreebies.model.dto.KeywordsDTO;
+import com.pixelfreebies.model.dto.*;
 import com.pixelfreebies.model.enums.ImageFormat;
-import com.pixelfreebies.model.payload.request.ImageUploadRequest;
+import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
-import com.pixelfreebies.service.FileService;
+import com.pixelfreebies.repository.KeywordsRepository;
+import com.pixelfreebies.service.ImageService;
 import com.pixelfreebies.service.ImageStorageStrategy;
 import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.ImageConverter;
@@ -36,10 +36,11 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class FileServiceImpl implements FileService {
+public class ImageServiceImpl implements ImageService {
 
     private final ImageRepository imageRepository;
     private final ImageVariantRepository imageVariantRepository;
+    private final KeywordsRepository keywordsRepository;
     private final ImageStorageStrategy imageStorageStrategy;
     private final ImageConverter imageConverter;
     private final ImageValidationService imageValidationService;
@@ -51,10 +52,10 @@ public class FileServiceImpl implements FileService {
     private final MinioS3Service minioS3Service;
 
     @Override
-    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageUploadRequest imageUploadRequest) {
+    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageOperationRequest imageOperationRequest) {
         try {
             // Generate image name with suffix and possible random number
-            String generatedImageName = this.imageCreationService.generateImageName(imageUploadRequest.getFileName());
+            String generatedImageName = this.imageCreationService.generateImageName(imageOperationRequest.getFileName());
             // Generate path-friendly name
             String pathName = this.imageCreationService.generateImagePath(generatedImageName);
             // Validate the generated name
@@ -66,10 +67,10 @@ public class FileServiceImpl implements FileService {
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, newFileName);
 
             // Validate keywords and retrieve their entities
-            Set<Keywords> keywordsSet = this.keywordValidationService.validateAndFetchKeywords(imageUploadRequest.getKeywords());
+            Set<Keywords> keywordsSet = this.keywordValidationService.validateAndFetchKeywords(imageOperationRequest.getKeywords());
 
             // Create the domains
-            Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, relativePath.toString(), imageUploadRequest);
+            Image image = this.imageCreationService.createImageDomain(uploadedMultipartFile, relativePath.toString(), imageOperationRequest);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Set full paths
@@ -214,6 +215,109 @@ public class FileServiceImpl implements FileService {
         KeywordsDTO foundKeyword = this.keywordsService.findKeywordById(keywordId);
         return this.imageRepository.findByKeywords_Id(foundKeyword.getId(), pageable)
                 .map(this.imageConverter::toDto);
+    }
+
+    @Override
+    public ImageDTO updateImage(UUID imageId, ImageOperationRequest imageOperationRequest) {
+        Image image = this.imageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+
+        String imageName = imageOperationRequest.getFileName();
+        boolean lightMode = imageOperationRequest.isLightMode();
+        String source = imageOperationRequest.getSource();
+        List<String> dominantColors = imageOperationRequest.getDominantColors();
+        List<String> keywords = imageOperationRequest.getKeywords();
+        List<String> styles = imageOperationRequest.getStyle();
+
+        if (imageName != null) image.setFileTitle(imageName + " Pixelfreebies");
+        if (lightMode != image.isLightMode()) image.setLightMode(lightMode);
+        if (source != null) image.setSource(source);
+
+        // Handle styles
+        if (styles != null) {
+            List<String> currentStyles = image.getStyles();
+            styles.forEach(newStyle -> {
+                if (!currentStyles.contains(newStyle))
+                    currentStyles.add(newStyle); // Add only if a newStyle doesn't already exist
+            });
+        }
+
+        // Handle dominantColors
+        if (dominantColors != null) {
+            Set<String> currentDominantColors = image.getDominantColors();
+            currentDominantColors.addAll(dominantColors); // Since this is a Set, it'll only add new dominantColors
+        }
+
+        // Handle keywords
+        if (keywords != null) {
+            Set<Keywords> currentKeywords = image.getKeywords();
+            Set<Keywords> newKeywords = this.keywordValidationService.validateAndFetchKeywords(keywords);
+
+            // Add new keywords
+            currentKeywords.addAll(newKeywords);
+            this.keywordsRepository.saveAll(currentKeywords);
+        }
+
+        // Save the updated image
+        Image updatedImage = this.imageRepository.save(image);
+        return this.convertToDto(updatedImage);
+    }
+
+    @Override
+    public ImageDTO removeStylesFromImage(UUID imageId, ImageRemoveStyleDTO removeStyleDTO) throws NotFoundException {
+        Image existingImage = this.imageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+
+        String styleToRemove = removeStyleDTO.getStyleToRemove();
+        if (styleToRemove != null) {
+            // Check if any styles to remove exist
+            List<String> existingStyles = existingImage.getStyles();
+            if (!existingStyles.contains(styleToRemove))
+                throw new NotFoundException("The following style was not found: " + styleToRemove);
+
+            // Remove the specified styles
+            existingImage.getStyles().remove(styleToRemove);
+        }
+
+        return this.convertToDto(this.imageRepository.save(existingImage));
+    }
+
+    @Override
+    public ImageDTO removeDominantColorsFromImage(UUID imageId, ImageRemoveDominantColorDTO removeColorDTO) throws NotFoundException {
+        Image existingImage = this.imageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+
+        String colorToRemove = removeColorDTO.getColorToRemove();
+        if (colorToRemove != null) {
+            Set<String> currentColors = existingImage.getDominantColors();
+            // Find colors that are not present in the image
+            if (!currentColors.contains(colorToRemove))
+                throw new NotFoundException("The following color was not found: " + colorToRemove);
+
+            // Remove the specified colors
+            currentColors.remove(colorToRemove);
+        }
+
+        return this.convertToDto(this.imageRepository.save(existingImage));
+    }
+
+    @Override
+    public ImageDTO removeKeywordsFromImage(UUID imageId, ImageRemoveKeywordsDTO removeKeywordsDTO) throws NotFoundException {
+        Image existingImage = this.imageRepository.findById(imageId)
+                .orElseThrow(() -> new NotFoundException("Image not found with id " + imageId));
+
+        Long keywordToRemove = removeKeywordsDTO.getKeywordToRemove();
+        if (keywordToRemove != null) {
+            Set<Keywords> currentKeywords = existingImage.getKeywords();
+            // Check if the keyword exist in database
+            Keywords keywords = this.keywordsRepository.findById(keywordToRemove)
+                    .orElseThrow(() -> new NotFoundException("Keyword not found with id: " + keywordToRemove));
+
+            // Remove the specified keywords
+            currentKeywords.remove(keywords);
+        }
+
+        return this.convertToDto(this.imageRepository.save(existingImage));
     }
 
 }

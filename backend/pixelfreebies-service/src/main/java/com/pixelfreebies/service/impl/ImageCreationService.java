@@ -2,7 +2,7 @@ package com.pixelfreebies.service.impl;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
-import com.pixelfreebies.model.payload.request.ImageUploadRequest;
+import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +26,9 @@ public class ImageCreationService {
     private final ImageRepository imageRepository;
     private final ImageValidationService imageValidationService;
 
-    public Image createImageDomain(MultipartFile uploadedMultipartFile, String relativePath, ImageUploadRequest imageUploadRequest) {
+    public Image createImageDomain(MultipartFile uploadedMultipartFile, String relativePath, ImageOperationRequest imageOperationRequest) {
         Image image = new Image();
-        image.setFileTitle(this.generateImageName(imageUploadRequest.getFileName()));
+        image.setFileTitle(this.generateImageName(imageOperationRequest.getFileName()));
         image.setFilePath(relativePath);
         image.setContentType(uploadedMultipartFile.getContentType());
         image.setSize(uploadedMultipartFile.getSize()); // size in bytes
@@ -37,16 +37,16 @@ public class ImageCreationService {
         image.setDownloadCount(0);
         image.setUploadedBy(this.securityUtil.getAuthenticatedUser());
         // Calculate dimensions
-        this.calculateDimension(uploadedMultipartFile, image, imageUploadRequest.getFileName());
-        image.setStyle(imageUploadRequest.getStyle());
-        image.setLightMode(imageUploadRequest.isLightMode());
+        this.calculateDimension(uploadedMultipartFile, image, imageOperationRequest.getFileName());
+        image.setStyles(imageOperationRequest.getStyle());
+        image.setLightMode(imageOperationRequest.isLightMode());
 
-        String source = imageUploadRequest.getSource();
+        String source = imageOperationRequest.getSource();
         if (source == null || source.trim().isEmpty()) source = "PixelFreebies";
         image.setSource(source);
 
-        if (imageUploadRequest.getDominantColors() != null) {
-            image.getDominantColors().addAll(imageUploadRequest.getDominantColors());
+        if (imageOperationRequest.getDominantColors() != null) {
+            image.getDominantColors().addAll(imageOperationRequest.getDominantColors());
         }
 
         return image;

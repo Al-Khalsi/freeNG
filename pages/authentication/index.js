@@ -9,7 +9,6 @@ import * as jwt_decode from 'jwt-decode';
 import axios from 'axios';
 import { AUTH_API } from "@/utils/api/auth"; 
 
-
 function AuthForm() {
     const { token, storeToken, setUsername, setEmail, setRole } = useAuth(); // Added setUsername
     const [isActive, setIsActive] = useState(false);
