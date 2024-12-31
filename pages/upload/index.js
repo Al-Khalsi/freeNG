@@ -34,6 +34,9 @@ function UploadImage() {
   const inputRef = useRef(null);
   const addKeywordInputRef = useRef(null);
   const dropdownColorRef = useRef(null);
+  const [selectedStyles, setSelectedStyles] = useState([]);
+  const [showStyleDropdown, setShowStyleDropdown] = useState(false);
+  const colorDropdownRef = useRef(null);
 
   const colors = [
     { name: 'Black', hex: '#000000' },
@@ -230,7 +233,12 @@ function UploadImage() {
         !dropdownColorRef.current.contains(event.target)
       ) {
         setShowResults(false);
-        setShowColorDropdown(false);
+      }
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowStyleDropdown(false); // Close dropdown if clicked outside
+      }
+      if (colorDropdownRef.current && !colorDropdownRef.current.contains(event.target)) {
+        setShowColorDropdown(false); // Close color dropdown if clicked outside
       }
     };
 
@@ -240,6 +248,16 @@ function UploadImage() {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const handleStyleChange = (styleOption) => {
+    setSelectedStyles(prevStyles => {
+      if (prevStyles.includes(styleOption)) {
+        return prevStyles.filter(style => style !== styleOption); // Remove style if already selected
+      } else {
+        return [...prevStyles, styleOption]; // Add style if not selected
+      }
+    });
+  };
 
   return (
     <div className={`UploadImage w-full min-h-dvh flex justify-center items-center bg-bgDarkBlue`}>
@@ -293,7 +311,7 @@ function UploadImage() {
 
           <div className='flex items-center flex-col sm:flex-row mt-4'>
             <div className='mx-2 w-full sm:w-1/2'>
-              <div className="relative">
+              <div className="relative" ref={colorDropdownRef}>
                 <Button
                   type="button"
                   onClick={() => setShowColorDropdown(prev => !prev)}
@@ -302,7 +320,7 @@ function UploadImage() {
                   {dominantColors.length > 0 ? dominantColors.join(', ') : 'Select Colors'}
                 </Button>
                 {showColorDropdown && (
-                  <div className='absolute bg-bgDarkGray2 border border-t-0 rounded w-full z-10' ref={dropdownColorRef}>
+                  <div className='absolute bg-bgDarkGray2 border border-t-0 rounded w-full z-10'>
                     <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
                       {colors.map((color) => (
                         <label key={color.name} className="flex justify-between items-center p-2 border-b cursor-pointer hover:bg-bgDarkGray">
@@ -328,20 +346,31 @@ function UploadImage() {
               </div>
             </div>
 
-            <div className="mx-2 mt-4 sm:mt-0 w-full sm:w-1/2">
-              <select
-                value={style}
-                onChange={(e) => setStyle(e.target.value)}
-                className="border rounded p-2 w-full bg-bgDarkGray2"
-                required
+            <div className="relative mx-2 mt-4 sm:mt-0 w-full sm:w-1/2" ref={dropdownRef}>
+              <Button
+                type="button"
+                onClick={() => setShowStyleDropdown(prev => !prev)} // Toggle dropdown visibility
+                className="flex border rounded px-3 py-2 w-full bg-bgDarkGray2"
               >
-                <option value="">Select a style</option>
-                {styles.map((styleOption) => (
-                  <option key={styleOption} value={styleOption}>
-                    {styleOption}
-                  </option>
-                ))}
-              </select>
+                {selectedStyles.length > 0 ? selectedStyles.join(', ') : 'Select Styles'}
+              </Button>
+              {showStyleDropdown && (
+                <div className='absolute bg-bgDarkGray2 border border-t-0 rounded w-full z-10'>
+                  <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
+                    {styles.map((styleOption) => (
+                      <label key={styleOption} className="flex justify-between items-center p-2 border-b cursor-pointer hover:bg-bgDarkGray">
+                        <span className="text-white">{styleOption}</span>
+                        <Input
+                          type="checkbox"
+                          checked={selectedStyles.includes(styleOption)}
+                          onChange={() => handleStyleChange(styleOption)}
+                          className="mr-2"
+                        />
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
