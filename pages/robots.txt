@@ -5,5 +5,5 @@ User-agent: *  # This applies to all web crawlers
 Allow: /                # Allow indexing of the main page
 Allow: /search          # Allow indexing of the search page
 Allow: /authentication/ # Allow indexing of all pages within the authentication folder
-Allow: /download/       # Allow indexing of all pages within the download folder
+Disallow: /download/       # Allow indexing of all pages within the download folder
 Disallow: /upload/      # Disallow indexing of any pages within the upload folder
