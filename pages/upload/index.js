@@ -110,6 +110,7 @@ function UploadImage() {
     formData.append('style', style);
     formData.append('lightMode', lightMode);
     formData.append('source', source);
+    formData.append('environment', 'prod'); // TODO: make this environment dynamic
     dominantColors.forEach(color => {
       formData.append('dominantColors', color);
     });
