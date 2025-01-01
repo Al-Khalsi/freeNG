@@ -3,7 +3,7 @@ package com.pixelfreebies.controller;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
 import com.pixelfreebies.model.payload.response.Result;
-import com.pixelfreebies.service.ImageService;
+import com.pixelfreebies.service.ImageQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,13 +23,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${base.url}/file/search")
-@Tag(name = "File API", description = "Endpoints for file operations")
+@Tag(name = "Image Search API", description = "Endpoints for Image search operations")
 @SecurityRequirement(name = "BearerToken")
-public class SearchController {
+public class ImageSearchController {
 
-    private final ImageService imageService;
+    private final ImageQueryService imageQueryService;
 
-    // Endpoint for searching files
     @Operation(
             summary = "Search files paginated",
             description = "Searches the files from the database and return a paginated result."
@@ -39,7 +38,7 @@ public class SearchController {
                                                                           @RequestParam(defaultValue = "0") int page,
                                                                           @RequestParam(defaultValue = "50") int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<ImageDTO> searchedFiles = this.imageService.searchImages(query, pageRequest);
+        Page<ImageDTO> searchedFiles = this.imageQueryService.searchImages(query, pageRequest);
 
         if (searchedFiles.isEmpty()) {
             return ResponseEntity.ok(PaginatedResult.success("No exact matches found. Here are similar results paginated:", true, searchedFiles));
@@ -48,8 +47,6 @@ public class SearchController {
         return ResponseEntity.ok(PaginatedResult.success("Search files result paginated.", true, searchedFiles));
     }
 
-
-    // Endpoint for searching keywords
     @Operation(
             summary = "Fetch keywords list.",
             description = "Retrieves a paginated list of keywords."
@@ -58,7 +55,7 @@ public class SearchController {
     public ResponseEntity<Result> searchKeywords(@RequestParam String query,
                                                  @RequestParam(defaultValue = "0") int page,
                                                  @RequestParam(defaultValue = "10") int size) {
-        List<String> searchedKeywords = this.imageService.searchKeywords(query, page, size);
+        List<String> searchedKeywords = this.imageQueryService.searchKeywords(query, page, size);
 
         if (searchedKeywords.isEmpty()) {
             return ResponseEntity.ok(Result.success("No exact matches found. Here are similar results:", searchedKeywords));
