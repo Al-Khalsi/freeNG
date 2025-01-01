@@ -1,6 +1,7 @@
 package com.pixelfreebies.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pixelfreebies.model.enums.StorageLocation;
 import jakarta.persistence.*;
 import lombok.*;
 

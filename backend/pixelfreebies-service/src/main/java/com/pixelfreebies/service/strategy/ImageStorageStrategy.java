@@ -1,4 +1,4 @@
-package com.pixelfreebies.service;
+package com.pixelfreebies.service.strategy;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 import org.springframework.web.multipart.MultipartFile;

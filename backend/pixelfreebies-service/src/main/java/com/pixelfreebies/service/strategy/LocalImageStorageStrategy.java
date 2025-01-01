@@ -1,8 +1,7 @@
-package com.pixelfreebies.service.impl;
+package com.pixelfreebies.service.strategy;
 
 import com.pixelfreebies.config.properties.FileStorageProperties;
 import com.pixelfreebies.exception.PixelfreebiesException;
-import com.pixelfreebies.service.ImageStorageStrategy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
@@ -19,8 +18,6 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @Component
-@Primary
-@Profile("!prod")
 public class LocalImageStorageStrategy implements ImageStorageStrategy {
 
     protected final Path fileStorageLocation;

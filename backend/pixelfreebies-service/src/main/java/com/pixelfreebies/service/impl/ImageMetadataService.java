@@ -8,7 +8,7 @@ import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.enums.ImageUnits;
 import com.pixelfreebies.model.enums.Purpose;
-import com.pixelfreebies.service.ImageStorageStrategy;
+import com.pixelfreebies.service.strategy.ImageStorageStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,9 +36,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @RequiredArgsConstructor
 public class ImageMetadataService {
 
-    private final ImageStorageStrategy imageStorageStrategy;
-
-    public ImageVariant createImageVariants(MultipartFile uploadedMultipartFile, String relativePath) throws PixelfreebiesException {
+    public ImageVariant createImageVariants(MultipartFile uploadedMultipartFile, String relativePath, ImageStorageStrategy imageStorageStrategy) throws PixelfreebiesException {
         try {
             // Read original image
             BufferedImage originalImage = ImageIO.read(uploadedMultipartFile.getInputStream());
@@ -49,7 +47,7 @@ public class ImageMetadataService {
 
             // Generate WebP filename
             relativePath = relativePath.replace("\\images\\png\\", "\\images\\webp\\");
-            String webpFileName = generateWebpFileName(relativePath);
+            String webpFileName = this.generateWebpFileName(relativePath);
             webpVariant.setFilePath(webpFileName);
             webpVariant.setWidth(originalImage.getWidth());
             webpVariant.setHeight(originalImage.getHeight());
@@ -57,11 +55,10 @@ public class ImageMetadataService {
             webpVariant.setSize(uploadedMultipartFile.getSize());
             webpVariant.setPurpose(Purpose.DOWNLOAD);
 
-            if (imageStorageStrategy.supportsWebP()) {
-                this.imageStorageStrategy.storeWebp(originalImage, webpFileName, 0.8f, false);
-            } else {
+            if (imageStorageStrategy.supportsWebP()) imageStorageStrategy.storeWebp(originalImage, webpFileName, 0.8f, false);
+            else {
                 // Default fallback: Save WebP locally
-                Path webpPath = this.imageStorageStrategy.getStorageLocation().resolve(webpFileName);
+                Path webpPath = imageStorageStrategy.getStorageLocation().resolve(webpFileName);
                 saveAsWebp(originalImage, new FileOutputStream(webpPath.toFile()), 0.8f, false);
             }
 

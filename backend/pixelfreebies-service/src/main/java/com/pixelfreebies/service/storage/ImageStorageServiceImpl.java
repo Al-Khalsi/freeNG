@@ -11,7 +11,8 @@ import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
 import com.pixelfreebies.service.ImageStorageService;
-import com.pixelfreebies.service.ImageStorageStrategy;
+import com.pixelfreebies.service.factory.ImageStorageStrategyFactory;
+import com.pixelfreebies.service.strategy.ImageStorageStrategy;
 import com.pixelfreebies.service.impl.*;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
     private final ImageRepository imageRepository;
     private final ImageVariantRepository imageVariantRepository;
-    private final ImageStorageStrategy imageStorageStrategy;
+    private final ImageStorageStrategyFactory imageStorageFactory;
     private final ImageCreationService imageCreationService;
     private final ImageMetadataService imageMetadataService;
     private final ImageValidationService imageValidationService;
@@ -49,13 +50,16 @@ public class ImageStorageServiceImpl implements ImageStorageService {
     @Override
     public ImageDTO saveImage(MultipartFile file, ImageOperationRequest request) throws PixelfreebiesException {
         try {
+            // Build the storage strategy object
+            ImageStorageStrategy storageStrategy = this.imageStorageFactory.getStrategy(request.getEnvironment());
+
             String newFileName = this.validateAndGenerateImageName(file, request);
-            Path relativePath = this.imageStorageStrategy.store(file, newFileName);
+            Path relativePath = storageStrategy.store(file, newFileName);
 
             // Validate keywords and create image domain
             Set<Keywords> keywordsSet = this.keywordValidationService.validateAndFetchKeywords(request.getKeywords());
             Image image = this.imageCreationService.createImageDomain(file, relativePath.toString(), request);
-            ImageVariant imageVariant = this.imageMetadataService.createImageVariants(file, relativePath.toString());
+            ImageVariant imageVariant = this.imageMetadataService.createImageVariants(file, relativePath.toString(), storageStrategy);
 
             // Set paths and associations
             this.setImagePaths(relativePath, image, imageVariant);
