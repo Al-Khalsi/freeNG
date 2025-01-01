@@ -310,21 +310,21 @@ function UploadImage() {
           </div>
 
           <div className='flex items-center flex-col sm:flex-row mt-4'>
-              <Selector
-                options={colors}
-                selectedOptions={dominantColors}
-                onChange={handleColorChange}
-                title="Colors"
-                ref={colorDropdownRef}
-              />
+            <Selector
+              options={colors}
+              selectedOptions={dominantColors}
+              onChange={handleColorChange}
+              title="Colors"
+              ref={colorDropdownRef}
+            />
 
-              <Selector
-                options={styles}
-                selectedOptions={selectedStyles}
-                onChange={handleStyleChange}
-                title="Styles"
-                ref={styleDropdownRef} 
-              />
+            <Selector
+              options={styles}
+              selectedOptions={selectedStyles}
+              onChange={handleStyleChange}
+              title="Styles"
+              ref={styleDropdownRef}
+            />
           </div>
 
           <div className='flex mt-4'>
@@ -428,59 +428,42 @@ function UploadImage() {
             </div>
           )}
 
-          <div className='hidden sm:flex flex-col sm:flex-row justify-center items-center mt-4'>
-            <Button
-              type="submit"
-              className={`bg-bgDarkBlue text-white rounded w-full sm:w-1/2 mx-2 p-2 hover:border
-              ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Uploading...' : 'Upload'}
-            </Button>
-            <div className='flex flex-col sm:flex-row justify-between items-center w-full mx-2 sm:w-1/2'>
-              <Button
-                type="button"
-                onClick={toggleLightMode}
-                className={`rounded p-2 mr-2 w-full hover:border 
-              ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}
-              >
-                {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
-              </Button>
+          <div className='flex flex-col sm:flex-row-reverse justify-center items-center mt-4'>
+            <div className='flex flex-col sm:flex-row-reverse justify-between items-center w-full mx-2 sm:w-1/2'>
               <Input
                 type="text"
-                className='INPUTSource rounded ml-2 mt-4 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
+                className='INPUTSource rounded mt-4 sm:mt-0 p-2 w-full ml-0 sm:ml-2 md:w-1/2 bg-bgDarkGray2 opacity-50'
                 value={source}
                 onChange={(e) => setSource(e.target.value)}
                 placeholder='PixelFreebies'
               />
-            </div>
-          </div>
-
-          {/* mobile ui */}
-          <div className='flex sm:hidden flex-col sm:flex-row justify-center items-center mt-4'>
-            <Input
-              type="text"
-              className='INPUTSource rounded mx-2 sm:mt-0 p-2 w-full bg-bgDarkGray2 opacity-50'
-              value={source}
-              onChange={(e) => setSource(e.target.value)}
-              placeholder='PixelFreebies'
-            />
-            <div className='flex flex-row justify-between items-center w-full sm:w-1/2 mt-4'>
-              <Button
-                type="submit"
-                className={`bg-bgDarkBlue flex justify-center text-xl text-white rounded w-full sm:w-1/2 mr-2 sm:ml-2 p-2 hover:border
-              ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                disabled={isLoading}>
-                {isLoading ? '...' : <LuUpload />}
-              </Button>
               <Button
                 type="button"
                 onClick={toggleLightMode}
-                className={`flex justify-center p-2 ml-2 sm:mr-2 w-full text-xl font-bold rounded
-              ${lightMode ? 'bg-white text-black border-none' : 'bg-black text-white border-none'}`}>
-                {lightMode ? <FaSun /> : <FaMoon />}
+                className={`flex justify-center p-2 py-3 md:py-2 w-full mr-0 sm:mr-2 md:w-1/2 hover:border rounded
+                ${lightMode ? 'bg-white text-black' : 'bg-black text-white'}`}
+              >
+                <span className='hidden md:block'>
+                  {lightMode ? 'Disable Light Mode' : 'Enable Light Mode'}
+                </span>
+                <span className='block md:hidden'>
+                  {lightMode ? <FaSun /> : <FaMoon />}
+                </span>
               </Button>
             </div>
+            <Button
+              type="submit"
+              className={`flex justify-center bg-bgDarkBlue text-white rounded w-full 
+              sm:w-1/2 mx-2 p-2 py-3 md:py-2 hover:border ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              disabled={isLoading}
+            >
+              <span className='hidden md:block'>
+                {isLoading ? 'Uploading...' : 'Upload'}
+              </span>
+              <span className='block md:hidden'>
+                <LuUpload />
+              </span>
+            </Button>
           </div>
 
         </form>

@@ -1,4 +1,4 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useEffect } from 'react';
 import Button from '@/components/modules/Button';
 import Input from '@/components/modules/Input';
 
@@ -12,6 +12,21 @@ const Selector = forwardRef(({ options, selectedOptions, onChange, title }, ref)
   const toggleDropdown = () => {
     setShowDropdown(prev => !prev);
   };
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref]);
 
   return (
     <div className="relative mx-2 w-full sm:w-1/2" ref={ref}>
