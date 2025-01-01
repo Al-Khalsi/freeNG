@@ -8,7 +8,7 @@ import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.enums.ImageUnits;
 import com.pixelfreebies.model.enums.Purpose;
-import com.pixelfreebies.service.strategy.ImageStorageStrategy;
+import com.pixelfreebies.service.storage.strategy.ImageStorageStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

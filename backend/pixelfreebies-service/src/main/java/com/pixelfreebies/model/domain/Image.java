@@ -39,6 +39,8 @@ public class Image extends BaseEntity<UUID> {
     private String contentType;
     private long size;
     private String filePath;
+    @Enumerated(EnumType.STRING)
+    private StorageLocation storageLocation;
 
     // Statistics and metrics
     private long viewCount;

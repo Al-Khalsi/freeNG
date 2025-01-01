@@ -7,13 +7,15 @@ import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.domain.ImageVariant;
 import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.dto.ImageDTO;
+import com.pixelfreebies.model.enums.StorageLocation;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
 import com.pixelfreebies.service.ImageStorageService;
-import com.pixelfreebies.service.factory.ImageStorageStrategyFactory;
-import com.pixelfreebies.service.strategy.ImageStorageStrategy;
+import com.pixelfreebies.service.storage.factory.ImageStorageStrategyFactory;
+import com.pixelfreebies.service.storage.strategy.ImageStorageStrategy;
 import com.pixelfreebies.service.impl.*;
+import com.pixelfreebies.service.storage.strategy.S3BucketImageStorageStrategy;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +63,9 @@ public class ImageStorageServiceImpl implements ImageStorageService {
             Image image = this.imageCreationService.createImageDomain(file, relativePath.toString(), request);
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(file, relativePath.toString(), storageStrategy);
 
+            // Set image storage location type
+            this.setStorageLocationType(image, storageStrategy);
+
             // Set paths and associations
             this.setImagePaths(relativePath, image, imageVariant);
             this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
@@ -71,6 +76,11 @@ public class ImageStorageServiceImpl implements ImageStorageService {
             log.error("Failed to save image: {}", e.getMessage());
             throw new PixelfreebiesException(e.getMessage(), BAD_REQUEST);
         }
+    }
+
+    private void setStorageLocationType(Image image, ImageStorageStrategy storageStrategy) {
+        if (storageStrategy instanceof S3BucketImageStorageStrategy) image.setStorageLocation(StorageLocation.S3_BUCKET);
+        else image.setStorageLocation(StorageLocation.LOCAL);
     }
 
     private @NotNull String validateAndGenerateImageName(MultipartFile uploadedMultipartFile, ImageOperationRequest imageOperationRequest) throws IOException {

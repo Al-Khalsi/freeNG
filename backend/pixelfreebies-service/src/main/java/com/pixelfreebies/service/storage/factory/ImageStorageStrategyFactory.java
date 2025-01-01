@@ -1,8 +1,8 @@
-package com.pixelfreebies.service.factory;
+package com.pixelfreebies.service.storage.factory;
 
-import com.pixelfreebies.service.strategy.ImageStorageStrategy;
-import com.pixelfreebies.service.strategy.LocalImageStorageStrategy;
-import com.pixelfreebies.service.strategy.S3BucketImageStorageStrategy;
+import com.pixelfreebies.service.storage.strategy.ImageStorageStrategy;
+import com.pixelfreebies.service.storage.strategy.LocalImageStorageStrategy;
+import com.pixelfreebies.service.storage.strategy.S3BucketImageStorageStrategy;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
