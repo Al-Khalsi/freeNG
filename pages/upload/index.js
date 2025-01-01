@@ -8,6 +8,7 @@ import { LuUpload } from "react-icons/lu";
 import { FaSun, FaMoon } from "react-icons/fa";
 import Button from '@/components/modules/Button';
 import Input from '@/components/modules/Input';
+import Selector from '@/components/templates/Selector';
 
 function UploadImage() {
   const { token } = useAuth();
@@ -37,6 +38,7 @@ function UploadImage() {
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [showStyleDropdown, setShowStyleDropdown] = useState(false);
   const colorDropdownRef = useRef(null);
+  const styleDropdownRef = useRef(null);
 
   const colors = [
     { name: 'Black', hex: '#000000' },
@@ -225,20 +227,15 @@ function UploadImage() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        inputRef.current &&
-        !inputRef.current.contains(event.target) &&
-        dropdownColorRef.current &&
-        !dropdownColorRef.current.contains(event.target)
+        colorDropdownRef.current &&
+        !colorDropdownRef.current.contains(event.target) &&
+        styleDropdownRef.current &&
+        !styleDropdownRef.current.contains(event.target)
       ) {
+        // Close both dropdowns if clicked outside
         setShowResults(false);
-      }
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowStyleDropdown(false); // Close dropdown if clicked outside
-      }
-      if (colorDropdownRef.current && !colorDropdownRef.current.contains(event.target)) {
-        setShowColorDropdown(false); // Close color dropdown if clicked outside
+        setShowStyleDropdown(false);
+        setShowColorDropdown(false);
       }
     };
 
@@ -280,7 +277,7 @@ function UploadImage() {
                     <img
                       src={imagePreviewUrl}
                       alt="Preview"
-                      className="w-full h-full rounded object-contain" // Add styles for the image
+                      className="w-full h-full rounded object-contain"
                     />
                   </>
                 ) : (
@@ -311,66 +308,23 @@ function UploadImage() {
 
           <div className='flex items-center flex-col sm:flex-row mt-4'>
             <div className='mx-2 w-full sm:w-1/2'>
-              <div className="relative" ref={colorDropdownRef}>
-                <Button
-                  type="button"
-                  onClick={() => setShowColorDropdown(prev => !prev)}
-                  className="flex border rounded px-3 py-2 w-full bg-bgDarkGray2"
-                >
-                  {dominantColors.length > 0 ? dominantColors.join(', ') : 'Select Colors'}
-                </Button>
-                {showColorDropdown && (
-                  <div className='absolute bg-bgDarkGray2 border border-t-0 rounded w-full z-10'>
-                    <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                      {colors.map((color) => (
-                        <label key={color.name} className="flex justify-between items-center p-2 border-b cursor-pointer hover:bg-bgDarkGray">
-                          <span className="flex items-center">
-                            <span
-                              className="block w-4 h-4 rounded-full mr-2"
-                              style={{ backgroundColor: color.hex }}
-                            ></span>
-                            {color.name}
-                          </span>
-                          <Input
-                            type="checkbox"
-                            value={color.name}
-                            checked={dominantColors.includes(color.name)}
-                            onChange={() => handleColorChange(color.name)}
-                            className="mr-2"
-                          />
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              <Selector
+                options={colors}
+                selectedOptions={dominantColors}
+                onChange={handleColorChange}
+                title="Colors"
+                ref={colorDropdownRef}
+              />
             </div>
 
-            <div className="relative mx-2 mt-4 sm:mt-0 w-full sm:w-1/2" ref={dropdownRef}>
-              <Button
-                type="button"
-                onClick={() => setShowStyleDropdown(prev => !prev)} // Toggle dropdown visibility
-                className="flex border rounded px-3 py-2 w-full bg-bgDarkGray2"
-              >
-                {selectedStyles.length > 0 ? selectedStyles.join(', ') : 'Select Styles'}
-              </Button>
-              {showStyleDropdown && (
-                <div className='absolute bg-bgDarkGray2 border border-t-0 rounded w-full z-10'>
-                  <div style={{ maxHeight: '200px', overflowY: 'auto' }}>
-                    {styles.map((styleOption) => (
-                      <label key={styleOption} className="flex justify-between items-center p-2 border-b cursor-pointer hover:bg-bgDarkGray">
-                        <span className="text-white">{styleOption}</span>
-                        <Input
-                          type="checkbox"
-                          checked={selectedStyles.includes(styleOption)}
-                          onChange={() => handleStyleChange(styleOption)}
-                          className="mr-2"
-                        />
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
+            <div className="relative mx-2 mt-4 sm:mt-0 w-full sm:w-1/2">
+              <Selector
+                options={styles}
+                selectedOptions={selectedStyles}
+                onChange={handleStyleChange}
+                title="Styles"
+                ref={styleDropdownRef} // Pass the ref to Selector
+              />
             </div>
           </div>
 
