@@ -18,6 +18,7 @@ import com.pixelfreebies.service.KeywordsService;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -54,16 +55,8 @@ public class ImageServiceImpl implements ImageService {
     @Override
     public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageOperationRequest imageOperationRequest) {
         try {
-            // Generate image name with suffix and possible random number
-            String generatedImageName = this.imageCreationService.generateImageName(imageOperationRequest.getFileName());
-            // Generate path-friendly name
-            String pathName = this.imageCreationService.generateImagePath(generatedImageName);
-            // Validate the generated name
-            this.imageValidationService.validateImageName(pathName);
+            String newFileName = this.validateAndGenerateImageName(uploadedMultipartFile, imageOperationRequest);
 
-            String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
-            String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-            String newFileName = pathName + fileExtension;
             Path relativePath = this.imageStorageStrategy.store(uploadedMultipartFile, newFileName);
 
             // Validate keywords and retrieve their entities
@@ -74,17 +67,8 @@ public class ImageServiceImpl implements ImageService {
             ImageVariant imageVariant = this.imageMetadataService.createImageVariants(uploadedMultipartFile, relativePath.toString());
 
             // Set full paths
-            String normalizedPngPath = relativePath.toString().replace("\\", "/");
-            String pngPath = this.getFullPath(normalizedPngPath);
-            image.setFilePath(pngPath);
-            log.debug("Normalized path (png) for saving image: {}", normalizedPngPath);
-            log.debug("Full Path (png): {}", pngPath);
-
-            String normalizedWebpFilePath = imageVariant.getFilePath().replace("\\", "/");
-            String webpPath = this.getFullPath(normalizedWebpFilePath);
-            imageVariant.setFilePath(webpPath);
-            log.debug("Normalized path (webp) for saving image: {}", normalizedWebpFilePath);
-            log.debug("Full Path (webp): {}", webpPath);
+            this.setFullImagePath(relativePath, image);
+            this.setFullImageVariantPath(imageVariant.getFilePath(), imageVariant);
 
             // Associate relationships
             this.imageMetadataService.associateImageWithImageVariant(image, imageVariant);
@@ -99,6 +83,36 @@ public class ImageServiceImpl implements ImageService {
             log.error("-> FILE -> Failed to save the image: {}", e.getMessage());
             throw new PixelfreebiesException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    private void setFullImagePath(Path relativePath, Image image) {
+        String normalizedPngPath = relativePath.toString().replace("\\", "/");
+        String pngPath = this.getFullPath(normalizedPngPath);
+        image.setFilePath(pngPath);
+        log.debug("Normalized path (png) for saving image: {}", normalizedPngPath);
+        log.debug("Full Path (png): {}", pngPath);
+    }
+
+    private void setFullImageVariantPath(String filePath, ImageVariant imageVariant) {
+        String normalizedWebpFilePath = filePath.replace("\\", "/");
+        String webpPath = this.getFullPath(normalizedWebpFilePath);
+        imageVariant.setFilePath(webpPath);
+        log.debug("Normalized path (webp) for saving image: {}", normalizedWebpFilePath);
+        log.debug("Full Path (webp): {}", webpPath);
+    }
+
+    private @NotNull String validateAndGenerateImageName(MultipartFile uploadedMultipartFile, ImageOperationRequest imageOperationRequest) throws IOException {
+        // Generate image name with suffix and possible random number
+        String generatedImageName = this.imageCreationService.generateImageName(imageOperationRequest.getFileName());
+        // Generate path-friendly name
+        String pathName = this.imageCreationService.generateImagePath(generatedImageName);
+        // Validate the generated name
+        this.imageValidationService.validateImageName(pathName);
+
+        String originalFileName = Objects.requireNonNull(uploadedMultipartFile.getOriginalFilename());
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+
+        return pathName + fileExtension; // new file name
     }
 
     public String getFullPath(String objectName) {
