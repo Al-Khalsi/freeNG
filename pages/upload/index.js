@@ -37,6 +37,7 @@ function UploadImage() {
   const [selectedStyles, setSelectedStyles] = useState([]);
   const [showStyleDropdown, setShowStyleDropdown] = useState(false);
   const colorDropdownRef = useRef(null);
+  const styleDropdownRef = useRef(null);
 
   const colors = [
     { name: 'Black', hex: '#000000' },
@@ -234,7 +235,7 @@ function UploadImage() {
       ) {
         setShowResults(false);
       }
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (styleDropdownRef.current && !styleDropdownRef.current.contains(event.target)) {
         setShowStyleDropdown(false); // Close dropdown if clicked outside
       }
       if (colorDropdownRef.current && !colorDropdownRef.current.contains(event.target)) {
@@ -346,10 +347,10 @@ function UploadImage() {
               </div>
             </div>
 
-            <div className="relative mx-2 mt-4 sm:mt-0 w-full sm:w-1/2" ref={dropdownRef}>
+            <div className="relative mx-2 mt-4 sm:mt-0 w-full sm:w-1/2" ref={styleDropdownRef}>
               <Button
                 type="button"
-                onClick={() => setShowStyleDropdown(prev => !prev)} // Toggle dropdown visibility
+              onClick={() => setShowStyleDropdown(prev => !prev)} // Toggle dropdown visibility
                 className="flex border rounded px-3 py-2 w-full bg-bgDarkGray2"
               >
                 {selectedStyles.length > 0 ? selectedStyles.join(', ') : 'Select Styles'}
