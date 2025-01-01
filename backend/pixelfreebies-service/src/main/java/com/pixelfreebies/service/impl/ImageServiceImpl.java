@@ -53,7 +53,7 @@ public class ImageServiceImpl implements ImageService {
     private final MinioS3Service minioS3Service;
 
     @Override
-    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageOperationRequest imageOperationRequest) {
+    public ImageDTO saveImage(MultipartFile uploadedMultipartFile, ImageOperationRequest imageOperationRequest) throws PixelfreebiesException {
         try {
             String newFileName = this.validateAndGenerateImageName(uploadedMultipartFile, imageOperationRequest);
 

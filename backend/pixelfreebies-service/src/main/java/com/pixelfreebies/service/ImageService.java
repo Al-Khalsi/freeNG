@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public interface ImageService {
 
-    ImageDTO saveImage(MultipartFile multipartFile, ImageOperationRequest imageOperationRequest);
+    ImageDTO saveImage(MultipartFile multipartFile, ImageOperationRequest imageOperationRequest) throws PixelfreebiesException;
 
     Page<ImageDTO> listAllImages(Pageable pageable);
 

@@ -17,7 +17,7 @@ public class ImageValidationService {
     private static final String PIXELFREEBIES_SUFFIX = " Pixelfreebies";
     private static final Pattern NUMBER_PATTERN = Pattern.compile(" \\d+$");
 
-    public void validateImageName(String fileName) throws IOException, PixelfreebiesException {
+    public void validateImageName(String fileName) throws PixelfreebiesException {
         if (fileName == null || fileName.trim().isEmpty()) {
             log.error("-> FILE -> File name is null or empty");
             throw new PixelfreebiesException("File name cannot be empty", INTERNAL_SERVER_ERROR);

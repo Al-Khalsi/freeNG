@@ -58,11 +58,10 @@ public class ImageMetadataService {
             webpVariant.setPurpose(Purpose.DOWNLOAD);
 
             if (imageStorageStrategy.supportsWebP()) {
-                String remotePath = webpFileName;
-                imageStorageStrategy.storeWebp(originalImage, remotePath, 0.8f, false);
+                this.imageStorageStrategy.storeWebp(originalImage, webpFileName, 0.8f, false);
             } else {
                 // Default fallback: Save WebP locally
-                Path webpPath = imageStorageStrategy.getStorageLocation().resolve(webpFileName);
+                Path webpPath = this.imageStorageStrategy.getStorageLocation().resolve(webpFileName);
                 saveAsWebp(originalImage, new FileOutputStream(webpPath.toFile()), 0.8f, false);
             }
 

@@ -5,6 +5,7 @@ import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.util.SecurityUtil;
+import com.pixelfreebies.util.constants.ApplicationConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
+
+import static com.pixelfreebies.util.constants.ApplicationConstants.PIXELFREEBIES_SUFFIX;
 
 @Slf4j
 @Service
@@ -42,7 +45,7 @@ public class ImageCreationService {
         image.setLightMode(imageOperationRequest.isLightMode());
 
         String source = imageOperationRequest.getSource();
-        if (source == null || source.trim().isEmpty()) source = "PixelFreebies";
+        if (source == null || source.trim().isEmpty()) source = PIXELFREEBIES_SUFFIX;
         image.setSource(source);
 
         if (imageOperationRequest.getDominantColors() != null) {
