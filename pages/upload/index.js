@@ -227,12 +227,15 @@ function UploadImage() {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target) &&
+        inputRef.current &&
+        !inputRef.current.contains(event.target) &&
         colorDropdownRef.current &&
         !colorDropdownRef.current.contains(event.target) &&
         styleDropdownRef.current &&
         !styleDropdownRef.current.contains(event.target)
       ) {
-        // Close both dropdowns if clicked outside
         setShowResults(false);
         setShowStyleDropdown(false);
         setShowColorDropdown(false);
