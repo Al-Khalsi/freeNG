@@ -12,8 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -24,6 +28,23 @@ import org.springframework.web.bind.annotation.*;
 public class ImageQueryController {
 
     private final ImageQueryService imageQueryService;
+
+    @Operation(
+            summary = "Download a file",
+            description = "Download a file from the server using its ID"
+    )
+    @GetMapping("/download/{fileId}")
+    public ResponseEntity<?> downloadImage(@PathVariable String fileId) {
+        ImageDTO image = this.imageQueryService.findImageById(UUID.fromString(fileId));
+        URI location = URI.create(image.getFilePath());
+        log.debug("Download request for image: {}", image);
+        log.debug("Download location URI: {}", location);
+
+        // Redirect to the S3 URL
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .location(location)
+                .build();
+    }
 
     @Operation(
             summary = "Fetch paginated list of image.",
