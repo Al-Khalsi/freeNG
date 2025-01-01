@@ -14,7 +14,7 @@ const Selector = forwardRef(({ options, selectedOptions, onChange, title }, ref)
   };
 
   return (
-    <div className="relative" ref={ref}>
+    <div className="relative mx-2 w-full sm:w-1/2" ref={ref}>
       <Button
         type="button"
         onClick={toggleDropdown}

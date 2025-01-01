@@ -307,7 +307,6 @@ function UploadImage() {
           </div>
 
           <div className='flex items-center flex-col sm:flex-row mt-4'>
-            <div className='mx-2 w-full sm:w-1/2'>
               <Selector
                 options={colors}
                 selectedOptions={dominantColors}
@@ -315,17 +314,14 @@ function UploadImage() {
                 title="Colors"
                 ref={colorDropdownRef}
               />
-            </div>
 
-            <div className="relative mx-2 mt-4 sm:mt-0 w-full sm:w-1/2">
               <Selector
                 options={styles}
                 selectedOptions={selectedStyles}
                 onChange={handleStyleChange}
                 title="Styles"
-                ref={styleDropdownRef} // Pass the ref to Selector
+                ref={styleDropdownRef} 
               />
-            </div>
           </div>
 
           <div className='flex mt-4'>
