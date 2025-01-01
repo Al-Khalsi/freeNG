@@ -25,6 +25,12 @@ public class ImageQueryServiceImpl implements ImageQueryService {
     private final ImageConverter imageConverter;
     private final KeywordsService keywordsService;
 
+    @Override
+    public Page<ImageDTO> listAllImages(Pageable pageable) {
+        return this.imageRepository.findAll(pageable)
+                .map(this::convertToDto);
+    }
+
     private ImageDTO convertToDto(Image image) {
         ImageDTO imageDTO = this.imageConverter.toDto(image);
         String webpImagePath = image.getVariants()
@@ -36,12 +42,6 @@ public class ImageQueryServiceImpl implements ImageQueryService {
         imageDTO.setFilePath(webpImagePath);
         imageDTO.setContentType("image/webp");
         return imageDTO;
-    }
-
-    @Override
-    public Page<ImageDTO> listAllImages(Pageable pageable) {
-        return this.imageRepository.findAll(pageable)
-                .map(this::convertToDto);
     }
 
     @Override

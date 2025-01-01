@@ -5,7 +5,6 @@ import com.pixelfreebies.model.domain.Image;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.util.SecurityUtil;
-import com.pixelfreebies.util.constants.ApplicationConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -75,11 +74,6 @@ public class ImageCreationService {
         return finalName;
     }
 
-    public String generateImagePath(String fileName) {
-        // Convert to lowercase and replace spaces with hyphens
-        return fileName.toLowerCase().trim().replace(" ", "-");
-    }
-
     private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) throws PixelfreebiesException {
         try {
 
@@ -93,6 +87,11 @@ public class ImageCreationService {
             log.error("error calculating image dimension: {}", e.getMessage());
             throw new PixelfreebiesException("error calculating image dimension: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public String generateImagePath(String fileName) {
+        // Convert to lowercase and replace spaces with hyphens
+        return fileName.toLowerCase().trim().replace(" ", "-");
     }
 
 }

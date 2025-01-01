@@ -1,12 +1,7 @@
 package com.pixelfreebies.controller;
 
 import com.pixelfreebies.model.dto.ImageDTO;
-import com.pixelfreebies.model.dto.ImageRemoveDominantColorDTO;
-import com.pixelfreebies.model.dto.ImageRemoveKeywordsDTO;
-import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
-import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
-import com.pixelfreebies.model.payload.response.Result;
 import com.pixelfreebies.service.ImageQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,17 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.CompletionException;
 
 @Slf4j
 @RestController

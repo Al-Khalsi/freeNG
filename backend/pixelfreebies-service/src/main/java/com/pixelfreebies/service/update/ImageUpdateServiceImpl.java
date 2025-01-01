@@ -61,6 +61,19 @@ public class ImageUpdateServiceImpl implements ImageUpdateService {
         this.updateKeywords(image, request.getKeywords());
     }
 
+    private ImageDTO convertToDto(Image image) {
+        ImageDTO imageDTO = this.imageConverter.toDto(image);
+        String webpImagePath = image.getVariants()
+                .stream().findFirst()
+                .map(imageVariant -> {
+                    if (!imageVariant.getFormat().equals(ImageFormat.WEBP)) return null;
+                    return imageVariant.getFilePath();
+                }).orElse(image.getFilePath());
+        imageDTO.setFilePath(webpImagePath);
+        imageDTO.setContentType("image/webp");
+        return imageDTO;
+    }
+
     private void updateImageStyles(Image image, List<String> styles) {
         if (styles != null) {
             List<String> currentStyles = image.getStyles();
@@ -88,19 +101,6 @@ public class ImageUpdateServiceImpl implements ImageUpdateService {
             currentKeywords.addAll(newKeywords);
             this.keywordsRepository.saveAll(currentKeywords);
         }
-    }
-
-    private ImageDTO convertToDto(Image image) {
-        ImageDTO imageDTO = this.imageConverter.toDto(image);
-        String webpImagePath = image.getVariants()
-                .stream().findFirst()
-                .map(imageVariant -> {
-                    if (!imageVariant.getFormat().equals(ImageFormat.WEBP)) return null;
-                    return imageVariant.getFilePath();
-                }).orElse(image.getFilePath());
-        imageDTO.setFilePath(webpImagePath);
-        imageDTO.setContentType("image/webp");
-        return imageDTO;
     }
 
     @Override

@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -32,6 +31,15 @@ public class ImageValidationService {
         }
     }
 
+    public String cleanDisplayName(String fileTitle) {
+        // Remove random number if present
+        String withoutNumber = NUMBER_PATTERN.matcher(fileTitle).replaceAll("");
+
+        // Remove "pixelfreebies" suffix and capitalize
+        String cleaned = withoutNumber.replace(PIXELFREEBIES_SUFFIX, "").trim();
+        return this.capitalizeWords(cleaned);
+    }
+
     public String capitalizeWords(String input) {
         if (input == null || input.isEmpty()) {
             return input;
@@ -51,15 +59,6 @@ public class ImageValidationService {
         }
 
         return result.toString().trim();
-    }
-
-    public String cleanDisplayName(String fileTitle) {
-        // Remove random number if present
-        String withoutNumber = NUMBER_PATTERN.matcher(fileTitle).replaceAll("");
-
-        // Remove "pixelfreebies" suffix and capitalize
-        String cleaned = withoutNumber.replace(PIXELFREEBIES_SUFFIX, "").trim();
-        return this.capitalizeWords(cleaned);
     }
 
 }
