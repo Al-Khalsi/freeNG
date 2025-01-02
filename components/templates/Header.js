@@ -15,7 +15,7 @@ function Header({ searchQuery, setSearchQuery, handleSearch }) {
     // Effect to handle scroll event to make header sticky
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 100) {
+            if (window.scrollY > 35) {
                 setIsFixedHeader(true);
             } else {
                 setIsFixedHeader(false);
@@ -85,9 +85,6 @@ function Header({ searchQuery, setSearchQuery, handleSearch }) {
                 <div id="search-container" className="flex justify-center items-center ">
                     <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
                     <div className="starfield w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
-                    <div className="cosmic-dust"></div>
-                    <div className="cosmic-dust"></div>
-                    <div className="cosmic-dust"></div>
                     <div className="stardust w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm max-h-16"></div>
                     <div className="cosmic-ring w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
 
