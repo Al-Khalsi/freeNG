@@ -111,33 +111,6 @@ img {
   outline: none;
 }
 
-.stardust {
-  max-width: 600px;
-  border-radius: 10px;
-  filter: blur(2px);
-  transition: 0.4s;
-}
-
-.stardust::before {
-  content: "";
-  z-index: -2;
-  text-align: center;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(83deg);
-  position: absolute;
-  width: 800px;
-  height: 600px;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  filter: brightness(1.4);
-  background-image: conic-gradient(rgba(0, 0, 0, 0) 0%,
-      #4d6dff rgba(0, 0, 0, 0) 8%,
-      rgba(0, 0, 0, 0) 50%,
-      #6e8cff rgba(0, 0, 0, 0) 58%);
-  transition: all 2s;
-}
-
 .cosmic-ring {
   max-height: 59px;
   max-width: 595px;
@@ -168,61 +141,16 @@ img {
   transition: all 2s;
 }
 
-.starfield {
-  max-height: 65px;
-  max-width: 605px;
-  transition: 0.4s;
-}
-
-.starfield::before {
-  content: "";
-  z-index: -2;
-  text-align: center;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(82deg);
-  position: absolute;
-  width: 800px;
-  height: 600px;
-  background-repeat: no-repeat;
-  background-position: 0 0;
-  background-image: conic-gradient(rgba(0, 0, 0, 0),
-      #1c2452,
-      rgba(0, 0, 0, 0) 10%,
-      rgba(0, 0, 0, 0) 50%,
-      #2a3875,
-      rgba(0, 0, 0, 0) 60%);
-  transition: all 2s;
-}
-
-#search-container:hover>.starfield::before {
-  transform: translate(-50%, -50%) rotate(-98deg);
-}
-
 #search-container:hover>.nebula::before {
   transform: translate(-50%, -50%) rotate(-120deg);
-}
-
-#search-container:hover>.stardust::before {
-  transform: translate(-50%, -50%) rotate(-97deg);
 }
 
 #search-container:hover>.cosmic-ring::before {
   transform: translate(-50%, -50%) rotate(-110deg);
 }
 
-#search-container:focus-within>.starfield::before {
-  transform: translate(-50%, -50%) rotate(442deg);
-  transition: all 4s;
-}
-
 #search-container:focus-within>.nebula::before {
   transform: translate(-50%, -50%) rotate(420deg);
-  transition: all 4s;
-}
-
-#search-container:focus-within>.stardust::before {
-  transform: translate(-50%, -50%) rotate(443deg);
   transition: all 4s;
 }
 
@@ -798,14 +726,6 @@ body:hover #pixelCursor {
     max-width: 395px;
   }
 
-  .stardust {
-    max-width: 400px;
-  }
-
-  .starfield {
-    max-width: 405px;
-  }
-
   .nebula {
     max-width: 500px;
   }
@@ -818,14 +738,6 @@ body:hover #pixelCursor {
 
   .cosmic-ring {
     max-width: 595px;
-  }
-
-  .stardust {
-    max-width: 600px;
-  }
-
-  .starfield {
-    max-width: 605px;
   }
 
   .nebula {

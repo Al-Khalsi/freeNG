@@ -2,15 +2,14 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { FaSearch } from 'react-icons/fa';
 import { IoLogInSharp, IoLogOut } from "react-icons/io5";
-import { CiSearch } from "react-icons/ci";
 import { useAuth } from "@/context/AuthContext"
 
 function Header({ searchQuery, setSearchQuery, handleSearch }) {
     const { token, username, email, clearToken, userId, role } = useAuth();
     const [isFixedHeader, setIsFixedHeader] = useState(false);
-    const [isSearchBarVisible, setIsSearchBarVisible] = useState(false); // State for mobile search bar visibility
-    const searchBarRef = useRef(null); // Ref for the search bar
-    const searchInputRef = useRef(null); // Ref for the search input
+    const [isSearchBarVisible, setIsSearchBarVisible] = useState(false);
+    const searchBarRef = useRef(null);
+    const searchInputRef = useRef(null);
 
     // Effect to handle scroll event to make header sticky
     useEffect(() => {
@@ -28,7 +27,6 @@ function Header({ searchQuery, setSearchQuery, handleSearch }) {
         };
     }, []);
 
-    // Function to toggle the visibility of the search bar on mobile
     const toggleSearchBar = () => {
         setIsSearchBarVisible(!isSearchBarVisible);
     };
@@ -84,8 +82,6 @@ function Header({ searchQuery, setSearchQuery, handleSearch }) {
             <div id='search' className='search-box z-0 w-2/5 hidden md:block'>
                 <div id="search-container" className="flex justify-center items-center ">
                     <div className="nebula w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
-                    <div className="starfield w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
-                    <div className="stardust w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm max-h-16"></div>
                     <div className="cosmic-ring w-full h-full absolute overflow-hidden -z-10 rounded-xl blur-sm"></div>
 
                     <div id="main">
