@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { FaSearch } from 'react-icons/fa';
 import { IoLogInSharp, IoLogOut } from "react-icons/io5";
 import { useAuth } from "@/context/AuthContext"
+import Logo from './Logo';
 
 function Header({ searchQuery, setSearchQuery, handleSearch }) {
     const { token, username, email, clearToken, userId, role } = useAuth();
@@ -75,9 +76,8 @@ function Header({ searchQuery, setSearchQuery, handleSearch }) {
         <header className={`header sticky top-0 w-full h-24 px-4 md:px-8 
         flex justify-between items-center text-white bg-bgDarkBlue z-50 ${isFixedHeader ? 
         'shadow-custom-inset shadow-bgPurple' : ''}`}>
-            <Link href='/' className='w-20 h-20 flex justify-start items-center'>
-                <img src="../../img/LOGO.png" className='w-12 h-12 object-cover bg-gradient-to-t from-bgPurple to-bgLightPurple rounded-md' alt="Logo" title='Logo' />
-            </Link>
+            
+            <Logo />
 
             <div id='search' className='search-box z-0 w-2/5 hidden md:block'>
                 <div id="search-container" className="flex justify-center items-center ">
@@ -152,9 +152,9 @@ function Header({ searchQuery, setSearchQuery, handleSearch }) {
                                 <i className="point"></i>
                                 <i className="point"></i>
                             </div>
-                            <h2 className="inner">
+                            <span className="inner">
                                 Log In / Sign Up
-                            </h2>
+                            </span>
                         </Link>
                     </div>
                 )}
