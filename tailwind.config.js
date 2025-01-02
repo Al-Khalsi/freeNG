@@ -37,6 +37,9 @@ module.exports = {
         clDarkGray: "var(--cl-darkGray)",
         clDarkGray2: "var(--cl-darkGray2)",
       },
+      boxShadow: {
+        'custom-inset': 'inset 0 -10px 20px -10px rgba(0, 0, 0, 0.3)',
+      },
     },
     screens: {
       'sm': '425px',

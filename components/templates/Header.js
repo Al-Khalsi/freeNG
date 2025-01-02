@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { FaSearch } from 'react-icons/fa';
 import { IoLogInSharp, IoLogOut } from "react-icons/io5";
+import { CiSearch } from "react-icons/ci";
+import { useAuth } from "@/context/AuthContext"
 
-function Header({ token, username, handleLogout, searchQuery, setSearchQuery, handleSearch }) {
+function Header({ searchQuery, setSearchQuery, handleSearch }) {
+    const { token, username, email, clearToken, userId, role } = useAuth();
     const [isFixedHeader, setIsFixedHeader] = useState(false);
     const [isSearchBarVisible, setIsSearchBarVisible] = useState(false); // State for mobile search bar visibility
     const searchBarRef = useRef(null); // Ref for the search bar
@@ -66,9 +69,14 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
         }
     }, [isSearchBarVisible]);
 
+    const handleLogout = () => {
+        clearToken();
+    };
+
     return (
-        <header className={`header sticky top-0 w-full h-24 px-4 md:px-8 flex justify-between items-center 
-        text-white bg-bgDarkBlue duration-700 z-50`}>
+        <header className={`header sticky top-0 w-full h-24 px-4 md:px-8 
+        flex justify-between items-center text-white bg-bgDarkBlue z-50 ${isFixedHeader ? 
+        'shadow-custom-inset shadow-bgPurple' : ''}`}>
             <Link href='/' className='w-20 h-20 flex justify-start items-center'>
                 <img src="../../img/LOGO.png" className='w-12 h-12 object-cover bg-gradient-to-t from-bgPurple to-bgLightPurple rounded-md' alt="Logo" title='Logo' />
             </Link>
@@ -89,20 +97,18 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                             name="text"
                             type="text"
                             placeholder="Search..."
-                            value={searchQuery} // Keep the search query in the input
+                            value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter') {
                                     e.preventDefault();
                                     if (searchQuery.trim()) {
-                                        handleSearch(); // Call the search function on Enter
+                                        handleSearch();
                                     }
                                 }
                             }}
                             autoComplete="off"
                         />
-                        <div id="cosmic-glow"></div>
-                        <div className="wormhole-border"></div>
                         <div id="wormhole-icon">
                             <button
                                 type='button'
@@ -112,27 +118,6 @@ function Header({ token, username, handleLogout, searchQuery, setSearchQuery, ha
                             >
                                 Enter
                             </button>
-                        </div>
-                        <div id="search-icon">
-                            <svg
-                                strokeLinejoin="round"
-                                strokeLinecap="round"
-                                strokeWidth="2"
-                                stroke="url(#cosmic-search)"
-                                fill="none"
-                                height="24"
-                                width="24"
-                                viewBox="0 0 24 24"
-                            >
-                                <circle r="8" cy="11" cx="11"></circle>
-                                <line y2="16.65" x2="16.65" y1="21" x1="21"></line>
-                                <defs>
-                                    <linearGradient gradientTransform="rotate(45)" id="cosmic-search">
-                                        <stop stopColor="#a9c7ff" offset="0%"></stop>
-                                        <stop stopColor="#6e8cff" offset="100%"></stop>
-                                    </linearGradient>
-                                </defs>
-                            </svg>
                         </div>
                     </div>
                 </div>

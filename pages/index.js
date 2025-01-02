@@ -17,7 +17,6 @@ import Pagination from '@/components/templates/Pagination';
 function Index() {
     const { token, username, email, clearToken, userId, role } = useAuth();
     const router = useRouter();
-    const [openSelect, setOpenSelect] = useState(null);
     const [images, setImages] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [submittedSearchQuery, setSubmittedSearchQuery] = useState('');
@@ -26,14 +25,6 @@ function Index() {
     const currentPage = parseInt(router.query.page) || 1;
     const [totalPages, setTotalPages] = useState(0);
     const [totalElements, setTotalElements] = useState(0);
-
-    const handleSelectToggle = (selectId) => {
-        if (openSelect === selectId) {
-            setOpenSelect(null);
-        } else {
-            setOpenSelect(selectId);
-        }
-    };
 
     const fetchImages = async (keywordId = null, query = '', page = currentPage, size = itemsPerPage) => {
         setSpinner(true);
@@ -127,12 +118,6 @@ function Index() {
         fetchImages('', '', page); // Fetch default images
     };
 
-
-
-    const handleLogout = () => {
-        clearToken();
-    };
-
     const handleSearch = () => {
         const trimmedSearchQuery = searchQuery.trim();
         if (!trimmedSearchQuery) {
@@ -161,11 +146,6 @@ function Index() {
             </Head>
             <div className="app w-full flex flex-col min-h-screen relative">
                 <Header
-                    token={token}
-                    username={username}
-                    email={email}
-                    userId={userId}
-                    handleLogout={handleLogout}
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
                     handleSearch={handleSearch}

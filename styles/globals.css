@@ -99,7 +99,7 @@ img {
   width: 591px;
   height: 56px;
   color: var(--cl-purple);
-  padding-inline: 59px;
+  padding-inline: 15px;
   transition: 0.4s;
 }
 
@@ -109,23 +109,6 @@ img {
 
 .input:focus {
   outline: none;
-}
-
-#cosmic-glow {
-  pointer-events: none;
-  width: 30px;
-  height: 20px;
-  position: absolute;
-  background: var(--bg-purple);
-  top: 10px;
-  left: 5px;
-  filter: blur(20px);
-  opacity: 0.8;
-  transition: all 2s;
-}
-
-#main:hover>#cosmic-glow {
-  opacity: 0;
 }
 
 .stardust {
@@ -295,16 +278,6 @@ img {
   border-radius: 10px;
   background: linear-gradient(var(--bg-purple), var(--bg-lightPurple));
   cursor: pointer;
-}
-
-.wormhole-border {
-  height: 42px;
-  width: 42px;
-  position: absolute;
-  overflow: hidden;
-  top: 7px;
-  right: 7px;
-  border-radius: 10px;
 }
 
 #main {
