@@ -138,11 +138,6 @@ const Downloader = () => {
             </Head>
             <div className={`downloaderPage w-full`}>
                 <Header
-                    token={token}
-                    username={username}
-                    email={email}
-                    userId={userId}
-                    handleLogout={clearToken}
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
                     handleSearch={handleSearch}

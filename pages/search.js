@@ -138,11 +138,6 @@ function SearchPage() {
             </Head>
             <div className='w-full flex flex-col min-h-screen relative'>
                 <Header
-                    token={token}
-                    username={username}
-                    email={email}
-                    userId={userId}
-                    handleLogout={clearToken}
                     searchQuery={searchQuery}
                     setSearchQuery={setSearchQuery}
                     handleSearch={handleSearch}
