@@ -1,4 +1,4 @@
-package com.pixelfreebies.config;
+package com.pixelfreebies.config.image;
 
 import com.pixelfreebies.config.properties.S3Properties;
 import io.minio.MinioClient;

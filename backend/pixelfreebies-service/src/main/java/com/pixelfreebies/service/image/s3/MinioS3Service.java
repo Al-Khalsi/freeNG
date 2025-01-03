@@ -1,10 +1,7 @@
 package com.pixelfreebies.service.image.s3;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.RemoveObjectArgs;
-import io.minio.StatObjectArgs;
+import io.minio.*;
 import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -36,7 +34,7 @@ public class MinioS3Service {
                             .build());
 
             // verify the upload by checking if the object exists
-            minioClient.statObject(StatObjectArgs.builder()
+            this.minioClient.statObject(StatObjectArgs.builder()
                     .bucket(bucketName)
                     .object(desiredFilename)
                     .build());
@@ -44,6 +42,44 @@ public class MinioS3Service {
             return true; // If no exception was thrown, the object exists
 
         } catch (MinioException | InvalidKeyException | IOException | NoSuchAlgorithmException e) {
+            log.error("Error uploading object to S3 bucket: {}", e.getMessage());
+            throw new PixelfreebiesException("Error uploading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public long getFileSize(InputStream inputStream) throws IOException {
+        long size = 0;
+        byte[] buffer = new byte[1024]; // 1KB buffer
+        int bytesRead;
+
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            size += bytesRead;
+        }
+
+        return size;
+    }
+
+    public InputStream downloadObject(String bucketName, String objectName) throws PixelfreebiesException {
+        try {
+            return this.minioClient.getObject(GetObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .build());
+        } catch (Exception e) {
+            log.error("Error downloading object from S3 bucket: {}", e.getMessage());
+            throw new PixelfreebiesException("Error downloading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void uploadObject(String bucketName, String objectName, InputStream inputStream, String contentType) throws PixelfreebiesException {
+        try {
+            this.minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .stream(inputStream, -1, 10485760)
+                    .contentType(contentType)
+                    .build());
+        } catch (Exception e) {
             log.error("Error uploading object to S3 bucket: {}", e.getMessage());
             throw new PixelfreebiesException("Error uploading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         }

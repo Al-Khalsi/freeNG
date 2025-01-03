@@ -47,6 +47,7 @@
         <imageio.webp.version>0.1.6</imageio.webp.version>
         <minio.client.version>8.5.14</minio.client.version>
         <google.jib.version>3.3.2</google.jib.version>
+        <opencv.version>4.9.0-0</opencv.version>
     </properties>
 
     <dependencies>
@@ -68,7 +69,7 @@
             <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
 
-        <!-- File handling (FTP Protocol) -->
+        <!-- File handling -->
 <!--        <dependency>-->
 <!--            <groupId>commons-net</groupId>-->
 <!--            <artifactId>commons-net</artifactId>-->
@@ -89,6 +90,13 @@
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>${minio.client.version}</version>
+        </dependency>
+        <!-- Image Operation (Conversion, Resizing, etc...) -->
+        <!-- https://mvnrepository.com/artifact/org.openpnp/opencv -->
+        <dependency>
+            <groupId>org.openpnp</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${opencv.version}</version>
         </dependency>
 
         <!-- JWT -->
