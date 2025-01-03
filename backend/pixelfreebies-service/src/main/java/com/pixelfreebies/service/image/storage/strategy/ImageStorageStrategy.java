@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.storage.strategy;
+package com.pixelfreebies.service.image.storage.strategy;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 import org.springframework.web.multipart.MultipartFile;

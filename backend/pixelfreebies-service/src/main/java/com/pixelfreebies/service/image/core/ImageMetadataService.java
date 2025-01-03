@@ -8,7 +8,7 @@ import com.pixelfreebies.model.domain.Keywords;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.enums.ImageUnits;
 import com.pixelfreebies.model.enums.Purpose;
-import com.pixelfreebies.service.storage.strategy.ImageStorageStrategy;
+import com.pixelfreebies.service.image.storage.strategy.ImageStorageStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,7 +55,8 @@ public class ImageMetadataService {
             webpVariant.setSize(uploadedMultipartFile.getSize());
             webpVariant.setPurpose(Purpose.DOWNLOAD);
 
-            if (imageStorageStrategy.supportsWebP()) imageStorageStrategy.storeWebp(originalImage, webpFileName, 0.8f, false);
+            if (imageStorageStrategy.supportsWebP())
+                imageStorageStrategy.storeWebp(originalImage, webpFileName, 0.8f, false);
             else {
                 // Default fallback: Save WebP locally
                 Path webpPath = imageStorageStrategy.getStorageLocation().resolve(webpFileName);

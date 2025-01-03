@@ -59,18 +59,6 @@ public class MinioS3Service {
         return size;
     }
 
-    public InputStream downloadObject(String bucketName, String objectName) throws PixelfreebiesException {
-        try {
-            return this.minioClient.getObject(GetObjectArgs.builder()
-                    .bucket(bucketName)
-                    .object(objectName)
-                    .build());
-        } catch (Exception e) {
-            log.error("Error downloading object from S3 bucket: {}", e.getMessage());
-            throw new PixelfreebiesException("Error downloading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
-        }
-    }
-
     public void uploadObject(String bucketName, String objectName, InputStream inputStream, String contentType) throws PixelfreebiesException {
         try {
             this.minioClient.putObject(PutObjectArgs.builder()
@@ -82,6 +70,18 @@ public class MinioS3Service {
         } catch (Exception e) {
             log.error("Error uploading object to S3 bucket: {}", e.getMessage());
             throw new PixelfreebiesException("Error uploading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public InputStream downloadObject(String bucketName, String objectName) throws PixelfreebiesException {
+        try {
+            return this.minioClient.getObject(GetObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .build());
+        } catch (Exception e) {
+            log.error("Error downloading object from S3 bucket: {}", e.getMessage());
+            throw new PixelfreebiesException("Error downloading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 

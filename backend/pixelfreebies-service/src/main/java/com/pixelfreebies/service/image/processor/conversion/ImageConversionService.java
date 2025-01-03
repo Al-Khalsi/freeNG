@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.image.conversion;
+package com.pixelfreebies.service.image.processor.conversion;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 

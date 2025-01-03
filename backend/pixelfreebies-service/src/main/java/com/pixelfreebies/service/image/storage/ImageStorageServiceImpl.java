@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.storage;
+package com.pixelfreebies.service.image.storage;
 
 import com.pixelfreebies.config.properties.S3Properties;
 import com.pixelfreebies.exception.NotFoundException;
@@ -11,14 +11,14 @@ import com.pixelfreebies.model.enums.StorageLocation;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
-import com.pixelfreebies.service.image.s3.MinioS3Service;
 import com.pixelfreebies.service.image.core.ImageCreationService;
 import com.pixelfreebies.service.image.core.ImageMetadataService;
 import com.pixelfreebies.service.image.core.ImageValidationService;
-import com.pixelfreebies.service.storage.factory.ImageStorageStrategyFactory;
-import com.pixelfreebies.service.storage.strategy.ImageStorageStrategy;
-import com.pixelfreebies.service.keyword.*;
-import com.pixelfreebies.service.storage.strategy.S3BucketImageStorageStrategy;
+import com.pixelfreebies.service.image.s3.MinioS3Service;
+import com.pixelfreebies.service.image.storage.factory.ImageStorageStrategyFactory;
+import com.pixelfreebies.service.image.storage.strategy.ImageStorageStrategy;
+import com.pixelfreebies.service.image.storage.strategy.S3BucketImageStorageStrategy;
+import com.pixelfreebies.service.keyword.KeywordValidationService;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,7 +39,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ImageStorageServiceImpl implements com.pixelfreebies.service.storage.ImageStorageService {
+public class ImageStorageServiceImpl implements ImageStorageService {
 
     private final ImageRepository imageRepository;
     private final ImageVariantRepository imageVariantRepository;
@@ -81,11 +81,6 @@ public class ImageStorageServiceImpl implements com.pixelfreebies.service.storag
         }
     }
 
-    private void setStorageLocationType(Image image, ImageStorageStrategy storageStrategy) {
-        if (storageStrategy instanceof S3BucketImageStorageStrategy) image.setStorageLocation(StorageLocation.S3_BUCKET);
-        else image.setStorageLocation(StorageLocation.LOCAL);
-    }
-
     private @NotNull String validateAndGenerateImageName(MultipartFile uploadedMultipartFile, ImageOperationRequest imageOperationRequest) throws IOException {
         // Generate image name with suffix and possible random number
         String generatedImageName = this.imageCreationService.generateImageName(imageOperationRequest.getFileName());
@@ -98,6 +93,12 @@ public class ImageStorageServiceImpl implements com.pixelfreebies.service.storag
         String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
 
         return pathName + fileExtension; // new file name
+    }
+
+    private void setStorageLocationType(Image image, ImageStorageStrategy storageStrategy) {
+        if (storageStrategy instanceof S3BucketImageStorageStrategy)
+            image.setStorageLocation(StorageLocation.S3_BUCKET);
+        else image.setStorageLocation(StorageLocation.LOCAL);
     }
 
     private void setImagePaths(Path relativePath, Image image, ImageVariant imageVariant) {
