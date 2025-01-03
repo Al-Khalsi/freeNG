@@ -3,6 +3,13 @@ spring:
   config:
     activate:
       on-profile: dev
+logging:
+  level:
+    com.pixelfreebies:
+      config.security: ${SECURITY_LOG_LEVEL:DEBUG}
+      controller: ${CONTROLLER_LOG_LEVEL:DEBUG}
+      service: ${SERVICE_LOG_LEVEL:DEBUG}
+      service.image: ${SERVICE_LOG_LEVEL:DEBUG}
 
 --- ###Datasource
 spring:

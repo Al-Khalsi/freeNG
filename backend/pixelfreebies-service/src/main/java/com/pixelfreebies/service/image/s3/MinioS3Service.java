@@ -22,13 +22,13 @@ public class MinioS3Service {
 
     private final MinioClient minioClient;
 
-    public boolean uploadObjectToS3Bucket(String bucketName, String desiredFilename, MultipartFile multipartFile) throws PixelfreebiesException {
+    public boolean uploadObjectToS3Bucket(String bucketName, String objectName, MultipartFile multipartFile) throws PixelfreebiesException {
         try {
             // upload the multipart file to s3
             this.minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
-                            .object(desiredFilename)
+                            .object(objectName)
                             .stream(multipartFile.getInputStream(), multipartFile.getSize(), -1)
                             .contentType(multipartFile.getContentType())
                             .build());
@@ -36,7 +36,7 @@ public class MinioS3Service {
             // verify the upload by checking if the object exists
             this.minioClient.statObject(StatObjectArgs.builder()
                     .bucket(bucketName)
-                    .object(desiredFilename)
+                    .object(objectName)
                     .build());
 
             return true; // If no exception was thrown, the object exists
@@ -47,19 +47,7 @@ public class MinioS3Service {
         }
     }
 
-    public long getFileSize(InputStream inputStream) throws IOException {
-        long size = 0;
-        byte[] buffer = new byte[1024]; // 1KB buffer
-        int bytesRead;
-
-        while ((bytesRead = inputStream.read(buffer)) != -1) {
-            size += bytesRead;
-        }
-
-        return size;
-    }
-
-    public void uploadObject(String bucketName, String objectName, InputStream inputStream, String contentType) throws PixelfreebiesException {
+    public void uploadObjectToS3Bucket(String bucketName, String objectName, InputStream inputStream, String contentType) throws PixelfreebiesException {
         try {
             this.minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucketName)
@@ -70,18 +58,6 @@ public class MinioS3Service {
         } catch (Exception e) {
             log.error("Error uploading object to S3 bucket: {}", e.getMessage());
             throw new PixelfreebiesException("Error uploading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public InputStream downloadObject(String bucketName, String objectName) throws PixelfreebiesException {
-        try {
-            return this.minioClient.getObject(GetObjectArgs.builder()
-                    .bucket(bucketName)
-                    .object(objectName)
-                    .build());
-        } catch (Exception e) {
-            log.error("Error downloading object from S3 bucket: {}", e.getMessage());
-            throw new PixelfreebiesException("Error downloading object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -113,6 +89,18 @@ public class MinioS3Service {
                  XmlParserException e) {
             log.error("Error removing object from S3 bucket: {}", e.getMessage());
             throw new PixelfreebiesException("Error deleting object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public void processObjectInChunksFromS3Bucket(String bucketName, String objectName, ChunkProcessor processor) throws PixelfreebiesException {
+        try (InputStream inputStream = this.minioClient.getObject(GetObjectArgs.builder()
+                .bucket(bucketName)
+                .object(objectName)
+                .build())) {
+            processor.process(inputStream);
+        } catch (Exception e) {
+            log.error("Error processing object in chunks: {}", e.getMessage());
+            throw new PixelfreebiesException("Error processing object: " + e.getMessage(), INTERNAL_SERVER_ERROR);
         }
     }
 
