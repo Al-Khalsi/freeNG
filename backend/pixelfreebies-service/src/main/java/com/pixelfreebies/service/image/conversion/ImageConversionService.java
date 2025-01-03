@@ -6,6 +6,6 @@ import java.io.IOException;
 
 public interface ImageConversionService {
 
-    String convertAndUploadImage(String bucketName, String objectName, String targetFormat) throws PixelfreebiesException, IOException;
+    String convertAndUploadImage(String objectName, String targetFormat) throws PixelfreebiesException, IOException;
 
 }

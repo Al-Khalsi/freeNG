@@ -9,8 +9,8 @@ public class OpenCVConfig {
 
     @Bean
     public String loadOpenCVNativeLibraries() {
-        OpenCV.loadLocally();
-        return "loaded";
+        OpenCV.loadLocally(); // Loads OpenCV native libraries from the local path or bundled resources
+        return "opencv native libraries loaded";
     }
 
 }

@@ -1,18 +1,16 @@
 package com.pixelfreebies.controller;
 
-import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.service.image.conversion.ImageConversionService;
-import com.pixelfreebies.service.image.s3.MinioS3Service;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.io.InputStream;
-import java.util.UUID;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -29,7 +27,7 @@ public class ImageConversionController {
                                                @RequestParam("object") String objectName,
                                                @RequestParam("format") String targetFormat) {
         try {
-            String convertedFileName = this.imageConversionService.convertAndUploadImage(bucketName, objectName, targetFormat);
+            String convertedFileName = this.imageConversionService.convertAndUploadImage(objectName, targetFormat);
 
             return ResponseEntity.ok("Image converted and uploaded successfully as " + convertedFileName);
 
