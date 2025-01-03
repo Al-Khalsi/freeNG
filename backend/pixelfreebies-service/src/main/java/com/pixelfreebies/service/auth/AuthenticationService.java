@@ -1,4 +1,4 @@
-package com.pixelfreebies.service;
+package com.pixelfreebies.service.auth;
 
 import com.pixelfreebies.model.dto.UserDTO;
 import com.pixelfreebies.model.payload.request.LoginRequest;

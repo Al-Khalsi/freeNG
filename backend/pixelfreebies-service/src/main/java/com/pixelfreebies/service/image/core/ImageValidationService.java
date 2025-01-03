@@ -1,11 +1,10 @@
-package com.pixelfreebies.service.impl;
+package com.pixelfreebies.service.image.core;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -17,7 +16,7 @@ public class ImageValidationService {
     private static final String PIXELFREEBIES_SUFFIX = " Pixelfreebies";
     private static final Pattern NUMBER_PATTERN = Pattern.compile(" \\d+$");
 
-    public void validateImageName(String fileName) throws IOException, PixelfreebiesException {
+    public void validateImageName(String fileName) throws PixelfreebiesException {
         if (fileName == null || fileName.trim().isEmpty()) {
             log.error("-> FILE -> File name is null or empty");
             throw new PixelfreebiesException("File name cannot be empty", INTERNAL_SERVER_ERROR);
@@ -30,6 +29,15 @@ public class ImageValidationService {
             log.error("-> FILE -> File name contains invalid path sequence: {}", fileName);
             throw new PixelfreebiesException("Filename contains invalid path sequence: " + cleanFileName, INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public String cleanDisplayName(String fileTitle) {
+        // Remove random number if present
+        String withoutNumber = NUMBER_PATTERN.matcher(fileTitle).replaceAll("");
+
+        // Remove "pixelfreebies" suffix and capitalize
+        String cleaned = withoutNumber.replace(PIXELFREEBIES_SUFFIX, "").trim();
+        return this.capitalizeWords(cleaned);
     }
 
     public String capitalizeWords(String input) {
@@ -51,15 +59,6 @@ public class ImageValidationService {
         }
 
         return result.toString().trim();
-    }
-
-    public String cleanDisplayName(String fileTitle) {
-        // Remove random number if present
-        String withoutNumber = NUMBER_PATTERN.matcher(fileTitle).replaceAll("");
-
-        // Remove "pixelfreebies" suffix and capitalize
-        String cleaned = withoutNumber.replace(PIXELFREEBIES_SUFFIX, "").trim();
-        return this.capitalizeWords(cleaned);
     }
 
 }

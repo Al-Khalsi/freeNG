@@ -25,6 +25,13 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
     private final TokenService tokenService;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        // return true if any excluding path matches
+        return this.securityUtil.getPERMITTED_URLS().stream()
+                .anyMatch(request.getServletPath()::startsWith);
+    }
+
+    @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
@@ -37,13 +44,6 @@ public class JWTTokenGeneratorFilter extends OncePerRequestFilter {
                 });
 
         filterChain.doFilter(request, response);
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        // return true if any excluding path matches
-        return this.securityUtil.getPERMITTED_URLS().stream()
-                .anyMatch(request.getServletPath()::startsWith);
     }
 
 }

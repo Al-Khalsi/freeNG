@@ -47,10 +47,6 @@ public class UserUtil {
                 });
     }
 
-    public Authentication createAuthenticationToken(String email, String password) {
-        return UsernamePasswordAuthenticationToken.unauthenticated(email, password);
-    }
-
     public Map<String, Object> createAuthenticationResponse(User user, Authentication authentication) {
         UserDTO responseUserDTO = this.userConverter.toDto(user);
         responseUserDTO.setPassword(null);
@@ -73,6 +69,10 @@ public class UserUtil {
         }
 
         return authenticated;
+    }
+
+    public Authentication createAuthenticationToken(String email, String password) {
+        return UsernamePasswordAuthenticationToken.unauthenticated(email, password);
     }
 
     public Map<String, Object> createLoginResponse(String token) {
