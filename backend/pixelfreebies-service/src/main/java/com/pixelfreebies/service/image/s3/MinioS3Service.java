@@ -92,6 +92,7 @@ public class MinioS3Service {
         }
     }
 
+    // Processes an S3 object in chunks by invoking a processor on its InputStream.
     public void processObjectInChunksFromS3Bucket(String bucketName, String objectName, ChunkProcessor processor) throws PixelfreebiesException {
         try (InputStream inputStream = this.minioClient.getObject(GetObjectArgs.builder()
                 .bucket(bucketName)
