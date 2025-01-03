@@ -3,7 +3,7 @@ package com.pixelfreebies.controller;
 import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
 import com.pixelfreebies.model.payload.response.Result;
-import com.pixelfreebies.service.KeywordsService;
+import com.pixelfreebies.service.keyword.KeywordsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

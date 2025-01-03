@@ -18,4 +18,6 @@ public class ImageOperationRequest {
     private boolean lightMode;
     private String source;
 
+    private String environment; // environment indicates on which storage environment we want to save the image e.g., dev, prod
+
 }

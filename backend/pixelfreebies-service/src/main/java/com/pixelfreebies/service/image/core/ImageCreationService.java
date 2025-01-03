@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.impl;
+package com.pixelfreebies.service.image.core;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.domain.Image;
@@ -16,6 +16,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
+
+import static com.pixelfreebies.util.constants.ApplicationConstants.PIXELFREEBIES_SUFFIX;
 
 @Slf4j
 @Service
@@ -42,7 +44,7 @@ public class ImageCreationService {
         image.setLightMode(imageOperationRequest.isLightMode());
 
         String source = imageOperationRequest.getSource();
-        if (source == null || source.trim().isEmpty()) source = "PixelFreebies";
+        if (source == null || source.trim().isEmpty()) source = PIXELFREEBIES_SUFFIX;
         image.setSource(source);
 
         if (imageOperationRequest.getDominantColors() != null) {
@@ -72,11 +74,6 @@ public class ImageCreationService {
         return finalName;
     }
 
-    public String generateImagePath(String fileName) {
-        // Convert to lowercase and replace spaces with hyphens
-        return fileName.toLowerCase().trim().replace(" ", "-");
-    }
-
     private void calculateDimension(MultipartFile uploadedMultipartFile, Image imageEntity, String imageName) throws PixelfreebiesException {
         try {
 
@@ -90,6 +87,11 @@ public class ImageCreationService {
             log.error("error calculating image dimension: {}", e.getMessage());
             throw new PixelfreebiesException("error calculating image dimension: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    public String generateImagePath(String fileName) {
+        // Convert to lowercase and replace spaces with hyphens
+        return fileName.toLowerCase().trim().replace(" ", "-");
     }
 
 }

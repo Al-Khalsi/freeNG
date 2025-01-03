@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.impl;
+package com.pixelfreebies.service.keyword;
 
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.domain.Keywords;

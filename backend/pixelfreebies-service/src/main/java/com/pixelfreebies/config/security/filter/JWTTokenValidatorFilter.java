@@ -37,6 +37,13 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     private final ObjectMapper objectMapper;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        // return true if any excluding path matches
+        return this.securityUtil.getPERMITTED_URLS().stream().anyMatch(path::startsWith);
+    }
+
+    @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         // read the authorization header
         String jwt = request.getHeader(JWT_AUTHORIZATION_HEADER);
@@ -75,13 +82,6 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
 
         String jsonResult = this.objectMapper.writeValueAsString(result);
         response.getWriter().write(jsonResult);
-    }
-
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getServletPath();
-        // return true if any excluding path matches
-        return this.securityUtil.getPERMITTED_URLS().stream().anyMatch(path::startsWith);
     }
 
 }

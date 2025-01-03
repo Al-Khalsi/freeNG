@@ -1,4 +1,4 @@
-package com.pixelfreebies.service;
+package com.pixelfreebies.service.keyword;
 
 import com.pixelfreebies.model.dto.KeywordsDTO;
 import org.springframework.data.domain.Page;

@@ -1,6 +1,7 @@
 package com.pixelfreebies.model.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pixelfreebies.model.enums.StorageLocation;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +39,8 @@ public class Image extends BaseEntity<UUID> {
     private String contentType;
     private long size;
     private String filePath;
+    @Enumerated(EnumType.STRING)
+    private StorageLocation storageLocation;
 
     // Statistics and metrics
     private long viewCount;

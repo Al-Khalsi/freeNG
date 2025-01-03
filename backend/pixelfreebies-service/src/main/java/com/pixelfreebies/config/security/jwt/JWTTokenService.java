@@ -29,14 +29,6 @@ public class JWTTokenService implements TokenService {
     private @Value("${token.jwt.expires_in}") long expiresIn;
 
     @Override
-    public SecretKey getSecretKey() {
-        if (this.env == null) throw new NotFoundException("Environment not set");
-        String secret = this.env.getProperty(JWT_SECRET_KEY, JWT_DEFAULT_VALUE);
-
-        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
-    }
-
-    @Override
     public String generateToken(Authentication authentication) {
         Map<String, Object> claims = this.claimsBuilder.buildClaims(authentication);
 
@@ -60,6 +52,14 @@ public class JWTTokenService implements TokenService {
                 "username", claims.get("username", String.class),
                 "role", claims.get("role", String.class)
         );
+    }
+
+    @Override
+    public SecretKey getSecretKey() {
+        if (this.env == null) throw new NotFoundException("Environment not set");
+        String secret = this.env.getProperty(JWT_SECRET_KEY, JWT_DEFAULT_VALUE);
+
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
 }

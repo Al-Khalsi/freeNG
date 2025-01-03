@@ -7,8 +7,8 @@ import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.dto.RoleDTO;
 import com.pixelfreebies.model.dto.UserDTO;
-import com.pixelfreebies.service.impl.ImageMetadataService;
-import com.pixelfreebies.service.impl.ImageValidationService;
+import com.pixelfreebies.service.image.core.ImageMetadataService;
+import com.pixelfreebies.service.image.core.ImageValidationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

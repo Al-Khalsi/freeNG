@@ -2,11 +2,8 @@ package com.pixelfreebies.exception;
 
 import com.pixelfreebies.model.payload.response.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.ObjectNotFoundException;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AccountStatusException;
