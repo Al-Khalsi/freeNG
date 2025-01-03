@@ -11,10 +11,13 @@ import com.pixelfreebies.model.enums.StorageLocation;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.ImageVariantRepository;
-import com.pixelfreebies.service.ImageStorageService;
+import com.pixelfreebies.service.image.s3.MinioS3Service;
+import com.pixelfreebies.service.image.core.ImageCreationService;
+import com.pixelfreebies.service.image.core.ImageMetadataService;
+import com.pixelfreebies.service.image.core.ImageValidationService;
 import com.pixelfreebies.service.storage.factory.ImageStorageStrategyFactory;
 import com.pixelfreebies.service.storage.strategy.ImageStorageStrategy;
-import com.pixelfreebies.service.impl.*;
+import com.pixelfreebies.service.keyword.*;
 import com.pixelfreebies.service.storage.strategy.S3BucketImageStorageStrategy;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +39,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ImageStorageServiceImpl implements ImageStorageService {
+public class ImageStorageServiceImpl implements com.pixelfreebies.service.storage.ImageStorageService {
 
     private final ImageRepository imageRepository;
     private final ImageVariantRepository imageVariantRepository;

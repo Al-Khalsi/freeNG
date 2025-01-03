@@ -6,7 +6,7 @@ import com.pixelfreebies.model.dto.ImageRemoveKeywordsDTO;
 import com.pixelfreebies.model.dto.ImageRemoveStyleDTO;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.model.payload.response.Result;
-import com.pixelfreebies.service.ImageUpdateService;
+import com.pixelfreebies.service.image.update.ImageUpdateService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

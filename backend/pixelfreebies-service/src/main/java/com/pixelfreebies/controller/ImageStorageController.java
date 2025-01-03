@@ -3,7 +3,7 @@ package com.pixelfreebies.controller;
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.model.payload.response.Result;
-import com.pixelfreebies.service.ImageStorageService;
+import com.pixelfreebies.service.storage.ImageStorageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

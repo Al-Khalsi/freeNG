@@ -2,7 +2,7 @@ package com.pixelfreebies.controller;
 
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.payload.response.PaginatedResult;
-import com.pixelfreebies.service.ImageQueryService;
+import com.pixelfreebies.service.image.query.ImageQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,4 +1,4 @@
-package com.pixelfreebies.service;
+package com.pixelfreebies.service.image.query;
 
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.dto.ImageDTO;

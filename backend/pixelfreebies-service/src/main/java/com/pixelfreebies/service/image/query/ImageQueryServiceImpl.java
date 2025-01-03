@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.query;
+package com.pixelfreebies.service.image.query;
 
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.domain.Image;
@@ -6,8 +6,7 @@ import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.KeywordsDTO;
 import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.repository.ImageRepository;
-import com.pixelfreebies.service.ImageQueryService;
-import com.pixelfreebies.service.KeywordsService;
+import com.pixelfreebies.service.keyword.KeywordsService;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

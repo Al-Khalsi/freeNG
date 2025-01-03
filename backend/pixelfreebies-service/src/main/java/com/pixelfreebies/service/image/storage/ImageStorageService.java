@@ -1,4 +1,4 @@
-package com.pixelfreebies.service;
+package com.pixelfreebies.service.storage;
 
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.exception.PixelfreebiesException;

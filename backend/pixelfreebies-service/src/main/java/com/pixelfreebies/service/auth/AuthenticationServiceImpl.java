@@ -1,10 +1,9 @@
-package com.pixelfreebies.service.impl;
+package com.pixelfreebies.service.auth;
 
 import com.pixelfreebies.config.security.jwt.TokenService;
 import com.pixelfreebies.model.domain.User;
 import com.pixelfreebies.model.dto.UserDTO;
 import com.pixelfreebies.model.payload.request.LoginRequest;
-import com.pixelfreebies.service.AuthenticationService;
 import com.pixelfreebies.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.impl;
+package com.pixelfreebies.service.image.core;
 
 import com.luciad.imageio.webp.WebPWriteParam;
 import com.pixelfreebies.exception.PixelfreebiesException;

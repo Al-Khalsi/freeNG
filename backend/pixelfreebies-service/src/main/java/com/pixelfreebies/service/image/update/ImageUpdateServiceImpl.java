@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.update;
+package com.pixelfreebies.service.image.update;
 
 import com.pixelfreebies.exception.NotFoundException;
 import com.pixelfreebies.model.domain.Image;
@@ -11,8 +11,7 @@ import com.pixelfreebies.model.enums.ImageFormat;
 import com.pixelfreebies.model.payload.request.ImageOperationRequest;
 import com.pixelfreebies.repository.ImageRepository;
 import com.pixelfreebies.repository.KeywordsRepository;
-import com.pixelfreebies.service.ImageUpdateService;
-import com.pixelfreebies.service.impl.KeywordValidationService;
+import com.pixelfreebies.service.keyword.KeywordValidationService;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

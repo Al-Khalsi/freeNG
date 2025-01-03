@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.impl;
+package com.pixelfreebies.service.image.core;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 import lombok.extern.slf4j.Slf4j;

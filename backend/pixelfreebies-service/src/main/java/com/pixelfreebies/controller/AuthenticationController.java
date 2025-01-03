@@ -3,7 +3,7 @@ package com.pixelfreebies.controller;
 import com.pixelfreebies.model.dto.UserDTO;
 import com.pixelfreebies.model.payload.request.LoginRequest;
 import com.pixelfreebies.model.payload.response.Result;
-import com.pixelfreebies.service.AuthenticationService;
+import com.pixelfreebies.service.auth.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;

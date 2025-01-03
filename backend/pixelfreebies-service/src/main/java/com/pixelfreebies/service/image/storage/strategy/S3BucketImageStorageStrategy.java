@@ -4,7 +4,7 @@ import com.luciad.imageio.webp.WebPWriteParam;
 import com.pixelfreebies.config.properties.S3Properties;
 import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.MultipartFileInputStream;
-import com.pixelfreebies.service.impl.MinioS3Service;
+import com.pixelfreebies.service.image.s3.MinioS3Service;
 import io.minio.MinioClient;
 import io.minio.StatObjectArgs;
 import io.minio.errors.*;

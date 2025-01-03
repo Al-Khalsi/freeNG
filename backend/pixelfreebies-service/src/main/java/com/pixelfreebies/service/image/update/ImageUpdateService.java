@@ -1,4 +1,4 @@
-package com.pixelfreebies.service;
+package com.pixelfreebies.service.image.update;
 
 import com.pixelfreebies.model.dto.ImageDTO;
 import com.pixelfreebies.model.dto.ImageRemoveDominantColorDTO;

@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.impl;
+package com.pixelfreebies.service.image.s3;
 
 import com.pixelfreebies.exception.PixelfreebiesException;
 import io.minio.MinioClient;
