@@ -1,0 +1,195 @@
+openapi: 3.0.3
+info:
+  title: PixelFreebies
+  description: |
+    some description needed
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:9090/api/v1'
+    description: Local API server
+  - url: 'https://api.v1.pixelfreebies.com/api/v1'
+    description: Main API server
+
+tags:
+  - name: Authentication API
+    description: Endpoints for user authentication and registration
+
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Authentication API
+      summary: Register a new user
+      description: Creates a new user account with the provided details.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+            example:
+              email: user@example.com
+              username: user123
+              password: strongpassword123
+      responses:
+        '201':
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+              example:
+                flag: true
+                code: CREATED
+                message: User created successfully
+                data:
+                  token: JWT_Token
+                  userDTO:
+                    id: "c40c37cb-9e0e-4fd1-9942-e134c7e52f7c"
+                    username: "user123"
+                    email: "1234@example.com"
+                    password: null
+                    roles:
+                      - id: 2
+                        roleName: ROLE_USER
+        409:
+          description: User already exists in the db.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+              example:
+                flag: false
+                code: CONFLICT
+                message: user already exists
+                data: 'user with the provided email: user@example.com already exists'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication API
+      summary: User Login
+      description: Authenticate user and generate access token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        200:
+          description: User logged-in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+              example:
+                flag: true
+                code: OK
+                message: User logged-in successfully
+                data:
+                  token: "JWT_Token"
+                  userDetails:
+                    username: user123
+                    role: ROLE_USER
+                    email: 123@example.com
+        401:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Result'
+              example:
+                flag: false
+                code: UNAUTHORIZED
+                message: username or password is incorrect.
+                data: 'User not found: user@example.com'
+
+components:
+  schemas:
+    UserDTO:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: strongpassword123
+        username:
+          type: string
+          example: user123
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleDTO'
+      required:
+        - email
+        - password
+
+    RoleDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        roleName:
+          type: string
+          example: ROLE_MASTER
+
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: user@example.com
+        password:
+          type: string
+          format: password
+          example: strongpassword123
+      required:
+        - email
+        - password
+
+    Result:
+      type: object
+      properties:
+        flag:
+          type: boolean
+          example: true
+        code:
+          type: string
+          enum: [ OK, CREATED, BAD_REQUEST, NOT_FOUND, UNAUTHORIZED, CONFLICT, FORBIDDEN, INTERNAL_SERVER_ERROR ]
+          example: CREATED
+        message:
+          type: string
+          example: User created successfully
+        data:
+          type: object
+          additionalProperties: true
+
+    ErrorResponse:
+      type: object
+      properties:
+        flag:
+          type: boolean
+          example: false
+        code:
+          type: string
+          example: BAD_REQUEST
+        message:
+          type: string
+          example: Invalid input data
