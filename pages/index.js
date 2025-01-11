@@ -14,17 +14,17 @@ import NoImages from '@/components/modules/NoImages';
 import PageTitle from '@/components/templates/PageTitle';
 import Pagination from '@/components/templates/Pagination';
 
-function Index() {
-    const { token, username, email, clearToken, userId, role } = useAuth();
+function Index({ initialImages, initialTotalPages, initialTotalElements }) {
+    const { token, role } = useAuth();
     const router = useRouter();
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState(initialImages);
     const [searchQuery, setSearchQuery] = useState('');
     const [submittedSearchQuery, setSubmittedSearchQuery] = useState('');
     const [spinner, setSpinner] = useState(false);
     const itemsPerPage = 50;
     const currentPage = parseInt(router.query.page) || 1;
-    const [totalPages, setTotalPages] = useState(0);
-    const [totalElements, setTotalElements] = useState(0);
+    const [totalPages, setTotalPages] = useState(initialTotalPages);
+    const [totalElements, setTotalElements] = useState(initialTotalElements);
 
     const fetchImages = async (keywordId = null, query = '', page = currentPage, size = itemsPerPage) => {
         setSpinner(true);
@@ -57,7 +57,7 @@ function Index() {
                     keywords: JSON.stringify(file.keywords)
                 }));
 
-                setImages(fetchedImages); // Update state with the fetched images
+                setImages(fetchedImages);
                 setTotalPages(response.totalPages);
                 setTotalElements(response.totalElements);
             } else {
@@ -192,6 +192,43 @@ function Index() {
             </div>
         </>
     )
+}
+
+export async function getStaticProps() {
+    const initialImages = []; // Fetch initial images here if needed
+    const initialTotalPages = 0; // Set initial total pages
+    const initialTotalElements = 0; // Set initial total elements
+
+    // Optionally, you can fetch initial data here if you want to display something on the first load
+    // const response = await apiFetch(FILE_API.LIST_IMAGES_PAGINATED(0, 50));
+    // if (response.flag && response.data) {
+    //     initialImages = response.data.map((file) => ({
+    //         id: file.id,
+    //         title: file.fileTitle,
+    //         path: file.filePath,
+    //         contentType: file.contentType,
+    //         size: file.size,
+    //         width: file.width,
+    //         height: file.height,
+    //         style: file.style,
+    //         dominantColors: file.dominantColors,
+    //         uploadedBy: file.uploadedBy.username,
+    //         lightMode: file.lightMode,
+    //         source: file.source,
+    //         keywords: JSON.stringify(file.keywords)
+    //     }));
+    //     initialTotalPages = response.totalPages;
+    //     initialTotalElements = response.totalElements;
+    // }
+
+    return {
+        props: {
+            initialImages,
+            initialTotalPages,
+            initialTotalElements,
+        },
+        revalidate: 60, // Revalidate every 60 seconds
+    };
 }
 
 export default Index;
