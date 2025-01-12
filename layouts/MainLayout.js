@@ -3,7 +3,7 @@ import Footer from '@/components/templates/Footer';
 
 const MainLayout = ({ children, className, mainTagClassName, searchQuery, setSearchQuery, handleSearch }) => {
     return (
-        <div className={className}>
+        <div className={`${className} min-h-screen`}>
             <Header
                 searchQuery={searchQuery}
                 setSearchQuery={setSearchQuery}
