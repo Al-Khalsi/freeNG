@@ -1,18 +1,14 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
-import Header from '@/components/templates/Header';
-import Footer from '@/components/templates/Footer';
 import Card from '@/components/templates/Card';
 import { apiFetch } from '@/utils/api';
 import { FILE_API } from '@/utils/api/file';
 import { KEYWORD_API } from '@/utils/api/keyword';
 import Spinner from '@/components/modules/Spinner';
 import NoImages from '@/components/modules/NoImages';
-import PageTitle from '@/components/templates/PageTitle';
-import Pagination from '@/components/templates/Pagination';
+import MainLayout from '@/layouts/MainLayout';
 
 function Index({ initialImages, initialTotalPages, initialTotalElements }) {
     const { token, role } = useAuth();
@@ -144,19 +140,21 @@ function Index({ initialImages, initialTotalPages, initialTotalElements }) {
                 <meta property="og:url" content="https://pixelfreebies.com" />
                 <meta property="og:type" content="website" />
             </Head>
-            <div className="app w-full flex flex-col min-h-screen relative">
-                <Header
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    handleSearch={handleSearch}
-                />
+            <MainLayout
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                handleSearch={handleSearch}
+                pageTitle="Free Reference for Downloading All PNG Images"
+                totalElements={totalElements}
+                showUploadButton={true} // or some condition based on your logic
+                role={role}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+                className="app w-full flex flex-col relative"
+                mainTagClassName="main flex justify-between w-full py-4 px-4 lg:px-8"
+            >
 
-                <PageTitle
-                    title={"Free Reference for Downloading All PNG Images"}
-                    totalElements={totalElements}
-                />
-
-                <main className='main flex justify-between w-full py-4 px-4 lg:px-8'>
                     {spinner ? (
                         <Spinner />
                     ) : images.length === 0 ? (
@@ -169,27 +167,7 @@ function Index({ initialImages, initialTotalPages, initialTotalElements }) {
                             ))}
                         </section>
                     )}
-                </main>
-
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
-                />
-
-                <Footer />
-
-                {role === 'ROLE_MASTER' && (
-                    <Link
-                        href={'/upload'}
-                        className='fixed right-3 bottom-3
-                            w-10 h-10 p-6 flex justify-center items-center
-                            bg-gradient-to-t from-bgLightPurple to-bgPurple text-white text-2xl 
-                            outline-none rounded-lg cursor-pointer'>
-                        +
-                    </Link>
-                )}
-            </div>
+            </MainLayout>
         </>
     )
 }
@@ -198,28 +176,6 @@ export async function getStaticProps() {
     const initialImages = []; // Fetch initial images here if needed
     const initialTotalPages = 0; // Set initial total pages
     const initialTotalElements = 0; // Set initial total elements
-
-    // Optionally, you can fetch initial data here if you want to display something on the first load
-    // const response = await apiFetch(FILE_API.LIST_IMAGES_PAGINATED(0, 50));
-    // if (response.flag && response.data) {
-    //     initialImages = response.data.map((file) => ({
-    //         id: file.id,
-    //         title: file.fileTitle,
-    //         path: file.filePath,
-    //         contentType: file.contentType,
-    //         size: file.size,
-    //         width: file.width,
-    //         height: file.height,
-    //         style: file.style,
-    //         dominantColors: file.dominantColors,
-    //         uploadedBy: file.uploadedBy.username,
-    //         lightMode: file.lightMode,
-    //         source: file.source,
-    //         keywords: JSON.stringify(file.keywords)
-    //     }));
-    //     initialTotalPages = response.totalPages;
-    //     initialTotalElements = response.totalElements;
-    // }
 
     return {
         props: {
