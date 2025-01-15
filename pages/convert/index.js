@@ -1,3 +1,4 @@
+import Input from '@/components/modules/Input';
 import MainLayout from '@/layouts/MainLayout';
 import React, { useState } from 'react';
 
@@ -7,13 +8,36 @@ function Convert({ supportedFormats }) {
   const [loading, setLoading] = useState(false);
   const [convertedImage, setConvertedImage] = useState(null);
   const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [lightModePreview, setLightModePreview] = useState(false);
+  const [image, setImage] = useState(null);
+  const [imagePreviewUrl, setImagePreviewUrl] = useState('');
 
   // Handle file selection
   const handleFileChange = (event) => {
     setFile(event.target.files[0]);
     setError('');
     setConvertedImage(null);
+  };
+
+  const handleImageChange = (e) => {
+    setFile(e.target.files[0]);
+    setError('');
+    setConvertedImage(null);
+    const imageFile = e.target.files[0];
+    if (imageFile && imageFile.type.startsWith('image/')) {
+      setImage(imageFile);
+      setImagePreviewUrl(URL.createObjectURL(imageFile)); // Create a preview URL
+      setErrorMessage('');
+    } else {
+      setErrorMessage('Please select a valid image.');
+    }
+  };
+
+  const toggleLightMode = () => {
+    setLightMode(prevMode => !prevMode);
+    setLightModePreview(prevMode => !prevMode);
   };
 
   // Handle format selection
@@ -24,7 +48,7 @@ function Convert({ supportedFormats }) {
   // Handle image conversion
   const handleConvert = async () => {
     if (!file) {
-      setError('Please select a file.');
+      setError('Please select a file.'); // Error message for no file selected
       return;
     }
 
@@ -34,8 +58,12 @@ function Convert({ supportedFormats }) {
     try {
       const reader = new FileReader();
       reader.onloadend = async () => {
+        const arrayBuffer = reader.result; // Get the ArrayBuffer
+        const blob = new Blob([arrayBuffer], { type: file.type }); // Create a Blob from the ArrayBuffer
         const img = new Image();
-        img.src = reader.result;
+        const imgUrl = URL.createObjectURL(blob); // Create a URL for the Blob
+
+        img.src = imgUrl;
         img.onload = async () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
@@ -54,13 +82,14 @@ function Convert({ supportedFormats }) {
 
           // Convert the canvas to the desired format
           const dataUrl = canvas.toDataURL(`image/${outputFormat}`);
-          setConvertedImage(dataUrl);
+          setConvertedImage(dataUrl); // Set the converted image
           setLoading(false);
         };
       };
-      reader.readAsDataURL(file);
+
+      reader.readAsArrayBuffer(file); // Read the file as an ArrayBuffer
     } catch (err) {
-      setError('Error converting image.');
+      setError('Error converting image.'); // Error message for conversion failure
       setLoading(false);
     }
   };
@@ -78,20 +107,47 @@ function Convert({ supportedFormats }) {
   const handleSearch = () => {
     const trimmedSearchQuery = searchQuery.trim();
     if (!trimmedSearchQuery) {
-        return; // Do not proceed if the search query is empty
+      return; // Do not proceed if the search query is empty
     }
     setSubmittedSearchQuery(trimmedSearchQuery);
     router.push(`/search?query=${encodeURIComponent(trimmedSearchQuery)}`);
-};
-
+  };
 
   return (
     <MainLayout
+      pageTitle="Image Format Converter"
       searchQuery={searchQuery}
       setSearchQuery={setSearchQuery}
-      handleSearch={handleSearch}>
-      <h1>Image Format Converter</h1>
-      <input type="file" accept="image/*" onChange={handleFileChange} />
+      handleSearch={handleSearch}
+      className="app w-full flex flex-col relative"
+      mainTagClassName="main w-full py-4 px-80"
+    >
+      <div
+        className={`border-dashed border-4 rounded p-2 h-48 sm:h-80 w-full
+                ${lightModePreview ? 'bg-bgGray text-clDarkGray2 border-bgDarkGray2' :
+            'bg-bgDarkGray2 text-clGray border-bgGray'} 
+                     ${image ? 'border-green-500' : ''}
+                cursor-pointer flex items-center justify-center`}
+        onClick={() => document.getElementById('file-input').click()}>
+        {image ? (
+          <>
+            <img
+              src={imagePreviewUrl}
+              alt="Preview"
+              className="w-full h-full rounded object-contain"
+            />
+          </>
+        ) : (
+          <p>Click to select image</p>
+        )}
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+          id="file-input"
+        />
+      </div>
       <select value={outputFormat} onChange={handleFormatChange}>
         {supportedFormats.map((format) => (
           <option key={format} value={format}>
