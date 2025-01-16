@@ -4,6 +4,7 @@ import { FiUploadCloud } from 'react-icons/fi';
 import { LuFileSymlink } from 'react-icons/lu';
 import loadFfmpeg from "@/utils/load-ffmpeg";
 import fileToIcon from "@/utils/file-to-icon";
+import compressFileName from "@/utils/compress-file-name";
 
 const extensions = {
   image: [
