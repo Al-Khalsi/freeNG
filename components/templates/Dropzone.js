@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import ReactDropzone from 'react-dropzone'
 import { FiUploadCloud } from 'react-icons/fi';
 import { LuFileSymlink } from 'react-icons/lu';
-import loadFfmpeg from "@/utils/loadFfmpeg";
+import loadFfmpeg from "@/utils/load-ffmpeg";
+import fileToIcon from "@/utils/file-to-icon";
 
 const extensions = {
   image: [
