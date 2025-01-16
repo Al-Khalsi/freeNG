@@ -6,6 +6,7 @@ import loadFfmpeg from "@/utils/load-ffmpeg";
 import fileToIcon from "@/utils/file-to-icon";
 import compressFileName from "@/utils/compress-file-name";
 import bytesToSize from "@/utils/bytes-to-size";
+import { Select } from './Select';
 
 const extensions = {
   image: [
