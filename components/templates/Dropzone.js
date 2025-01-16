@@ -15,6 +15,7 @@ import {
 } from './Select';
 import { MdClose } from 'react-icons/md';
 import { Button } from './Button';
+import { Badge } from './Badge'
 
 const extensions = {
   image: [
