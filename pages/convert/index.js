@@ -3,7 +3,17 @@ import React, { useState } from 'react';
 import Dropzone from '@/components/templates/Dropzone';
 
 function Convert({ supportedFormats }) {
+  const [searchQuery, setSearchQuery] = useState('');
 
+
+  const handleSearch = () => {
+    const trimmedSearchQuery = searchQuery.trim();
+    if (!trimmedSearchQuery) {
+      return; // Do not proceed if the search query is empty
+    }
+    setSubmittedSearchQuery(trimmedSearchQuery);
+    router.push(`/search?query=${encodeURIComponent(trimmedSearchQuery)}`);
+  };
 
   return (
     <MainLayout
