@@ -1,6 +1,6 @@
-import Input from '@/components/modules/Input';
 import MainLayout from '@/layouts/MainLayout';
 import React, { useState } from 'react';
+import Dropzone from '@/components/templates/Dropzone';
 
 function Convert({ supportedFormats }) {
 
@@ -14,7 +14,7 @@ function Convert({ supportedFormats }) {
       className="app w-full flex flex-col relative"
       mainTagClassName="main w-full py-4 px-80"
     >
-
+      <Dropzone />
     </MainLayout>
   );
 }
