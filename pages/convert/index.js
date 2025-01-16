@@ -14,13 +14,6 @@ function Convert({ supportedFormats }) {
   const [image, setImage] = useState(null);
   const [imagePreviewUrl, setImagePreviewUrl] = useState('');
 
-  // Handle file selection
-  const handleFileChange = (event) => {
-    setFile(event.target.files[0]);
-    setError('');
-    setConvertedImage(null);
-  };
-
   const handleImageChange = (e) => {
     setFile(e.target.files[0]);
     setError('');
