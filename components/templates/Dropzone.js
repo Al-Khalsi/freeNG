@@ -6,7 +6,15 @@ import loadFfmpeg from "@/utils/load-ffmpeg";
 import fileToIcon from "@/utils/file-to-icon";
 import compressFileName from "@/utils/compress-file-name";
 import bytesToSize from "@/utils/bytes-to-size";
-import { Select } from './Select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from './Select';
+import { MdClose } from 'react-icons/md';
+import { Button } from './Button';
 
 const extensions = {
   image: [
