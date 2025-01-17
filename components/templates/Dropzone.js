@@ -19,6 +19,7 @@ import {
 import { MdClose } from 'react-icons/md';
 import { Button } from './Button';
 import { Badge } from './Badge'
+import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
 const extensions = {
   image: [
@@ -115,6 +116,57 @@ function Dropzone() {
     document.body.removeChild(a);
   };
 
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const ffmpeg_response = await loadFfmpeg();
+        ffmpegRef.current = ffmpeg_response;
+        setIsLoaded(true);
+        console.log("FFmpeg loaded successfully!");
+      } catch (error) {
+        console.error("Error loading FFmpeg:", error);
+      }
+    };
+    load();
+  }, []);
+
+  const convertFile = async (action) => {
+    console.log("Action object:", action); // Log the action object
+    const { file } = action;
+    if (!file) {
+      console.error("File is undefined in action object");
+      throw new Error("File is undefined");
+    }
+    const inputFileName = file.name;
+    const outputFileName = `converted_${file.name}`;
+  
+    try {
+      if (!ffmpegRef.current) {
+        throw new Error("FFmpeg is not loaded yet.");
+      }
+  
+      console.log(`Writing file: ${inputFileName}`);
+      const fileData = await fetchFile(file);
+      ffmpegRef.current.FS('writeFile', inputFileName, fileData);
+  
+      console.log(`Converting file: ${inputFileName} to ${outputFileName}`);
+      await ffmpegRef.current.run('-i', inputFileName, outputFileName);
+  
+      const data = ffmpegRef.current.FS('readFile', outputFileName);
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/jpeg' }));
+  
+      return { url, output: outputFileName };
+    } catch (error) {
+      console.error("Error during conversion:", error);
+      throw error;
+    }
+  };
+
+  const fetchFile = async (file) => {
+    const response = await fetch(URL.createObjectURL(file));
+    return response.arrayBuffer(); // Fetch the file as an ArrayBuffer
+  };
+
   const convert = async () => {
     let tmp_actions = actions.map((elt) => ({
       ...elt,
@@ -122,9 +174,11 @@ function Dropzone() {
     }));
     setActions(tmp_actions);
     setIsConverting(true);
+
     for (let action of tmp_actions) {
       try {
-        const { url, output } = await convertFile(ffmpegRef.current, action);
+        console.log("Converting action:", action); // Log the action being converted
+        const { url, output } = await convertFile(action);
         tmp_actions = tmp_actions.map((elt) =>
           elt === action
             ? {
@@ -138,6 +192,7 @@ function Dropzone() {
         );
         setActions(tmp_actions);
       } catch (err) {
+        console.error("Conversion error:", err); // Log the error
         tmp_actions = tmp_actions.map((elt) =>
           elt === action
             ? {
@@ -215,7 +270,9 @@ function Dropzone() {
     } else checkIsReady();
   }, [actions]);
   useEffect(() => {
-    load();
+    load().then(() => {
+      console.log("FFmpeg loaded:", ffmpegRef.current); // Check if ffmpegRef.current is valid
+    });
   }, []);
   const load = async () => {
     try {
