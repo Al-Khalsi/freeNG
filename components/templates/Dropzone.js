@@ -72,21 +72,9 @@ function Dropzone() {
   const [selcted, setSelected] = useState("...");
 
   const accepted_files = {
-    "image/*": [
-      ".jpg",
-      ".jpeg",
-      ".png",
-      ".gif",
-      ".bmp",
-      ".webp",
-      ".ico",
-      ".tif",
-      ".tiff",
-      ".raw",
-      ".tga",
-    ],
-    "video/*": [],
-    "audio/*": [],
+    "image/*": extensions.image,
+    "video/*": extensions.video,
+    "audio/*": extensions.audio,
   };
 
   const reset = () => {
@@ -169,6 +157,11 @@ function Dropzone() {
   };
 
   const convert = async () => {
+    if (!is_loaded) {
+      console.error("FFmpeg is not loaded yet, cannot convert files.");
+      return; // Exit if FFmpeg is not loaded
+    }
+
     let tmp_actions = actions.map((elt) => ({
       ...elt,
       is_converting: true,
@@ -210,6 +203,21 @@ function Dropzone() {
     setIsDone(true);
     setIsConverting(false);
   };
+
+  // Ensure that load() is called correctly in useEffect
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const ffmpeg_response = await loadFfmpeg();
+        ffmpegRef.current = ffmpeg_response;
+        setIsLoaded(true);
+        console.log("FFmpeg loaded successfully!");
+      } catch (error) {
+        console.error("Error loading FFmpeg:", error);
+      }
+    };
+    load();
+  }, []); // Run once on mount
 
   const handleUpload = (data) => {
     handleExitHover();
