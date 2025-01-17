@@ -9,6 +9,7 @@ import loadFfmpeg from "@/utils/load-ffmpeg";
 import fileToIcon from "@/utils/file-to-icon";
 import compressFileName from "@/utils/compress-file-name";
 import bytesToSize from "@/utils/bytes-to-size";
+import { Skeleton } from './Skeleton';
 import {
   Select,
   SelectContent,
@@ -139,22 +140,22 @@ function Dropzone() {
     }
     const inputFileName = file.name;
     const outputFileName = `converted_${file.name}`;
-  
+
     try {
       if (!ffmpegRef.current) {
         throw new Error("FFmpeg is not loaded yet.");
       }
-  
+
       console.log(`Writing file: ${inputFileName}`);
       const fileData = await fetchFile(file);
       ffmpegRef.current.FS('writeFile', inputFileName, fileData);
-  
+
       console.log(`Converting file: ${inputFileName} to ${outputFileName}`);
       await ffmpegRef.current.run('-i', inputFileName, outputFileName);
-  
+
       const data = ffmpegRef.current.FS('readFile', outputFileName);
       const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/jpeg' }));
-  
+
       return { url, output: outputFileName };
     } catch (error) {
       console.error("Error during conversion:", error);
