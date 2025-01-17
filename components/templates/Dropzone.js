@@ -3,6 +3,7 @@ import ReactDropzone from 'react-dropzone'
 import { FiUploadCloud } from 'react-icons/fi';
 import { LuFileSymlink } from 'react-icons/lu';
 import { BiError } from "react-icons/bi";
+import { ImSpinner3 } from "react-icons/im";
 import { HiOutlineDownload } from "react-icons/hi";
 import loadFfmpeg from "@/utils/load-ffmpeg";
 import fileToIcon from "@/utils/file-to-icon";
@@ -82,8 +83,8 @@ function Dropzone() {
       ".raw",
       ".tga",
     ],
-    "audio/*": [],
     "video/*": [],
+    "audio/*": [],
   };
 
   const reset = () => {
@@ -217,9 +218,14 @@ function Dropzone() {
     load();
   }, []);
   const load = async () => {
-    const ffmpeg_response = await loadFfmpeg();
-    ffmpegRef.current = ffmpeg_response;
-    setIsLoaded(true);
+    try {
+      const ffmpeg_response = await loadFfmpeg();
+      ffmpegRef.current = ffmpeg_response;
+      setIsLoaded(true);
+      console.log("FFmpeg loaded successfully!");
+    } catch (error) {
+      console.error("Error loading FFmpeg:", error);
+    }
   };
 
   // returns
