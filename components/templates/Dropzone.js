@@ -105,20 +105,6 @@ function Dropzone() {
     document.body.removeChild(a);
   };
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const ffmpeg_response = await loadFfmpeg();
-        ffmpegRef.current = ffmpeg_response;
-        setIsLoaded(true);
-        console.log("FFmpeg loaded successfully!");
-      } catch (error) {
-        console.error("Error loading FFmpeg:", error);
-      }
-    };
-    load();
-  }, []);
-
   const convertFile = async (action) => {
     console.log("Action object:", action); // Log the action object
     const { file } = action;
@@ -149,11 +135,6 @@ function Dropzone() {
       console.error("Error during conversion:", error);
       throw error;
     }
-  };
-
-  const fetchFile = async (file) => {
-    const response = await fetch(URL.createObjectURL(file));
-    return response.arrayBuffer(); // Fetch the file as an ArrayBuffer
   };
 
   const convert = async () => {
@@ -203,21 +184,6 @@ function Dropzone() {
     setIsDone(true);
     setIsConverting(false);
   };
-
-  // Ensure that load() is called correctly in useEffect
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const ffmpeg_response = await loadFfmpeg();
-        ffmpegRef.current = ffmpeg_response;
-        setIsLoaded(true);
-        console.log("FFmpeg loaded successfully!");
-      } catch (error) {
-        console.error("Error loading FFmpeg:", error);
-      }
-    };
-    load();
-  }, []); // Run once on mount
 
   const handleUpload = (data) => {
     handleExitHover();
