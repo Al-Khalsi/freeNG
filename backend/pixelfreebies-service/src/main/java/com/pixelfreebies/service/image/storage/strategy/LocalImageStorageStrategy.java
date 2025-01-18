@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.storage.strategy;
+package com.pixelfreebies.service.image.storage.strategy;
 
 import com.pixelfreebies.config.properties.FileStorageProperties;
 import com.pixelfreebies.exception.PixelfreebiesException;

@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.storage;
+package com.pixelfreebies.service.image.storage;
 
 import com.pixelfreebies.config.properties.S3Properties;
 import com.pixelfreebies.exception.NotFoundException;
@@ -15,10 +15,10 @@ import com.pixelfreebies.service.image.core.ImageCreationService;
 import com.pixelfreebies.service.image.core.ImageMetadataService;
 import com.pixelfreebies.service.image.core.ImageValidationService;
 import com.pixelfreebies.service.image.s3.MinioS3Service;
+import com.pixelfreebies.service.image.storage.factory.ImageStorageStrategyFactory;
+import com.pixelfreebies.service.image.storage.strategy.S3BucketImageStorageStrategy;
 import com.pixelfreebies.service.keyword.KeywordValidationService;
-import com.pixelfreebies.service.storage.factory.ImageStorageStrategyFactory;
 import com.pixelfreebies.service.storage.strategy.ImageStorageStrategy;
-import com.pixelfreebies.service.storage.strategy.S3BucketImageStorageStrategy;
 import com.pixelfreebies.util.converter.ImageConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
