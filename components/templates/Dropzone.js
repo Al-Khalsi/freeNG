@@ -20,7 +20,7 @@ import {
 import { MdClose } from 'react-icons/md';
 import { Button } from './Button';
 import { Badge } from './Badge'
-import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import { FFmpeg, createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 
 const extensions = {
   image: [
@@ -106,7 +106,8 @@ function Dropzone() {
   };
 
   const convertFile = async (action) => {
-    console.log("Action object:", action); // Log the action object
+    const ffmpeg = new FFmpeg({ log: true });
+    console.log("Action object:", action);
     const { file } = action;
     if (!file) {
       console.error("File is undefined in action object");
@@ -114,29 +115,34 @@ function Dropzone() {
     }
     const inputFileName = file.name;
     const outputFileName = `converted_${file.name}`;
-
+  
     try {
-      if (!ffmpegRef.current) {
-        throw new Error("FFmpeg is not loaded yet.");
+      // ابتدا بارگذاری FFmpeg
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
       }
-
+  
       console.log(`Writing file: ${inputFileName}`);
       const fileData = await file.arrayBuffer();
-      ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
-
+  
+      // نوشتن فایل در سیستم فایل FFmpeg
+      await ffmpeg.FS('writeFile', inputFileName, new Uint8Array(fileData));
+  
       console.log(`Converting file: ${inputFileName} to ${outputFileName}`);
-      await ffmpegRef.current.run('-i', inputFileName, outputFileName);
-
-      const data = ffmpegRef.current.FS('readFile', outputFileName);
-      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/jpeg' }));
-
+      
+      // استفاده از ffmpeg.run() برای تبدیل فایل
+      await ffmpeg.run('-i', inputFileName, outputFileName);
+  
+      const data = await ffmpeg.FS('readFile', outputFileName);
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }));
+  
       return { url, output: outputFileName };
     } catch (error) {
       console.error("Error during conversion:", error);
       throw error;
     }
   };
-
+  
   const convert = async () => {
     if (!isLoaded) {
       console.error("FFmpeg is not loaded yet, cannot convert files.");
@@ -249,10 +255,23 @@ function Dropzone() {
       console.log("FFmpeg loaded:", ffmpegRef.current); // Check if ffmpegRef.current is valid
     });
   }, []);
+  // const load = async () => {
+  //   try {
+  //     const ffmpeg_response = await loadFfmpeg();
+  //     ffmpegRef.current = ffmpeg_response;
+  //     setIsLoaded(true);
+  //     console.log("FFmpeg loaded successfully!");
+  //   } catch (error) {
+  //     console.error("Error loading FFmpeg:", error);
+  //   }
+  // };
+
   const load = async () => {
     try {
-      const ffmpeg_response = await loadFfmpeg();
-      ffmpegRef.current = ffmpeg_response;
+      // بارگذاری FFmpeg به صورت مستقیم
+      const ffmpeg = new FFmpeg({ log: true });  // اطمینان از اینکه `createFFmpeg` از FFmpeg به درستی استفاده می‌شود.
+      await ffmpeg.load();
+      ffmpegRef.current = ffmpeg;
       setIsLoaded(true);
       console.log("FFmpeg loaded successfully!");
     } catch (error) {
