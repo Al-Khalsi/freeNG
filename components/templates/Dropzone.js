@@ -20,7 +20,7 @@ import {
 import { MdClose } from 'react-icons/md';
 import { Button } from './Button';
 import { Badge } from './Badge'
-import { FFmpeg, createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+import { createFFmpeg } from '@ffmpeg/ffmpeg';
 
 const extensions = {
   image: [
@@ -70,6 +70,7 @@ function Dropzone() {
   const ffmpegRef = useRef(null);
   const [defaultValues, setDefaultValues] = useState("video");
   const [selcted, setSelected] = useState("...");
+  const [ffmpeg, setFfmpeg] = useState(null);
 
   const accepted_files = {
     "image/*": extensions.image,
@@ -106,35 +107,32 @@ function Dropzone() {
   };
 
   const convertFile = async (action) => {
-    const ffmpeg = new FFmpeg({ log: true });
-    console.log("Action object:", action);
     const { file } = action;
     if (!file) {
       console.error("File is undefined in action object");
       throw new Error("File is undefined");
     }
+  
     const inputFileName = file.name;
     const outputFileName = `converted_${file.name}`;
   
     try {
-      // ابتدا بارگذاری FFmpeg
-      if (!ffmpeg.isLoaded()) {
+      // بارگذاری FFmpeg فقط در صورت لود نشدن
+      if (!ffmpeg.isLoaded) {
         await ffmpeg.load();
       }
   
       console.log(`Writing file: ${inputFileName}`);
       const fileData = await file.arrayBuffer();
   
-      // نوشتن فایل در سیستم فایل FFmpeg
       await ffmpeg.FS('writeFile', inputFileName, new Uint8Array(fileData));
   
       console.log(`Converting file: ${inputFileName} to ${outputFileName}`);
-      
-      // استفاده از ffmpeg.run() برای تبدیل فایل
+  
       await ffmpeg.run('-i', inputFileName, outputFileName);
   
       const data = await ffmpeg.FS('readFile', outputFileName);
-      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/gif' }));
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
   
       return { url, output: outputFileName };
     } catch (error) {
@@ -142,6 +140,7 @@ function Dropzone() {
       throw error;
     }
   };
+  
   
   const convert = async () => {
     if (!isLoaded) {
@@ -268,8 +267,11 @@ function Dropzone() {
 
   const load = async () => {
     try {
-      // بارگذاری FFmpeg به صورت مستقیم
-      const ffmpeg = new FFmpeg({ log: true });  // اطمینان از اینکه `createFFmpeg` از FFmpeg به درستی استفاده می‌شود.
+      const ffmpeg = createFFmpeg({
+        corePath: 'https://unpkg.com/@ffmpeg/core@0.12.15/dist/umd/ffmpeg-core.js',
+        log: true, // برای نمایش لاگ‌ها در کنسول
+      });
+  
       await ffmpeg.load();
       ffmpegRef.current = ffmpeg;
       setIsLoaded(true);
