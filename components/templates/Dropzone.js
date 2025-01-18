@@ -71,6 +71,7 @@ function Dropzone() {
   const [defaultValues, setDefaultValues] = useState("video");
   const [selcted, setSelected] = useState("...");
   const [ffmpeg, setFfmpeg] = useState(null);
+  const [ffmpegStatus, setFfmpegStatus] = useState("not_loaded");
 
   const accepted_files = {
     "image/*": extensions.image.map(ext => `.${ext}`),
@@ -108,11 +109,18 @@ function Dropzone() {
 
   const convertFile = async (action) => {
 
-    if (!ffmpeg || !ffmpeg.isLoaded()) {
+    if (!ffmpegRef.current || !ffmpegRef.current.isLoaded()) {
       console.log("⚠️ FFmpeg is not ready yet!");
       return;
     }
-    
+
+    console.log("ℹ️ FFmpeg status:", ffmpegStatus);
+
+    if (ffmpegStatus !== "loaded") {
+      console.log("⚠️ FFmpeg is not ready yet!");
+      return;
+    }
+
     console.log("🎬 Starting conversion...");
     // اینجا کد تبدیل فایل‌ها با ffmpeg رو بنویس
 
@@ -145,11 +153,19 @@ function Dropzone() {
     }
   };
 
-
   const convert = async () => {
-    if (!isLoaded) {
+    console.log("ℹ️ FFmpeg status before conversion:", ffmpegStatus);
+
+    if (ffmpegStatus !== "loaded") {
+      console.error("🚨 FFmpeg is not loaded yet, cannot convert files.");
+      return;
+    }
+
+    console.log("✅ FFmpeg is ready, starting conversion...");
+
+    if (!ffmpegRef.current || !ffmpegRef.current.isLoaded()) {
       console.error("FFmpeg is not loaded yet, cannot convert files.");
-      return; // Exit if FFmpeg is not loaded
+      return;
     }
 
     let tmp_actions = actions.map((elt) => ({
@@ -256,8 +272,18 @@ function Dropzone() {
 
   useEffect(() => {
     async function load() {
-      const ff = await loadFfmpeg();
-      setFfmpeg(ff);
+      console.log("🟡 FFmpeg is starting to load...");
+      setFfmpegStatus("loading");
+
+      try {
+        const ff = await loadFfmpeg();
+        setFfmpeg(ff);
+        setFfmpegStatus("loaded");
+        console.log("✅ FFmpeg loaded successfully!");
+      } catch (error) {
+        console.error("❌ Error loading FFmpeg:", error);
+        setFfmpegStatus("not_loaded");
+      }
     }
     load();
   }, []);
