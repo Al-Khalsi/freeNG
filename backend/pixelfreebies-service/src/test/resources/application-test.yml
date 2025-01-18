@@ -1,0 +1,69 @@
+--- ###Profile
+spring:
+  config:
+    activate:
+      on-profile: test
+
+--- ###Datasource
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/pixelfreebies_service
+    username: user
+    password: qaz@123QAZ
+
+  # hibernate
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: false
+        format_sql: false
+    hibernate:
+      ddl-auto: validate
+
+  # flyway
+  flyway:
+    baseline-on-migrate: true
+    enabled: true
+
+--- ###File
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+file:
+  storage:
+    location: D:\Skill-Development\Spring-boot-Tutorial\source-code\Resume-Projects\PixelFreebies\public\img
+
+s3:
+  bucket: c567062
+  endpointUrl: dummy
+  accessKey: dummy
+  secretKey: dummy
+
+--- ###Email
+spring:
+  mail:
+    host: localhost
+    port: 2525
+    username: pixelfreebies@gmail.com
+    password: testpass
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: false
+        debug: true
+
+email:
+  service:
+    provider: google
+
+--- ###Custom Variables
+token:
+  jwt:
+    expires_in: 1440 # Token expiration time in minutes (1440 minutes = 24 hours)

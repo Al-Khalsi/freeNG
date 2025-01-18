@@ -20,7 +20,7 @@ public class EmailServiceRegistry {
         log.debug("Registered email service provider: {}, service implementation: {}", provider, emailServiceStrategy.getClass().getSimpleName());
     }
 
-    public EmailServiceStrategy getService(EmailServiceProvider provider) throws PixelfreebiesException {
+    public EmailServiceStrategy getServiceStrategy(EmailServiceProvider provider) throws PixelfreebiesException {
         EmailServiceStrategy emailServiceStrategy = this.emailServices.get(provider);
         if (emailServiceStrategy == null) {
             throw new PixelfreebiesException("No email service found for provider: " + provider);

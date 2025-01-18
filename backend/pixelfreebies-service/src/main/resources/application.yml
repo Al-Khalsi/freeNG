@@ -6,7 +6,7 @@ spring:
     name: PixelFreebies-Service
 
   config:
-    import: application-dev.yml,application-dev.yml
+    import: application-dev.yml,application-dev.yml,application-test.yml
 
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}

@@ -46,6 +46,19 @@ s3:
   secretKey: ${S3_SECRET_KEY:dummy}
 
 --- ###Email
+spring:
+  mail:
+    username: ${SMTP_USERNAME:pixelfreebies@gmail.com}
+    password: ${SMTP_PASSWORD}
+    host: ${SPRING_MAIL_HOST:smtp.gmail.com}
+    port: ${SPRING_MAIL_PORT:587}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 email:
   service:
     provider: google

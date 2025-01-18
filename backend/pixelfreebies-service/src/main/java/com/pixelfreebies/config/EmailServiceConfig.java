@@ -10,7 +10,7 @@ public class EmailServiceConfig {
 
     @Bean
     public EmailServiceFactory emailServiceFactory(EmailServiceRegistry emailServiceRegistry) {
-        return emailServiceRegistry::getService;
+        return emailServiceRegistry::getServiceStrategy;
     }
 
 }
