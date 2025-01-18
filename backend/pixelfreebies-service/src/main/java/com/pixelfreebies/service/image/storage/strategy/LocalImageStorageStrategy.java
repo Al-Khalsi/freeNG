@@ -1,4 +1,4 @@
-package com.pixelfreebies.service.storage.strategy;
+package com.pixelfreebies.service.image.storage.strategy;
 
 import com.pixelfreebies.config.properties.FileStorageProperties;
 import com.pixelfreebies.exception.PixelfreebiesException;
@@ -16,7 +16,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 @Slf4j
 @Component
-public class LocalImageStorageStrategy implements ImageStorageStrategy {
+public class LocalImageStorageStrategy implements com.pixelfreebies.service.storage.strategy.ImageStorageStrategy {
 
     protected final Path fileStorageLocation;
 

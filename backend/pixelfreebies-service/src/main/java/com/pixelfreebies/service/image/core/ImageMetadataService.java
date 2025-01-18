@@ -55,7 +55,8 @@ public class ImageMetadataService {
             webpVariant.setSize(uploadedMultipartFile.getSize());
             webpVariant.setPurpose(Purpose.DOWNLOAD);
 
-            if (imageStorageStrategy.supportsWebP()) imageStorageStrategy.storeWebp(originalImage, webpFileName, 0.8f, false);
+            if (imageStorageStrategy.supportsWebP())
+                imageStorageStrategy.storeWebp(originalImage, webpFileName, 0.8f, false);
             else {
                 // Default fallback: Save WebP locally
                 Path webpPath = imageStorageStrategy.getStorageLocation().resolve(webpFileName);
