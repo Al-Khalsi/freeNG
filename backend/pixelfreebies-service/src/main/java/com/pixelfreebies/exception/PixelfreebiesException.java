@@ -13,4 +13,9 @@ public class PixelfreebiesException extends RuntimeException {
         this.httpStatus = httpStatus;
     }
 
+    public PixelfreebiesException(String msg) {
+        super(msg);
+        this.httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+    }
+
 }

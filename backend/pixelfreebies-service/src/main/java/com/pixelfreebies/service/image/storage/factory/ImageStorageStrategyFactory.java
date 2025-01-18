@@ -11,7 +11,7 @@ import java.util.Map;
 public class ImageStorageStrategyFactory {
 
     private final Map<String, ImageStorageStrategy> strategies;
-    
+
     public ImageStorageStrategyFactory(LocalImageStorageStrategy localImageStorageStrategy,
                                        S3BucketImageStorageStrategy s3BucketImageStorageStrategy) {
         this.strategies = Map.of(
@@ -21,7 +21,7 @@ public class ImageStorageStrategyFactory {
     }
 
     public ImageStorageStrategy getStrategy(String environment) {
-        return this.strategies.getOrDefault(environment.toLowerCase(),this.strategies.get("dev"));
+        return this.strategies.getOrDefault(environment.toLowerCase(), this.strategies.get("dev"));
     }
 
 }

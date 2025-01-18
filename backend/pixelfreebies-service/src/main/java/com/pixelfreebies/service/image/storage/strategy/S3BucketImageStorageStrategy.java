@@ -35,7 +35,7 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class S3BucketImageStorageStrategy implements ImageStorageStrategy {
+public class S3BucketImageStorageStrategy implements com.pixelfreebies.service.storage.strategy.ImageStorageStrategy {
 
     private final MinioS3Service minioS3Service;
     private final S3Properties s3Properties;
