@@ -73,9 +73,9 @@ function Dropzone() {
   const [ffmpeg, setFfmpeg] = useState(null);
 
   const accepted_files = {
-    "image/*": extensions.image,
-    "video/*": extensions.video,
-    "audio/*": extensions.audio,
+    "image/*": extensions.image.map(ext => `.${ext}`),
+    "video/*": extensions.video.map(ext => `.${ext}`),
+    "audio/*": extensions.audio.map(ext => `.${ext}`),
   };
 
   const reset = () => {
@@ -107,6 +107,15 @@ function Dropzone() {
   };
 
   const convertFile = async (action) => {
+
+    if (!ffmpeg || !ffmpeg.isLoaded()) {
+      console.log("⚠️ FFmpeg is not ready yet!");
+      return;
+    }
+    
+    console.log("🎬 Starting conversion...");
+    // اینجا کد تبدیل فایل‌ها با ffmpeg رو بنویس
+
     if (!isLoaded) {
       console.log("Waiting for FFmpeg to load...");
       return; // منتظر بارگذاری FFmpeg می‌مانیم
@@ -246,26 +255,22 @@ function Dropzone() {
   }, [actions]);
 
   useEffect(() => {
-    load(); // بارگذاری FFmpeg در ابتدای کامپوننت
-    console.log('Loading FFmpeg...');
+    async function load() {
+      const ff = await loadFfmpeg();
+      setFfmpeg(ff);
+    }
+    load();
   }, []);
 
   const load = async () => {
     try {
-      const ffmpeg = new FFmpeg();
-
-      // بررسی بارگذاری FFmpeg
-      const isLoaded = await ffmpeg.load();
-      if (isLoaded) {
-        ffmpegRef.current = ffmpeg;
-        setIsLoaded(true); // تغییر وضعیت بارگذاری
-        console.log("FFmpeg loaded successfully!");
-      } else {
-        throw new Error("FFmpeg failed to load");
-      }
+      const ffmpeg = await loadFfmpeg(); // اینجا از تابع اصلاح‌شده `loadFfmpeg` استفاده می‌کنیم
+      ffmpegRef.current = ffmpeg; // ذخیره کردن نمونه ffmpeg در ref
+      setIsLoaded(true);
+      console.log("FFmpeg loaded successfully!");
     } catch (error) {
       console.error("Error loading FFmpeg:", error);
-      setIsLoaded(false);  // تغییر وضعیت بارگذاری به false در صورت خطا
+      setIsLoaded(false);
     }
   };
 

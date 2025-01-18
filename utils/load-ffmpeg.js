@@ -1,14 +1,30 @@
 export default async function loadFfmpeg() {
-  const { FFmpeg } = await import('@ffmpeg/ffmpeg');
+  const ffmpegModule = await import('@ffmpeg/ffmpeg');
   const { toBlobURL } = await import('@ffmpeg/util');
 
-  const ffmpeg = new FFmpeg();
-  const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.15/dist/umd';
+  const createFFmpeg = ffmpegModule.createFFmpeg || ffmpegModule.default?.createFFmpeg;
+  const FFmpeg = ffmpegModule.FFmpeg || ffmpegModule.default?.FFmpeg;
 
-  await ffmpeg.load({
-    coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-    wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-  });
+  let ffmpeg;
+  if (createFFmpeg) {
+    ffmpeg = createFFmpeg({ log: true });
+  } else if (FFmpeg) {
+    ffmpeg = new FFmpeg();
+  } else {
+    throw new Error('❌ Neither createFFmpeg nor FFmpeg is available!');
+  }
+
+  const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@latest/dist/umd';
+
+  try {
+    await ffmpeg.load({
+      coreURL: `${baseURL}/ffmpeg-core.js`,
+      wasmURL: `${baseURL}/ffmpeg-core.wasm`,
+    });
+    console.log("✅ ffmpeg loaded successfully!");
+  } catch (error) {
+    console.error("❌ Error loading ffmpeg:", error);
+  }
 
   return ffmpeg;
 }
