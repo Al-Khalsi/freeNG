@@ -60,13 +60,13 @@ const extensions = {
 
 function Dropzone() {
 
-  const [is_hover, setIsHover] = useState(false);
+  const [isHover, setIsHover] = useState(false);
   const [actions, setActions] = useState([]);
-  const [is_ready, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(false);
   const [files, setFiles] = useState([]);
-  const [is_loaded, setIsLoaded] = useState(false);
-  const [is_converting, setIsConverting] = useState(false);
-  const [is_done, setIsDone] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isConverting, setIsConverting] = useState(false);
+  const [isDone, setIsDone] = useState(false);
   const ffmpegRef = useRef(null);
   const [defaultValues, setDefaultValues] = useState("video");
   const [selcted, setSelected] = useState("...");
@@ -135,8 +135,8 @@ function Dropzone() {
       }
 
       console.log(`Writing file: ${inputFileName}`);
-      const fileData = await fetchFile(file);
-      ffmpegRef.current.FS('writeFile', inputFileName, fileData);
+      const fileData = await file.arrayBuffer();
+      ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
 
       console.log(`Converting file: ${inputFileName} to ${outputFileName}`);
       await ffmpegRef.current.run('-i', inputFileName, outputFileName);
@@ -157,14 +157,14 @@ function Dropzone() {
   };
 
   const convert = async () => {
-    if (!is_loaded) {
+    if (!isLoaded) {
       console.error("FFmpeg is not loaded yet, cannot convert files.");
       return; // Exit if FFmpeg is not loaded
     }
 
     let tmp_actions = actions.map((elt) => ({
       ...elt,
-      is_converting: true,
+      isConverting: true,
     }));
     setActions(tmp_actions);
     setIsConverting(true);
@@ -178,7 +178,7 @@ function Dropzone() {
             ? {
               ...elt,
               is_converted: true,
-              is_converting: false,
+              isConverting: false,
               url,
               output,
             }
@@ -192,7 +192,7 @@ function Dropzone() {
             ? {
               ...elt,
               is_converted: false,
-              is_converting: false,
+              isConverting: false,
               is_error: true,
             }
             : elt
@@ -233,7 +233,7 @@ function Dropzone() {
         file_type: file.type,
         file,
         is_converted: false,
-        is_converting: false,
+        isConverting: false,
         is_error: false,
       });
     });
@@ -259,11 +259,11 @@ function Dropzone() {
   };
 
   const checkIsReady = () => {
-    let tmp_is_ready = true;
+    let tmp_isReady = true;
     actions.forEach((action) => {
-      if (!action.to) tmp_is_ready = false;
+      if (!action.to) tmp_isReady = false;
     });
-    setIsReady(tmp_is_ready);
+    setIsReady(tmp_isReady);
   };
   const deleteAction = (action) => {
     setActions(actions.filter((elt) => elt !== action));
@@ -303,7 +303,7 @@ function Dropzone() {
             key={i}
             className="w-full py-4 space-y-2 lg:py-0 relative cursor-pointer rounded-xl border h-fit lg:h-20 px-4 lg:px-10 flex flex-wrap lg:flex-nowrap items-center justify-between"
           >
-            {!is_loaded && (
+            {!isLoaded && (
               <Skeleton className="h-full w-full -ml-10 cursor-progress absolute rounded-xl" />
             )}
             <div className="flex gap-4 items-center">
@@ -330,7 +330,7 @@ function Dropzone() {
                 <span>Done</span>
                 <MdDone />
               </Badge>
-            ) : action.is_converting ? (
+            ) : action.isConverting ? (
               <Badge variant="default" className="flex gap-2">
                 <span>Converting</span>
                 <span className="animate-spin">
@@ -432,7 +432,7 @@ function Dropzone() {
           </div>
         ))}
         <div className="flex w-full justify-end">
-          {is_done ? (
+          {isDone ? (
             <div className="space-y-4 w-fit">
               <Button
                 size="lg"
@@ -454,11 +454,11 @@ function Dropzone() {
           ) : (
             <Button
               size="lg"
-              disabled={!is_ready || is_converting}
+              disabled={!isReady || isConverting}
               className="rounded-xl font-semibold relative py-4 text-md flex items-center w-44"
               onClick={convert}
             >
-              {is_converting ? (
+              {isConverting ? (
                 <span className="animate-spin text-lg">
                   <ImSpinner3 />
                 </span>
@@ -504,7 +504,7 @@ function Dropzone() {
         >
           <input {...getInputProps()} />
           <div className="space-y-4 text-foreground">
-            {is_hover ? (
+            {isHover ? (
               <>
                 <div className="justify-center flex text-6xl">
                   <LuFileSymlink />
