@@ -2,7 +2,6 @@
   "name": "pixelfreebies-client",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "json-server": "json-server --watch data/db.json --port 3001",

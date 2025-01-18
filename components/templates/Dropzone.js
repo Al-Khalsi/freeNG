@@ -20,7 +20,7 @@ import {
 import { MdClose } from 'react-icons/md';
 import { Button } from './Button';
 import { Badge } from './Badge'
-import { createFFmpeg } from '@ffmpeg/ffmpeg';
+import { FFmpeg, createFFmpeg } from '@ffmpeg/ffmpeg';
 
 const extensions = {
   image: [
@@ -107,41 +107,36 @@ function Dropzone() {
   };
 
   const convertFile = async (action) => {
+    if (!isLoaded) {
+      console.log("Waiting for FFmpeg to load...");
+      return; // منتظر بارگذاری FFmpeg می‌مانیم
+    }
+
     const { file } = action;
     if (!file) {
       console.error("File is undefined in action object");
-      throw new Error("File is undefined");
+      return;
     }
-  
+
     const inputFileName = file.name;
     const outputFileName = `converted_${file.name}`;
-  
+
     try {
-      // بارگذاری FFmpeg فقط در صورت لود نشدن
-      if (!ffmpeg.isLoaded) {
-        await ffmpeg.load();
-      }
-  
-      console.log(`Writing file: ${inputFileName}`);
       const fileData = await file.arrayBuffer();
-  
-      await ffmpeg.FS('writeFile', inputFileName, new Uint8Array(fileData));
-  
-      console.log(`Converting file: ${inputFileName} to ${outputFileName}`);
-  
-      await ffmpeg.run('-i', inputFileName, outputFileName);
-  
-      const data = await ffmpeg.FS('readFile', outputFileName);
-      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
-  
+      await ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
+      await ffmpegRef.current.run('-i', inputFileName, outputFileName);
+
+      const data = await ffmpegRef.current.FS('readFile', outputFileName);
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/jpeg' }));
+
       return { url, output: outputFileName };
     } catch (error) {
       console.error("Error during conversion:", error);
       throw error;
     }
   };
-  
-  
+
+
   const convert = async () => {
     if (!isLoaded) {
       console.error("FFmpeg is not loaded yet, cannot convert files.");
@@ -249,35 +244,28 @@ function Dropzone() {
       setIsConverting(false);
     } else checkIsReady();
   }, [actions]);
+
   useEffect(() => {
-    load().then(() => {
-      console.log("FFmpeg loaded:", ffmpegRef.current); // Check if ffmpegRef.current is valid
-    });
+    load(); // بارگذاری FFmpeg در ابتدای کامپوننت
+    console.log('Loading FFmpeg...');
   }, []);
-  // const load = async () => {
-  //   try {
-  //     const ffmpeg_response = await loadFfmpeg();
-  //     ffmpegRef.current = ffmpeg_response;
-  //     setIsLoaded(true);
-  //     console.log("FFmpeg loaded successfully!");
-  //   } catch (error) {
-  //     console.error("Error loading FFmpeg:", error);
-  //   }
-  // };
 
   const load = async () => {
     try {
-      const ffmpeg = createFFmpeg({
-        corePath: 'https://unpkg.com/@ffmpeg/core@0.12.15/dist/umd/ffmpeg-core.js',
-        log: true, // برای نمایش لاگ‌ها در کنسول
-      });
-  
-      await ffmpeg.load();
-      ffmpegRef.current = ffmpeg;
-      setIsLoaded(true);
-      console.log("FFmpeg loaded successfully!");
+      const ffmpeg = new FFmpeg();
+
+      // بررسی بارگذاری FFmpeg
+      const isLoaded = await ffmpeg.load();
+      if (isLoaded) {
+        ffmpegRef.current = ffmpeg;
+        setIsLoaded(true); // تغییر وضعیت بارگذاری
+        console.log("FFmpeg loaded successfully!");
+      } else {
+        throw new Error("FFmpeg failed to load");
+      }
     } catch (error) {
       console.error("Error loading FFmpeg:", error);
+      setIsLoaded(false);  // تغییر وضعیت بارگذاری به false در صورت خطا
     }
   };
 

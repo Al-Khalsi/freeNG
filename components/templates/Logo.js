@@ -9,7 +9,8 @@ function Logo() {
                 src="/img/LOGO.png"
                 className='object-cover rounded-md
                 bg-gradient-to-t from-bgPurple to-bgLightPurple'
-                layout="fill"
+                width={56}
+                height={56}
                 title="Logo"
                 alt="Logo"
             />
