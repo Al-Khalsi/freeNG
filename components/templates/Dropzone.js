@@ -108,48 +108,45 @@ function Dropzone() {
   };
 
   const convertFile = async (action) => {
+  if (!ffmpegRef.current) {
+    console.error("⚠️ FFmpeg is not initialized!");
+    return;
+  }
 
-    if (!ffmpegRef.current) {
-      console.error("⚠️ FFmpeg is not initialized!");
-      return;
-    }
+  if (!isLoaded) {
+    console.log("Waiting for FFmpeg to load...");
+    return;
+  }
 
-    if (!ffmpegRef.current.load()) {
-      console.log("⚠️ FFmpeg is not ready yet!");
-      return;
-    }
+  const { file } = action;
+  if (!file) {
+    console.error("File is undefined in action object", action);
+    return;
+  }
 
-    console.log("🎬 Starting conversion...");
-    // اینجا کد تبدیل فایل‌ها با ffmpeg رو بنویس
+  const inputFileName = file.name;
+  const outputFileName = `converted_${file.name.split('.').slice(0, -1).join('.')}.mp4`;
 
-    if (!isLoaded) {
-      console.log("Waiting for FFmpeg to load...");
-      return; // منتظر بارگذاری FFmpeg می‌مانیم
-    }
+  try {
+    const fileData = await file.arrayBuffer();
+    await ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
 
-    const { file } = action;
-    if (!file) {
-      console.error("File is undefined in action object");
-      return;
-    }
+    console.log("🚀 Starting FFmpeg conversion...");
+    await ffmpegRef.current.run('-i', inputFileName, outputFileName);
 
-    const inputFileName = file.name;
-    const outputFileName = `converted_${file.name}`;
+    // بررسی فایل‌های موجود در سیستم مجازی FFmpeg
+    const files = ffmpegRef.current.FS('readdir', '/');
+    console.log("📂 Files in FFmpeg virtual system:", files);
 
-    try {
-      const fileData = await file.arrayBuffer();
-      await ffmpegRef.current.FS('writeFile', file.name, new Uint8Array(fileData));
-      await ffmpegRef.current.run('-i', file.name, `converted_${file.name}`);
+    const data = ffmpegRef.current.FS('readFile', outputFileName);
+    const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
 
-      const data = await ffmpegRef.current.FS('readFile', `converted_${file.name}`);
-      const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/jpeg' }));
-
-      return { url, output: `converted_${file.name}` };
-    } catch (error) {
-      console.error("❌ Error during conversion:", error);
-      throw error;
-    }
-  };
+    return { url, output: outputFileName };
+  } catch (error) {
+    console.error("❌ Error during conversion:", error);
+    return null;
+  }
+};
 
   const convert = async () => {
     console.log("ℹ️ FFmpeg status before conversion:", ffmpegStatus);
@@ -161,11 +158,6 @@ function Dropzone() {
 
     console.log("✅ FFmpeg is ready, starting conversion...");
 
-    if (!ffmpegRef.current || !ffmpegRef.current.load()) {
-      console.error("FFmpeg is not loaded yet, cannot convert files.");
-      return;
-    }
-
     let tmp_actions = actions.map((elt) => ({
       ...elt,
       isConverting: true,
@@ -175,22 +167,27 @@ function Dropzone() {
 
     for (let action of tmp_actions) {
       try {
-        console.log("Converting action:", action); // Log the action being converted
-        const { url = '', output = '' } = await convertFile(action) || {};
-        tmp_actions = tmp_actions.map((elt) =>
-          elt === action
-            ? {
-              ...elt,
-              is_converted: true,
-              isConverting: false,
-              url,
-              output,
-            }
-            : elt
-        );
-        setActions(tmp_actions);
+        console.log("Converting action:", action);
+        const result = await convertFile(action);
+        console.log("Result from convertFile:", result);
+
+        if (result) {
+          const { url, output } = result;
+          tmp_actions = tmp_actions.map((elt) =>
+            elt === action
+              ? {
+                ...elt,
+                is_converted: true,
+                isConverting: false,
+                url,
+                output,
+              }
+              : elt
+          );
+          setActions(tmp_actions);
+        }
       } catch (err) {
-        console.error("Conversion error:", err); // Log the error
+        console.error("Conversion error:", err);
         tmp_actions = tmp_actions.map((elt) =>
           elt === action
             ? {
@@ -204,6 +201,7 @@ function Dropzone() {
         setActions(tmp_actions);
       }
     }
+
     setIsDone(true);
     setIsConverting(false);
   };
@@ -272,14 +270,17 @@ function Dropzone() {
     let retries = 5;
     while (!ffmpegRef.current && retries > 0) {
       console.log("⏳ Waiting for FFmpeg to load...");
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 1 ثانیه صبر کند
+      await new Promise(resolve => setTimeout(resolve, 1000));
       retries--;
     }
 
     if (!ffmpegRef.current) {
       console.error("❌ FFmpeg failed to load after multiple attempts.");
+    } else {
+      console.log("✅ FFmpeg is fully loaded and ready.");
     }
   };
+
 
   useEffect(() => {
     ensureFfmpegLoaded();
@@ -293,7 +294,7 @@ function Dropzone() {
 
       try {
         const ff = await loadFfmpeg();
-        ffmpegRef.current = ff; // ذخیره FFmpeg در ref
+        ffmpegRef.current = ff;
         setFfmpegStatus("loaded");
         console.log("✅ FFmpeg loaded successfully!");
       } catch (error) {
@@ -302,11 +303,8 @@ function Dropzone() {
       }
     }
 
-    load();
-    ensureFfmpegLoaded(); // اطمینان از بارگذاری صحیح
+    load().then(() => ensureFfmpegLoaded());
   }, []);
-
-
 
   const load = async () => {
     try {
