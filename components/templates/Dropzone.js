@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from './Select';
-import { MdClose } from 'react-icons/md';
+import { MdClose, MdDone } from 'react-icons/md';
 import { Button } from './Button';
 import { Badge } from './Badge'
 import { FFmpeg, createFFmpeg } from '@ffmpeg/ffmpeg';
@@ -109,14 +109,12 @@ function Dropzone() {
 
   const convertFile = async (action) => {
 
-    if (!ffmpegRef.current || !ffmpegRef.current.isLoaded()) {
-      console.log("⚠️ FFmpeg is not ready yet!");
+    if (!ffmpegRef.current) {
+      console.error("⚠️ FFmpeg is not initialized!");
       return;
     }
 
-    console.log("ℹ️ FFmpeg status:", ffmpegStatus);
-
-    if (ffmpegStatus !== "loaded") {
+    if (!ffmpegRef.current.load()) {
       console.log("⚠️ FFmpeg is not ready yet!");
       return;
     }
@@ -140,15 +138,15 @@ function Dropzone() {
 
     try {
       const fileData = await file.arrayBuffer();
-      await ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
-      await ffmpegRef.current.run('-i', inputFileName, outputFileName);
+      await ffmpegRef.current.FS('writeFile', file.name, new Uint8Array(fileData));
+      await ffmpegRef.current.run('-i', file.name, `converted_${file.name}`);
 
-      const data = await ffmpegRef.current.FS('readFile', outputFileName);
+      const data = await ffmpegRef.current.FS('readFile', `converted_${file.name}`);
       const url = URL.createObjectURL(new Blob([data.buffer], { type: 'image/jpeg' }));
 
-      return { url, output: outputFileName };
+      return { url, output: `converted_${file.name}` };
     } catch (error) {
-      console.error("Error during conversion:", error);
+      console.error("❌ Error during conversion:", error);
       throw error;
     }
   };
@@ -163,7 +161,7 @@ function Dropzone() {
 
     console.log("✅ FFmpeg is ready, starting conversion...");
 
-    if (!ffmpegRef.current || !ffmpegRef.current.isLoaded()) {
+    if (!ffmpegRef.current || !ffmpegRef.current.load()) {
       console.error("FFmpeg is not loaded yet, cannot convert files.");
       return;
     }
@@ -178,7 +176,7 @@ function Dropzone() {
     for (let action of tmp_actions) {
       try {
         console.log("Converting action:", action); // Log the action being converted
-        const { url, output } = await convertFile(action);
+        const { url = '', output = '' } = await convertFile(action) || {};
         tmp_actions = tmp_actions.map((elt) =>
           elt === action
             ? {
@@ -270,6 +268,24 @@ function Dropzone() {
     } else checkIsReady();
   }, [actions]);
 
+  const ensureFfmpegLoaded = async () => {
+    let retries = 5;
+    while (!ffmpegRef.current && retries > 0) {
+      console.log("⏳ Waiting for FFmpeg to load...");
+      await new Promise(resolve => setTimeout(resolve, 1000)); // 1 ثانیه صبر کند
+      retries--;
+    }
+
+    if (!ffmpegRef.current) {
+      console.error("❌ FFmpeg failed to load after multiple attempts.");
+    }
+  };
+
+  useEffect(() => {
+    ensureFfmpegLoaded();
+  }, []);
+
+
   useEffect(() => {
     async function load() {
       console.log("🟡 FFmpeg is starting to load...");
@@ -277,7 +293,7 @@ function Dropzone() {
 
       try {
         const ff = await loadFfmpeg();
-        setFfmpeg(ff);
+        ffmpegRef.current = ff; // ذخیره FFmpeg در ref
         setFfmpegStatus("loaded");
         console.log("✅ FFmpeg loaded successfully!");
       } catch (error) {
@@ -285,8 +301,12 @@ function Dropzone() {
         setFfmpegStatus("not_loaded");
       }
     }
+
     load();
+    ensureFfmpegLoaded(); // اطمینان از بارگذاری صحیح
   }, []);
+
+
 
   const load = async () => {
     try {
@@ -334,7 +354,6 @@ function Dropzone() {
             ) : action.is_converted ? (
               <Badge variant="default" className="flex gap-2 bg-green-500">
                 <span>Done</span>
-                <MdDone />
               </Badge>
             ) : action.isConverting ? (
               <Badge variant="default" className="flex gap-2">
