@@ -108,11 +108,16 @@ function Dropzone() {
   };
 
   const convertFile = async (action) => {
-    console.log("Inside convertFile:", action);
+    console.log("⏳ Waiting before conversion...");
+
+    await new Promise(resolve => setTimeout(resolve, 10000));
+
     if (!ffmpegRef.current) {
       console.error("⚠️ FFmpeg is not initialized!");
       return;
     }
+
+    console.log("🔍 Debugging action object:", action);
 
     if (!isLoaded) {
       console.log("Waiting for FFmpeg to load...");
@@ -126,7 +131,7 @@ function Dropzone() {
     }
 
     const inputFileName = `input.${file.name.split('.').pop()}`;
-    const outputFileName = `converted_${file.name.split('.').slice(0, -1).join('.')}.${to}`;
+    const outputFileName = `converted_${file.name.split('.').slice(0, -1).join('.')}.${to}`; // فرمت خروجی داینامیک شد!
 
     try {
       const fileData = await file.arrayBuffer();
@@ -139,8 +144,7 @@ function Dropzone() {
       console.log("📂 Files in FFmpeg virtual system:", files);
 
       const data = ffmpegRef.current.FS('readFile', outputFileName);
-      const mimeType = `image/${to}`;
-      const url = URL.createObjectURL(new Blob([data.buffer], { type: mimeType }));
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: `image/${to}` })); // نوع خروجی داینامیک شد!
 
       return { url, output: outputFileName };
     } catch (error) {
