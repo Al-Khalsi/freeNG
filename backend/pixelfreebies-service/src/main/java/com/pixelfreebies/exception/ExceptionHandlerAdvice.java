@@ -50,6 +50,18 @@ public class ExceptionHandlerAdvice {
         return ResponseEntity.status(CONFLICT).body(new Result(false, CONFLICT, "duplicate key value violates unique constraint", e.getMessage()));
     }
 
+    @ExceptionHandler({InvalidTokenException.class})
+    @ResponseStatus(BAD_REQUEST)
+    public ResponseEntity<Result> handleInvalidTokenException(InvalidTokenException e) {
+        return ResponseEntity.status(BAD_REQUEST).body(new Result(false, BAD_REQUEST, "token is not valid", e.getMessage()));
+    }
+
+    @ExceptionHandler({TokenExpiredException.class})
+    @ResponseStatus(EXPECTATION_FAILED)
+    public ResponseEntity<Result> handleTokenExpiredException(TokenExpiredException e) {
+        return ResponseEntity.status(EXPECTATION_FAILED).body(new Result(false, EXPECTATION_FAILED, "token has been expired", e.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(BAD_REQUEST)
     public ResponseEntity<Result> handleMethodValidationException(MethodArgumentNotValidException e) {

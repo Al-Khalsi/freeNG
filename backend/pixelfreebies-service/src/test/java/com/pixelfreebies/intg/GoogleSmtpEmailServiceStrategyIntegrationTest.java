@@ -3,13 +3,11 @@ package com.pixelfreebies.intg;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
-import com.pixelfreebies.exception.PixelfreebiesException;
 import com.pixelfreebies.model.enums.EmailServiceProvider;
 import com.pixelfreebies.service.email.registry.EmailServiceRegistry;
 import com.pixelfreebies.service.email.strategy.EmailServiceStrategy;
 import com.pixelfreebies.service.email.strategy.GoogleSmtpEmailServiceStrategy;
 import jakarta.mail.internet.MimeMessage;
-import org.eclipse.angus.mail.util.MailConnectException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +20,6 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.Properties;
 

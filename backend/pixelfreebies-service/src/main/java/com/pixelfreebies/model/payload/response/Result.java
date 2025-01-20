@@ -28,12 +28,6 @@ public class Result {
     @Schema(description = "Response payload", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
     private Object data;
 
-    public Result(boolean flag, HttpStatus code, String message) {
-        this.flag = flag;
-        this.code = code;
-        this.message = message;
-    }
-
     public Result(boolean flag, HttpStatus code, String message, Object data) {
         this.flag = flag;
         this.code = code;
@@ -77,6 +71,15 @@ public class Result {
                         "results", results,
                         "errors", errors
                 ))
+                .build();
+    }
+
+    public static Result success(String message) {
+        return Result.builder()
+                .flag(true)
+                .code(HttpStatus.OK)
+                .message(message)
+                .data(null)
                 .build();
     }
 

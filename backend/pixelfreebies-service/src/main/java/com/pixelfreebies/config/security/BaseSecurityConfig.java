@@ -27,11 +27,13 @@ public abstract class BaseSecurityConfig {
             "/",
             "/api/v1/auth/login",
             "/api/v1/auth/register",
+            "/api/v1/auth/forget-password/**",
             "/api/v1/file/download/**",
             "/api/v1/file/list/**",
             "/api/v1/file/search/**",
             "/api/v1/keywords/fetch/**",
             "/api/v1/file/keyword/**",
+
             "/v2/api-docs",
             "/v3/api-docs",
             "/v3/api-docs/**",
