@@ -108,45 +108,47 @@ function Dropzone() {
   };
 
   const convertFile = async (action) => {
-  if (!ffmpegRef.current) {
-    console.error("⚠️ FFmpeg is not initialized!");
-    return;
-  }
+    console.log("Inside convertFile:", action);
+    if (!ffmpegRef.current) {
+      console.error("⚠️ FFmpeg is not initialized!");
+      return;
+    }
 
-  if (!isLoaded) {
-    console.log("Waiting for FFmpeg to load...");
-    return;
-  }
+    if (!isLoaded) {
+      console.log("Waiting for FFmpeg to load...");
+      return;
+    }
 
-  const { file } = action;
-  if (!file) {
-    console.error("File is undefined in action object", action);
-    return;
-  }
+    const { file, to } = action;
+    if (!file || !file.name) {
+      console.error("❌ File is missing in action object", action);
+      return;
+    }
 
-  const inputFileName = file.name;
-  const outputFileName = `converted_${file.name.split('.').slice(0, -1).join('.')}.mp4`;
+    const inputFileName = `input.${file.name.split('.').pop()}`;
+    const outputFileName = `converted_${file.name.split('.').slice(0, -1).join('.')}.${to}`;
 
-  try {
-    const fileData = await file.arrayBuffer();
-    await ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
+    try {
+      const fileData = await file.arrayBuffer();
+      await ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
 
-    console.log("🚀 Starting FFmpeg conversion...");
-    await ffmpegRef.current.run('-i', inputFileName, outputFileName);
+      console.log("🚀 Running FFmpeg conversion...");
+      await ffmpegRef.current.run('-i', inputFileName, outputFileName);
 
-    // بررسی فایل‌های موجود در سیستم مجازی FFmpeg
-    const files = ffmpegRef.current.FS('readdir', '/');
-    console.log("📂 Files in FFmpeg virtual system:", files);
+      const files = ffmpegRef.current.FS('readdir', '/');
+      console.log("📂 Files in FFmpeg virtual system:", files);
 
-    const data = ffmpegRef.current.FS('readFile', outputFileName);
-    const url = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+      const data = ffmpegRef.current.FS('readFile', outputFileName);
+      const mimeType = `image/${to}`;
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: mimeType }));
 
-    return { url, output: outputFileName };
-  } catch (error) {
-    console.error("❌ Error during conversion:", error);
-    return null;
-  }
-};
+      return { url, output: outputFileName };
+    } catch (error) {
+      console.error("❌ Error during conversion:", error);
+      return null;
+    }
+  };
+
 
   const convert = async () => {
     console.log("ℹ️ FFmpeg status before conversion:", ffmpegStatus);
@@ -169,7 +171,11 @@ function Dropzone() {
       try {
         console.log("Converting action:", action);
         const result = await convertFile(action);
-        console.log("Result from convertFile:", result);
+        if (!result) {
+          console.error("❌ Conversion failed!");
+        } else {
+          console.log("✅ Conversion successful:", result);
+        }
 
         if (result) {
           const { url, output } = result;
@@ -233,13 +239,11 @@ function Dropzone() {
     setActions(
       actions.map((action) => {
         if (action.file_name === file_name) {
-          console.log("FOUND");
           return {
             ...action,
-            to,
+            to, // Output value based on selector selection
           };
         }
-
         return action;
       })
     );
@@ -294,6 +298,8 @@ function Dropzone() {
 
       try {
         const ff = await loadFfmpeg();
+        if (!ff) throw new Error("Failed to initialize FFmpeg");
+
         ffmpegRef.current = ff;
         setFfmpegStatus("loaded");
         console.log("✅ FFmpeg loaded successfully!");
@@ -303,20 +309,8 @@ function Dropzone() {
       }
     }
 
-    load().then(() => ensureFfmpegLoaded());
+    load();
   }, []);
-
-  const load = async () => {
-    try {
-      const ffmpeg = await loadFfmpeg(); // اینجا از تابع اصلاح‌شده `loadFfmpeg` استفاده می‌کنیم
-      ffmpegRef.current = ffmpeg; // ذخیره کردن نمونه ffmpeg در ref
-      setIsLoaded(true);
-      console.log("FFmpeg loaded successfully!");
-    } catch (error) {
-      console.error("Error loading FFmpeg:", error);
-      setIsLoaded(false);
-    }
-  };
 
   // returns
   if (actions.length) {

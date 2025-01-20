@@ -17,6 +17,7 @@ export default async function loadFfmpeg() {
   const baseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@latest/dist/umd';
 
   try {
+    console.log("🔄 Loading FFmpeg...");
     await ffmpeg.load({
       coreURL: `${baseURL}/ffmpeg-core.js`,
       wasmURL: `${baseURL}/ffmpeg-core.wasm`,
