@@ -79,6 +79,13 @@ function Dropzone() {
     "audio/*": extensions.audio.map(ext => `.${ext}`),
   };
 
+  const getMimeType = (extension) => {
+    if (mimeTypes.video.includes(extension)) return `video/${extension}`;
+    if (mimeTypes.audio.includes(extension)) return `audio/${extension}`;
+    if (mimeTypes.image.includes(extension)) return `image/${extension}`;
+    return "application/octet-stream";
+  };
+
   const reset = () => {
     setIsDone(false);
     setActions([]);
@@ -108,51 +115,56 @@ function Dropzone() {
   };
 
   const convertFile = async (action) => {
-    console.log("⏳ Waiting before conversion...");
-
-    await new Promise(resolve => setTimeout(resolve, 10000));
+    console.log("⏳ Starting conversion process...");
 
     if (!ffmpegRef.current) {
-      console.error("⚠️ FFmpeg is not initialized!");
-      return;
+      console.error("⚠️ FFmpeg instance is not initialized!");
+      return null;
     }
-
-    console.log("🔍 Debugging action object:", action);
 
     if (!isLoaded) {
       console.log("Waiting for FFmpeg to load...");
-      return;
+      return null;
     }
 
     const { file, to } = action;
     if (!file || !file.name) {
-      console.error("❌ File is missing in action object", action);
-      return;
+      console.error("❌ Invalid file object", action);
+      return null;
     }
 
-    const inputFileName = `input.${file.name.split('.').pop()}`;
-    const outputFileName = `converted_${file.name.split('.').slice(0, -1).join('.')}.${to}`; // فرمت خروجی داینامیک شد!
+    const inputExt = file.name.split('.').pop();
+    const outputExt = to;
+
+    const inputFileName = `input.${inputExt}`;
+    const outputFileName = `output.${outputExt}`;
 
     try {
       const fileData = await file.arrayBuffer();
-      await ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
+      ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
 
-      console.log("🚀 Running FFmpeg conversion...");
+      console.log(`🚀 Running FFmpeg: converting ${inputFileName} to ${outputFileName}...`);
       await ffmpegRef.current.run('-i', inputFileName, outputFileName);
 
       const files = ffmpegRef.current.FS('readdir', '/');
       console.log("📂 Files in FFmpeg virtual system:", files);
 
-      const data = ffmpegRef.current.FS('readFile', outputFileName);
-      const url = URL.createObjectURL(new Blob([data.buffer], { type: `image/${to}` })); // نوع خروجی داینامیک شد!
+      if (!files.includes(outputFileName)) {
+        console.error(`❌ Output file ${outputFileName} not found in FFmpeg virtual system.`);
+        return null;
+      }
 
+      const data = ffmpegRef.current.FS('readFile', outputFileName);
+      const mimeType = getMimeType(to);
+      const url = URL.createObjectURL(new Blob([data.buffer], { type: mimeType }));
+
+      console.log("✅ File conversion successful!", { url, output: outputFileName });
       return { url, output: outputFileName };
     } catch (error) {
       console.error("❌ Error during conversion:", error);
       return null;
     }
   };
-
 
   const convert = async () => {
     console.log("ℹ️ FFmpeg status before conversion:", ffmpegStatus);

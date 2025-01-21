@@ -36,8 +36,8 @@ spring:
 
 file:
   storage:
-    location: ${FILE_UPLOAD_LOCATION:D:\Skill-Development\Spring-boot-Tutorial\source-code\Resume-Projects\PixelFreebies\public\img}
-#    location: ${FILE_UPLOAD_LOCATION:C:\Users\Al-Khalsi\Desktop\WebSite\pixelfreebies-client\public\img}
+#   location: ${FILE_UPLOAD_LOCATION:D:\Skill-Development\Spring-boot-Tutorial\source-code\Resume-Projects\PixelFreebies\public\img}
+    location: ${FILE_UPLOAD_LOCATION:C:\Users\Al-Khalsi\Desktop\WebSite\pixelfreebies-client\public\img}
 #    location: ${FILE_UPLOAD_LOCATION:/home/simi/uploads}
 
 s3:
