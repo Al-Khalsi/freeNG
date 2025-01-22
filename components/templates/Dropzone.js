@@ -117,16 +117,19 @@ function Dropzone() {
   const convertFile = async (action) => {
     console.log("⏳ Starting conversion process...");
 
+    console.log("current");
     if (!ffmpegRef.current) {
       console.error("⚠️ FFmpeg instance is not initialized!");
       return null;
     }
 
-    if (!isLoaded) {
-      console.log("Waiting for FFmpeg to load...");
+    console.log("load");
+    if (ffmpegStatus !== "loaded") {
+      console.error("❌ FFmpeg is NOT loaded yet!");
       return null;
     }
 
+    console.log("action");
     const { file, to } = action;
     if (!file || !file.name) {
       console.error("❌ Invalid file object", action);
@@ -139,7 +142,10 @@ function Dropzone() {
     const inputFileName = `input.${inputExt}`;
     const outputFileName = `output.${outputExt}`;
 
+    console.log("🚀 Before try block...");
     try {
+      console.log("✅ Inside try block...");
+      
       const fileData = await file.arrayBuffer();
       ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
 

@@ -1,6 +1,5 @@
 export default async function loadFfmpeg() {
   const ffmpegModule = await import('@ffmpeg/ffmpeg');
-  const { toBlobURL } = await import('@ffmpeg/util');
 
   const createFFmpeg = ffmpegModule.createFFmpeg || ffmpegModule.default?.createFFmpeg;
   const FFmpeg = ffmpegModule.FFmpeg || ffmpegModule.default?.FFmpeg;
