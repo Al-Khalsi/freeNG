@@ -5,7 +5,7 @@ import { LuFileSymlink } from 'react-icons/lu';
 import { BiError } from "react-icons/bi";
 import { ImSpinner3 } from "react-icons/im";
 import { HiOutlineDownload } from "react-icons/hi";
-import loadFfmpeg from "@/utils/load-ffmpeg";
+import loadFfmpeg from "@/utils/loadImageMagick";
 import fileToIcon from "@/utils/file-to-icon";
 import compressFileName from "@/utils/compress-file-name";
 import bytesToSize from "@/utils/bytes-to-size";
