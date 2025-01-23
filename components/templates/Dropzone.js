@@ -116,54 +116,46 @@ function Dropzone() {
 
   const convertFile = async (action) => {
     console.log("⏳ Starting conversion process...");
-
-    console.log("current");
+  
     if (!ffmpegRef.current) {
       console.error("⚠️ FFmpeg instance is not initialized!");
       return null;
     }
-
-    console.log("load");
+  
     if (ffmpegStatus !== "loaded") {
       console.error("❌ FFmpeg is NOT loaded yet!");
       return null;
     }
-
-    console.log("action");
+  
     const { file, to } = action;
     if (!file || !file.name) {
       console.error("❌ Invalid file object", action);
       return null;
     }
-
+  
     const inputExt = file.name.split('.').pop();
     const outputExt = to;
-
+  
     const inputFileName = `input.${inputExt}`;
     const outputFileName = `output.${outputExt}`;
-
-    console.log("🚀 Before try block...");
+  
     try {
-      console.log("✅ Inside try block...");
-      
       const fileData = await file.arrayBuffer();
       ffmpegRef.current.FS('writeFile', inputFileName, new Uint8Array(fileData));
-
+  
       console.log(`🚀 Running FFmpeg: converting ${inputFileName} to ${outputFileName}...`);
       await ffmpegRef.current.run('-i', inputFileName, outputFileName);
-
+  
       const files = ffmpegRef.current.FS('readdir', '/');
-      console.log("📂 Files in FFmpeg virtual system:", files);
-
       if (!files.includes(outputFileName)) {
         console.error(`❌ Output file ${outputFileName} not found in FFmpeg virtual system.`);
         return null;
       }
-
+  
       const data = ffmpegRef.current.FS('readFile', outputFileName);
       const mimeType = getMimeType(to);
       const url = URL.createObjectURL(new Blob([data.buffer], { type: mimeType }));
-
+  
       console.log("✅ File conversion successful!", { url, output: outputFileName });
       return { url, output: outputFileName };
     } catch (error) {
@@ -317,12 +309,12 @@ function Dropzone() {
     async function load() {
       console.log("🟡 FFmpeg is starting to load...");
       setFfmpegStatus("loading");
-
+  
       try {
         const ff = await loadFfmpeg();
         if (!ff) throw new Error("Failed to initialize FFmpeg");
-
-        ffmpegRef.current = ff;
+  
+        ffmpegRef.current = ff; // Ensure this is set
         setFfmpegStatus("loaded");
         console.log("✅ FFmpeg loaded successfully!");
       } catch (error) {
@@ -330,7 +322,7 @@ function Dropzone() {
         setFfmpegStatus("not_loaded");
       }
     }
-
+  
     load();
   }, []);
 

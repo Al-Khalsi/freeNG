@@ -12,6 +12,7 @@
   "dependencies": {
     "@ffmpeg/ffmpeg": "^0.12.15",
     "@ffmpeg/util": "^0.12.2",
+    "@imagemagick/magick-wasm": "^0.0.32",
     "@radix-ui/react-select": "^2.1.4",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
